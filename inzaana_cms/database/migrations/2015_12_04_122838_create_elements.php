@@ -13,9 +13,9 @@ class CreateElements extends Migration
     public function up()
     {
       Schema::create('elements', function (Blueprint $table) {
-        $table->increments('id');
+        $table->bigIncrements('id');
         $table->string('element_name');
-        $table->integer('status');
+        $table->string('status');
         $table->rememberToken();
         $table->timestamps();        
         });  //
@@ -28,6 +28,6 @@ class CreateElements extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('elements');//
     }
 }

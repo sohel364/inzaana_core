@@ -12,7 +12,17 @@ class CreateMenus extends Migration
      */
     public function up()
     {
-        //
+       Schema::create('menus', function (Blueprint $table) {
+        $table->bigIncrements('id');
+        $table->string('menu_name');
+        $table->integer('menu_order');
+        $table->string('menu_url');
+        $table->string('menu_icon');
+        $table->string('controller');
+        $table->string('is_active');
+        $table->rememberToken();
+        $table->timestamps();        
+        });  //
     }
 
     /**
@@ -22,6 +32,6 @@ class CreateMenus extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('menus'); //
     }
 }

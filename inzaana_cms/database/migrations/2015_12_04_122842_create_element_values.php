@@ -11,12 +11,12 @@ class CreateElementValues extends Migration
      * @return void
      */
     public function up()
-    {
+    {       
         Schema::create('element_values', function (Blueprint $table) {
-        $table->increments('id');
-        $table->string('element_id');
-        $table->integer('element_valuse');
-        $table->integer('status');
+        $table->bigIncrements('id');
+        $table->bigInteger('element_id');
+        $table->bigInteger('element_valuse');
+        $table->string('status');
         $table->rememberToken();
         $table->timestamps();        
         });  //
@@ -29,6 +29,6 @@ class CreateElementValues extends Migration
      */
     public function down()
     {
-        //
+      Schema::drop('element_values'); //
     }
 }

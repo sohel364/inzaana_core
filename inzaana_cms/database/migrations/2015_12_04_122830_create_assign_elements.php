@@ -13,10 +13,10 @@ class CreateAssignElements extends Migration
     public function up()
     {
         Schema::create('assign_elements', function (Blueprint $table) {
-        $table->increments('id');
-        $table->integer('super_category_id');
-        $table->integer('element_id');
-        $table->integer('element_value_id');
+        $table->bigIncrements('id');
+        $table->bigInteger('super_category_id');
+        $table->bigInteger('element_id');
+        $table->bigInteger('element_value_id');
         $table->rememberToken();
         $table->timestamps();        
         });
@@ -29,6 +29,6 @@ class CreateAssignElements extends Migration
      */
     public function down()
     {
-        //
+         Schema::drop('assign_elements');// //
     }
 }

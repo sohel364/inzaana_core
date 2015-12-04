@@ -13,8 +13,8 @@ class CreateCategories extends Migration
     public function up()
     {
         Schema::create('categories', function (Blueprint $table) {
-        $table->increments('id');
-        $table->integer('sup_category_id');
+        $table->bigIncrements('id');
+        $table->bigInteger('sup_category_id');
         $table->string('category_name');
         $table->string('category_slug');
         $table->string('status');
@@ -30,6 +30,6 @@ class CreateCategories extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('categories');//
     }
 }
