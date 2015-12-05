@@ -20,6 +20,6 @@ class Category extends Model
 
     public function superCategories()
     {
-        $this->hasMany('App\SuperCategory');
+        return $this->hasMany('App\SuperCategory');
     }
 }
