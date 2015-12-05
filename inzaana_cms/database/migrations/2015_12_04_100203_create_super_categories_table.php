@@ -13,7 +13,7 @@ class CreateSuperCategoriesTable extends Migration
     public function up()
     {
             Schema::create('super_categories', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('sup_category_name');
             $table->string('sup_category_slug');
             $table->string('status');          

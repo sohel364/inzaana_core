@@ -13,7 +13,7 @@ class CreateAccYears extends Migration
     public function up()
     {
             Schema::create('acc_years', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('acc_year');
             $table->rememberToken();
             $table->timestamps();
@@ -27,6 +27,6 @@ class CreateAccYears extends Migration
      */
     public function down()
     {
-        //
+         Schema::drop('acc_years');//
     }
 }

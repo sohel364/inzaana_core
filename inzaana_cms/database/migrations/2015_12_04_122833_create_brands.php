@@ -13,10 +13,10 @@ class CreateBrands extends Migration
     public function up()
     {
         Schema::create('brands', function (Blueprint $table) {
-        $table->increments('id');
-        $table->integer('user_id');
-        $table->integer('category_id');
-        $table->integer('sub_category_id');
+        $table->bigIncrements('id');
+        $table->bigInteger('user_id');
+        $table->bigInteger('category_id');
+        $table->bigInteger('sub_category_id');
         $table->string('brand_name');
         $table->string('status');
         $table->rememberToken();
@@ -31,6 +31,6 @@ class CreateBrands extends Migration
      */
     public function down()
     {
-        //
+       Schema::drop('brands');//
     }
 }
