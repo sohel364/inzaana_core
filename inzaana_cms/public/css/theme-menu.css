@@ -1,0 +1,157 @@
+/*--------------- Menu-css------------- */ 
+.nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+  background-color: transparent !important;
+}
+.nav > li > a:hover, .nav > li > a:focus {
+    background-color:transparent !important;
+}
+#top .dropdown-menu > li > a {
+  padding: 8px 10px !important;
+  font-size:14px;
+}
+.navbar {
+	border: 0px none;
+	position: relative;
+	min-height: 40px;
+	padding: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	border-radius: 0px;
+	background-color: #fff !important;
+	box-shadow: 0 6px 6px -6px rgba(0, 0, 0, 0.5) !important;
+}
+.navbar > .container .navbar-brand { color:#202020 !important;}
+.navbar > .container .navbar-brand > span { color:#5bc0de !important;}
+.navbar-default .navbar-nav > li > a { 
+	color:#000 !important;
+	font-family: 'RobotoRegular';
+}
+.navbar-default .navbar-nav > li > a:hover {
+	color:#5bc0de !important;
+	background-color: transparent !important;
+}
+.nav {
+    list-style: outside none none;
+    margin-bottom: 0;
+	padding: 0px;
+}
+ .navbar-toggle {
+    border-color: none;
+	margin-top: 20px !important;
+}
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+  background-color: #5bc0de;
+}
+.navbar-default .navbar-toggle {
+  border-color: #5bc0de;
+  background-color: #5bc0de;
+}
+.navbar-default .navbar-toggle .icon-bar {
+   background-color:#fff;
+}
+.navbar-brand {
+    font-size: 32px;
+    height: auto;
+    line-height: 40px;
+    margin-right: 50px;
+	padding: 16px 0px;
+}
+.navbar > .container .navbar-brand { 
+   margin-left: 0px; 
+   font-weight:bold;
+}
+.navbar-inverse {
+    border-bottom: 0;
+	border-top: 0;
+	border-right: 0;
+	border-left: 0;
+	padding: 0;
+}
+.navbar-wrapper {
+	position: absolute;
+	right: 0;
+	left: 0;
+	margin-top: 0px;
+	z-index: 20;
+}
+.navbar .navbar-nav > li {
+    margin-right: 0px;
+    padding: 0 0 0px 0px;
+}
+.navbar-default .navbar-nav > li > a {
+	font-size: 16px;
+	letter-spacing: 0.5px;
+	border-radius: 0px;
+	padding:26px 15px;
+	-webkit-transition: all 0.3s ease-in-out 0s;
+	        transition: all 0.3s ease-in-out 0s
+}
+/*-----------------Dropdown Menus--------------*/
+.dropdown-menu {
+	padding: 0;
+	min-width: 200px;
+	border-radius: 0px;
+	box-shadow: 0;
+}
+.dropdown-menu > li > a {
+    font-size: 15px;
+    line-height: 20px;
+	color:#fff !important;
+    border-bottom: 1px solid #101010;
+	background: #2f3338 !important;
+    padding: 15px 0px;
+	-webkit-transition: all 0.3s ease-in-out 0s;
+	        transition: all 0.3s ease-in-out 0s;
+	letter-spacing: 0.7px;
+}
+.dropdown-menu > li > a:last-chlid {
+	border-bottom: 0px;
+	border-bottom: 0;
+}
+.dropdown-menu > li > a:hover {
+  background: #5bc0de !important;
+}
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+    text-decoration: none;
+}
+.dropdown-submenu { position:relative; }
+.dropdown-submenu > .dropdown-menu {
+    top:0;
+    left:100% !important;
+    margin-top:0px;
+    margin-left:0px;
+    border-radius:0px 0px 0px 0px;
+}
+.dropdown-submenu:hover > .dropdown-menu { display:block; }
+.dropdown-submenu .pull-left{ float:none; }
+.dropdown-submenu.pull-left > .dropdown-menu{
+    left:-100%;
+    margin-left:10px;
+    border-radius:0px;
+}
+.navbar-nav .open .dropdown-menu > li > a, .navbar-nav .open .dropdown-menu .dropdown-header {
+    padding:10px;
+	margin: 0px;
+	font-family: 'RobotoRegular';
+	background: #5bc0de;
+    color: #fff !important;
+}
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+  color: #5bc0de !important;
+  background:transparent !important;
+}
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+  color: #5bc0de!important;
+  background: transparent !important;
+}
+.navbar-right .dropdown-menu {
+    left: 0;
+    right: 0;
+}
+.navbar-right .dropdown-menu i {
+   margin-right:8px;
+}
+@media only screen and (max-width: 767px) and (min-width: 480px){
+ .open:{ }
+}

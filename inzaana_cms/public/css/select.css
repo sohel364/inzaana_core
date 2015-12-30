@@ -1,0 +1,41 @@
+select {
+padding:4px;
+margin: 0;
+background: rgba(255, 255, 255, 0);
+color:#888;
+border:none;
+outline:none;
+display: inline-block;
+-webkit-appearance:none;
+-moz-appearance:none;
+appearance:none;
+cursor:pointer;
+width: 150px;
+border-radius: 0px;
+}
+
+/* Targetting Webkit browsers only. FF will show the dropdown arrow with so much padding. */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+select {padding-right:18px}
+}
+
+label {position:relative}
+label:after {
+content:"\f078";   
+font-family: "FontAwesome";
+font-size: 14px;
+color:#aaa;
+right:8px; top:5px;
+padding:0 0 2px;
+position:absolute;
+pointer-events:none;
+}
+label:before {
+content:'';
+right:4px; top:5px;
+width:23px; height:18px;
+background:rgba(255, 255, 255, 0);
+position:absolute;
+pointer-events:none;
+display:block;
+}

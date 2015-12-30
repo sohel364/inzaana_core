@@ -1,0 +1,1 @@
+$(window).scroll(function() {var scroll = $(window).scrollTop();if(scroll>=500){$(".hc_scrollup").addClass("hc_scrollup1");}else{$(".hc_scrollup").removeClass("hc_scrollup1");}});

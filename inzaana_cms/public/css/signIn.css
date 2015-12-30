@@ -1,0 +1,65 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed);
+body {
+  background-color: #f0f0f0;
+}
+
+.panHead {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.pad50 {
+  padding-top:50px;
+}
+
+.mar30 {
+  margin-top: 50px;
+}
+
+.panel {
+  margin-bottom: 20px;
+  background-color: rgba(255, 255, 255, 0.69);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+.backgroundwhite {
+  background-color: white;
+  background-image: url(/images/signin.png)
+  size: cover;
+  
+}
+
+
+
+.firstpart {
+  
+}
+
+.backgroundWhite {
+  background-image: url(/images/signin.png);
+  background-size: cover;
+  height: 100%;
+}
+
+.marTop100 {
+  margin-top: 100px;
+}
+
+.pad30 {
+  padding-top: 30px;
+  padding-bottom: 10px;
+}
+
+.padDown {
+  padding-bottom: ;
+}
+
+.CustomHead {
+  text-shadow: 0px 1px 1px rgb(188, 188, 188);
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+.paraDeco {
+  text-shadow: 0px 2px 2px rgb(193, 193, 193);
+}
