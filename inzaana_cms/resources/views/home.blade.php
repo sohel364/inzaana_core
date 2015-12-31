@@ -1,11 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Testing')
-
-@section('head')
-    @parent
-
-@endsection
+@section('title', 'Home')
 
 @section('content')
     <div class="row">
@@ -66,5 +61,4 @@
         <img src="images/slide1.gif" class="img-responsive img-thumbnail maxHeightWidth animated fadeInRightShort delay-250" />
       </div>
     </div>
-  <!-- End of How it works-->
 @endsection
