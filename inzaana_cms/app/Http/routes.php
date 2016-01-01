@@ -11,7 +11,16 @@
 |
 */
 
+/*
+| --------------------------
+| Server deployment routing
+| --------------------------
+*/
+if (file_exists(__DIR__.'/Controllers/ServerDeploymentController.php'))
+{
+    Route::get('/deploy', 'ServerDeploymentController@deploy');
+}
+
 Route::get('/', function () {
-    //return view('welcome');
 	return view('home');
 });
