@@ -63,7 +63,7 @@
 
 							</ul>
 						  </li>
-						  <li><a href="signIn.html" class="animated">Login</a></li>
+						  <li><a href="/sign-in" class="animated">Login</a></li>
 						</ul>
 					  </div>
 					</div>
