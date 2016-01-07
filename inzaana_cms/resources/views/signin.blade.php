@@ -1,4 +1,7 @@
-@extends('layouts.master')
+@extends('layouts.master_out')
+
+@section('title', 'Log-In')
+
 @section('header-style')
  <link href="{{ URL::asset('css/signIn.css') }}" rel="stylesheet" type="text/css">  
 @endsection
@@ -60,6 +63,5 @@
 @section('footer-script')
   <script src="js/signIn.js"></script>
 @endsection
-
 
 </body>

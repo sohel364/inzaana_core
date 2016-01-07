@@ -24,4 +24,3 @@ if (file_exists(__DIR__.'/Controllers/ServerDeploymentController.php'))
 Route::get('/', function () {
 	return view('home');
 });
-
