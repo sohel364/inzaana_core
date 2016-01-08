@@ -16,12 +16,17 @@ class AuthorisedUserViewsTest extends TestCase
         $this->assertTrue(true);
     }
 	
+    public function testNewUserRegistration()
+    {
+        $this->visit('/sign-up')
+             ->see('Inzaana | Sign-Up');
+    }
  //    public function testNewUserRegistration()
-	// {
-	//     $this->visit('/register')
-	//          ->type('Taylor', 'name')
-	//          ->check('terms')
-	//          ->press('Register')
-	//          ->seePageIs('/dashboard');
-	// }
+    // {
+    //     $this->visit('/register')
+    //          ->type('Taylor', 'name')
+    //          ->check('terms')
+    //          ->press('Register')
+    //          ->seePageIs('/dashboard');
+    // }
 }
