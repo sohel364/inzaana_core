@@ -128,7 +128,7 @@
 							</select>
 						  </label>
 					<!--<a href="signUp.html" class="btn btn-info animated fadeInRight btn-poss"  data-id='4' type="button">Create Store!</a>-->
-						<a href="#" id="create_store" class="btn btn-info animated fadeInRight btn-poss"  data-id='4' type="button">Create Store!</a>
+						<a href="/sign-up" id="create_store" class="btn btn-info animated fadeInRight btn-poss"  data-id='4' type="button">Create Store!</a>
 				  </span>
 					  </div>
 					</div>
