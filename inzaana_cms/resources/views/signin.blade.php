@@ -6,7 +6,7 @@
  <link href="{{ URL::asset('css/signIn.css') }}" rel="stylesheet" type="text/css">  
 @endsection
 
-<body>
+@section('content')
   <div class="container-fluid">
 
     <div class="row">
@@ -59,9 +59,8 @@
     </div>
 
   </div>
-
-@section('footer-script')
-  <script src="js/signIn.js"></script>
 @endsection
 
-</body>
+@section('footer-script')
+  <script src="{{ URL::asset('js/signIn.js') }}"></script>
+@endsection
