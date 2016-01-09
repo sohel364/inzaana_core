@@ -1,0 +1,9 @@
+body { background-image: url(/images/404bg.png);}
+.error-template {padding: 0px 5px;text-align: center;}
+/*.error-actions {margin-top:15px;margin-bottom:15px;}*/
+.error-actions .btn { margin-right:10px; }
+
+
+.error-details {
+    padding-bottom: 10px;
+}

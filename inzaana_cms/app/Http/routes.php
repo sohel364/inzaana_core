@@ -25,14 +25,14 @@ Route::get('/', function () {
 	return view('home');
 });
 
-Route::get('/signin', function () {
+Route::get('/sign-in', function () {
 	return view('signin');
-<<<<<<< HEAD
-});
-=======
 });
 
 Route::get('/sign-up', function () {
 	return view('signup');
 });
->>>>>>> f4f97d5417756a72600203a524f7d204f3dfa1b7
+
+Route::get('/errors.404', function () {
+	return view('404');
+});
