@@ -10,13 +10,13 @@
       </div>
       <div class="col-md-6 col-md-offset-3 animatedParent animateOnce">
         <img class="img-responsive" src="images/shop.png">
-        <h3 class="text-center shopname animated bounceInLeft">Shop Name</h3>
+        <h3 class="text-center shopname animated bounceInLeft">{{ $shopName }}</h3>
       </div>
     </div>
 
     <div class="row animatedParent animateOnce">
       <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-        <form role="form">
+        <form role="form" action="http://spinelbd.com/inzaanahomepage/Dashboard/dashboard.html" method="POST">
           <h2 class="text-center nicename animated fadeInDownShort delay-1000"><small>Nice Name! Just give us few more information about your shop.</small></h2>
           
           <div class="animatedParent animateOnce" data-sequence='500'>
@@ -27,7 +27,7 @@
               <div class="col-xs-6 col-sm-6 col-md-6 text-left;">
                 <div class="form-group animated fadeInRightShort" data-id="2">
                   <label>
-                    <select class="form-control" placeholder="Select a country">
+                    <select name="business" class="form-control" placeholder="Select a business area">
                       <option value="" class="placehold" selected="">I'm not sure yet.</option>
                       <option value="">Animal &amp; Pet</option>
                       <option value="">Art &amp; Entertainment</option>
@@ -45,7 +45,7 @@
               <div class="col-xs-6 col-md-6">
                 <div class="form-group animated fadeInRightShort" data-id="4">
                   <label>
-                    <select class="form-control" placeholder="Select a country">
+                    <select name="country" class="form-control" placeholder="Select a country">
                       <option value="" class="placehold" selected="" disabled="">Select a country</option>
                       <option value="AF">Afghanistan</option>
                       <option value="AX">Aland Islands</option>
@@ -300,12 +300,12 @@
             <div class="row">
               <div class="col-xs-6 col-sm-6 col-md-6 text-right">
                 <div class="form-group animated fadeInLeftShort" data-id="5">
-                  <input type="name" name="frist name" class="form-control input-sm" placeholder="First Name">
+                  <input type="name" name="first_name" class="form-control input-sm" placeholder="First Name">
                 </div>
               </div>
               <div class="col-xs-6 col-sm-6 col-md-6 text-left">
                 <div class="form-group animated fadeInRightShort" data-id="6">
-                  <input type="name" name="frist name" class="form-control input-sm" placeholder="Last Name">
+                  <input type="name" name="last_name" class="form-control input-sm" placeholder="Last Name">
                 </div>
 
               </div>
@@ -339,7 +339,7 @@
             <div class="row">
               <div class="col-xs-4 col-sm-3 col-md-3">
                 <span class="button-checkbox animated fadeInLeftShort" data-id="11">
-						<button type="button" class="btn btn-default" data-color="info"><i class="state-icon glyphicon glyphicon-unchecked"></i>I Agree</button>
+						<button name="is_agreed" type="button" class="btn btn-default" data-color="info"><i class="state-icon glyphicon glyphicon-unchecked"></i>I Agree</button>
                         <input type="checkbox" class="hidden" value="1">
 					</span>
               </div>

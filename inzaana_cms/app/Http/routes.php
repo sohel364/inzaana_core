@@ -30,9 +30,6 @@ Route::get('/sign-in', function () {
 });
 
 Route::get('/sign-up', function () {
-	return view('signup');
+	return view('signup')->with('shopName', Input::get('store_name', 'Shop Name'));
 });
 
-Route::get('/errors.404', function () {
-	return view('404');
-});
