@@ -33,3 +33,6 @@ Route::get('/sign-up', function () {
 	return view('signup')->with('shopName', Input::get('store_name', 'Shop Name'));
 });
 
+Route::get('/admin', function () {
+	return view('admin');
+});

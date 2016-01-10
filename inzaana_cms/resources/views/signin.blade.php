@@ -29,7 +29,7 @@
             <span class="button-checkbox animated fadeInLeftShort">
 					<button type="button" class="btn" data-color="info">Remember Me</button>
                     <input type="checkbox" name="remember_me" id="remember_me" checked="checked" class="hidden">
-					<a href="" class="btn btn-link pull-right animated fadeInLeftShort">Forgot Password?</a>
+					<a href="admin" class="btn btn-link pull-right animated fadeInLeftShort">Forgot Password?</a>
 				</span>
             <hr class="mar30">
             <div class="row">
