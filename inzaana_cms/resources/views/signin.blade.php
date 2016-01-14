@@ -29,12 +29,12 @@
             <span class="button-checkbox animated fadeInLeftShort">
 					<button type="button" class="btn" data-color="info">Remember Me</button>
                     <input type="checkbox" name="remember_me" id="remember_me" checked="checked" class="hidden">
-					<a href="admin" class="btn btn-link pull-right animated fadeInLeftShort">Forgot Password?</a>
+					<a href="#" class="btn btn-link pull-right animated fadeInLeftShort">Forgot Password?</a>
 				</span>
             <hr class="mar30">
             <div class="row">
                <div class="col-xs-12 col-md-6 col-md-offset-3 animated growIn">
-                <input type="submit" value="Log In" class="btn btn-lg btn-info btn-block">
+                <a href="admin" class="btn btn-lg btn-info btn-block">Log In</a>
               </div>
             </div>
           </fieldset>
