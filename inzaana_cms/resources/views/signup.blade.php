@@ -16,7 +16,7 @@
 
     <div class="row animatedParent animateOnce">
       <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-        <form role="form" action="http://spinelbd.com/inzaanahomepage/Dashboard/dashboard.html" method="POST">
+        <form role="form" action="/admin" method="GET">
           <h2 class="text-center nicename animated fadeInDownShort delay-1000"><small>Nice Name! Just give us few more information about your shop.</small></h2>
           
           <div class="animatedParent animateOnce" data-sequence='500'>
