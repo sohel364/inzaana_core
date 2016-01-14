@@ -15,9 +15,8 @@ class CreateProducts extends Migration
         Schema::create('products', function (Blueprint $table) {
         $table->bigIncrements('id');
         $table->bigInteger('user_id');
-        $table->bigInteger('sup_category_id');
-        $table->bigInteger('category_id');
-        $table->bigInteger('sub_category_id');
+        $table->boolean('has_sub_category_id');
+		$table->bigInteger('category_subcategory_id');
         $table->double('lat');
         $table->double('lng');
         $table->string('product_title');
