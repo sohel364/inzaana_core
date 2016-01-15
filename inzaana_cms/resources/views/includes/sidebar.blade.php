@@ -8,7 +8,7 @@
               <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-              <p>Alexander Pierce</p>
+              <p>User Name</p>
               <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
           </div>
@@ -24,7 +24,7 @@
           <!-- /.search form -->
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu">
-            <li class="header">MAIN NAVIGATION</li>
+            <!--<li class="header">MAIN NAVIGATION</li>-->
             <li class="active treeview">
               <a href="#">
                 <i class="fa fa-dashboard"></i> <span>Dashboard</span> 
@@ -33,7 +33,7 @@
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-list"></i>
-                <span>Categories</span> <small class="label bg-green">120</small>
+                <span>Categories <small class="label bg-green">120</small></span> 
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
@@ -43,7 +43,7 @@
             </li>
             <li class="treeview">
               <a href="#">
-                <i class="fa fa-cubes"></i> <span>Products</span> <small class="label bg-green">1717</small>
+                <i class="fa fa-cubes"></i> <span>Products <small class="label bg-green">1717</small></span> 
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
                 <ul class="treeview-menu">
@@ -69,7 +69,7 @@
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-shopping-cart"></i>
-                <span>Orders</span> <small class="label bg-green">200</small>
+                <span>Orders <small class="label bg-green">200</small></span> 
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
@@ -82,7 +82,7 @@
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-users"></i> 
-                <span>Customers</span> <small class="label bg-green">700</small>
+                <span>Customers <small class="label bg-green">700</small></span> 
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
@@ -93,7 +93,7 @@
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-barcode"></i> 
-                  <span>Coupons</span> <small class="label bg-blue">700</small>
+                  <span>Coupons <small class="label bg-blue">700</small></span> 
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
@@ -138,7 +138,7 @@
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-file-code-o">
-                </i> <span> Pages</span> <small class="label bg-green">13</small>
+                </i> <span> Pages <small class="label bg-green">13</small></span> 
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
@@ -153,11 +153,11 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-plus"></i> Modules</a></li>
-                <li><a href="#"><i class="fa fa-list-ol"></i> Shipping</a></li>
-                <li><a href="#"><i class="fa fa-list-ol"></i> Payments</a></li>
-                <li><a href="#"><i class="fa fa-list-ol"></i> Order Totals</a></li>
-                <li><a href="#"><i class="fa fa-list-ol"></i> Product Feeds</a></li>
+                <li><a href="#"><i class="fa fa-magnet"></i> Modules</a></li>
+                <li><a href="#"><i class="fa fa-ship"></i> Shipping</a></li>
+                <li><a href="#"><i class="fa fa-credit-card"></i> Payments</a></li>
+                <li><a href="#"><i class="fa fa-reorder"></i> Order Totals</a></li>
+                <li><a href="#"><i class="fa fa-bicycle"></i> Product Feeds</a></li>
               </ul>
             </li>
             <li class="treeview">
@@ -210,32 +210,85 @@
             </li>
             <li class="treeview">
               <a href="#">
-                <i class="fa fa-share"></i> <span>Multilevel</span>
+                <i class="fa fa-cog"></i> <span>System</span>
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
                 <li>
-                  <a href="#"><i class="fa fa-circle-o"></i> Level One <i class="fa fa-angle-left pull-right"></i></a>
+                  <a href="#"><i class="fa fa-recycle"></i> Clear Cache(s) <i class="fa fa-angle-left pull-right"></i></a>
                   <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Level Two</a></li>
-                    <li>
-                      <a href="#"><i class="fa fa-circle-o"></i> Level Two <i class="fa fa-angle-left pull-right"></i></a>
-                      <ul class="treeview-menu">
-                        <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
-                        <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
-                      </ul>
-                    </li>
+                    <li><a href="#"><i class="fa fa-circle-o"></i> All (Less Images)</a></li>
+                    <li><a href="#"><i class="fa fa-image"></i> All (Plus Images)</a></li>
+                    <li><a href="#"><i class="fa fa-asterisk"></i> VQMod Cache</a></li>
+                    <li><a href="#"><i class="fa fa-file-image-o"></i> Image Cache</a></li>
+                    <li><a href="#"><i class="fa fa-cogs"></i> System Cache</a></li>
+                    <li><a href="#"><i class="fa fa-arrows-h"></i> Minify Cache</a></li>
+                    <li><a href="#"><i class="fa fa-search-plus"></i> SEO cache</a></li>
                   </ul>
                 </li>
-                <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
+                <li><a href="#"><i class="fa fa-wrench"></i> Settings</a></li>
+                <li><a href="#"><i class="fa fa-link"></i> SEO URL</a></li>
+                <li><a href="#"><i class="fa fa-clock-o"></i> Timeslot</a></li>
+                <li>
+                    <a href="#"><i class="fa fa-image"></i> Design <i class="fa fa-angle-left pull-right"></i></a>
+                  <ul class="treeview-menu">
+                    <li><a href="#"><i class="fa fa-link"></i> Footer links</a></li>
+                    <li><a href="#"><i class="fa fa-desktop"></i> Layouts <small class="label bg-green">12</small></a></li>
+                    <li><a href="#"><i class="fa fa-square"></i> Banners <small class="label bg-green">2</small></a></li>
+                    <li><a href="#"><i class="fa fa-stop"></i> Sliders <small class="label bg-green">6</small></a></li>
+                  </ul>
+                </li>
+                  <li><a href="#"><i class="fa fa-bug"></i> Error Logs</a></li>
+                  <li><a href="#"><i class="fa fa-suitcase"></i> Backup/Restore</a></li>
+                  <li>
+                      <a href="#"><i class="fa fa-exchange"></i> Export/Import <i class="fa fa-angle-left pull-right"></i></a>
+                  <ul class="treeview-menu">
+                    <li><a href="#"><i class="fa fa-user-md"></i> Master</a></li>
+                    <li><a href="#"><i class="fa fa-database"></i> Stock Data </a></li>
+                  </ul>
+                  </li>
               </ul>
             </li>
-            <li><a href="documentation/index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
-            <li class="header">LABELS</li>
-            <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
-            <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
-            <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-line-chart"></i> <span>Reports</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="#"><i class="fa fa-circle-o"></i> ADV Orders & Profit</a></li>
+                <li>
+                  <a href="#"><i class="fa fa-cart-plus"></i> Sales <i class="fa fa-angle-left pull-right"></i></a>
+                  <ul class="treeview-menu">
+                    <li><a href="#"><i class="fa fa-shopping-cart"></i> Orders</a></li>
+                    <li><a href="#"><i class="fa fa-money"></i> Tax</a></li>
+                    <li><a href="#"><i class="fa fa-ship"></i> Shipping</a></li>
+                    <li><a href="#"><i class="fa fa-hand-o-down"></i> Returns</a></li>
+                    <li><a href="#"><i class="fa fa-barcode"></i> Coupons</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#"><i class="fa fa-cubes"></i> Products <i class="fa fa-angle-left pull-right"></i></a>
+                  <ul class="treeview-menu">
+                    <li><a href="#"><i class="fa fa-desktop"></i> Viewed</a></li>
+                    <li><a href="#"><i class="fa fa-credit-card"></i> Purchased</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#"><i class="fa fa-users"></i> Customers <i class="fa fa-angle-left pull-right"></i></a>
+                  <ul class="treeview-menu">
+                    <li><a href="#"><i class="fa fa-shopping-cart"></i> Orders</a></li>
+                    <li><a href="#"><i class="fa fa-usd"></i> Reward Points</a></li>
+                    <li><a href="#"><i class="fa fa-google-wallet"></i> Wallet</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#"><i class="fa  fa-user-plus"></i> Affiliates <i class="fa fa-angle-left pull-right"></i></a>
+                  <ul class="treeview-menu">
+                    <li><a href="#"><i class="fa fa-star-half-empty"></i> Commission</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
           </ul>
         </section>
         <!-- /.sidebar -->
