@@ -21,7 +21,6 @@ class CreateSubMenus extends Migration
         $table->string('(sub_menu_icon');
         $table->string('action');
         $table->string('is_active');
-        $table->rememberToken();
         $table->timestamps();        
         });  //
     }

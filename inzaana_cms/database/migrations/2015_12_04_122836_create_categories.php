@@ -18,7 +18,6 @@ class CreateCategories extends Migration
         $table->string('category_name');
         $table->string('category_slug');
         $table->string('status');
-        $table->rememberToken();
         $table->timestamps();        
         });  //
     }

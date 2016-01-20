@@ -24,7 +24,6 @@ class CreatePlans extends Migration
         $table->string('photo_size');
         $table->string('photo_type');
         $table->string('status');
-        $table->rememberToken();
         $table->timestamps();        
         });  //
     }

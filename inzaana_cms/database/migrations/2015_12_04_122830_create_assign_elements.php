@@ -17,7 +17,6 @@ class CreateAssignElements extends Migration
         $table->bigInteger('super_category_id');
         $table->bigInteger('element_id');
         $table->bigInteger('element_value_id');
-        $table->rememberToken();
         $table->timestamps();        
         });
     }

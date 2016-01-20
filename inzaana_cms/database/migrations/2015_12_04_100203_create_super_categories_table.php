@@ -17,7 +17,6 @@ class CreateSuperCategoriesTable extends Migration
             $table->string('sup_category_name');
             $table->string('sup_category_slug');
             $table->string('status');          
-            $table->rememberToken();
             $table->timestamps();
         });// //
     }

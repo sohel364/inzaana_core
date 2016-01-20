@@ -15,7 +15,6 @@ class CreateAccYears extends Migration
             Schema::create('acc_years', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('acc_year');
-            $table->rememberToken();
             $table->timestamps();
         });// // //
     }

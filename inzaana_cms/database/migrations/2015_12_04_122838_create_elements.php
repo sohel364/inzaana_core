@@ -16,7 +16,6 @@ class CreateElements extends Migration
         $table->bigIncrements('id');
         $table->string('element_name');
         $table->string('status');
-        $table->rememberToken();
         $table->timestamps();        
         });  //
     }

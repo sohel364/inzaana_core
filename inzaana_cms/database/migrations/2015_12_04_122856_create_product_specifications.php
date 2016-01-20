@@ -28,7 +28,6 @@ class CreateProductSpecifications extends Migration
         $table->float('terms_conditions');
         $table->string('video_calling_facility');
         $table->string('inzaana_fullfill');
-        $table->rememberToken();
         $table->timestamps();        
         });  //
     }

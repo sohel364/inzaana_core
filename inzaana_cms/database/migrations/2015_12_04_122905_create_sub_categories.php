@@ -18,7 +18,6 @@ class CreateSubCategories extends Migration
         $table->string('sub_category_name');
         $table->string('sub_category_slug');       
         $table->string('status');
-        $table->rememberToken();
         $table->timestamps();        
         });  //
     }

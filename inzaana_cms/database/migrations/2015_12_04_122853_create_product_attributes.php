@@ -22,7 +22,6 @@ class CreateProductAttributes extends Migration
         $table->bigInteger('element_id');
         $table->bigInteger('element_value_id');
         $table->string('element_description');        
-        $table->rememberToken();
         $table->timestamps();        
         });  //
     }

@@ -19,7 +19,6 @@ class CreateBrands extends Migration
         $table->bigInteger('sub_category_id');
         $table->string('brand_name');
         $table->string('status');
-        $table->rememberToken();
         $table->timestamps();        
         });  //
     }

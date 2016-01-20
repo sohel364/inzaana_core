@@ -18,7 +18,6 @@ class CreateSendApprovals extends Migration
         $table->bigInteger('product_id');
         $table->bigInteger('plan_id');       
         $table->string('status');
-        $table->rememberToken();
         $table->timestamps();        
         });  //
     }

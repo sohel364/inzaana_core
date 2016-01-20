@@ -18,7 +18,6 @@ class CreateRoleMenus extends Migration
         $table->bigInteger('menu_id');
         $table->bigInteger('sub_menu_id');       
         $table->string('status');
-        $table->rememberToken();
         $table->timestamps();        
         });  //
     }

@@ -20,7 +20,6 @@ class CreateMenus extends Migration
         $table->string('menu_icon');
         $table->string('controller');
         $table->string('is_active');
-        $table->rememberToken();
         $table->timestamps();        
         });  //
     }

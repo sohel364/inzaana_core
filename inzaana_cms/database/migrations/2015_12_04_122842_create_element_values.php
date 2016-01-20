@@ -17,7 +17,6 @@ class CreateElementValues extends Migration
         $table->bigInteger('element_id');
         $table->bigInteger('element_valuse');
         $table->string('status');
-        $table->rememberToken();
         $table->timestamps();        
         });  //
     }
