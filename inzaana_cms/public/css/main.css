@@ -206,3 +206,10 @@ hr{
   position: relative;
   z-index: 9999999999;
 }
+
+.removeBCarve {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
