@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Inzaana;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,15 +10,15 @@ class SendApproval extends Model
 	 
 	 public function user()
 	 {
-		return $this->belongsTo('App\User');
+		return $this->belongsTo('Inzaana\User');
 	 }
 	 public function product()
 	 {
-		return $this->belongsTo('App\Product');
+		return $this->belongsTo('Inzaana\Product');
 	 }
 	 public function plan()
 	 {
-		return $this->belongsTo('App\Plan');
+		return $this->belongsTo('Inzaana\Plan');
 	 }
 	 
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Inzaana;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,11 +15,11 @@ class Category extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('Inzaana\User');
     }
 
     public function superCategories()
     {
-        return $this->hasMany('App\SuperCategory');
+        return $this->hasMany('Inzaana\SuperCategory');
     }
 }

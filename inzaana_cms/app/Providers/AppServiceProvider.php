@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace Inzaana\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace Inzaana\Http\Controllers\Auth;
 
-use App\User;
+use Inzaana\User;
 use Validator;
-use App\Http\Controllers\Controller;
+use Inzaana\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+
+// @addedby tajuddin.khandaker.cse.ju@gmail.com
+use Illuminate\Http\Request as AuthRequest;
 
 class AuthController extends Controller
 {
@@ -22,6 +25,9 @@ class AuthController extends Controller
     */
 
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+
+    protected $redirectTo = '/home';
+    protected $defaultStoreName = 'My New Store';
 
     /**
      * Create a new authentication controller instance.
@@ -61,5 +67,55 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    public function getLogout()
+    {
+        return redirect('/');
+    }
+
+    public function getLogin()
+    {
+        return view('signin');
+    }
+
+    public function postLogin()
+    {
+        return redirect('/dashboard');
+    }
+
+    public function postRegister(AuthRequest $request)
+    {
+        $storeName = $request->input("first_name", $this->defaultStoreName);
+        if(empty($storeName)) 
+            $storeName = $this->defaultStoreName;
+
+        $validator = $this->validator($request->all());
+
+        if(!$validator->fails())
+        {
+            return redirect('/auth/register')->with('store_name' , $storeName)->withErrors($validator)->withInput();
+        }
+        else
+        {
+            $user = $this->create([
+                'name' => $request->input('first_name') . ' ' . $request->input('last_name'),
+                'email' => $request->input('email'),
+                'password' => $request->input('password'),
+            ]);
+            if($user)
+            {
+                return redirect('/dashboard')->with('user', $user);
+            }
+        }
+    }
+
+    public function getRegister(AuthRequest $request)
+    {
+        $storeName = $request->query("store_name");
+        if(empty($storeName)) 
+            return redirect('/')->with('message', 'You forgot to put the name of your shop!');
+        // dd($request->query());
+        return view('signup')->with('store_name' , $storeName);
     }
 }

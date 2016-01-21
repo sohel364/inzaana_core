@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Inzaana;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,6 +14,6 @@ class RoleMenu extends Model
      */
     public function role()
     {
-        return $this->belongsTo('App\Role');
+        return $this->belongsTo('Inzaana\Role');
     }
 }

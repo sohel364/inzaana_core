@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Inzaana;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,6 +10,6 @@ class ElementValue extends Model
 
     public function element()
     {
-        return $this->belongsTo('App\Element');
+        return $this->belongsTo('Inzaana\Element');
     }
 }

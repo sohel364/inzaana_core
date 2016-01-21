@@ -20,7 +20,7 @@
             "app/Models"
         ],
         "psr-4": {
-            "App\\": "app/"
+            "Inzaana\\": "app/"
         }
     },
     "autoload-dev": {

@@ -63,7 +63,7 @@
 
 							</ul>
 						  </li>
-						  <li><a href="/sign-in" class="animated">Login</a></li>
+						  <li><a href="auth/login" class="animated">Login</a></li>
 						</ul>
 					  </div>
 					</div>
@@ -117,10 +117,41 @@
                       <h1 class="heading1 animated growIn delay-500 go" data-id="1">Give a nice name to your online store!</h1>
                       <div class="col-md-5 col-md-offset-3 col-xs-8 col-xs-offset-2">
 
+<<<<<<< Updated upstream
                           <!--form start--------------------------------------------------------------------------------------->
                           <form method="POST" action="">
                               <div class="input-group input-group-lg">
                                   <input type="text" class="form-control animated fadeInLeft go" data-id="2" placeholder="Your Store Name...">
+=======
+          <div class="col-md-4 col-md-offset-4 col-xs-8 col-xs-offset-2" style="left: -69px;">
+            <div class="input-group input-group-lg">
+              <!-- ======================================= CREATE STORE FORM ========================================= -->
+              <form role="form" action="/auth/register" method="GET">
+                
+                <!-- {!! csrf_field() !!} -->
+
+                <input name="store_name" type="text" class="form-control animated fadeInLeft" data-id='2' placeholder="Your Store Name...">
+                <span class="input-group-btn input-group-lg ">
+                  <input name="domain_name" type="text" class="form-control animated growIn CreateInput" data-id='2' value="Inzaana" style="height: 46px; width: 100px; border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                  <label class="animated growIn" data-id="3">
+                  <select name="domain_type" class="form-control" placeholder="Select a domain" style="height: 46px; margin: 0px; padding-left: 0px; padding-right: 25px;">
+                    <option value=".com" class="placehold" selected>.com</option>
+                    <option value=".net">.net</option>
+                    <option value=".org">.org</option>
+                  </select>
+                  </label>
+                  <!--<a href="signUp.html" class="btn btn-info animated fadeInRight btn-poss"  data-id='4' type="button">Create Store!</a>-->
+                  <!-- <a href="/sign-up" id="create_store" class="btn btn-info animated fadeInRight btn-poss"  data-id='4' type="submit">Create Store!</a> -->
+                  <button id="create_store" class="btn btn-info animated fadeInRight btn-poss" data-id='4' type="submit">Create Store!</button>
+                </span>
+
+              </form>
+              <!-- ========================================================================================= -->
+
+            </div>
+          </div>
+				  </div>
+>>>>>>> Stashed changes
 
                                   <span class="input-group-btn input-group-lg ">
                                       <input type="text" class="form-control animated growIn CreateInput go removeBCarve" data-id="2" value="Inzaana" style="width: 106px; left: 0px; top: 0px;">

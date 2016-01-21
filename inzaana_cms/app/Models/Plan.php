@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Inzaana;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,10 +10,10 @@ class Plan extends Model
 	 
 	public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('Inzaana\User');
     }
 	public function sendApprovals()
 	{
-		return $this->hasMany('App\SendApproval');
+		return $this->hasMany('Inzaana\SendApproval');
 	}
 }

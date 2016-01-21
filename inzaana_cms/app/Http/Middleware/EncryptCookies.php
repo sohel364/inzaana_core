@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace Inzaana\Http\Middleware;
 
 use Illuminate\Cookie\Middleware\EncryptCookies as BaseEncrypter;
 

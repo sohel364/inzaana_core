@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Inzaana;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,7 +10,7 @@ class ProductSpecification extends Model
 	 
 	 public function user()
 	 {
-		return $this->belongsTo('App\User');
+		return $this->belongsTo('Inzaana\User');
 	 }
 	 
 }

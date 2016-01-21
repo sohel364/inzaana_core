@@ -16,23 +16,23 @@
 | Server deployment routing
 | --------------------------
 */
-if (file_exists(__DIR__.'/Controllers/ServerDeploymentController.php'))
-{
-    Route::get('/deploy', 'ServerDeploymentController@deploy');
-}
 
 Route::get('/', function () {
 	return view('home');
 });
 
-Route::get('/sign-in', function () {
-	return view('signin');
+Route::group(array('before' => 'guest'), function () {
+	
+// Authentication routes...
+// Registration routes...
+Route::controller('/auth', 'Auth\AuthController', [
+    'getRegister' => 'auth.get.register',
+    'postRegister' => 'auth.post.register',
+    'postLogin' => 'auth.post.login',
+    'getLogin' => 'auth.get.login',
+    'getLogout' => 'auth.get.logout',
+]);
+
 });
 
-Route::get('/sign-up', function () {
-	return view('signup')->with('shopName', Input::get('store_name', 'Shop Name'));
-});
-
-Route::get('/admin', function () {
-	return view('admin');
-});
+Route::get('/dashboard', ['uses' => 'UserController@create', 'as' => 'user.home']);

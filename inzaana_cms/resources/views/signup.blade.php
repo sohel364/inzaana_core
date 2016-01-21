@@ -9,14 +9,20 @@
         <h1 class="signupHeader animated fadeInDownShort">Let's create your store!</h1>
       </div>
       <div class="col-md-6 col-md-offset-3 animatedParent animateOnce">
-        <img class="img-responsive" src="images/shop.png">
-        <h3 class="text-center shopname animated bounceInLeft">{{ $shopName }}</h3>
+        <img class="img-responsive" src="{{ URL::asset('images/shop.png') }}">
+        <h3 class="text-center shopname animated bounceInLeft">{{ $store_name }}</h3>
       </div>
     </div>
 
     <div class="row animatedParent animateOnce">
       <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-        <form role="form" action="/admin" method="GET">
+
+        <!-- ================================================================================ -->
+
+        <form role="form" action="/auth/register" method="POST">
+
+          {!! csrf_field() !!}
+
           <h2 class="text-center nicename animated fadeInDownShort delay-1000"><small>Nice Name! Just give us few more information about your shop.</small></h2>
           
           <div class="animatedParent animateOnce" data-sequence='500'>
@@ -46,7 +52,7 @@
                 <div class="form-group animated fadeInRightShort" data-id="4">
                   <label>
                     <select name="country" class="form-control" placeholder="Select a country">
-                      <option value="" class="placehold" selected="" disabled="">Select a country</option>
+                      <option value="" class="placehold" selected disabled="false">Select a country</option>
                       <option value="AF">Afghanistan</option>
                       <option value="AX">Aland Islands</option>
                       <option value="AL">Albania</option>
@@ -313,12 +319,12 @@
             <div class="row">
               <div class="col-xs-6 col-sm-6 col-md-6 text-right">
                 <div class="form-group animated fadeInLeftShort" data-id="7">
-                  <input type="email" class="form-control input-sm" placeholder="Enter Email">
+                  <input name="email" type="email" class="form-control input-sm" placeholder="Enter Email">
                 </div>
               </div>
               <div class="col-xs-6 col-sm-6 col-md-6 text-left">
                 <div class="form-group animated fadeInRightShort" data-id="8">
-                  <input type="email" class="form-control input-sm" placeholder="Confirm Email">
+                  <input name="email_confirmation" type="email" class="form-control input-sm" placeholder="Confirm Email">
                 </div>
 
               </div>
@@ -356,6 +362,9 @@
             </div>
           </div>
         </form>
+
+        <!-- ==================================================================================== -->
+
       </div>
     </div>
 

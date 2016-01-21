@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Inzaana;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
@@ -42,6 +42,6 @@ class User extends Model implements AuthenticatableContract,
      */
     public function categories()
     {
-        return $this->hasMany('App\Category');
+        return $this->hasMany('Inzaana\Category');
     }
 }

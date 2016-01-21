@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Inzaana;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,6 +10,6 @@ class SubCategory extends Model
 	 
 	 public function Category()
     {
-        return $this->belongsTo('App\Category');
+        return $this->belongsTo('Inzaana\Category');
     }
 }

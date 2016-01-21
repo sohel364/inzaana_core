@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace Inzaana\Events;
 
 abstract class Event
 {
