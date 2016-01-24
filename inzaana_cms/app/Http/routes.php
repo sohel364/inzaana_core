@@ -36,3 +36,10 @@ Route::controller('/auth', 'Auth\AuthController', [
 });
 
 Route::get('/dashboard', ['uses' => 'UserController@create', 'as' => 'user.home']);
+
+// ==============  ADDED AFTER 5.2 LARAVEL MIGRATION ========================== //
+Route::group(['middleware' => 'web'], function () {
+    Route::auth();
+
+    Route::get('/', 'HomeController@index');
+});
