@@ -28,6 +28,7 @@ class AuthController extends Controller
 
     protected $redirectTo = '/dashboard';
     protected $defaultStoreName = 'My New Store';
+    protected $redirectToGuestHome = '/';
 
     /**
      * Create a new authentication controller instance.
@@ -71,7 +72,7 @@ class AuthController extends Controller
 
     public function getLogout()
     {
-        return redirect('/');
+        return redirect($this->redirectToGuestHome);
     }
 
     public function getLogin()
@@ -81,7 +82,7 @@ class AuthController extends Controller
 
     public function postLogin()
     {
-        return redirect('/dashboard');
+        return redirect($this->redirectTo);
     }
 
     public function postRegister(AuthRequest $request)
@@ -94,28 +95,30 @@ class AuthController extends Controller
 
         if($validator->fails())
         {
-            return redirect('/register')->with('store_name' , $storeName)->withErrors($validator)->withInput();
+            return redirect('/register')->with('store_name' , $storeName)->withErrors($validator)->withInput($request->except('password'));
         }
         else
         {
             $user = $this->create([
-                'name' => $request->input('first_name') . ' ' . $request->input('last_name'),
+                'name' => $request->input('name') . ' ' . $request->input('last_name'),
                 'email' => $request->input('email'),
                 'password' => $request->input('password'),
             ]);
+
             if($user)
             {
-                return redirect('/dashboard')->with('user', $user);
+                return redirect()->route('user::home', [ 'hashed_user_id' => bcrypt($user->id) ]);
             }
         }
     }
 
-    public function getRegister(AuthRequest $request)
+    public function getRegister()
     {
-        $storeName = $request->query("store_name");
+        // $storeName = $request->query("store_name");
+        $storeName = Request::input('store_name');
         if(empty($storeName)) 
-            return redirect('/')->with('message', 'You forgot to put the name of your shop!');
+            return redirect()->route('guest::home')->withErrors('message', 'You forgot to put the name of your shop!');
         // dd($request->query());
-        return view('auth.register')->with('store_name' , $storeName);
+        return redirect('/register')->with('storeName' , $storeName);//view('auth.register')->with('store_name' , $storeName);
     }
 }

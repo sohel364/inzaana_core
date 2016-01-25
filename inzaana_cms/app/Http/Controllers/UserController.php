@@ -59,10 +59,14 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($hashed_user_id)
     {
-        //
-        return view('admin');
+        $user = Auth::user();
+        if(bcrypt($user->id) == $hashed_user_id)
+        {
+            return view('admin')->with('user', $user);
+        }
+        return redirect()->route('guest::home');
     }
 
     /**

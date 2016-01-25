@@ -10,7 +10,7 @@
       </div>
       <div class="col-md-6 col-md-offset-3 animatedParent animateOnce">
         <img class="img-responsive" src="{{ URL::asset('images/shop.png') }}">
-        <h3 class="text-center shopname animated bounceInLeft">Store Name</h3>
+        <h3 class="text-center shopname animated bounceInLeft">{{{ $storeName or 'Dummy Store Name' }}}</h3>
       </div>
     </div>
 
