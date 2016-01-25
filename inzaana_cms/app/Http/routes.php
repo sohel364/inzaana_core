@@ -17,29 +17,32 @@
 | --------------------------
 */
 
-Route::get('/', function () {
-	return view('home');
-});
+Route::get('/', 'HomeController@index');
 
 Route::group(array('before' => 'guest'), function () {
 	
 // Authentication routes...
 // Registration routes...
-Route::controller('/auth', 'Auth\AuthController', [
-    'getRegister' => 'auth.get.register',
-    'postRegister' => 'auth.post.register',
-    'postLogin' => 'auth.post.login',
-    'getLogin' => 'auth.get.login',
-    'getLogout' => 'auth.get.logout',
-]);
+// Route::controller('/auth', 'Auth\AuthController', [
+//     'getRegister' => 'auth.get.register',
+//     'postRegister' => 'auth.post.register',
+//     'postLogin' => 'auth.post.login',
+//     'getLogin' => 'auth.get.login',
+//     'getLogout' => 'auth.get.logout',
+// ]);
 
 });
 
-Route::get('/dashboard', ['uses' => 'UserController@create', 'as' => 'user.home']);
+// Route::get('/dashboard', ['uses' => 'UserController@create', 'as' => 'user.home']);
 
 // ==============  ADDED AFTER 5.2 LARAVEL MIGRATION ========================== //
 Route::group(['middleware' => 'web'], function () {
+	
+	// Registration routes...
+	Route::get('auth/register', 'Auth\AuthController@getRegister');
+	Route::post('auth/register', 'Auth\AuthController@postRegister');
+
     Route::auth();
 
-    Route::get('/', 'HomeController@index');
+    Route::get('/dashboard/{id}', 'UserController@show');
 });

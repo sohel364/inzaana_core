@@ -11,7 +11,7 @@ class ExampleTest extends TestCase
      *
      * @return void
      */
-    public function testBasicExample()
+    public function testCMSHomePage()
     {
         $this->visit('/')
              ->see('Inzaana | Home');

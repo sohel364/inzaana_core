@@ -26,7 +26,7 @@ class AuthController extends Controller
 
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/dashboard';
     protected $defaultStoreName = 'My New Store';
 
     /**
@@ -86,15 +86,15 @@ class AuthController extends Controller
 
     public function postRegister(AuthRequest $request)
     {
-        $storeName = $request->input("first_name", $this->defaultStoreName);
+        $storeName = $request->input("store_name", $this->defaultStoreName);
         if(empty($storeName)) 
             $storeName = $this->defaultStoreName;
 
         $validator = $this->validator($request->all());
 
-        if(!$validator->fails())
+        if($validator->fails())
         {
-            return redirect('/auth/register')->with('store_name' , $storeName)->withErrors($validator)->withInput();
+            return redirect('/register')->with('store_name' , $storeName)->withErrors($validator)->withInput();
         }
         else
         {
@@ -116,6 +116,6 @@ class AuthController extends Controller
         if(empty($storeName)) 
             return redirect('/')->with('message', 'You forgot to put the name of your shop!');
         // dd($request->query());
-        return view('signup')->with('store_name' , $storeName);
+        return view('auth.register')->with('store_name' , $storeName);
     }
 }

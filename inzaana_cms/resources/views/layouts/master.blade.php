@@ -63,7 +63,7 @@
 
 							</ul>
 						  </li>
-						  <li><a href="auth/login" class="animated">Login</a></li>
+						  <li><a href="{{ url('/login') }}" class="animated">Login</a></li>
 						</ul>
 					  </div>
 					</div>
@@ -117,7 +117,7 @@
               <h1 class="heading1 animated growIn delay-500 go" data-id="1">Give a nice name to your online store!</h1>
               <div class="col-md-5 col-md-offset-3 col-xs-8 col-xs-offset-2">
 
-                  <form role="form" method="GET" action="/auth/register">
+                  <form role="form" method="GET" action="{{ url('/register') }}">
 
                       {!! csrf_field() !!}
 

@@ -19,7 +19,7 @@
                
                 
                 <div class="error-actions col-xs-12 col-md-8 col-md-offset-2 marTop100 text-center">
-                    <a href="/home" class="btn btn btn-info"><span class="glyphicon glyphicon-home"></span>
+                    <a href="{{ url('/') }}" class="btn btn btn-info"><span class="glyphicon glyphicon-home"></span>
                         Take Me Home </a><a href="#" class="btn btn-default "><span class="glyphicon glyphicon-envelope"></span> Contact Support </a>
                 </div>
             </div>
