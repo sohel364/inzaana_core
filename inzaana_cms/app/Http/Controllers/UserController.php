@@ -30,6 +30,7 @@ class UserController extends Controller
     public function index()
     {
         //
+        return view('admin');
     }
 
     /**
@@ -62,7 +63,8 @@ class UserController extends Controller
     public function show($hashed_user_id)
     {
         $user = Auth::user();
-        if(bcrypt($user->id) == $hashed_user_id)
+        // if(bcrypt($user->id) == $hashed_user_id)
+        if($user->id == $hashed_user_id)
         {
             return view('admin')->with('user', $user);
         }

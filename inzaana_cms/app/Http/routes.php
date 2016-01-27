@@ -24,9 +24,11 @@ Route::group([ 'as' => 'guest::' ], function() {
 
 Route::group(['middleware' => 'web'], function () {
 
+	Route::get('/auth/login', [ 'uses' => 'Auth\AuthController@getLogin', 'as' => 'login' ]);
+
     Route::auth();
 
     Route::group([ 'as' => 'user::' ], function() {
-    	Route::get('/dashboard/{hashed_user_id}', [ 'uses' => 'UserController@show', 'as' => 'home' ]);
+    	Route::get('/dashboard', [ 'uses' => 'UserController@index', 'as' => 'home' ]);
     });
 });

@@ -1,4 +1,4 @@
-@extends('app')
+@extends('layouts.admin-master')
 @section('content')
 <!-- Small boxes (Stat box) -->
 <div class="row">

@@ -25,7 +25,7 @@
               {!! csrf_field() !!}
 
               <fieldset>
-                <div class="form-group animated fadeInLeftShort">
+                <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }} animated fadeInLeftShort">
                   <input type="email" name="email" id="email" class="form-control" placeholder="Email Address" value="{{ old('email') }}">
                   @if ($errors->has('email'))
                       <span class="help-block">
@@ -33,7 +33,7 @@
                       </span>
                   @endif
                 </div>
-                <div class="form-group animated fadeInLeftShort">
+                <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }} animated fadeInLeftShort">
                   <input type="password" name="password" id="password" class="form-control" placeholder="Password">
                   @if ($errors->has('password'))
                       <span class="help-block">

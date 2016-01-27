@@ -14,7 +14,7 @@ class CreateProductSpecifications extends Migration
     {
         Schema::create('product_specifications', function (Blueprint $table) {
         $table->bigIncrements('id');
-        $table->bigInteger('user_id');
+        // $table->bigInteger('user_id');
         $table->bigInteger('product_id');
         $table->string('color');
         $table->string('rating');

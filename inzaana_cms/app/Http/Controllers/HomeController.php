@@ -2,9 +2,7 @@
 
 namespace Inzaana\Http\Controllers;
 
-// namespace App\Http\Controllers;
-
-use App\Http\Requests;
+use Inzaana\Http\Requests;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -16,7 +14,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware('auth');
+        $this->middleware('guest');
     }
 
     /**
