@@ -47,7 +47,7 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
                 <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-plus"></i> Add New Product</a></li>
+                <li><a href="/products"><i class="fa fa-plus"></i> Add New Product</a></li>
                 <li><a href="#"><i class="fa  fa-filter"></i> Filter Tags</a></li>
                 <li><a href="#"><i class="fa  fa-list-ol"></i> List All Products</a></li>
                 <li><a href="#"><i class="fa  fa-angle-double-down"></i> Low Stock Products</a></li>

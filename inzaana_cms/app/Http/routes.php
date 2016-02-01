@@ -30,9 +30,8 @@ Route::group(['middleware' => 'web'], function () {
 
     Route::group([ 'as' => 'user::' ], function() {
     	Route::get('/dashboard', [ 'uses' => 'UserController@index', 'as' => 'home' ]);
-        Route::get('/product/add', function(){
-            return view('add_product');
-        });
+        Route::get('/products', [ 'uses' => 'ProductController@index', 'as' => 'products' ]);
+        Route::post('/products/create', [ 'uses' => 'ProductController@create', 'as' => 'products.create' ]);
     });
 });
 

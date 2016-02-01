@@ -1,5 +1,5 @@
 @extends('layouts.master_out')
-@section('title', 'Reset passwors')
+@section('title', 'Reset passwords')
 @section('header-style')
  <link href="{{ URL::asset('css/email.css') }}" rel="stylesheet" type="text/css">  
 @endsection
@@ -28,15 +28,11 @@
 
                             <div class="col-md-12">
                                 <input type="email" placeholder="Your Email Address" class="form-control" name="email" value="{{ old('email') }}">
-                                <span class="help-block">
-                                    <strong>::::: Please Enter a vaild email id::::</strong>
-                                </span>
-
-                                <!--@if ($errors->has('email'))
+                                @if ($errors->has('email'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('email') }}</strong>
                                     </span>
-                                @endif-->
+                                @endif
                             </div>
                         </div>
 
