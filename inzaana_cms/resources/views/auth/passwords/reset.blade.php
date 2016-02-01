@@ -1,4 +1,4 @@
-
+@extends('layouts.master_out')
 @section('content')
 <div class="container">
     <div class="row">
