@@ -67,7 +67,7 @@
         </div>
     </div>
 </div>
-    
+        
     <!--add product modal-->
 <div id="addProduct" class="modal fade" role="dialog">
     
@@ -116,6 +116,12 @@
                       </div>
                         <div class="col-sm-7 padT5"><b>$</b></div>
                     </div>
+                    <div class="form-group">
+                      <label for="upload-image" class="col-sm-3 control-label">Upload Image:</label>
+                      <div class="col-sm-9">
+                        <input type="file" class="form-control" id="upload-image">
+                      </div>
+                    </div>
                 </form>
 
       </div>
@@ -128,5 +134,116 @@
     
 </div>
     <!--end add product modal-->
+    
+    <!--recently added product-->
+    <div class="row">
+            <div class="col-xs-12">
+              <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">Recently Added product</h3>
+                  <div class="box-tools">
+                    <div class="input-group" style="width: 150px;">
+                      <input type="text" name="table_search" class="form-control input-sm pull-right" placeholder="Search">
+                      <div class="input-group-btn">
+                        <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                  <table id="parent" class="table table-hover">
+                    <tr>
+                      <th>ID</th>
+                      <th>Product Name</th>
+                      <th>Category</th>
+                      <th>MRP</th>
+                      <th>Discount</th>
+                      <th>Price</th>
+                      <th>Image</th>
+                      <th>Status</th>
+                    </tr>
+                    <tr>
+                      <td id="child"><a href="">001</a> </td>
+                      <td id="child"><a href="">Kitkat 5RS</a></td>
+                      <td id="child"><a href="">Chocolate</a></td>
+                      <td id="child"><a href="">$3</a></td>
+                      <td id="child"><a href="">2%</a></td>
+                      <td id="child"><a href="">$3.99</a></td>
+                      <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ URL::asset('images/kitkat-300x300.jpg') }}" height="60px" width="90px"/></a></td>
+                      <td id="child"><a href=""><span class="label label-success">In Stock</span></a></td>
+                    </tr>
+                    <tr>
+                      <td id="child"><a href="">002</a> </td>
+                      <td id="child"><a href="">Kitkat 10RS</a></td>
+                      <td id="child"><a href="">Chocolate</a></td>
+                      <td id="child"><a href="">$3</a></td>
+                      <td id="child"><a href="">2%</a></td>
+                      <td id="child"><a href="">$3.99</a></td>
+                      <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ URL::asset('images/kitkat-300x300.jpg') }}" height="60px" width="90px"/></a></td>
+                      <td id="child"><a href=""><span class="label label-danger">Out of Stock</span></a></td>
+                    </tr>
+                    <tr>
+                      <td id="child"><a href="">003</a> </td>
+                      <td id="child"><a href="">Kitkat 15RS</a></td>
+                      <td id="child"><a href="">Chocolate</a></td>
+                      <td id="child"><a href="">$3</a></td>
+                      <td id="child"><a href="">2%</a></td>
+                      <td id="child"><a href="">$3.99</a></td>
+                      <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ URL::asset('images/kitkat-300x300.jpg') }}" height="60px" width="90px"/></a></td>
+                      <td id="child"><a href=""><span class="label label-success">In Stock</span></a></td>
+                    </tr>
+                    <tr>
+                      <td id="child"><a href="">004</a> </td>
+                      <td id="child"><a href="">Kitkat 25RS</a></td>
+                      <td id="child"><a href="">Chocolate</a></td>
+                      <td id="child"><a href="">$3</a></td>
+                      <td id="child"><a href="">2%</a></td>
+                      <td id="child"><a href="">$3.99</a></td>
+                      <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ URL::asset('images/kitkat-300x300.jpg') }}" height="60px" width="90px"/></a></td>
+                      <td id="child"><a href=""><span class="label label-success">In Stock</span></a></td>
+                    </tr>
+                  </table>
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div>
+          </div>
+    <!--end of recently added product-->
+
+<!--View product modal-->
+<div id="viewImage" class="modal fade" role="dialog">
+    
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Product Details - Quick View</h4>
+      </div>
+      <div class="modal-body">
+          <div class="row">
+      <div class="col-md-6  padT10">
+        <img class="img-responsive imgborder" data-toggle="magnify" src="{{ URL::asset('images/kitkat-300x300.jpg') }}" />
+      </div>
+      <div class="col-md-6">
+        <h3 class="padmar0 headtext1">Kitkat 25RS</h3>
+        <p>ID:0001</p>
+        <p>Category: Chocolate</p>
+        <h4>$2.99</h4>
+        <p class="sku">30% discount!</p>
+          <span class="label label-success">In Stock</span></a>
+        <hr>
+        <h5>Product Info</h5>
+        <p class="slidePara1">I'm a product details. Quibusdam minim occaecat, eu fugiat lorem ea cupidatat. Do et enim deserunt nam duis imitarentur occaecat noster eiusmod. Ita iis tamen quorum aliqua e quamquam sunt mandaremus arbitror. Occaecat concursionibus ne doctrina, do hic anim labore noster.</p>
+      </div>
+    </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+    
+</div>
+    <!--end View product modal-->
 
 @endsection

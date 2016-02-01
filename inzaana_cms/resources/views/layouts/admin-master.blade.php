@@ -28,6 +28,7 @@
         <!-- bootstrap wysihtml5 - text editor -->
         <link href="{{ asset('/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ URL::asset('css/admin.css') }}" rel="stylesheet" type="text/css">  
+        <link href="{{ URL::asset('css/bootstrap-magnify.min.css') }}" rel="stylesheet" type="text/css">  
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -265,5 +266,6 @@
         <script src="{{ asset('/dist/js/pages/dashboard.js') }}" type="text/javascript"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="{{ asset('/dist/js/demo.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('js/bootstrap-magnify.min.js') }}" type="text/javascript"></script>
     </body>
 </html>

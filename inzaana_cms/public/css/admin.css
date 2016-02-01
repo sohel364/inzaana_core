@@ -8,3 +8,21 @@
 .padT5{
     padding-top: 5px;
 }
+.padtT10{
+    padding-top: 10px;
+}
+.marT10{
+    margin-top: 10px;
+}
+#parent {display: table}
+
+#child {
+  display: table-cell;
+  vertical-align: middle;
+ }
+.imgborder {
+  border: 1px solid rgba(13, 151, 157, 0.38);
+}
+.padT10 {
+  padding-top: 25px;
+}
