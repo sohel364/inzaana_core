@@ -86,33 +86,33 @@
                     <div class="form-group">
                       <label for="product-title" class="col-sm-3 control-label">Product Title:</label>
                       <div class="col-sm-9">
-                        <input type="email" class="form-control" id="product-title" placeholder="ex: kitka 5RS">
+                        <input type="text" class="form-control" id="product-title" placeholder="ex: kitka 5RS">
                       </div>
                     </div>
                     <div class="form-group">
                       <label for="Manufacturer" class="col-sm-3 control-label">Manufacturer</label>
                       <div class="col-sm-9">
-                        <input type="password" class="form-control" id="Manufacturer" placeholder="ex: dairy milk">
+                        <input type="text" class="form-control" id="Manufacturer" placeholder="ex: dairy milk">
                       </div>
                     </div>
                     <div class="form-group">
                       <label for="mrp" class="col-sm-3 control-label">MRP:</label>
                       <div class="col-sm-2">
-                        <input type="password" class="form-control" id="mrp" placeholder="ex: 3$">
+                        <input type="text" class="form-control" id="mrp" placeholder="ex: 3$">
                       </div>
                         <div class="col-sm-7 padT5"><b>$</b></div>
                     </div>
                     <div class="form-group">
                       <label for="discount" class="col-sm-3 control-label">Discount:</label>
                       <div class="col-sm-2">
-                        <input type="password" class="form-control" id="discount" placeholder="ex: 30%">
+                        <input type="text" class="form-control" id="discount" placeholder="ex: 30%">
                       </div>
                         <div class="col-sm-7 padT5"><b>%</b></div>
                     </div>
                     <div class="form-group">
                       <label for="selling-price" class="col-sm-3 control-label">Selling Price:</label>
                       <div class="col-sm-2">
-                        <input type="password" class="form-control" id="selling-price" placeholder="ex: 3$">
+                        <input type="text" class="form-control" id="selling-price" placeholder="ex: 3$">
                       </div>
                         <div class="col-sm-7 padT5"><b>$</b></div>
                     </div>
