@@ -63,7 +63,13 @@
 
 							</ul>
 						  </li>
-						  <li><a href="{{ url('/login') }}" class="animated">Login</a></li>
+						  <li>
+                @if(Auth::check())
+                  <a href="{{ url('/dashboard') }}" class="animated">Dashboard</a>
+                @else
+                  <a href="{{ url('/login') }}" class="animated">Login</a>
+                @endif
+              </li>
 						</ul>
 					  </div>
 					</div>
@@ -78,7 +84,7 @@
 				  <div class="container animated fadeInDownShort">
 					<!-- Brand and toggle get grouped for better mobile display -->
 					<div class="navbar-header">
-					  <a class="navbar-brand" href="index.html"><!-- <img alt="Logo" src="images/logo.png" class="img-responsive"> --><span>In</span>zaana</a>
+					  <a class="navbar-brand" href="/"><!-- <img alt="Logo" src="images/logo.png" class="img-responsive"> --><span>In</span>zaana</a>
 					  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 						<span class="sr-only">Toggle navigation</span>
 						<span class="icon-bar"></span>
@@ -111,6 +117,7 @@
 
 			  <!--Home-->
 			  <section>
+        @include('flash')
 				<div class="box animatedParent animateOnce" data-sequence="500">
 
 				  <div class="overlay">

@@ -41,9 +41,8 @@
 <body>
 	
      
-	<div class="">
+    @include('flash')
     @yield('content')
-  </div>
 	 
   <div class="clearfix"></div>
   <!-------Footer-------------------------------->

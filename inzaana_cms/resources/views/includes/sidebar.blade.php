@@ -8,7 +8,7 @@
               <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-              <p>User Name</p>
+              <p>{{ Auth::user()->name }}</p>
               <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
           </div>
@@ -48,11 +48,11 @@
               </a>
                 <ul class="treeview-menu">
                 <li><a href="/products"><i class="fa fa-plus"></i> Add New Product</a></li>
-                <li><a href="#"><i class="fa  fa-filter"></i> Filter Tags</a></li>
-                <li><a href="#"><i class="fa  fa-list-ol"></i> List All Products</a></li>
-                <li><a href="#"><i class="fa  fa-angle-double-down"></i> Low Stock Products</a></li>
-                <li><a href="#"><i class="fa  fa-diamond"></i> Brands <small class="label bg-green">300</small></a></li>
-                <li><a href="#"><i class="fa  fa-comments"></i> Reviews <small class="label bg-green">5</small></a></li>
+                <li><a href="/products"><i class="fa  fa-filter"></i> Filter Tags</a></li>
+                <li><a href="/products"><i class="fa  fa-list-ol"></i> List All Products</a></li>
+                <li><a href="/products"><i class="fa  fa-angle-double-down"></i> Low Stock Products</a></li>
+                <li><a href="/products"><i class="fa  fa-diamond"></i> Brands <small class="label bg-green">300</small></a></li>
+                <li><a href="/products"><i class="fa  fa-comments"></i> Reviews <small class="label bg-green">5</small></a></li>
               </ul>
             </li>
             <li class="treeview">

@@ -13,7 +13,7 @@ class RedirectIfAuthenticated
      * @var Guard
      */
     protected $auth;
-    protected $redirectToAuthHome = '/dashboard';
+    protected $redirectToAuthHome = '/';
 
     /**
      * Create a new filter instance.

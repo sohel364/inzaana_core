@@ -12,5 +12,6 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         //
+        factory(Inzaana\User::class, 50)->create();
     }
 }

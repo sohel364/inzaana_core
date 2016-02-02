@@ -2,7 +2,8 @@
 
 @section('title', 'Sign-Up')
 
-<body>
+@section('content')
+
   <div class="container">
     <div class="row">
       <div class="col-md-12 text-center animatedParent animateOnce">
@@ -18,7 +19,7 @@
       <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
 
         <!-- ================================================================================ -->
-
+        
         <form role="form" method="POST" action="{{ url('/register') }}">
 
           {!! csrf_field() !!}
@@ -367,9 +368,9 @@
             <div class="row">
               <div class="col-xs-4 col-sm-3 col-md-3">
                 <span class="button-checkbox animated fadeInLeftShort" data-id="11">
-						<button name="is_agreed" type="button" class="btn btn-default" data-color="info"><i class="state-icon glyphicon glyphicon-unchecked"></i>I Agree</button>
+            <button name="is_agreed" type="button" class="btn btn-default" data-color="info"><i class="state-icon glyphicon glyphicon-unchecked"></i>I Agree</button>
                         <input type="checkbox" class="hidden" value="1">
-					</span>
+          </span>
               </div>
               <div class="col-xs-8 col-sm-9 col-md-9 animated fadeInRightShort" data-id="12">
                 By clicking <strong class="label label-info">Start My Store Now</strong>, you agree to the <a href="#" data-toggle="modal" data-target="#t_and_c_m">Terms and Conditions</a> set out by this site, including our Cookie Use.
@@ -418,7 +419,7 @@
     </div>
     <!-- /.modal -->
   </div>
-</body>
+@endsection
 
 
 @section('footer-script')

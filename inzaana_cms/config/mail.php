@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'admin.noreply@inzaana.com', 'name' => 'Inzaana Admin'],
+    'from' => ['address' => env('MAIL_USERNAME', 'admin.noreply@inzaana.com'), 'name' => 'Inzaana Admin'],
 
     /*
     |--------------------------------------------------------------------------
