@@ -1,10 +1,17 @@
 @extends('layouts.master_out')
+@section('title', 'Recover passwords')
+@section('header-style')
+ <link href="{{ URL::asset('css/email.css') }}" rel="stylesheet" type="text/css">  
+@endsection
+
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Reset Password</div>
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-default padPtop">
+                <div class="panel-heading text-center panHead">
+                    <h2 class="CustomHead" ><i class="fa fa-key"></i> Add new Password</h2>
+                </div>
 
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/password/reset') }}">
@@ -13,9 +20,9 @@
                         <input type="hidden" name="token" value="{{ $token }}">
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">E-Mail Address</label>
+                            
 
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <input type="email" class="form-control" name="email" value="{{ $email or old('email') }}">
 
                                 @if ($errors->has('email'))
@@ -27,10 +34,10 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Password</label>
+                            
 
-                            <div class="col-md-6">
-                                <input type="password" class="form-control" name="password">
+                            <div class="col-md-12">
+                                <input type="password" class="form-control" name="password" placeholder="Your new password" >
 
                                 @if ($errors->has('password'))
                                     <span class="help-block">
@@ -41,9 +48,9 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Confirm Password</label>
-                            <div class="col-md-6">
-                                <input type="password" class="form-control" name="password_confirmation">
+                            
+                            <div class="col-md-12">
+                                <input type="password" class="form-control" name="password_confirmation" placeholder="Confirm new password">
 
                                 @if ($errors->has('password_confirmation'))
                                     <span class="help-block">
@@ -55,8 +62,8 @@
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-btn fa-refresh"></i>Reset Password
+                                <button type="submit" class="btn btn-info">
+                                    <i class="fa fa-btn fa-refresh"></i> Reset Password
                                 </button>
                             </div>
                         </div>

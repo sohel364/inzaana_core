@@ -23,45 +23,81 @@
         <div class="row padTB"> 
             <!--form-->
             <form>
-                <div class="col-lg-5 col-lg-offset-3 text-right">
-                <div class="input-group">
-                <input type="text" class="form-control">
-                  <span class="input-group-btn">
-                    <button class="btn btn-info btn-flat" type="button"><i class="fa fa-lg fa-search"></i></button>
-                  </span>
+                <div class="col-lg-6 col-lg-offset-3">
+                <div class="box box-widget">
+                    <div class="box-header with-border">
+                        <h4 class="boxed-header">Find it on Inzaana</h4>
+                    </div>
+                    <div class="box-body">
+                    <div class="input-group">
+                        <input type="text" class="form-control">
+                      <span class="input-group-btn">
+                        <button class="btn btn-info btn-flat" type="button"><i class="fa fa-lg fa-search"></i></button>
+                      </span>
+                    </div>
+                    </div>
+                    <div class="box-footer box-comments">
+                        <div class="box-comment">
+                            <div class="col-lg-6">
+                                <h4 class="C-header">If it is not in Inaana's catalog:</h4>
+                            </div>
+                           <div class="col-lg-6 text-right">
+                               <button class="btn btn-info btn-flat" data-toggle="modal" data-target="#addProduct" type="button"><i class="fa fa-lg fa-plus-square"></i>&ensp; Add Product</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                </div>
-                <div class="col-lg-1 text-left">
-                    <button class="btn btn-info btn-flat" data-toggle="modal" data-target="#addProduct" type="button"><i class="fa fa-lg fa-plus-square"></i></button>
                 </div>
             </form>
             <!--end of form-->
             
-            <div class="col-lg-5 col-lg-offset-3 boxPadTop">
-                <div class="box box-info">
+            <div class="col-lg-6 col-lg-offset-3 boxPadTop">
+                <div class="box box-down box-info">
+                    <div class="boxed-header">
+                        <h5>Results on Inzaana.com &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<b>1</b> to <b>5</b> of <b>10</b> results.</h5>
+                    </div>
                 <div class="box-body no-padding">
-                  <table class="table table-condensed">
+                  <table id="parent" class="table table-hover">
                     <tr>
+                      <th>Image</th>
                       <th>Product Name</th>
                       <th>Category</th>
+                      <th>Action</th>
                     </tr>
                     <tr>
-                      <td>Kitkat 5RS</td>
-                      <td>Chocolate</td>
+                        <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ URL::asset('images/kitkat-300x300.jpg') }}" height="50px" width="80px"/></a></td>
+                        <td id="child">Kitkat 5RS</td>
+                        <td id="child">Chocolate</td>
+                        <td id="child"><button class="btn btn-info btn-flat btn-sm" type="button">Sell yours</button></td>
                     </tr>
                     <tr>
-                       <td>Kitkat 10RS</td>
-                      <td>Chocolate</td>
+                        <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ URL::asset('images/kitkat-300x300.jpg') }}" height="50px" width="80px"/></a></td>
+                        <td id="child">Kitkat 10RS</td>
+                        <td id="child">Chocolate</td>
+                        <td id="child"><button class="btn btn-info btn-flat btn-sm" type="button">Sell yours</button></td>
                     </tr>
                     <tr>
-                       <td>Kitkat 15 RS</td>
-                      <td>Chocolate</td>
+                        <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ URL::asset('images/kitkat-300x300.jpg') }}" height="50px" width="80px"/></a></td>
+                        <td id="child">Kitkat 15 RS</td>
+                        <td id="child">Chocolate</td>
+                        <td id="child"><button class="btn btn-info btn-flat btn-sm" type="button">Sell yours</button></td>
                     </tr>
                     <tr>
-                       <td>Kitkat Ice Cream</td>
-                      <td>Chocolate Ice Cream</td>
+                        <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ URL::asset('images/kitkat-300x300.jpg') }}" height="50px" width="80px"/></a></td>
+                        <td id="child">Kitkat Ice Cream</td>
+                        <td id="child">Chocolate Ice Cream</td>
+                        <td id="child"><button class="btn btn-info btn-flat btn-sm" type="button">Sell yours</button></td>
                     </tr>
                   </table>
+                    <div class="col-sm-12 noPadMar text-center">
+                        <ul class="pagination pagination-sm noPadMar">
+                            <li class="active"><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a href="#">5</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -230,7 +266,7 @@
         <p>Category: Chocolate</p>
         <h4>$2.99</h4>
         <p class="sku">30% discount!</p>
-          <span class="label label-success">In Stock</span></a>
+          <span class="label label-success">In Stock</span>
         <hr>
         <h5>Product Info</h5>
         <p class="slidePara1">I'm a product details. Quibusdam minim occaecat, eu fugiat lorem ea cupidatat. Do et enim deserunt nam duis imitarentur occaecat noster eiusmod. Ita iis tamen quorum aliqua e quamquam sunt mandaremus arbitror. Occaecat concursionibus ne doctrina, do hic anim labore noster.</p>
