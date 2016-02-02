@@ -1,5 +1,5 @@
 @extends('layouts.master_out')
-@section('title', 'Reset passwors')
+@section('title', 'Reset passwords')
 @section('header-style')
  <link href="{{ URL::asset('css/email.css') }}" rel="stylesheet" type="text/css">  
 @endsection
