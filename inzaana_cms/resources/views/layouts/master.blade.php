@@ -114,10 +114,11 @@
 				</div>
 				<!-- /.navbar -->
 			  </div>
+        
+        @include('flash')
 
 			  <!--Home-->
 			  <section>
-        @include('flash')
 				<div class="box animatedParent animateOnce" data-sequence="500">
 
 				  <div class="overlay">
