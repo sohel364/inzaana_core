@@ -11,4 +11,4 @@
         We just need you to <a href='{{ url("register/confirm/{$user->token}") }}'>confirm your email address</a> real quick!
     </p>
 </body>
-</html>
+</html> 

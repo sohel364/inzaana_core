@@ -65,7 +65,7 @@ class AppMailer
         $this->to = $user->email;
         $this->view = 'auth.emails.confirm';
         $this->data = compact('user');
-
+        
         $this->deliver();
     }
 

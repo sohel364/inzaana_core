@@ -125,9 +125,7 @@
               <h1 class="heading1 animated growIn delay-500 go" data-id="1">Give a nice name to your online store!</h1>
               <div class="col-md-5 col-md-offset-3 col-xs-8 col-xs-offset-2">
 
-                  <form role="form" method="GET" action="{{ url('/register') }}">
-
-                      {!! csrf_field() !!}
+                  <form role="form" method="GET" action="{{ url('/create-store') }}">
 
                       <div class="input-group input-group-lg">
                           <input name="store_name" type="text" class="form-control animated fadeInLeft go" data-id="2" placeholder="Your Store Name...">

@@ -4,6 +4,7 @@ namespace Inzaana\Http\Controllers;
 
 use Auth;
 use Session;
+use Inzaana\User;
 use Inzaana\Mailers\AppMailer;
 use Illuminate\Http\Request;
 
@@ -30,15 +31,16 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(AppMailer $mailer)
+    public function index(Request $request, AppMailer $mailer)
     {
         //
-        if(!Auth::user()->verified)
+        if(!Auth::user()->verified && $request->session()->has('user'))
         {            
-            $user = Auth::user();
+            $user = session('user');
             $mailer->sendEmailConfirmationTo($user);
             flash('Please confirm your email address.');
-            return redirect('login');
+            Auth::logout();
+            return redirect('/login');
         }
         return view('admin');
     }

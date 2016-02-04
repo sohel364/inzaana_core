@@ -24,9 +24,11 @@ Route::group([ 'as' => 'guest::' ], function() {
 
 Route::group(['middleware' => 'web'], function () {
 
-	Route::get('/auth/login', [ 'uses' => 'Auth\AuthController@getLogin', 'as' => 'login' ]);
-
 	Route::get('/register/confirm/{token}', 'Auth\AuthController@confirmEmail');
+	Route::get('/{role_name}/login/', 'UserController@login');
+	Route::get('/r/{role_name}/u/{user_id}/dashboard', 'UserController@dashboard');
+
+	Route::get('/create-store', [ 'uses' => 'StoreController@create', 'as' => 'stores.create' ]);
 
     Route::auth();
 
