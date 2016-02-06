@@ -22,7 +22,7 @@
     <div class="box-body">
         <div class="row padTB"> 
             <!--form-->
-            <form>
+            <form action="/products/search" method="GET">
                 <div class="col-lg-6 col-lg-offset-3">
                 <div class="box box-widget">
                     <div class="box-header with-border">
@@ -30,13 +30,13 @@
                     </div>
                     <div class="box-body">
                     <div class="input-group">
-                        <input type="text" class="form-control">
-                      <span class="input-group-btn">
-                        <button class="btn btn-info btn-flat" type="button"><i class="fa fa-lg fa-search"></i></button>
-                      </span>
+                        <input id="search-box" name="search-box" type="text" class="form-control">
+                        <span class="input-group-btn">
+                          <button id="product-search-btn" class="btn btn-info btn-flat" type="submit"><i class="fa fa-lg fa-search"><!-- Search --></i></button>
+                        </span>
                     </div>
                     </div>
-                    <div class="box-footer box-comments">
+                    <div class="box-footer box-comments{{ $productsCount == 0 ? '' : ' hidden' }}">
                         <div class="box-comment">
                             <div class="col-lg-6">
                                 <h4 class="C-header">If it is not in Inaana's catalog:</h4>
@@ -282,4 +282,9 @@
 </div>
     <!--end View product modal-->
 
+@endsection
+
+@section('footer-scripts')
+
+        <script src="{{ asset('js/product-search-events.js') }}" type="text/javascript"></script>
 @endsection
