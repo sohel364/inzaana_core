@@ -1,6 +1,8 @@
 @extends('layouts.admin-master')
 @section('title', 'Dashboard')
-
+@section('header-style')
+ <link href="{{ URL::asset('css/select2.min.css') }}" rel="stylesheet" type="text/css">  
+@endsection
 
 @section('breadcumb')
 <h1>Product
@@ -119,6 +121,22 @@
                 <!-- form start -->
                 <form class="form-horizontal">
                   
+                    <div class="form-group">
+                      <label  class="col-sm-3 control-label">Product Category:</label>
+                      <div class="col-sm-7">
+                        <select class="form-control select2" multiple="multiple" data-placeholder="Select a Category" style="width: 100%;">
+                      <option>Chocolate</option>
+                      <option>Ice Cream</option>
+                      <option>Choco-ice Cream</option>
+                      <option>Milk-Chocolate</option>
+                      <option>Milk-Choco-Ice Cream</option>
+                      <option>Candy</option>
+                    </select>
+                      </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-info btn-flat"><i class="fa fa-plus"></i> </button>
+                        </div>
+                    </div>
                     <div class="form-group">
                       <label for="product-title" class="col-sm-3 control-label">Product Title:</label>
                       <div class="col-sm-9">
@@ -285,6 +303,21 @@
 @endsection
 
 @section('footer-scripts')
-
-        <script src="{{ asset('js/product-search-events.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/product-search-events.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/select2.full.min.js') }}" type="text/javascript"></script>
+    <script>
+      function matchStart (term, text) {
+  if (text.toUpperCase().indexOf(term.toUpperCase()) == 0) {
+    return true;
+  }
+ 
+  return false;
+}
+ 
+$.fn.select2.amd.require(['select2/compat/matcher'], function (oldMatcher) {
+  $("select").select2({
+    matcher: oldMatcher(matchStart)
+  })
+});
+    </script>
 @endsection
