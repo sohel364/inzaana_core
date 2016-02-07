@@ -31,6 +31,12 @@ class ProductController extends Controller
         $productsCount = 0;
         return view('add-product', compact('productsCount'));
     }
+    public function gettemplate()
+    {
+        //
+        $productsCount = 0;
+        return view('view_template', compact('productsCount'));
+    }
 
     /**
      * Show the form for creating a new product. post method

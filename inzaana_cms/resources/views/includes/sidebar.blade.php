@@ -289,6 +289,11 @@
                 </li>
               </ul>
             </li>
+            <li class=" treeview">
+                  <a href="/template_view">
+                    <i class="fa fa-binoculars"></i> <span>Template View</span> 
+                  </a>
+                </li>
           </ul>
         </section>
         <!-- /.sidebar -->

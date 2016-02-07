@@ -29,6 +29,7 @@
         <link href="{{ asset('/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ URL::asset('css/admin.css') }}" rel="stylesheet" type="text/css">  
         <link href="{{ URL::asset('css/bootstrap-magnify.min.css') }}" rel="stylesheet" type="text/css">
+        @yield('header-style')
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>

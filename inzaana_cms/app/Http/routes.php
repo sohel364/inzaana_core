@@ -20,6 +20,7 @@
 Route::group([ 'as' => 'guest::' ], function() {
 
 	Route::get('/', [ 'uses' => 'HomeController@index', 'as' => 'home' ]);
+    
 });
 
 Route::group(['middleware' => 'web'], function () {
@@ -36,9 +37,9 @@ Route::group(['middleware' => 'web'], function () {
 
     	Route::get('/dashboard', [ 'uses' => 'UserController@index', 'as' => 'home' ]);
         Route::get('/products', [ 'uses' => 'ProductController@index', 'as' => 'products' ]);
+        Route::get('/template_view', [ 'uses' => 'ProductController@gettemplate', 'as' => 'template' ]);
         Route::get('/products/search', [ 'uses' => 'ProductController@search', 'as' => 'products.search' ]);
         Route::get('/products/search/{terms?}', [ 'uses' => 'ProductController@searchTerms', 'as' => 'products.search-terms' ]);
         Route::post('/products/create', [ 'uses' => 'ProductController@create', 'as' => 'products.create' ]);
     });
 });
-
