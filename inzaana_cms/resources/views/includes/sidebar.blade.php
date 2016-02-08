@@ -37,7 +37,7 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-plus"></i> Add New Category</a></li>
+                <li><a href="/category_view"><i class="fa fa-plus"></i> Add New Category</a></li>
                 <li><a href="#"><i class="fa fa-list-ol"></i> List All Categories</a></li>
               </ul>
             </li>

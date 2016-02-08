@@ -1,5 +1,5 @@
 @extends('layouts.admin-master')
-@section('title', 'Dashboard')
+@section('title', 'Add Product')
 @section('header-style')
  <link href="{{ URL::asset('css/select2.min.css') }}" rel="stylesheet" type="text/css">  
 @endsection
