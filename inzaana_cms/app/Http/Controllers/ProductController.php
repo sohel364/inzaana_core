@@ -3,10 +3,12 @@
 namespace Inzaana\Http\Controllers;
 
 use Auth;
+use Validator;
 use Illuminate\Http\Request as ProductRequest;
 
 use Inzaana\Http\Requests;
 use Inzaana\Http\Controllers\Controller;
+use Inzaana\Product;
 
 class ProductController extends Controller
 {
@@ -30,8 +32,10 @@ class ProductController extends Controller
     {
         //
         $productsCount = 0;
-        return view('add-product', compact('productsCount'));
+        $products = Product::all();
+        return view('add-product', compact('productsCount', 'products'));
     }
+    
     public function gettemplate()
     {
         //
@@ -55,9 +59,14 @@ class ProductController extends Controller
     public function create(ProductRequest $request)
     {
         //
-        $this->validate($request, [
-            'product_title' => 'required',
-        ]);
+        // $validator = Validator::make($request->all(),[
+        //     'product_title' => 'required|unique:products,product_title,manufacture_name,product_mrp,selling_price,photo_name|max:100',
+        //     'product_mrp' => 'required|numeric',
+        //     'manufacture_name' => 'required|max:200',
+        //     'product_discount' => 'numeric|max:100',
+        //     'selling_price' => 'numeric',
+        //     'photo_name' => 'required|url|active_url|image',
+        // ]);
         // $this->validate($request, [
         //     'product_title' => 'required|unique:products|max:100',
         //     'product_mrp' => 'required|numeric',
@@ -67,29 +76,37 @@ class ProductController extends Controller
         //     'photo_name' => 'required|url|active_url|image',
         // ]);
 
-        // $mrp = $request->input('mrp');
-        // $discount = $request->input('discount');
+        // if($validator->fails())
+        // {
+        //     return redirect()->route('user::products')
+        //                     ->withErrors($validator)
+        //                     ->withInput();
+        // }
+        // session()->forget('errors');
 
-        // $product = Product::create([
-        //     'user_id' => Auth::user()->id,
-        //     'has_sub_category_id' => false,
-        //     'category_subcategory_id' => 1,
-        //     'product_title' => $request->input('product-title'),
-        //     'manufacture_name' => $request->input('manufacturer'),
-        //     'product_mrp' => $mrp,
-        //     'product_discount' => $discount,
-        //     'selling_price' => $this->getSellingPrice($mrp, $discount),
-        //     'photo_name' => 'http://lorempixel.com/300/300/food',
-        // ]);
-        // if($product)
-        // {
-        //     flash( $product->attributes['product_title'] . ' is successfully added.');
-        // }
-        // else
-        // {
-        //     flash( $product->attributes['product_title'] . ' is failed to add.');
-        // }
-        return 'CREATED';//redirect()->route('user::products');
+        $mrp = $request->input('mrp');
+        $discount = $request->input('discount');
+
+        $product = Product::create([
+            'user_id' => Auth::user()->id,
+            'has_sub_category_id' => false,
+            'category_subcategory_id' => 1,
+            'product_title' => $request->input('product-title'),
+            'manufacture_name' => $request->input('manufacturer'),
+            'product_mrp' => $mrp,
+            'product_discount' => $discount,
+            'selling_price' => $this->getSellingPrice($mrp, $discount),
+            'photo_name' => 'http://lorempixel.com/300/300/food',
+        ]);
+        if($product)
+        {
+            flash( $product->attributes['product_title'] . ' is successfully added.');
+        }
+        else
+        {
+            flash( $product->attributes['product_title'] . ' is failed to add.');
+        }
+        return redirect()->route('user::products')->with('products', Product::all());
     }
 
     /**

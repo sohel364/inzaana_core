@@ -122,66 +122,34 @@
 
         {!! csrf_field() !!}
 
+        @if (count($errors) > 1)
+            <div class="alert alert-danger">
+                <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="modal-body">
-                  
-<<<<<<< Updated upstream
-                    <div class="form-group">
-                      <label  class="col-sm-3 control-label">Product Category:</label>
-                      <div class="col-sm-7">
-                        <select class="form-control select2" multiple="multiple" data-placeholder="Select a Category" style="width: 100%;">
-                      <option>Chocolate</option>
-                      <option>Ice Cream</option>
-                      <option>Choco-ice Cream</option>
-                      <option>Milk-Chocolate</option>
-                      <option>Milk-Choco-Ice Cream</option>
-                      <option>Candy</option>
-                    </select>
-                      </div>
-                        <div class="col-sm-2">
-                            <button class="btn btn-info btn-flat"><i class="fa fa-plus"></i> </button>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="product-title" class="col-sm-3 control-label">Product Title:</label>
-                      <div class="col-sm-9">
-                        <input type="text" class="form-control" id="product-title" placeholder="ex: kitka 5RS">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="Manufacturer" class="col-sm-3 control-label">Manufacturer</label>
-                      <div class="col-sm-9">
-                        <input type="text" class="form-control" id="Manufacturer" placeholder="ex: dairy milk">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="mrp" class="col-sm-3 control-label">MRP:</label>
-                      <div class="col-sm-2">
-                        <input type="text" class="form-control" id="mrp" placeholder="ex: 3$">
-                      </div>
-                        <div class="col-sm-7 padT5"><b>$</b></div>
-                    </div>
-                    <div class="form-group">
-                      <label for="discount" class="col-sm-3 control-label">Discount:</label>
-                      <div class="col-sm-2">
-                        <input type="text" class="form-control" id="discount" placeholder="ex: 30%">
-                      </div>
-                        <div class="col-sm-7 padT5"><b>%</b></div>
-                    </div>
-                    <div class="form-group">
-                      <label for="selling-price" class="col-sm-3 control-label">Selling Price:</label>
-                      <div class="col-sm-2">
-                        <input type="text" class="form-control" id="selling-price" placeholder="ex: 3$">
-                      </div>
-                        <div class="col-sm-7 padT5"><b>$</b></div>
-                    </div>
-                    <div class="form-group">
-                      <label for="upload-image" class="col-sm-3 control-label">Upload Image:</label>
-                      <div class="col-sm-9">
-                        <input type="file" class="form-control" id="upload-image">
-                      </div>
-                    </div>
-                </form>
-=======
+            <div class="form-group">
+              <label  class="col-sm-3 control-label">Product Category:</label>
+              <div class="col-sm-7">
+                <select name="category" class="form-control select2" multiple="multiple" data-placeholder="Select a Category" style="width: 100%;">
+                  <option>Chocolate</option>
+                  <option>Ice Cream</option>
+                  <option>Choco-ice Cream</option>
+                  <option>Milk-Chocolate</option>
+                  <option>Milk-Choco-Ice Cream</option>
+                  <option>Candy</option>
+                </select>
+              </div>
+              <div class="col-sm-2">
+                  <button class="btn btn-info btn-flat"><i class="fa fa-plus"></i> </button>
+              </div>
+            </div>
             <div class="form-group{{ $errors->has('product_title') ? ' has-error' : '' }}">
               <label for="product-title" class="col-sm-3 control-label">Product Title:</label>
               <div class="col-sm-9">
@@ -193,37 +161,62 @@
                 @endif
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group{{ $errors->has('manufacturer') ? ' has-error' : '' }}">
               <label for="Manufacturer" class="col-sm-3 control-label">Manufacturer</label>
               <div class="col-sm-9">
                 <input type="text" class="form-control" id="manufacturer" name="manufacturer" placeholder="ex: dairy milk">
+                @if ($errors->has('manufacturer'))
+                      <span class="help-block">
+                          <strong>{{ $errors->first('manufacturer') }}</strong>
+                      </span>
+                @endif
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group{{ $errors->has('mrp') ? ' has-error' : '' }}">
               <label for="mrp" class="col-sm-3 control-label">MRP:</label>
               <div class="col-sm-2">
                 <input type="text" class="form-control" id="mrp" name="mrp" placeholder="ex: 3$">
+                @if ($errors->has('mrp'))
+                      <span class="help-block">
+                          <strong>{{ $errors->first('mrp') }}</strong>
+                      </span>
+                @endif
               </div>
                 <div class="col-sm-7 padT5"><b>$</b></div>
             </div>
-            <div class="form-group">
+            <div class="form-group{{ $errors->has('discount') ? ' has-error' : '' }}">
               <label for="discount" class="col-sm-3 control-label">Discount:</label>
               <div class="col-sm-2">
                 <input type="text" class="form-control" id="discount" name="discount" placeholder="ex: 30%">
+                @if ($errors->has('discount'))
+                      <span class="help-block">
+                          <strong>{{ $errors->first('discount') }}</strong>
+                      </span>
+                @endif
               </div>
                 <div class="col-sm-7 padT5"><b>%</b></div>
             </div>
-            <div class="form-group">
+            <div class="form-group{{ $errors->has('selling-price') ? ' has-error' : '' }}">
               <label for="selling-price" class="col-sm-3 control-label">Selling Price:</label>
               <div class="col-sm-2">
                 <input type="text" class="form-control" id="selling-price" name="selling-price" placeholder="ex: 3$">
+                @if ($errors->has('selling-price'))
+                      <span class="help-block">
+                          <strong>{{ $errors->first('selling-price') }}</strong>
+                      </span>
+                @endif
               </div>
                 <div class="col-sm-7 padT5"><b>$</b></div>
             </div>
-            <div class="form-group">
+            <div class="form-group{{ $errors->has('upload-image') ? ' has-error' : '' }}">
               <label for="upload-image" class="col-sm-3 control-label">Upload Image:</label>
               <div class="col-sm-9">
                 <input type="file" class="form-control" id="upload-image" name="upload-image">
+                @if ($errors->has('upload-image'))
+                      <span class="help-block">
+                          <strong>{{ $errors->first('upload-image') }}</strong>
+                      </span>
+                @endif
               </div>
             </div>
 
@@ -236,7 +229,6 @@
 
       </form>
       <!-- form ends -->
->>>>>>> Stashed changes
 
     </div>
   </div>
@@ -262,7 +254,7 @@
                 <div class="box-body table-responsive no-padding">
                   <table id="parent" class="table table-hover">
                     <tr>
-                      <th>ID</th>
+                      <!-- <th>ID</th> -->
                       <th>Product Name</th>
                       <th>Category</th>
                       <th>MRP</th>
@@ -271,17 +263,20 @@
                       <th>Image</th>
                       <th>Status</th>
                     </tr>
+
+                    @foreach( $products as $product )
                     <tr>
-                      <td id="child"><a href="">001</a> </td>
-                      <td id="child"><a href="">Kitkat 5RS</a></td>
-                      <td id="child"><a href="">Chocolate</a></td>
-                      <td id="child"><a href="">$3</a></td>
-                      <td id="child"><a href="">2%</a></td>
-                      <td id="child"><a href="">$3.99</a></td>
-                      <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ URL::asset('images/kitkat-300x300.jpg') }}" height="60px" width="90px"/></a></td>
-                      <td id="child"><a href=""><span class="label label-success">In Stock</span></a></td>
+                      <!-- <td id="child"><a href="">001</a> </td> -->
+                      <td id="child"><a href="">{{ $product->product_title }}</a></td>
+                      <td id="child"><a href="">Uncategoried</a></td>
+                      <td id="child"><a href="">{{ $product->mrp }}</a></td>
+                      <td id="child"><a href="">{{ $product->product_discount }} %</a></td>
+                      <td id="child"><a href="">$ {{ $product->selling_price }}</a></td>
+                      <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ $product->photo_name }}" height="60px" width="90px"/></a></td>
+                      <td id="child"><a href=""><span class="label label-success">{{ $product->status }}</span></a></td>
                     </tr>
-                    <tr>
+                    @endforeach
+                    <!-- <tr>
                       <td id="child"><a href="">002</a> </td>
                       <td id="child"><a href="">Kitkat 10RS</a></td>
                       <td id="child"><a href="">Chocolate</a></td>
@@ -310,7 +305,7 @@
                       <td id="child"><a href="">$3.99</a></td>
                       <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ URL::asset('images/kitkat-300x300.jpg') }}" height="60px" width="90px"/></a></td>
                       <td id="child"><a href=""><span class="label label-success">In Stock</span></a></td>
-                    </tr>
+                    </tr> -->
                   </table>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
@@ -358,31 +353,26 @@
 @endsection
 
 @section('footer-scripts')
-<<<<<<< Updated upstream
-    <script src="{{ asset('js/product-search-events.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/select2.full.min.js') }}" type="text/javascript"></script>
-    <script>
-      function matchStart (term, text) {
-  if (text.toUpperCase().indexOf(term.toUpperCase()) == 0) {
-    return true;
-  }
- 
-  return false;
-}
- 
-$.fn.select2.amd.require(['select2/compat/matcher'], function (oldMatcher) {
-  $("select").select2({
-    matcher: oldMatcher(matchStart)
-  })
-});
-    </script>
-=======
+  <script src="{{ asset('js/product-search-events.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('js/select2.full.min.js') }}" type="text/javascript"></script>
+  <script>
+    function matchStart (term, text) {
+      if (text.toUpperCase().indexOf(term.toUpperCase()) == 0) {
+        return true;
+      }
+     
+      return false;
+    }
+     
+    $.fn.select2.amd.require(['select2/compat/matcher'], function (oldMatcher) {
+      $("select").select2({
+        matcher: oldMatcher(matchStart)
+      })
+    });
+  </script>
 
+  <script type="text/javascript">
+      $('#addProduct').modal({ 'show' : {{ session()->has('errors') }}  });
+  </script>
 
-        <script src="{{ asset('js/product-search-events.js') }}" type="text/javascript"></script>
-
-        <script type="text/javascript">
-            $('#addProduct').modal({ 'show' : {{ count($errors) > 0 }}  });
-        </script>
->>>>>>> Stashed changes
 @endsection

@@ -6,7 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected table = 'products';
+    protected $table = 'products';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = ['user_id', 'has_sub_category_id'];
 	 
 	public function user()
     {
