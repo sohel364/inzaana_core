@@ -1,5 +1,5 @@
 @extends('layouts.admin-master')
-@section('title', 'Add Product')
+@section('title', 'Add Category')
 
 @section('breadcumb')
 <h1>Category
