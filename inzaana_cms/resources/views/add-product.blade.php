@@ -1,5 +1,6 @@
 @extends('layouts.admin-master')
-@section('title', 'Add Product')
+@section('title', 'Dashboard')
+
 @section('header-style')
  <link href="{{ URL::asset('css/select2.min.css') }}" rel="stylesheet" type="text/css">  
 @endsection
@@ -44,7 +45,7 @@
                                 <h4 class="C-header">If it is not in Inaana's catalog:</h4>
                             </div>
                            <div class="col-lg-6 text-right">
-                               <button class="btn btn-info btn-flat" data-toggle="modal" data-target="#addProduct" type="button"><i class="fa fa-lg fa-plus-square"></i>&ensp; Add Product</button>
+                               <button id="product-form-open-button" class="btn btn-info btn-flat laravel-bootstrap-modal-form-open" data-toggle="modal" data-target="#addProduct" type="button"><i class="fa fa-lg fa-plus-square"></i>&ensp; Add Product</button>
                             </div>
                         </div>
                     </div>
@@ -107,7 +108,7 @@
 </div>
         
     <!--add product modal-->
-<div id="addProduct" class="modal fade" role="dialog">
+<div id="addProduct" class="modal fade laravel-bootstrap-modal-form" role="dialog">
     
   <div class="modal-dialog">
     <!-- Modal content-->
@@ -116,11 +117,14 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Add Product Details</h4>
       </div>
-      <div class="modal-body">
+      <!-- form start -->
+      <form id="product-create-form" class="form-horizontal" action="{{ route('user::products.create') }}" method="POST">
 
-                <!-- form start -->
-                <form class="form-horizontal">
+        {!! csrf_field() !!}
+
+        <div class="modal-body">
                   
+<<<<<<< Updated upstream
                     <div class="form-group">
                       <label  class="col-sm-3 control-label">Product Category:</label>
                       <div class="col-sm-7">
@@ -177,12 +181,63 @@
                       </div>
                     </div>
                 </form>
+=======
+            <div class="form-group{{ $errors->has('product_title') ? ' has-error' : '' }}">
+              <label for="product-title" class="col-sm-3 control-label">Product Title:</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="product-title" name="product-title" placeholder="ex: kitka 5RS">
+                @if ($errors->has('product_title'))
+                      <span class="help-block">
+                          <strong>{{ $errors->first('product_title') }}</strong>
+                      </span>
+                @endif
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="Manufacturer" class="col-sm-3 control-label">Manufacturer</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="manufacturer" name="manufacturer" placeholder="ex: dairy milk">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="mrp" class="col-sm-3 control-label">MRP:</label>
+              <div class="col-sm-2">
+                <input type="text" class="form-control" id="mrp" name="mrp" placeholder="ex: 3$">
+              </div>
+                <div class="col-sm-7 padT5"><b>$</b></div>
+            </div>
+            <div class="form-group">
+              <label for="discount" class="col-sm-3 control-label">Discount:</label>
+              <div class="col-sm-2">
+                <input type="text" class="form-control" id="discount" name="discount" placeholder="ex: 30%">
+              </div>
+                <div class="col-sm-7 padT5"><b>%</b></div>
+            </div>
+            <div class="form-group">
+              <label for="selling-price" class="col-sm-3 control-label">Selling Price:</label>
+              <div class="col-sm-2">
+                <input type="text" class="form-control" id="selling-price" name="selling-price" placeholder="ex: 3$">
+              </div>
+                <div class="col-sm-7 padT5"><b>$</b></div>
+            </div>
+            <div class="form-group">
+              <label for="upload-image" class="col-sm-3 control-label">Upload Image:</label>
+              <div class="col-sm-9">
+                <input type="file" class="form-control" id="upload-image" name="upload-image">
+              </div>
+            </div>
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-info btn-flat" data-dismiss="modal">Save</button>
-      </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary btn-flat">Save</button>
+        </div>
+
+      </form>
+      <!-- form ends -->
+>>>>>>> Stashed changes
+
     </div>
   </div>
     
@@ -303,6 +358,7 @@
 @endsection
 
 @section('footer-scripts')
+<<<<<<< Updated upstream
     <script src="{{ asset('js/product-search-events.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/select2.full.min.js') }}" type="text/javascript"></script>
     <script>
@@ -320,4 +376,13 @@ $.fn.select2.amd.require(['select2/compat/matcher'], function (oldMatcher) {
   })
 });
     </script>
+=======
+
+
+        <script src="{{ asset('js/product-search-events.js') }}" type="text/javascript"></script>
+
+        <script type="text/javascript">
+            $('#addProduct').modal({ 'show' : {{ count($errors) > 0 }}  });
+        </script>
+>>>>>>> Stashed changes
 @endsection

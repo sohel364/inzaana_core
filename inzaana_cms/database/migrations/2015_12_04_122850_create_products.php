@@ -19,8 +19,8 @@ class CreateProducts extends Migration
 		$table->bigInteger('category_subcategory_id');
         // $table->double('lat');
         // $table->double('lng');
-        $table->string('product_title');
-        $table->string('manufacture_name');
+        $table->string('product_title', 100);
+        $table->string('manufacture_name', 200);
         // $table->float('quantity');
         $table->float('product_mrp');
         $table->float('selling_price');

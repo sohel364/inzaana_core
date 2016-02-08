@@ -45,6 +45,7 @@
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
+                    @include('flash')
                     @yield('breadcumb') <!--page top breadcumb-->
                 </section>
                 <!-- Main content -->
