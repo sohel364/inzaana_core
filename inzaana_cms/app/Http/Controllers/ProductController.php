@@ -42,6 +42,12 @@ class ProductController extends Controller
         $productsCount = 0;
         return view('view_template', compact('productsCount'));
     }
+    public function viewcategory()
+    {
+        //
+        $productsCount = 0;
+        return view('category_view', compact('productsCount'));
+    }
 
     /**
      * Calculates selling price
