@@ -40,6 +40,7 @@ Route::group(['middleware' => 'web'], function () {
         Route::get('/template_view', [ 'uses' => 'ProductController@gettemplate', 'as' => 'template' ]);
         Route::get('/products/search', [ 'uses' => 'ProductController@search', 'as' => 'products.search' ]);
         Route::get('/products/search/{terms?}', [ 'uses' => 'ProductController@searchTerms', 'as' => 'products.search-terms' ]);
+        Route::get('/products/create', [ 'uses' => 'ProductController@store', 'as' => 'products.store' ]);
         Route::post('/products/create', [ 'uses' => 'ProductController@create', 'as' => 'products.create' ]);
     });
 });

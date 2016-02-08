@@ -2,6 +2,7 @@
 
 namespace Inzaana\Http\Controllers;
 
+use Auth;
 use Illuminate\Http\Request as ProductRequest;
 
 use Inzaana\Http\Requests;
@@ -39,14 +40,56 @@ class ProductController extends Controller
     }
 
     /**
+     * Calculates selling price
+     */
+    protected function getSellingPrice($mrp, $discount)
+    {
+        return $mrp * ( 1 -  ( $discount / 100.0) );
+    }
+
+    /**
      * Show the form for creating a new product. post method
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(ProductRequest $request)
     {
         //
-        return redirect()->route('user::products');
+        $this->validate($request, [
+            'product_title' => 'required',
+        ]);
+        // $this->validate($request, [
+        //     'product_title' => 'required|unique:products|max:100',
+        //     'product_mrp' => 'required|numeric',
+        //     'manufacture_name' => 'required|max:200',
+        //     'product_discount' => 'numeric|max:100',
+        //     'selling_price' => 'numeric',
+        //     'photo_name' => 'required|url|active_url|image',
+        // ]);
+
+        // $mrp = $request->input('mrp');
+        // $discount = $request->input('discount');
+
+        // $product = Product::create([
+        //     'user_id' => Auth::user()->id,
+        //     'has_sub_category_id' => false,
+        //     'category_subcategory_id' => 1,
+        //     'product_title' => $request->input('product-title'),
+        //     'manufacture_name' => $request->input('manufacturer'),
+        //     'product_mrp' => $mrp,
+        //     'product_discount' => $discount,
+        //     'selling_price' => $this->getSellingPrice($mrp, $discount),
+        //     'photo_name' => 'http://lorempixel.com/300/300/food',
+        // ]);
+        // if($product)
+        // {
+        //     flash( $product->attributes['product_title'] . ' is successfully added.');
+        // }
+        // else
+        // {
+        //     flash( $product->attributes['product_title'] . ' is failed to add.');
+        // }
+        return 'CREATED';//redirect()->route('user::products');
     }
 
     /**
