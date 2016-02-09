@@ -12,6 +12,7 @@ class Category extends Model
      * @var string
      */
     protected $table = 'categories';
+    protected $guarded = ['sup_category_id'];
 
     public function user()
     {
@@ -21,5 +22,10 @@ class Category extends Model
     public function superCategories()
     {
         return $this->hasMany('Inzaana\SuperCategory');
+    }
+
+    public function products()
+    {
+        return $this->hasMany('Inzaana\Product');
     }
 }

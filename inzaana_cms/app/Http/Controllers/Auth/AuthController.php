@@ -87,9 +87,4 @@ class AuthController extends Controller
         flash('You are now confirmed. Please login.');
         return redirect('login');
     }
-
-    public function verify(Request $request)
-    {
-        return 'VERIFIED';
-    }
 }

@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 
 use Inzaana\Http\Requests;
 use Inzaana\Http\Controllers\Controller;
+use Inzaana\Product;
+use Inzaana\Category;
 
 // @addedby tajuddin.khandaker.cse.ju@gmail.com
 use Illuminate\Support\Facades\Input as UserInput;
