@@ -23,19 +23,32 @@
             <!--form-->
             <form action="" method="GET">
                 <div class="col-lg-6 col-lg-offset-3">
-                <div class="box box-widget">
-                    <div class="box-header with-border">
-                        <h4 class="boxed-header">Add your product category name.</h4>
-                    </div>
-                    <div class="box-body">
-                    <div class="input-group">
-                        <input id="search-box" name="search-box" type="text" class="form-control">
-                        <span class="input-group-btn">
-                          <button id="product-search-btn" class="btn btn-info btn-flat" type="submit"><i class="fa fa-lg fa-plus-square"></i>&ensp; Add Category</button>
-                        </span>
-                    </div>
-                    </div>
+                <div class="box box-noborder">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Add your product category</h3>
                 </div>
+                <!-- form start -->
+                <form role="form">
+                  <div class="box-body">
+                    <div class="form-group">
+                      <label for="category-name">Category Name</label>
+                      <input type="text" class="form-control" id="category-name" placeholder="Add your category name here...">
+                    </div>
+                    <div class="form-group">
+                      <label for="sub-category-name">Password</label>
+                      <input type="text" class="form-control" id="sub-category-name" placeholder="Sub category name (Optional)">
+                    </div>
+                    <div class="form-group">
+                      <label for="description">Category Description</label>
+                      <textarea placeholder="Add category description here..." class="form-control" rows="5" id="description"></textarea>
+                    </div>
+                  </div><!-- /.box-body -->
+
+                  <div class="box-footer text-right">
+                    <button type="submit" class="btn btn-info btn-flat">Add Category</button>
+                  </div>
+                </form>
+              </div>
                 </div>
             </form>
             <!--end of form-->

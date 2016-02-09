@@ -46,7 +46,7 @@ class ProductController extends Controller
     {
         //
         $productsCount = 0;
-        return view('category_view', compact('productsCount'));
+        return view('add_category', compact('productsCount'));
     }
 
     /**

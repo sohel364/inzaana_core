@@ -63,3 +63,7 @@
   color: #fff;
   border-color: #00c0ef;
 }
+.box .box-noborder {
+    border-top-color: rgba(60, 141, 188, 0);
+
+}
