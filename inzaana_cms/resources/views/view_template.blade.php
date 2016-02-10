@@ -31,15 +31,15 @@ for($i=2;$i<sizeof($dirs);$i++)
     <div class="box-header with-border text-center">
         <h1 class="box-title ">{{$dirs[$i]}}</h1>
     </div>
-
+<div class="box-body">
+      <div class="row">
     <?php 
     $templates=scandir("./templates/$dirs[$i]");    
     for($j=2; $j<sizeof($templates);$j++)
     {
     ?>
 
-    <div class="box-body">
-      <div class="row">
+    
           <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
         <div class="hovereffect">
             <?php 
@@ -61,8 +61,7 @@ for($i=2;$i<sizeof($dirs);$i++)
             <h4>{{$templates[$j]}}</h4>
               </div>
           </div>
-        </div>
-    </div>
+     
     
     <?php 
     }
@@ -72,5 +71,6 @@ for($i=2;$i<sizeof($dirs);$i++)
 <?php 
 }
 ?>
-
+   </div>
+    </div>
 @endsection
