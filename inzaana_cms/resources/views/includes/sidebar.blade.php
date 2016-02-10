@@ -290,13 +290,13 @@
               </ul>
             </li>
             <li class=" treeview">
-			  <a href="/template_view">
-				<i class="fa fa-cog"></i> <span>Template View</span>
-				<i class="fa fa-angle-left pull-right"></i>
-			  </a>
-			  <ul class="treeview-menu">
-				@include('editor.template-list-view')
-			  </ul>
+      			  <a href="/template_view">
+        				<span>Template View</span>
+        				<i class="fa fa-angle-left pull-right"></i>
+      			  </a>
+      			  <ul class="treeview-menu">
+      				  @include('editor.template-list-view')
+      			  </ul>
             </li>
           </ul>
         </section>
