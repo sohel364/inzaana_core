@@ -15,16 +15,38 @@
 @endsection 
 
 @section('content')
+
 <div class="box box-info">
     <div class="box-header with-border text-center">
-        <h1 class="box-title ">Pick the website template you love</h1>
+        <h1 class="box-title">Pick the website template you love</h1>
     </div>
+</div>
 
-    <div class="box-body">
+<?php
+$dirs=scandir("./templates");
+for($i=2;$i<sizeof($dirs);$i++)
+{       
+?>
+    <div class="box box-info">
+    <div class="box-header with-border text-center">
+        <h1 class="box-title ">{{$dirs[$i]}}</h1>
+    </div>
+<div class="box-body">
       <div class="row">
+    <?php 
+    $templates=scandir("./templates/$dirs[$i]");    
+    for($j=2; $j<sizeof($templates);$j++)
+    {
+    ?>
+
+    
           <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
         <div class="hovereffect">
-            <img class="img-responsive" src="{{ URL::asset('images/template_view.jpg') }}">
+            <?php 
+                $path = "templates/$dirs[$i]/$templates[$j]/preview.jpg"    
+            ?>
+            
+            <img class="img-responsive" src="{{ URL::asset($path) }}">
             <div class="overlay">
                 <table id="parent" border="0">
                     <tr>
@@ -36,10 +58,19 @@
                 <a class="info btn btn-info btn-flat" href="#">Edit</a>
                 <a class="info btn btn-info btn-flat" href="#">View</a>
             </div>
-            <h4>Template Name</h4>
+            <h4>{{$templates[$j]}}</h4>
               </div>
           </div>
-        </div>
+     
+    
+    <?php 
+    }
+    ?> 
+
+</div>    
+<?php 
+}
+?>
+   </div>
     </div>
-</div>
 @endsection
