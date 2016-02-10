@@ -57,7 +57,7 @@
             <div class="col-lg-6 col-lg-offset-3 boxPadTop">
                 <div class="box box-down box-info">
                     <div class="boxed-header">
-                        <h5>Results on Inzaana.com &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<b>1</b> to <b>5</b> of <b>10</b> results.</h5>
+                        <h5>Results on Inzaana.com &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<b>1</b> to <b>5</b> of <b>{{ $productsCount }}</b> results.</h5>
                     </div>
                 <div class="box-body no-padding">
                   <table id="parent" class="table table-hover">
@@ -67,38 +67,23 @@
                       <th>Category</th>
                       <th>Action</th>
                     </tr>
-                    <tr>
-                        <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ URL::asset('images/kitkat-300x300.jpg') }}" height="50px" width="80px"/></a></td>
-                        <td id="child">Kitkat 5RS</td>
-                        <td id="child">Chocolate</td>
-                        <td id="child"><button class="btn btn-info btn-flat btn-sm" type="button">Sell yours</button></td>
-                    </tr>
-                    <tr>
-                        <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ URL::asset('images/kitkat-300x300.jpg') }}" height="50px" width="80px"/></a></td>
-                        <td id="child">Kitkat 10RS</td>
-                        <td id="child">Chocolate</td>
-                        <td id="child"><button class="btn btn-info btn-flat btn-sm" type="button">Sell yours</button></td>
-                    </tr>
-                    <tr>
-                        <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ URL::asset('images/kitkat-300x300.jpg') }}" height="50px" width="80px"/></a></td>
-                        <td id="child">Kitkat 15 RS</td>
-                        <td id="child">Chocolate</td>
-                        <td id="child"><button class="btn btn-info btn-flat btn-sm" type="button">Sell yours</button></td>
-                    </tr>
-                    <tr>
-                        <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ URL::asset('images/kitkat-300x300.jpg') }}" height="50px" width="80px"/></a></td>
-                        <td id="child">Kitkat Ice Cream</td>
-                        <td id="child">Chocolate Ice Cream</td>
-                        <td id="child"><button class="btn btn-info btn-flat btn-sm" type="button">Sell yours</button></td>
-                    </tr>
+                    @if(isset($productsBySearch))
+                      @foreach($productsBySearch as $product)
+                      <tr>
+                          <td id="photo"><a data-toggle="modal" data-target="#viewImage"><img src="{{ $product->photo_name }}" height="50px" width="80px"/></a></td>
+                          <td id="product">{{ $product->product_title }}</td>
+                          <td id="category">{{ $product->category->category_name or 'Uncategorized' }}</td>
+                          <td id="sellyours"><button class="btn btn-info btn-flat btn-sm" type="button">Sell yours</button></td>
+                      </tr>
+                      @endforeach
+                    @endif
                   </table>
                     <div class="col-sm-12 noPadMar text-center">
                         <ul class="pagination pagination-sm noPadMar">
                             <li class="active"><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
+                            @for ($i = 0; $i < ($productsCount / 5) - 1; $i++)
+                                <li><a href="#">{{ $i }}</a></li>
+                            @endfor
                         </ul>
                     </div>
                 </div>
@@ -138,12 +123,17 @@
               <label  class="col-sm-3 control-label">Product Category:</label>
               <div class="col-sm-7">
                 <select name="category" class="form-control select2" multiple="multiple" data-placeholder="Select a Category" style="width: 100%;">
-                  <option>Chocolate</option>
-                  <option>Ice Cream</option>
+
+                @if(isset($categories))
+                  @foreach( $categories as $category )
+                  <option>{{ $category->category_name or 'Uncategorized' }}</option>
+                  @endforeach
+                @endif
+                  <!-- <option>Ice Cream</option>
                   <option>Choco-ice Cream</option>
                   <option>Milk-Chocolate</option>
                   <option>Milk-Choco-Ice Cream</option>
-                  <option>Candy</option>
+                  <option>Candy</option> -->
                 </select>
               </div>
               <div class="col-sm-2">
@@ -264,48 +254,20 @@
                       <th>Status</th>
                     </tr>
 
+                  @if(isset($products))
                     @foreach( $products as $product )
                     <tr>
                       <!-- <td id="child"><a href="">001</a> </td> -->
                       <td id="child"><a href="">{{ $product->product_title }}</a></td>
-                      <td id="child"><a href="">Uncategoried</a></td>
-                      <td id="child"><a href="">{{ $product->mrp }}</a></td>
+                      <td id="child"><a href="">{{ $product->category ? $product->category->category_name : 'Uncategorized' }}</a></td>
+                      <td id="child"><a href="">{{ $product->product_mrp }}</a></td>
                       <td id="child"><a href="">{{ $product->product_discount }} %</a></td>
                       <td id="child"><a href="">$ {{ $product->selling_price }}</a></td>
                       <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ $product->photo_name }}" height="60px" width="90px"/></a></td>
-                      <td id="child"><a href=""><span class="label label-success">{{ $product->status }}</span></a></td>
+                      <td id="child"><a href=""><span class="label label-success">{{ $product->getStatus() }}</span></a></td>
                     </tr>
                     @endforeach
-                    <!-- <tr>
-                      <td id="child"><a href="">002</a> </td>
-                      <td id="child"><a href="">Kitkat 10RS</a></td>
-                      <td id="child"><a href="">Chocolate</a></td>
-                      <td id="child"><a href="">$3</a></td>
-                      <td id="child"><a href="">2%</a></td>
-                      <td id="child"><a href="">$3.99</a></td>
-                      <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ URL::asset('images/kitkat-300x300.jpg') }}" height="60px" width="90px"/></a></td>
-                      <td id="child"><a href=""><span class="label label-danger">Out of Stock</span></a></td>
-                    </tr>
-                    <tr>
-                      <td id="child"><a href="">003</a> </td>
-                      <td id="child"><a href="">Kitkat 15RS</a></td>
-                      <td id="child"><a href="">Chocolate</a></td>
-                      <td id="child"><a href="">$3</a></td>
-                      <td id="child"><a href="">2%</a></td>
-                      <td id="child"><a href="">$3.99</a></td>
-                      <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ URL::asset('images/kitkat-300x300.jpg') }}" height="60px" width="90px"/></a></td>
-                      <td id="child"><a href=""><span class="label label-success">In Stock</span></a></td>
-                    </tr>
-                    <tr>
-                      <td id="child"><a href="">004</a> </td>
-                      <td id="child"><a href="">Kitkat 25RS</a></td>
-                      <td id="child"><a href="">Chocolate</a></td>
-                      <td id="child"><a href="">$3</a></td>
-                      <td id="child"><a href="">2%</a></td>
-                      <td id="child"><a href="">$3.99</a></td>
-                      <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ URL::asset('images/kitkat-300x300.jpg') }}" height="60px" width="90px"/></a></td>
-                      <td id="child"><a href=""><span class="label label-success">In Stock</span></a></td>
-                    </tr> -->
+                  @endif
                   </table>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->

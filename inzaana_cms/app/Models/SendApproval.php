@@ -12,13 +12,14 @@ class SendApproval extends Model
 	 {
 		return $this->belongsTo('Inzaana\User');
 	 }
+
 	 public function product()
 	 {
 		return $this->belongsTo('Inzaana\Product');
 	 }
+
 	 public function plan()
 	 {
 		return $this->belongsTo('Inzaana\Plan');
-	 }
-	 
+	 }	 
 }

@@ -9,6 +9,7 @@ use Illuminate\Http\Request as ProductRequest;
 use Inzaana\Http\Requests;
 use Inzaana\Http\Controllers\Controller;
 use Inzaana\Product;
+use Inzaana\Category;
 
 class ProductController extends Controller
 {
@@ -32,8 +33,9 @@ class ProductController extends Controller
     {
         //
         $productsCount = 0;
-        $products = Product::all();
-        return view('add-product', compact('productsCount', 'products'));
+        $products = Auth::user()->products;
+        $categories = Category::all();
+        return view('add-product', compact('productsCount', 'products', 'categories'));
     }
     
     public function gettemplate()
@@ -94,6 +96,8 @@ class ProductController extends Controller
      */
     public function create(ProductRequest $request)
     {
+        $products = Auth::user()->products;
+        $categories = Category::all();
         //
         // $validator = Validator::make($request->all(),[
         //     'product_title' => 'required|unique:products,product_title,manufacture_name,product_mrp,selling_price,photo_name|max:100',
@@ -122,17 +126,20 @@ class ProductController extends Controller
 
         $mrp = $request->input('mrp');
         $discount = $request->input('discount');
+        $category_name = $request->input('category');
+        $category_id = $categories->where('category_name', $category_name)->first()->id;
 
         $product = Product::create([
             'user_id' => Auth::user()->id,
             'has_sub_category_id' => false,
-            'category_subcategory_id' => 1,
+            'category_subcategory_id' => $category_id ? $category_id : 0,
             'product_title' => $request->input('product-title'),
             'manufacture_name' => $request->input('manufacturer'),
             'product_mrp' => $mrp,
             'product_discount' => $discount,
             'selling_price' => $this->getSellingPrice($mrp, $discount),
             'photo_name' => 'http://lorempixel.com/300/300/food',
+            'status' => 'OUT_OF_STOCK',
         ]);
         if($product)
         {
@@ -142,7 +149,7 @@ class ProductController extends Controller
         {
             flash( $product->attributes['product_title'] . ' is failed to add.');
         }
-        return redirect()->route('user::products')->with('products', Product::all());
+        return redirect()->route('user::products')->with(compact('products', 'categories'));
     }
 
     /**
@@ -154,33 +161,34 @@ class ProductController extends Controller
     {
         //
         $productsCount = 0;
-        return view('add-product', compact('productsCount'));
+        $products = Auth::user()->products;
+        $categories = Category::all();
+        return view('add-product', compact('productsCount', 'products', 'categories'));
     }
 
     public function search(ProductRequest $request)
-    {        
+    {   
+        $products = Auth::user()->products;
+        $categories = Category::all();   
         if($request->exists('search-box') && $request->has('search-box'))
         {
             $search_terms = $request->query('search-box');
             $search_terms_slugged = str_slug($search_terms);
-            return redirect()->route('user::products.search-terms', [$search_terms_slugged])->with('search_terms', $search_terms);
+
+            $productsBySearch = Auth::user()->products->where('product_title', $search_terms);
+            $productsCount = $productsBySearch->count();
+            return redirect()->route('user::products.search-terms', [$search_terms_slugged])
+                                ->with(compact('productsBySearch', 'productsCount'));
         }
-        return redirect()->route('user::products');
+        return redirect()->route('user::products')->with(compact('products', 'categories'));
     }
 
     public function searchTerms($terms)
     {   
-        $productsCount = 0;
-        if(session()->has('search_terms'))
-        {
-            // search from database
-            return  str_slug($terms). ' FOUND FROM ' . session('search_terms');
-            // comment above code and run below with real data
-            $products = null;
-            return redirect()->route('user::products.search-terms', [$terms])
-                    ->with('products', $products)
-                    ->with('productsCount', $productsCount);
-        }
-        return 'nothing taj';
+        $productsCount = session()->has('productsCount') ? session('productsCount') : 0;
+        $categories = Category::all();
+        $products = Auth::user()->products;
+        $productsBySearch = session('productsBySearch');
+        return view('add-product', compact('productsCount', 'products', 'categories', 'productsBySearch'));
     }
 }

@@ -33,17 +33,17 @@
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-list"></i>
-                <span>Categories <small class="label bg-green">120</small></span> 
+                <span>Categories <small class="label bg-green">{{ Inzaana\Category::count() }}</small></span> 
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="/add_category"><i class="fa fa-plus"></i> Add New Category</a></li>
-                <li><a href="#"><i class="fa fa-list-ol"></i> List All Categories</a></li>
+                <li><a href="{{ route('user::categories') }}"><i class="fa fa-plus"></i> Add New Category</a></li>
+                <li><a href="{{ route('user::categories') }}"><i class="fa fa-list-ol"></i> List All Categories</a></li>
               </ul>
             </li>
             <li class="treeview">
               <a href="#">
-                <i class="fa fa-cubes"></i> <span>Products <small class="label bg-green">1717</small></span> 
+                <i class="fa fa-cubes"></i> <span>Products <small class="label bg-green">{{ Auth::user()->products->count() }}</small></span> 
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
                 <ul class="treeview-menu">
