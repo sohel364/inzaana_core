@@ -35,7 +35,7 @@
                       <input type="text" class="form-control" id="category-name" placeholder="Add your category name here...">
                     </div>
                     <div class="form-group">
-                      <label for="sub-category-name">Password</label>
+                      <label for="sub-category-name">Sub Category Name</label>
                       <input type="text" class="form-control" id="sub-category-name" placeholder="Sub category name (Optional)">
                     </div>
                     <div class="form-group">
