@@ -48,6 +48,36 @@ class ProductController extends Controller
         $productsCount = 0;
         return view('add_category', compact('productsCount'));
     }
+    public function userdashboard()
+    {
+        //
+        $productsCount = 0;
+        return view('user_dashboard', compact('productsCount'));
+    }
+    public function usermyorder()
+    {
+        //
+        $productsCount = 0;
+        return view('user_my_order', compact('productsCount'));
+    }
+    public function userproductreturn()
+    {
+        //
+        $productsCount = 0;
+        return view('user_product_return', compact('productsCount'));
+    }
+    public function userrewardpoints()
+    {
+        //
+        $productsCount = 0;
+        return view('user_reward_points', compact('productsCount'));
+    }
+    public function userwallet()
+    {
+        //
+        $productsCount = 0;
+        return view('user_wallet', compact('productsCount'));
+    }
 
     /**
      * Calculates selling price

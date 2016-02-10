@@ -39,6 +39,11 @@ Route::group(['middleware' => 'web'], function () {
         Route::get('/products', [ 'uses' => 'ProductController@index', 'as' => 'products' ]);
         Route::get('/template_view', [ 'uses' => 'ProductController@gettemplate', 'as' => 'template' ]);
         Route::get('/add_category', [ 'uses' => 'ProductController@viewcategory', 'as' => 'category' ]);
+        Route::get('/user_dashboard', [ 'uses' => 'ProductController@userdashboard', 'as' => 'udashboard' ]);
+        Route::get('/user_my_order', [ 'uses' => 'ProductController@usermyorder', 'as' => 'umyorder' ]);
+        Route::get('/user_product_return', [ 'uses' => 'ProductController@userproductreturn', 'as' => 'uproductreturn' ]);
+        Route::get('/user_reward_points', [ 'uses' => 'ProductController@userrewardpoints', 'as' => 'urewardpoints' ]);
+        Route::get('/user_wallet', [ 'uses' => 'ProductController@userwallet', 'as' => 'uwallet' ]);
         Route::get('/products/search', [ 'uses' => 'ProductController@search', 'as' => 'products.search' ]);
         Route::get('/products/search/{terms?}', [ 'uses' => 'ProductController@searchTerms', 'as' => 'products.search-terms' ]);
         Route::get('/products/create', [ 'uses' => 'ProductController@store', 'as' => 'products.store' ]);
