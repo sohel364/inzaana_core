@@ -38,4 +38,9 @@ class Product extends Model
         }
         return 'Unknown';
     }
+
+    public function getProductTitleAttribute($value)
+    {
+        return $value;
+    }
 }

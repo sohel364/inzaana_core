@@ -129,11 +129,6 @@
                   <option>{{ $category->category_name or 'Uncategorized' }}</option>
                   @endforeach
                 @endif
-                  <!-- <option>Ice Cream</option>
-                  <option>Choco-ice Cream</option>
-                  <option>Milk-Chocolate</option>
-                  <option>Milk-Choco-Ice Cream</option>
-                  <option>Candy</option> -->
                 </select>
               </div>
               <div class="col-sm-2">
@@ -252,6 +247,7 @@
                       <th>Price</th>
                       <th>Image</th>
                       <th>Status</th>
+                      <th>Action</th>
                     </tr>
 
                   @if(isset($products))
@@ -265,6 +261,13 @@
                       <td id="child"><a href="">$ {{ $product->selling_price }}</a></td>
                       <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ $product->photo_name }}" height="60px" width="90px"/></a></td>
                       <td id="child"><a href=""><span class="label label-success">{{ $product->getStatus() }}</span></a></td>
+                      <td class="text-center" id="child">
+                        <form id="product-modification-form" class="form-horizontal" method="POST" >
+                          {!! csrf_field() !!}
+                          <input formaction="{{ route('user::products.edit', [$product->id]) }}" id="product-edit-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Edit"></input>
+                          <input formaction="{{ route('user::products.delete', [$product->id]) }}" id="product-delete-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Delete"></input>
+                        </form>
+                      </td>
                     </tr>
                     @endforeach
                   @endif

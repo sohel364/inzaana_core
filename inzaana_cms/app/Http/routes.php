@@ -44,10 +44,14 @@ Route::group(['middleware' => 'web'], function () {
         Route::get('/products', [ 'uses' => 'ProductController@index', 'as' => 'products' ]);
         Route::get('/products/search', [ 'uses' => 'ProductController@search', 'as' => 'products.search' ]);
         Route::get('/products/search/{terms?}', [ 'uses' => 'ProductController@searchTerms', 'as' => 'products.search-terms' ]);
-        Route::get('/products/create', [ 'uses' => 'ProductController@store', 'as' => 'products.store' ]);
+        // Route::get('/products/create', [ 'uses' => 'ProductController@store', 'as' => 'products.store' ]);
         Route::post('/products/create', [ 'uses' => 'ProductController@create', 'as' => 'products.create' ]);
+        Route::post('/products/edit/{product_id}', [ 'uses' => 'ProductController@edit', 'as' => 'products.edit' ]);
+        Route::post('/products/delete/{product_id}', [ 'uses' => 'ProductController@delete', 'as' => 'products.delete' ]);
 
         Route::get('/categories', [ 'uses' => 'CategoryController@index', 'as' => 'categories' ]);
         Route::post('/categories/create', [ 'uses' => 'CategoryController@create', 'as' => 'categories.create' ]);
+        Route::post('/categories/edit/{category_id}', [ 'uses' => 'CategoryController@edit', 'as' => 'categories.edit' ]);
+        Route::post('/categories/delete/{category_id}', [ 'uses' => 'CategoryController@delete', 'as' => 'categories.delete' ]);
     });
 });

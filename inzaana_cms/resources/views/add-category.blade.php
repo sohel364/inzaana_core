@@ -76,7 +76,7 @@
                 <div class="box-body table-responsive no-padding">
                   <table id="parent" class="table table-hover">
                     <tr>
-                      <th class="text-center hidden">ID</th>
+                      <!-- <th class="text-center hidden">ID</th> -->
                       <th class="text-center">Category Name</th>
                       <th class="text-center">Description</th>
                       <th class="text-center">Sub-categories</th>
@@ -88,7 +88,13 @@
                       <td class="text-center" id="child"><a href="">{{ $category->category_name or 'Chocolate'}}</a></td>
                       <td class="text-center" id="child"><a href="">{{ $category->category_name or 'This is a description'}}</a></td>
                       <td class="text-center" id="child"><a href="">subcat-1, subcat-2, subcat-3</a></td>
-                      <td class="text-center" id="child"><button id="product-search-btn" class="btn btn-info btn-flat btn-xs" type="submit">Edit</button> <button id="product-search-btn" class="btn btn-info btn-flat btn-xs" type="submit">Delete</button></td>
+                      <td class="text-center" id="child">
+                        <form id="category-modification-form" class="form-horizontal" method="POST" >
+                          {!! csrf_field() !!}
+                          <input formaction="{{ route('user::categories.edit', [$category->id]) }}" id="category-edit-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Edit"></input>
+                          <input formaction="{{ route('user::categories.delete', [$category->id]) }}" id="category-delete-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Delete"></input>
+                        </form>
+                      </td>
                     </tr>
                     @endforeach
                   </table>

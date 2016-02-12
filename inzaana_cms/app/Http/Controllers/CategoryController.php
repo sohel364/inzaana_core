@@ -42,8 +42,33 @@ class CategoryController extends Controller
         	'sup_category_id' => 0,
         	'category_name' => $request->input('category-name'),
         	'category_slug' => str_slug($categoryName),
-        	// 'description' => $request->input('description'),
+        	'description' => $request->input('description'),
         ]);
         return redirect()->route('user::categories')->with(compact('categories'));
+    }
+
+    public function edit($category_id)
+    {
+        # code...
+        $categories = Category::all();
+        return view('add-category', compact('categories'));
+    }
+
+    public function delete($category_id)
+    {
+        # code...
+        $categories = Category::all();
+        $category = $categories->find($category_id);
+        if($category)
+        {
+            flash('Your category is will be removed when your administrator will approve.');
+            $category->delete();
+        }
+        else
+        {            
+            flash('Your category is already removed or not in your list. Please contact your administrator to know category removal policy');
+        }
+        $categories = Category::all();
+        return view('add-category', compact('categories'));
     }
 }

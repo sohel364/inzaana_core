@@ -191,4 +191,37 @@ class ProductController extends Controller
         $productsBySearch = session('productsBySearch');
         return view('add-product', compact('productsCount', 'products', 'categories', 'productsBySearch'));
     }
+
+    public function edit($product_id)
+    {
+        //edit the product
+        $productsCount = 0;
+        $products = Auth::user()->products;
+        $product = $products->find($product_id);
+        $categories = Category::all();
+        return view('add-product', compact('productsCount', 'products', 'categories'));
+    }
+
+    public function delete($product_id)
+    {
+        //delete the product
+        $productsCount = 0;
+        $products = Auth::user()->products;
+        $product = $products->find($product_id);
+        $message = 'Your product is removed from your product list.';
+        if($product)
+        {
+            $product->delete();
+        }
+        else
+        {
+            $message = 'Your product is NOT removed from your product list.';
+            $message .= 'Product is NOT found to your product list.';
+            $message .= 'Contact your administrator to know about product removing policy';
+        }
+        flash($message);
+        $products = Auth::user()->products;
+        $categories = Category::all();
+        return view('add-product', compact('productsCount', 'products', 'categories'));
+    }
 }
