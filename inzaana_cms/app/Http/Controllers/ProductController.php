@@ -143,11 +143,11 @@ class ProductController extends Controller
         ]);
         if($product)
         {
-            flash('Your product is successfully added.');
+            flash('Your product (' . $product->product_title . ') is successfully added.');
         }
         else
         {
-            flash('Your product is failed to add. Please contact your administrator for assistance.');
+            flash('Your product (' . $product->product_title . ') is failed to add. Please contact your administrator for assistance.');
         }
         return redirect()->route('user::products')->with(compact('products', 'categories'));
     }
@@ -161,7 +161,9 @@ class ProductController extends Controller
             $search_terms = $request->query('search-box');
             $search_terms_slugged = str_slug($search_terms);
 
-            $productsBySearch = Auth::user()->products->where('product_title', $search_terms);
+            $productsBySearch = Product::all()->where('product_title', $search_terms);
+            // return $productsBySearch;
+                                        // ->where('user_id', '!=', Auth::user()->id);
             $productsCount = $productsBySearch->count();
             return redirect()->route('user::products.search-terms', [$search_terms_slugged])
                                 ->with(compact('productsBySearch', 'productsCount'));
@@ -193,18 +195,50 @@ class ProductController extends Controller
         //delete the product
         $products = Auth::user()->products;
         $product = $products->find($product_id);
-        $message = 'Your product is removed from your product list.';
+        $message = 'Your product (' . $product->product_title . ') is removed from your product list.';
         if($product)
         {
             $product->delete();
         }
         else
         {
-            $message = 'Your product is NOT removed from your product list.';
+            $message = 'Your product (' . $product->product_title . ') is NOT removed from your product list.';
             $message .= 'Product is NOT found to your product list.';
             $message .= 'Contact your administrator to know about product removing policy';
         }
         flash($message);
+        return redirect()->route('user::products');
+    }
+
+    public function copy($id)
+    {
+        $products = Auth::user()->products;
+        $product = Product::find($id); 
+        if($product)
+        {
+            if($product->user_id == Auth::user()->id)
+            {
+                flash('Your selected product (' . $product->product_title . ') is from YOUR product list.');
+            }
+            else
+            {
+                $productCopied = Product::create([
+                    'user_id' => Auth::user()->id,
+                    'has_sub_category_id' => false,
+                    'category_subcategory_id' => $product->category_subcategory_id,
+                    'product_title' => $product->product_title,
+                    'manufacture_name' => $product->manufacture_name,
+                    'product_mrp' => $product->product_mrp,
+                    'selling_price' => $product->product_mrp,
+                    'photo_name' => $product->photo_name,
+                ]);
+                flash('Your selected product (' . $productCopied->product_title . ') is copied to your product list.');
+            }
+        }
+        else
+        {
+            flash('Your selected product is invalid. Please conatct your administrator.');
+        }
         return redirect()->route('user::products');
     }
 }

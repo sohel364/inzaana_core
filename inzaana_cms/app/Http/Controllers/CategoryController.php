@@ -46,11 +46,11 @@ class CategoryController extends Controller
         ]);
         if($category)
         {
-            flash('Your category is submitted for admin approval. Will be added when approved.');
+            flash('Your category (' . $category->category_name . ') is submitted for admin approval. Will be added when approved.');
         }
         else
         {
-            flash('Your category is failed to submit for admin approval.');            
+            flash('Your category (' . $category->category_name . ') is failed to submit for admin approval.');            
         }
         return redirect()->route('user::categories')->with(compact('categories'));
     }
@@ -69,12 +69,12 @@ class CategoryController extends Controller
         $category = $categories->find($category_id);
         if($category)
         {
-            flash('Your category is will be removed when your administrator will approve.');
+            flash('Your category (' . $category->category_name . ') is will be removed when your administrator will approve.');
             $category->delete();
         }
         else
         {            
-            flash('Your category is already removed or not in your list. Please contact your administrator to know category removal policy');
+            flash('Your category (' . $category->category_name . ') is already removed or not in your list. Please contact your administrator to know category removal policy');
         }
         return redirect()->route('user::categories');
     }

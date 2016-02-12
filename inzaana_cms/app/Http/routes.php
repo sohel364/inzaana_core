@@ -50,6 +50,7 @@ Route::group(['middleware' => 'web'], function () {
         Route::get('/products/search', [ 'uses' => 'ProductController@search', 'as' => 'products.search' ]);
         Route::get('/products/search/{terms?}', [ 'uses' => 'ProductController@searchTerms', 'as' => 'products.search-terms' ]);
         Route::post('/products/create', [ 'uses' => 'ProductController@create', 'as' => 'products.create' ]);
+        Route::post('/products/sell-yours/{id}', [ 'uses' => 'ProductController@copy', 'as' => 'products.sell-yours' ]);
         Route::post('/products/edit/{product_id}', [ 'uses' => 'ProductController@edit', 'as' => 'products.edit' ]);
         Route::post('/products/delete/{product_id}', [ 'uses' => 'ProductController@delete', 'as' => 'products.delete' ]);
 

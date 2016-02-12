@@ -73,7 +73,12 @@
                           <td id="photo"><a data-toggle="modal" data-target="#viewImage"><img src="{{ $product->photo_name }}" height="50px" width="80px"/></a></td>
                           <td id="product">{{ $product->product_title }}</td>
                           <td id="category">{{ $product->category->category_name or 'Uncategorized' }}</td>
-                          <td id="sellyours"><button class="btn btn-info btn-flat btn-sm" type="button">Sell yours</button></td>
+                          <td id="sellyours">
+                            <form method="POST">
+                              {!! csrf_field() !!}
+                              <input formaction="{{ route('user::products.sell-yours', [$product->id]) }}" class="btn btn-info btn-flat btn-sm" type="submit" value="Sell yours"></input>
+                            </form>
+                          </td>
                       </tr>
                       @endforeach
                     @endif
