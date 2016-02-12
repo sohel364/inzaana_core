@@ -1,0 +1,78 @@
+.bg_eidtor {
+	height: 90%;
+	width: 100%;
+}
+
+.bg_sample_image_palette {
+	border: 1px solid gray;
+	border-radius: 15px;
+	float: left;
+	width: 50%;
+	height: 100%;
+	overflow-y: scroll;
+	
+}
+
+.section_bg_editor {
+	border: 1px solid gray;
+	border-radius: 15px;
+	float: right;
+	width: 50%;
+	height: 100%;
+}
+
+.bg_editor_box {
+	border: 1px solid gray;
+	border-radius: 15px;
+}
+
+.gradient_option{
+	list-style-type: none;
+    margin: 0;
+    padding: 20px;
+}
+
+.gradient_option > li{
+	display: inline-table;
+    border: 1px solid gray;
+    border-radius: 15px;
+    width: 50px;
+    height: 50px;
+}
+
+.gradient_option > li:HOVER{
+	box-shadow: 0px 0px 10px #00a3d9;
+}
+
+.bg_editor_thumbnail {
+	width: 300px;
+	height: 180px;
+	text-align: center;
+	border: 1px solid lightgrey;
+	border-radius: 5px;
+	padding: 10px;
+}
+
+.bg_editor_thumbnail:HOVER{
+	box-shadow: 0px 0px 20px #00a3d9;
+}
+
+.bg_sample_image_grid {
+}
+
+.bg_sample_image_grid > li{
+	display: inline;
+	
+}
+
+.bg_editor_gradient_1 {
+	float: left;
+}
+
+.bg_editor_gradient_2 {
+	float: right;
+}
+
+.bg_editor_button {
+	float: right;
+}

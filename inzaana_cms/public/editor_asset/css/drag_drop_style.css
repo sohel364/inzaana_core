@@ -1,0 +1,398 @@
+#div_header {
+	width: 100%;
+	height: 50px;
+	border-radius: 25px;
+	background: #8AC007;
+	/* margin: 0 0 30px 0 */
+}
+
+#div_droppable {
+	width: 1000px;
+	height: 500px;
+	border: 1px solid #000;
+	/* border-radius: 25px; */
+	float: right;
+	text-align: center;
+	/* margin: 20px */
+}
+
+#div_control_palette {
+	width: 250px;
+	height: 200px;
+	border: 1px solid #000;
+	border-radius: 25px;
+	background: #c6f8a7;
+	float: left;
+	margin: 20px
+}
+
+.activeDroppable {
+	/* this class is for Droppable Area  */
+	background-color: #eeffee;
+}
+
+.hoverDroppable {
+	/* border-radius: 5px; */
+	/* background-color: lightgreen; */
+	
+}
+
+.draggableField {
+	/* float: left; */
+	/* padding-left: 5px; */
+	
+}
+
+.draggableField>input, select, button, h1 {
+	/* margin-top: 10px;
+	margin-right: 10px;
+	margin-bottom: 10px; */
+	
+}
+
+.draggableField:hover {
+	cursor: move;
+	/* border-radius: 5px; */
+	background-color: #d0f9fb;
+}
+
+.ui-draggable:hover {
+	cursor: move;
+	border-radius: 5px;
+	box-shadow: 0px 0px 20px #00a3d9;
+}
+
+.dialog {
+	display: none;
+	background-color: white;
+	z-index: 1000000 !important;
+}
+
+.ui-dialog {
+	border-radius: 8px;
+	box-shadow: 0px 0px 10px #888888;
+	background: white;
+}
+
+.ui-dialog-content {
+	
+}
+
+.ui-dialog-titlebar {
+	background: #6cc8f9;
+	height: 35px;
+}
+
+.ui-dialog-titlebar-close {
+	display: none;
+}
+
+.dialog_btn {
+	background: white;
+	border-bottom: 1px solid #c0c0c0;
+	height: 30px;
+}
+
+/*-------------------------------------------------Resize Border--------------------------------------------  */
+.ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle
+	{
+	display: block;
+}
+
+.ui-resizable-handle {
+	position: absolute;
+	border: 2px dashed grey;
+	display: marker;
+	overflow: hide;
+}
+
+.ui-resizable-n {
+	cursor: n-resize;
+	/*width: 100%;
+	border: 0.1px solid #00ff00;*/
+}
+
+.ui-resizable-s {
+	cursor: s-resize;
+	/* width: 100%;
+	border: 0.1px solid #00ff00; */
+}
+
+.ui-resizable-e {
+	cursor: e-resize;
+	/*width: 100%;
+	border: 0.1px solid #00ff00;*/
+}
+
+.ui-resizable-w {
+	cursor: w-resize;
+	/* width: 100%;
+	border: .1spx solid #00ff00; */
+}
+
+.ui-resizable-se {
+	cursor: se-resize;
+	/* width: 100%;
+	border: 1px solid #00ff00; */
+}
+
+.ui-resizable-sw {
+	cursor: sw-resize;
+	/* width: 100%;
+	border: 1px solid #00ff00; */
+}
+
+.ui-resizable-nw {
+	cursor: nw-resize;
+	/* width: 100%;
+	border: 1px solid #00ff00; */
+}
+
+.ui-resizable-ne {
+	cursor: ne-resize;
+	/* width: 100%;
+	border: 1px solid #00ff00; */
+}
+
+/*------------------------------------------Resize Border End------------------------------------  */
+
+/* ---------------------------------------- For Tab View ---------------------------------------- */
+#tabbed_box {
+	margin: 0px auto 0px auto;
+}
+
+.tabbed_box h1 h2 h3 h4 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 23px;
+	color: #000;
+	letter-spacing: -1px;
+	margin-bottom: 10px;
+}
+
+.tabbed_area {
+	border: 1px solid #494e52;
+	background-color: #636d76;
+	padding: 8px;
+	border-radius: 20px;
+	width: 245px;
+}
+
+ul.tabs {
+	margin: 0px;
+	padding: 0px;
+	border-radius: 20px;
+}
+
+ul.tabs li {
+	list-style: none;
+	display: inline;
+}
+
+ul.tabs li a {
+	background-color: #464c54;
+	color: #ffebb5;
+	padding: 8px 14px 8px 14px;
+	text-decoration: none;
+	font-size: 9px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	text-transform: uppercase;
+	border-radius: 15px 15px 0 0;
+	border: 1px solid #464c54;
+}
+
+ul.tabs li a:hover {
+	background-color: #2f343a;
+	border-color: #2f343a;
+}
+
+ul.tabs li a.active {
+	background-color: #ffffff;
+	color: #282e32;
+	border: 1px solid #464c54;
+	border-bottom: 1px solid #ffffff;
+}
+
+.content {
+	background-color: #ffffff;
+	padding: 10px;
+	border-radius: 0 0 15px 15px;
+	border: 1px solid #464c54;
+}
+
+#content_2, #content_3 {
+	display: none;
+}
+
+ul.tabs {
+	margin: 0px;
+	padding: 0px;
+	margin-top: 5px;
+	margin-bottom: 6px;
+}
+
+/* ---------------------------------------- End Tab View ---------------------------------------- */
+.editable_mode {
+	/* border: 3px dotted grey; */
+	border-radius: 5px;
+	box-shadow: 0px 0px 20px #00a3d9;
+}
+
+.non_editable_mode {
+	
+}
+
+.text_template_non_editable {
+	padding: 5px;
+	height: 400px;
+	width: 400px;
+	position: absolute;
+}
+
+.text_template_editable {
+	border: 1px dotted #464c54;
+	position: absolute;
+}
+
+.title_template_non_editable {
+	/* height: 70px; */
+	width: 250px;
+	position: absolute;
+}
+
+.title_template_editable {
+	border: 1px dotted #464c54;
+	position: absolute;
+}
+
+.image_template_non_editable {
+	height: 256px;
+	width: 256px;
+	position: absolute;
+}
+
+.image_template_editable {
+	border: 1px dotted #464c54;
+	position: absolute;
+}
+
+.button_template_non_editable {
+	height: 50px;
+	width: 200px;
+	position: absolute;
+	font-size: 20px;
+}
+
+.button_template_editable {
+	position: absolute;
+}
+
+.drop_down_template_non_editable {
+	height: 40px;
+	width: 200px;
+	position: absolute;
+}
+
+.drop_down_template_editable {
+	position: absolute;
+}
+
+.radio_button_template_non_editable {
+	height: 40px;
+	width: 200px;
+	position: absolute;
+}
+
+.radio_button_template_editable {
+	position: absolute;
+}
+
+.text_editor_component {
+	background: white;
+	height: 30px;
+	border-radius: 5px;
+}
+
+.slider_template_non_editable {
+	width: 60%;
+	height: 375px;
+	position: absolute;
+	overflow: hidden;
+}
+
+/* .slider_template_non_editable ul {
+	display: block;
+	width: 10000px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.slider_template_non_editable li {
+	float: left;
+	list-style-type: none;
+	width: 720px;
+	height: 360px;
+}
+
+.slide {
+	width: 720px;
+	height: 360px;
+} */
+
+.nbs-flexisel-container {
+    position:relative;
+    max-width:100%;
+}
+.nbs-flexisel-ul {
+    position:relative;
+    width:9999px;
+    margin:0px;
+    padding:0px;
+    list-style-type:none;   
+    text-align:center;  
+}
+.nbs-flexisel-inner {
+    overflow:hidden;
+    float:left;
+   /*  width:100%; */     
+}
+.nbs-flexisel-item {
+    float:left;
+    padding:0px 0px 20px;
+    cursor:pointer;
+    position:relative;
+    line-height:0px;
+	/*width:165px !important;*/
+}
+.nbs-flexisel-item img {
+    width: 100%;
+    cursor: pointer;
+    position: relative;
+	padding:0 0 18px;
+}
+
+.nbs-flexisel-nav-left,
+.nbs-flexisel-nav-right {
+    width: 22px;
+    height: 22px; 
+    position: absolute;
+    cursor: pointer;
+    z-index: 100;
+    opacity: 0.5;
+}
+
+/* .nbs-flexisel-nav-left {
+    left: 10px;
+    background: url(../images/button-previous.png) no-repeat;
+	height:43px;
+	width:21px;
+}
+
+.nbs-flexisel-nav-right {
+    right: 5px;
+    background: url(../images/button-next.png) no-repeat;
+	height:43px;
+	width:21px;
+} */
+
