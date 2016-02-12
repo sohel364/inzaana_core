@@ -44,6 +44,14 @@ class CategoryController extends Controller
         	'category_slug' => str_slug($categoryName),
         	'description' => $request->input('description'),
         ]);
+        if($category)
+        {
+            flash('Your category is submitted for admin approval. Will be added when approved.');
+        }
+        else
+        {
+            flash('Your category is failed to submit for admin approval.');            
+        }
         return redirect()->route('user::categories')->with(compact('categories'));
     }
 
@@ -68,7 +76,6 @@ class CategoryController extends Controller
         {            
             flash('Your category is already removed or not in your list. Please contact your administrator to know category removal policy');
         }
-        $categories = Category::all();
-        return view('add-category', compact('categories'));
+        return redirect()->route('user::categories');
     }
 }

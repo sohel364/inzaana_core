@@ -86,7 +86,7 @@
                     <tr>
                       <!-- <td class="text-center" id="child"><a href="">001</a> </td> -->
                       <td class="text-center" id="child"><a href="">{{ $category->category_name or 'Chocolate'}}</a></td>
-                      <td class="text-center" id="child"><a href="">{{ $category->category_name or 'This is a description'}}</a></td>
+                      <td class="text-center" id="child"><a href="">{{ $category->description or 'This is a description'}}</a></td>
                       <td class="text-center" id="child"><a href="">subcat-1, subcat-2, subcat-3</a></td>
                       <td class="text-center" id="child">
                         <form id="category-modification-form" class="form-horizontal" method="POST" >

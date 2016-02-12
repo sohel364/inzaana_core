@@ -143,27 +143,13 @@ class ProductController extends Controller
         ]);
         if($product)
         {
-            flash( $product->attributes['product_title'] . ' is successfully added.');
+            flash('Your product is successfully added.');
         }
         else
         {
-            flash( $product->attributes['product_title'] . ' is failed to add.');
+            flash('Your product is failed to add. Please contact your administrator for assistance.');
         }
         return redirect()->route('user::products')->with(compact('products', 'categories'));
-    }
-
-    /**
-     * Show the form for creating a new product. post method
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function newProduct()
-    {
-        //
-        $productsCount = 0;
-        $products = Auth::user()->products;
-        $categories = Category::all();
-        return view('add-product', compact('productsCount', 'products', 'categories'));
     }
 
     public function search(ProductRequest $request)
@@ -205,7 +191,6 @@ class ProductController extends Controller
     public function delete($product_id)
     {
         //delete the product
-        $productsCount = 0;
         $products = Auth::user()->products;
         $product = $products->find($product_id);
         $message = 'Your product is removed from your product list.';
@@ -220,8 +205,6 @@ class ProductController extends Controller
             $message .= 'Contact your administrator to know about product removing policy';
         }
         flash($message);
-        $products = Auth::user()->products;
-        $categories = Category::all();
-        return view('add-product', compact('productsCount', 'products', 'categories'));
+        return redirect()->route('user::products');
     }
 }
