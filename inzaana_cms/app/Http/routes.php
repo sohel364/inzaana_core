@@ -38,12 +38,13 @@ Route::group(['middleware' => 'web'], function () {
         // User controller
     	Route::get('/dashboard', [ 'uses' => 'UserController@index', 'as' => 'home' ]);
 
-        Route::get('/template_view', [ 'uses' => 'ProductController@gettemplate', 'as' => 'template' ]);
-        Route::get('/user_dashboard', [ 'uses' => 'ProductController@userdashboard', 'as' => 'udashboard' ]);
-        Route::get('/user_my_order', [ 'uses' => 'ProductController@usermyorder', 'as' => 'umyorder' ]);
-        Route::get('/user_product_return', [ 'uses' => 'ProductController@userproductreturn', 'as' => 'uproductreturn' ]);
-        Route::get('/user_reward_points', [ 'uses' => 'ProductController@userrewardpoints', 'as' => 'urewardpoints' ]);
-        Route::get('/user_wallet', [ 'uses' => 'ProductController@userwallet', 'as' => 'uwallet' ]);
+        // Template Controller
+        Route::get('/template_view', [ 'uses' => 'TemplateController@gettemplate', 'as' => 'template' ]);
+        Route::get('/user_dashboard', [ 'uses' => 'TemplateController@userdashboard', 'as' => 'udashboard' ]);
+        Route::get('/user_my_order', [ 'uses' => 'TemplateController@usermyorder', 'as' => 'umyorder' ]);
+        Route::get('/user_product_return', [ 'uses' => 'TemplateController@userproductreturn', 'as' => 'uproductreturn' ]);
+        Route::get('/user_reward_points', [ 'uses' => 'TemplateController@userrewardpoints', 'as' => 'urewardpoints' ]);
+        Route::get('/user_wallet', [ 'uses' => 'TemplateController@userwallet', 'as' => 'uwallet' ]);
 
         // Product controller
         Route::get('/products', [ 'uses' => 'ProductController@index', 'as' => 'products' ]);
