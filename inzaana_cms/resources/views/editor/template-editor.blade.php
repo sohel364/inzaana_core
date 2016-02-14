@@ -229,8 +229,11 @@ $_SESSION['isInEditor'] = $isInEditor;
  
  
  	<div>
-		<button class="template_save_btn btn btn-success"
-			onclick="savePage(user_id, template_id);" style="<?php echo $user_id == NULL? "display: none;" : "display: block;"?>">Save</button>
+ 		@if (Auth::check())
+			<button class="template_save_btn btn btn-success"
+				onclick="savePage(user_id, template_id);" style="display: block;">Save
+			</button>
+		@endif
 		<canvas id="hidden-canvas" style="display:none"></canvas>
 	</div>
 

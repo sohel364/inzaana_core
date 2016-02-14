@@ -20,9 +20,7 @@
 Route::group([ 'as' => 'guest::' ], function() {
 
 	Route::get('/', [ 'uses' => 'HomeController@index', 'as' => 'home' ]);   
-    Route::get('/editor/{category}/{template}', ['as'=>'editor', function($category, $template){
-        return view('editor.template-editor', ['category'=>$category, 'template'=>$template]);
-    }]); 
+     
 });
 
 Route::group(['middleware' => 'web'], function () {
@@ -60,5 +58,9 @@ Route::group(['middleware' => 'web'], function () {
         Route::post('/categories/create', [ 'uses' => 'CategoryController@create', 'as' => 'categories.create' ]);
         Route::post('/categories/edit/{category_id}', [ 'uses' => 'CategoryController@edit', 'as' => 'categories.edit' ]);
         Route::post('/categories/delete/{category_id}', [ 'uses' => 'CategoryController@delete', 'as' => 'categories.delete' ]);
+
+        Route::get('/editor/{category}/{template}', ['as'=>'editor', function($category, $template){
+            return view('editor.template-editor', ['category'=>$category, 'template'=>$template]);
+        }]);
     });
 });
