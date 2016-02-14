@@ -61,7 +61,10 @@ $_SESSION['isInEditor'] = $isInEditor;
             }
             var isInEditor = true;
 </script>
-<?php include ($turl.'/header.html');?>
+
+<?php
+	include ("templates/$category/$template/header.html");
+?>
 <script src="{{ asset('editor_asset/js/savePage.js') }}"></script>
 <script src="{{ asset('editor_asset/js/drag_drop.js') }}"></script>
 <script src="{{ asset('editor_asset/js/menu.js') }}"></script>
@@ -123,7 +126,7 @@ $_SESSION['isInEditor'] = $isInEditor;
 
 .control_dialog {
 	position: absolute;
-	background: url("../../images/img-noise-361x370.png");
+	background: url("{{ asset('editor_asset/images/img-noise-361x370.png') }}");
 	border-radius: 7px;
 	border: 1px solid silver;
 }
@@ -207,7 +210,7 @@ $_SESSION['isInEditor'] = $isInEditor;
 	height: 100%;
 	position: fixed;
 	z-index: 9999;
-	background: url("http://localhost/WebBuilder/images/loading.gif")
+	background: url("{{ asset('editor_asset/images/loading.gif') }}")
 		no-repeat center center rgba(0, 0, 0, 0.25)
 }
 </style>
@@ -255,8 +258,8 @@ $_SESSION['isInEditor'] = $isInEditor;
 					</div>
 					<div id="mainNav" class="collapse navbar-collapse">
                         <?php if ($template_id == NULL) { ?>
-						<?php //include ($turl.'/menu.html');?>
-                        <?php //include ($turl.'/menu.php');?>
+						<?php include ("templates/$category/$template/menu.html");?>
+                        <?php include ("templates/$category/$template/menu.php");?>
                         <?php } else { ?>
 						<?php //include '../user_views/user_menu.php';?>
 						<?php } ?>
@@ -268,15 +271,13 @@ $_SESSION['isInEditor'] = $isInEditor;
 			<?php //include_once 'control_template.php';?>
 			@include('editor.control-template')
 			
-			<div id="body" contentEditable="false" style="width:100%; height:1000px">
-				<h1>{{$category}}</h1>
-				<h1>{{$template}}</h1>
-                            <?php //include ($turl.'/body.html');?>
-                            <?php //include ($turl.'/body.php');?>
+			<div id="body" contentEditable="false" >
+                            <?php include ("templates/$category/$template/body.html");?>
+                            <?php include ($turl.'/body.php');?>
             </div>
 
 			<div id="footer">
-				<?php //include ($turl.'/footer.html');?>
+				<?php include ("templates/$category/$template/footer.html");?>
 			</div>
 		</div>
 		
@@ -778,15 +779,15 @@ $_SESSION['isInEditor'] = $isInEditor;
 		</h1>
 
 	<div  id="image_template" name="image" class="image_template_non_editable" style="display: none; position: absolute;" data-id="container_imageT">
-		<img src="../../images/image_template.png" alt="Image Template" />
+		<img src="{{ asset('editor_asset/images/image_template.png') }}" alt="Image Template" />
 	</div>
 
 	<div id="image_slider_template" name="imageslider" data-id="container_imageS"
 		class="slider_template_non_editable" data-pause="3000" data-speed="1000" style="display: none; position: absolute;">
 		<ul data-pause_time="3000" data-animation_speed="1000" data-visible_items="1" data-total_item="3">
-			<li><img src="../../images/slider1.jpg" class="slide" alt="Image1"></li>
-			<li><img src="../../images/slider2.jpg" class="slide" alt="Image2"></li>
-			<li><img src="../../images/slider3.jpg" class="slide" alt="Image3"></li>
+			<li><img src="{{ asset('editor_asset/images/slider1.jpg') }}" class="slide" alt="Image1"></li>
+			<li><img src="{{ asset('editor_asset/images/slider2.jpg') }}" class="slide" alt="Image2"></li>
+			<li><img src="{{ asset('editor_asset/images/slider3.jpg') }}" class="slide" alt="Image3"></li>
 		</ul>
 	</div>
 

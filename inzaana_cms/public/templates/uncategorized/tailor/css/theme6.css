@@ -1,0 +1,82 @@
+@charset "utf-8";
+/* CSS Document */
+
+@import url(http://fonts.googleapis.com/css?family=Josefin+Sans:400,100,300,700,600);
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,700,500,900,300,100);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800);
+
+html{margin:0; padding:0;}
+body{margin:0; padding:0; font-family: 'Josefin Sans', sans-serif; background:#fff;}
+header,aside,nav,section,article,figure,footer,p,h1,h2,h3,h4,h5,h6{margin:0; padding:0;}
+ul,li,ol{list-style:none;}
+a{text-decoration:none;}
+table,tr,td{
+	margin:0;
+	padding:0;
+	outline:0;
+	vertical-align:top;
+}
+
+
+.header-top{
+	background:url(../resource/images/header-top6.jpg) repeat-x;
+	padding:19px 0;
+	text-transform:capitalize;
+}
+.logo6{
+	display:block;
+}
+.logo,.logo1,.logo2,.logo3,.logo4,.logo5,.logo7{display:none;}
+.hvr-underline-from-center::before{
+	background:#2c1c02;
+}
+
+.denim_escape, .denim_escape1, .denim_escape2, .denim_escape3, .denim_escape5, .denim_escape7, denim_escape4{
+	display:none !important;
+}
+.denim_escape6{
+	display:block !important;
+}
+.purple{
+	background:url(../resource/images/purple-bg6.jpg) no-repeat;
+	background-size:cover;
+}
+.purple .btn-info{
+	background:#e06e00;
+}
+.mg-img .caption .btn-info{
+	background:#e06e00;
+	font-weight:600;
+}
+.mg-img .caption2 .btn-info{
+	background:#e06e00;
+	font-weight:600;
+}
+.offer span{
+	color:#e06e00;
+}
+.footer-top .newsletter .btn-info{
+	background:#e06e00;
+}
+.footer-top{
+	background:url(../resource/images/footer-bg6.jpg);
+}
+
+.footer-top .newsletter{
+	border-bottom:2px dashed #695739;
+}
+.footer-nav{
+	border-bottom:2px dashed #695739;
+}
+.footer-bottom{
+	background:#2c1c02;
+}
+.footer-bottom p{
+	color:#627088;
+}
+.footer-nav ul li a:hover{
+	color:#e06e00;
+}
+.footer-nav ul li.active a{
+	color:#e06e00;
+}

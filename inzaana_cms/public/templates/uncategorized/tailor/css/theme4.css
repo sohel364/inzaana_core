@@ -1,0 +1,81 @@
+@charset "utf-8";
+/* CSS Document */
+
+@import url(http://fonts.googleapis.com/css?family=Josefin+Sans:400,100,300,700,600);
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,700,500,900,300,100);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800);
+
+html{margin:0; padding:0;}
+body{margin:0; padding:0; font-family: 'Josefin Sans', sans-serif; background:#fff;}
+header,aside,nav,section,article,figure,footer,p,h1,h2,h3,h4,h5,h6{margin:0; padding:0;}
+ul,li,ol{list-style:none;}
+a{text-decoration:none;}
+table,tr,td{
+	margin:0;
+	padding:0;
+	outline:0;
+	vertical-align:top;
+}
+
+
+.header-top{
+	background:url(../resource/images/header-top4.jpg) repeat-x;
+	padding:19px 0;
+	text-transform:capitalize;
+}
+.logo4{
+	display:block;
+}
+.logo,.logo1,.logo2,.logo3,.logo5,.logo6,.logo7{display:none;}
+.hvr-underline-from-center::before{
+	background:#55195f;
+}
+.denim_escape, .denim_escape1, .denim_escape2, .denim_escape3, .denim_escape6 .denim_escape5, .denim_escape7{
+	display:none !important;
+}
+.denim_escape4{
+	display:block !important;
+}
+.welcome h1{
+	color:#360b0b;
+}
+.purple{
+	background:url(../resource/images/purple-bg4.jpg) no-repeat;
+	background-size:cover;
+}
+.purple .btn-info{
+	background:#74a51a;
+}
+.mg-img .caption .btn-info{
+	background:#74a51a;
+}
+.mg-img .caption2 .btn-info{
+	background:#74a51a;
+}
+.offer span{
+	color:#74a51a;
+}
+.footer-top .newsletter .btn-info{
+	background:#74a51a;
+}
+.footer-top{
+	background:url(../resource/images/footer-bg4.jpg);
+}
+.footer-top .newsletter{
+	border-bottom:2px dashed #6e3e5d;
+}
+.footer-nav{
+	border-bottom:2px dashed #6e3e5d;
+}
+.footer-bottom{
+	background:#2c021c;
+}
+.footer-bottom p{
+	color:#627088;
+}
+.footer-nav ul li.active a{
+	color:#74a51a;
+}
+.footer-nav ul li a:hover{
+	color:#74a51a;
+}

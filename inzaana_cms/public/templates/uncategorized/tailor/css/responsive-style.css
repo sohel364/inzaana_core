@@ -1,0 +1,155 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+@media only screen and (width : 1024px){
+	
+	#myCarousel{display:block !important;}
+	.slider-wrapper{display:none;}
+	.header-top ul li{font-size:13px;}
+	
+	.customer{left:-239px; bottom:-129px;}
+	.feedback{padding:100px 0 146px;}
+	
+	.footer-nav ul li a{padding:0 23px 0 0;}
+	.footer-nav .social li a{padding:0;}
+	
+}
+
+@media only screen and (min-width : 768px) and (max-width : 1023px){
+	
+	#myCarousel{display:block !important;}
+	.slider-wrapper{display:none;}
+	.carousel-control{display:none;}
+	
+	.header-top ul li{font-size:12px;}
+	.header-top ul li a{padding:0 5px;}
+	.rightnav{text-align:left;}
+	.rightnav ul .dropdown{padding-right:0;}
+	.rightnav ul .order{border:none;}
+	
+	
+	.header-bottom input[type="text"]{width:100%;}
+	.search{margin-top:12px;}
+	.mynavbar .navbar-nav li a{padding:15px 10px;}
+	
+	.text h3{font-size:24px;}
+	.text p{font-size:15px;}
+	.customer{display:none;}
+	
+	.nbs-flexisel-nav-right{right:-22px;}
+	
+	.offer a{margin-right:3px;}
+	.footer-top .newsletter input{width:auto;}
+	
+	.footer-nav ul li{font-size:10px;}
+	.footer-nav ul li a{padding:0 5px 0 0;}
+
+}
+
+@media only screen and (min-width : 480px) and (max-width : 767px){
+	
+	#myCarousel{display:block !important;}
+	.slider-wrapper{display:none;}
+	.carousel-control{display:none;}
+	
+	.header-top{background:#002045;}
+	.header-top ul li{font-size:14px;}
+	.header-top ul li a{padding:0 9px;}
+	.rightnav{text-align:left;}
+	.rightnav ul .dropdown{padding-right:4px;}
+	.rightnav ul .order{border:none;}
+	
+	.header-bottom input[type="text"]{width:100%;}
+	.search{margin-top:20px;}
+	.mynavbar{position:absolute; right:0; top:-18px; width:100%; z-index:9999;}
+	.mynavbar .navbar-collapse, .collapse, .in{background:rgba(0,0,0,0.8);}
+	.mynavbar .navbar-nav li a{color:#fff;}
+	.mynavbar .navbar-nav li a:hover{color:#fff;}
+	
+	.welcome h1{font-size:21px; padding-bottom:27px;}
+	.welcome{padding:60px 0;}
+	
+	.header-bottom{padding:30px 0;}
+	.purple h3{font-size:20px; padding-bottom:16px;}
+	.purple aside{margin-bottom:10px;}
+	
+	.mg-img{width:100%;}
+	.four_pics{padding:70px 0;}
+	
+	.nbs-flexisel-nav-left{left:-13px;}
+	.nbs-flexisel-nav-right{right:-15px;}
+	.slide2{padding:70px 0;}
+	
+	.feedback{padding:70px 0;}
+	.feedback h2{font-size:34px; padding-bottom:38px;}
+	.customer{display:none;}
+	.text{margin-bottom:20px;}
+	
+	.offer aside{margin-bottom:20px;}
+	.offer h3{padding-bottom:4px;}	
+	
+	.footer-top .newsletter input{width:100%; margin:0;}
+	.footer-nav ul li a{padding:0 22px 0 0;}
+	.footer-nav ul li{font-size:10px;}
+	.footer-nav ul li a{padding:0 9px 0 0;}
+	.footer-nav{padding:24px 0;}
+	.footer-nav .social{padding-top:20px; text-align:center;}	
+	.footer-bottom p{font-size:11px;}
+	
+}
+
+
+@media only screen and (min-width : 320px) and (max-width : 479px){
+	
+	.header-top{background:#002045;}
+	.header-top ul li{font-size:10px;}
+	.header-top ul li a{padding:0 4px;}
+	.rightnav{text-align:left;}
+	.rightnav ul .dropdown{padding-right:4px;}
+	.rightnav ul .order{border:none;}
+	
+	.header-bottom input[type="text"]{width:100%;}
+	.search{margin-top:20px;}
+	.mynavbar{position:absolute; right:0; top:-18px; width:100%; z-index:9999;}
+	.mynavbar .navbar-collapse, .collapse, .in{background:rgba(0,0,0,0.8);}
+	.mynavbar .navbar-nav li a{color:#fff;}
+	.mynavbar .navbar-nav li a:hover{color:#fff;}
+	
+	.welcome h1{font-size:21px; padding-bottom:27px;}
+	.welcome{padding:60px 0;}
+	
+	.header-bottom{padding:30px 0;}
+	.purple h3{font-size:20px; padding-bottom:16px;}
+	.purple aside{margin-bottom:10px;}
+	
+	.mg-img .caption h3{font-size:58px;}
+	.mg-img .caption h3 sub{font-size:23px;}
+	.mg-img .caption h3 sup{font-size:23px;}
+	
+	.four_pics{padding:70px 0;}
+	
+	.nbs-flexisel-nav-left{left:-13px;}
+	.nbs-flexisel-nav-right{right:-15px;}
+	
+	.feedback{padding:70px 0;}
+	.feedback h2{font-size:25px; padding-bottom:38px;}
+	.customer{display:none;}
+	.text{margin-bottom:20px;}
+	
+	.offer aside{margin-bottom:20px;}
+	.offer h3{padding-bottom:4px;}
+	
+	.footer-top .newsletter input{width:100%; margin:0;}
+	.footer-nav ul li a{padding:0 22px 0 0;}
+	.footer-nav ul li{font-size:10px;}
+	.footer-nav ul li a{padding:0 13px 0 0;}
+	.footer-nav{padding:24px 0;}
+	.footer-nav .social{padding-top:20px; text-align:left;}	
+	.footer-bottom p{font-size:11px;}
+	
+	#myCarousel{display:block !important;}
+	.slider-wrapper{display:none;}
+	.carousel-control{display:none;}	
+	
+}

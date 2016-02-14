@@ -1,0 +1,131 @@
+@charset "utf-8";
+/* CSS Document */
+
+@import url(http://fonts.googleapis.com/css?family=Josefin+Sans:400,100,300,700,600);
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,700,500,900,300,100);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800);
+
+html{margin:0; padding:0;}
+body{margin:0; padding:0; font-family: 'Josefin Sans', sans-serif; background:#000;}
+header,aside,nav,section,article,figure,footer,p,h1,h2,h3,h4,h5,h6{margin:0; padding:0;}
+ul,li,ol{list-style:none;}
+a{text-decoration:none;}
+table,tr,td{
+	margin:0;
+	padding:0;
+	outline:0;
+	vertical-align:top;
+}
+
+
+.header-top{
+	background:url(../resource/images/header-top7.jpg) repeat-x;
+	padding:19px 0;
+	text-transform:capitalize;
+}
+
+.logo5{
+	display:block;
+}
+.logo,.logo1,.logo2,.logo3,.logo4,.logo6{display:none;}
+.hvr-underline-from-center::before{
+	background:#55195f;
+}
+.mynavbar .navbar-nav li a{
+	color:#fff;
+}
+.denim_escape, .denim_escape1, .denim_escape2, .denim_escape3, .denim_escape4 .denim_escape6, .denim_escape5{
+	display:none !important;
+}
+.denim_escape7{
+	display:block !important;
+}
+.welcome h1{
+	color:#fff;
+}
+.welcome p{
+	color:#fff;
+}
+.purple{
+	background:url(../resource/images/purple-bg7.jpg) no-repeat;
+	background-size:cover;
+}
+.purple .btn-info{
+	background:#d44836;
+	color:#fff;
+	text-shadow:none;
+	font-weight:400;
+}
+.mg-img .caption .btn-info{
+	background:#d44836;
+	color:#fff;
+	text-shadow:none;
+	font-weight:400;
+}
+.mg-img .caption2 .btn-info{
+	background:#d44836;
+	color:#fff;
+	text-shadow:none;
+	font-weight:400;
+}
+.thumb{
+	border:2px dashed #555;
+}
+.thumb img{
+	border:15px solid #000;
+}
+.customer img{
+	border:none;
+}
+.feedback{
+	border-bottom:2px dashed #555;
+}
+.offer{
+	border-top:2px dashed #555;
+}
+.feedback h2{
+	color:#fff;
+}
+.text{
+	background:url(../resource/images/quote2.png) no-repeat bottom right;
+	color:#fff;
+}
+.text h3{
+	color:#fff;
+}
+.text p{
+	color:#fff;
+}
+.offer h3{
+	color:#fff;
+}
+.offer span{
+	color:#d44836;
+}
+.offer a{
+	color:#fff;
+}
+.footer-top .newsletter .btn-info{
+	background:#000;
+}
+.footer-top{
+	background:url(../resource/images/footer-bg7.jpg);
+}
+.footer-top .newsletter{
+	border-bottom:2px dashed #d97165;
+}
+.footer-nav{
+	border-bottom:2px dashed #d97165;
+}
+.footer-bottom{
+	background:#000;
+}
+.footer-bottom p{
+	color:#627088;
+}
+.footer-nav ul li.active a{
+	color:#000;
+}
+.footer-nav ul li a:hover{
+	color:#000;
+}
