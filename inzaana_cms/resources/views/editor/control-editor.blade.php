@@ -1,12 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-	<script src="{{ asset('editor_asset/js/control_editor.js') }}"></script>
-	<link href="{{ asset('editor_asset/css/control_editor.css') }}" rel="stylesheet" />
-</head>
-
-
-<body>
 
 <div id="control_option_dialog" class="dialog">
 		<button id="dialog_btn_edit" class="btn dialog_btn "
@@ -429,12 +420,3 @@
 	</div>
 	
 </div>
-	
-	
-		
-</body>
-
-
-
-
-

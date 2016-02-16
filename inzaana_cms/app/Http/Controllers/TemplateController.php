@@ -62,7 +62,7 @@ class TemplateController extends Controller
         {
             $user_id = Auth::user()->name;
         }
-        return view('editor.template-editor', ['category'=>$category, 'template_id'=>$template, 'user_id'=>$user_id, 'template'=>$template]);
+        return view('editor.template-editor', ['category'=>$category, 'template_id'=>$template]);
     }
 
 }

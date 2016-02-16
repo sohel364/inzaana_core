@@ -19,10 +19,10 @@
 
 Route::group([ 'as' => 'guest::' ], function() {
 
-	Route::get('/', [ 'uses' => 'HomeController@index', 'as' => 'home' ]);
-    Route::get('/editor/{category}/{template}', ['as'=>'editor', 'uses'=>'TemplateController@geteditor']);
-     
+	Route::get('/', [ 'uses' => 'HomeController@index', 'as' => 'home' ]);     
 });
+
+Route::get('/editor/{category}/{template}', ['as'=>'template.editor', 'uses'=>'TemplateController@geteditor']);
 
 Route::group(['middleware' => 'web'], function () {
 
