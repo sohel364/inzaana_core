@@ -1,1 +1,107 @@
 
+#frame {
+	background: white;
+	float: left;
+	height: 100%;
+	width: 100%;
+	margin-left: 5px;
+	padding: 5px;
+/* 	z-index: 10000000; */
+}
+
+.edit_option {
+	position: absolute;
+	top: 65px;
+	left: 243px;
+	background-color: white;
+	/* background: url("../../images/img-noise-361x370.png"); */
+	border-radius: 7px;
+	border: 1px solid silver;
+	padding: 5px;
+	display: none;
+}
+
+.edit_option  table  tr, th, td {
+	padding: 2px;
+	border: 1px solid white;
+}
+
+.control_dialog {
+	position: absolute;
+	background: url("{{ asset('editor_asset/images/img-noise-361x370.png') }}");
+	border-radius: 7px;
+	border: 1px solid silver;
+}
+
+.edit_option td:nth-child(even) {
+	float: right;
+	text-align: right;
+}
+
+.color {
+	height: 30px;
+	width: 30px;
+}
+
+.color_picker_container {
+	background: white;
+	border-radius: 10px;
+	box-shadow: 0px 0px 10px #888888;
+}
+
+.color_picker_icon {
+	background: white;
+	border: .5px solid lightgrey;
+	border-radius: 7px;
+	width: 100%;
+}
+
+.sortable.grid li {
+			line-height: 60px;
+			float: left;
+			width: 80px;
+			height: 60px;
+			text-align: center;
+			border-radius: 5px;
+			margin-left: 5px;
+			margin-top: 5px;
+		}
+.grid {
+			display: inline;			
+}
+.slider_thumbnail{		
+			width: 80px;
+			height: 60px;
+			text-align: center;
+			border: 1px solid lightgrey;
+			border-radius: 5px;
+}
+
+.template_save_btn {
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index: 10000000000 !important;
+	
+}
+
+.editor_topper_view {
+	width: 80%;
+}
+
+.form_label{
+	font-size: 17px;
+}
+
+.form_input {
+	height: 35px;
+}
+
+#showsaveicon {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	z-index: 9999;
+	background: url("{{ asset('editor_asset/images/loading.gif') }}")
+		no-repeat center center rgba(0, 0, 0, 0.25)
+}

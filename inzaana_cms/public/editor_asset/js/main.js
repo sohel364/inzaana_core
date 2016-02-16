@@ -3,6 +3,9 @@ $(document).ready(function () {
     $('form').submit(false);
 });
 
+var template_id = "{{$template_id}}";
+var isInEditor = true;
+
 function signIn() {
     var userName = $('#userid').val();
     var pass = $('#passwordinput').val();

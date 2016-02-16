@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use Inzaana\Http\Requests;
 use Inzaana\Http\Controllers\Controller;
+use Auth;
 
 class TemplateController extends Controller
 {
@@ -52,6 +53,16 @@ class TemplateController extends Controller
         //
         $productsCount = 0;
         return view('user_wallet', compact('productsCount'));
+    }
+
+    public function geteditor($category, $template)
+    {
+        $user_id = NULL;
+        if (Auth::check())
+        {
+            $user_id = Auth::user()->name;
+        }
+        return view('editor.template-editor', ['category'=>$category, 'template_id'=>$template, 'user_id'=>$user_id, 'template'=>$template]);
     }
 
 }
