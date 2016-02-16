@@ -15,7 +15,7 @@ class CreateProducts extends Migration
         Schema::create('products', function (Blueprint $table) {
         $table->bigIncrements('id');
         $table->bigInteger('user_id');
-        $table->boolean('has_sub_category_id');
+        $table->boolean('has_sub_category_id')->default(false);
 		$table->bigInteger('category_subcategory_id');
         // $table->double('lat');
         // $table->double('lng');
@@ -28,7 +28,7 @@ class CreateProducts extends Migration
         $table->string('photo_name');// will be considered as photo_url
         // $table->string('photo_size');
         // $table->string('photo_type');
-        $table->string('status');
+        $table->enum('status', ['OUT_OF_STOCK', 'AVAILABLE', 'NOT_AVAILABLE', 'ON_SHIPPING', 'REMOVED', 'COMING_SOON', 'SOLD', 'ORDERED']);
         $table->timestamps();        
         });  //
     }
