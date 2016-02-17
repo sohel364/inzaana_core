@@ -125,6 +125,7 @@ $(function(){
      * */
     $(".add-menu").on('click',function(){
         BootstrapDialog.show({
+             title: 'Create new page',
             message: '<div class="form-group"><label for="pageType">Page event type:</label><select class="form-control" id="pageType"><option>Education</option><option>Health</option><option>Food</option></select></div> <label for="pageType">Page Name:</label><input type="text" class="form-control">',
             buttons: [{
                 label: 'Ok',
