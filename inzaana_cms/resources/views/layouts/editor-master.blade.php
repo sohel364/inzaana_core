@@ -51,7 +51,7 @@
           <form class="navbar-form navbar-left" role="save">
         <button type="submit" class="btn btn-default btn-flat">Save</button>
       </form>
-        <li><a href="#">Link</a></li>
+        <li><a href="#">Preview</a></li>
         <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="user-image" alt="User Image"/>

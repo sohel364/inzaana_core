@@ -51,7 +51,7 @@
     background-color: #5bc0de;
 }
 .bootstrap-dialog.type-primary .modal-header {
-    background-color: #428bca;
+    background-color: #3c8dbc;
 }
 .bootstrap-dialog.type-success .modal-header {
     background-color: #5cb85c;
@@ -118,3 +118,11 @@
 }
 }
 /** End of icon animation **/
+.bootstrap-dialog .modal-header {
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+}
+.modal-content{
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+}

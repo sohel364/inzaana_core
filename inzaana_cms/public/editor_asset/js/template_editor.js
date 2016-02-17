@@ -125,10 +125,10 @@ $(function(){
      * */
     $(".add-menu").on('click',function(){
         BootstrapDialog.show({
-            message: 'Give Menu Name: <input type="text" class="form-control">',
+            message: '<div class="form-group"><label for="pageType">Page event type:</label><select class="form-control" id="pageType"><option>Education</option><option>Health</option><option>Food</option></select></div> <label for="pageType">Page Name:</label><input type="text" class="form-control">',
             buttons: [{
                 label: 'Ok',
-                cssClass: 'btn-success',
+                cssClass: 'btn-info btn-flat',
                 action: function(dialogRef) {
                     var newMenu = dialogRef.getModalBody().find('input').val();
                     addNewMenu(newMenu);
@@ -137,6 +137,7 @@ $(function(){
             } ,
                 {
                     label: 'Cancel',
+                    cssClass: 'btn-info btn-flat',
                     action: function(dialogRef) {
                         dialogRef.close();
                     }
