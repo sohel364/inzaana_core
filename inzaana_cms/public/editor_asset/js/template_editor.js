@@ -133,6 +133,7 @@ $(function(){
                 action: function(dialogRef) {
                     var newMenu = dialogRef.getModalBody().find('input').val();
                     addNewMenu(newMenu);
+                    updateControlPaletteTabList("custom");
                     dialogRef.close();
                 }
             } ,

@@ -24,26 +24,34 @@
 	</div>
 	
 	<div id="tabs">
-	    <ul>
-	        <li>
+
+		<!-- Start Section Add Control Tab List -->
+
+	    <ul id="tab_list">
+	        <li data-category='["general"]'>
 	            <a href="#btn_template_palette">Button</a>
 	        </li>
-	        <li>
+	        <li data-category='["general", "custom"]'>
 	            <a href="#images">Image</a>
 	        </li>
-	        <li>
+	        <li data-category='["general", "custom"]'>
 	            <a href="#slider">Slider</a>
 	        </li>
-	        <li>
+	        <li data-category='["general"]'>
 	            <a href="#text">Text</a>
 	        </li>
-	        <li>
+	        <li data-category='["general", "custom"]'>
 	            <a href="#form">Form</a>
 	        </li>
-	        <li>
+	        <li data-category='["general"]'>
 	            <a href="#space">Space</a>
 	        </li>
 	    </ul>
+
+	    <!-- Start Section Add Control Tab List -->
+
+	    <!-- Start Section Add control tab body -->
+
 	    <div id="btn_template_palette">
 	        <!-- <button name='button' class='selectorField draggableField btn-primary btn-lg'>Click Me</button> -->
 	    </div>
@@ -79,6 +87,10 @@
 	    <div id="space">
 	    	<h1 name='space' class='selectorField draggableField'>New Space</h1>
 	    </div>
+
+	<!-- End Section Add control tab body -->
+
+
 	</div>
 </div>
 
@@ -92,7 +104,8 @@
 	</div>
 	<div class="background_theme">
 		<br />
-		<ul id="bg_editor_default_images_list"></ul>
+		<ul id="bg_editor_default_images_list">
+		</ul>
 	
 	</div>
 </div>

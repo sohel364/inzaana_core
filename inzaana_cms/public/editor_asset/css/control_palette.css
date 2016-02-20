@@ -155,7 +155,7 @@
 
 
 
-<!-- dsfsdfsdfsdfddddddddddddddddddddddddddddddddddddddddddddddddddddddd-->
+<!-- Section for Tabbed pane in Control palette-->
 
 .ui-tabs.ui-tabs-vertical {
   /*   padding: 0;
@@ -174,7 +174,7 @@
 .ui-tabs.ui-tabs-vertical .ui-tabs-nav li {
     /* clear: left; */
     width: 100%;
-   	height: 90px;
+   	/*height: 90px;*/
     /* margin: 0.2em 0; */
     /* border: 1px solid gray;
     border-width: 1px 0 1px 1px; */

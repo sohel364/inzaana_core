@@ -13,9 +13,55 @@ var is_bg_fixed = false;
 $(function(){	
 	initializeControlPalette();
 	controlPaletteHoverAction();
+	updateControlPaletteTabList("general");
 	
 });
 
+function updateControlPaletteTabList(category){
+	if ($("#tabs").tabs("instance") == undefined)
+	{
+		$("#tabs").tabs();
+	}
+
+	if (isValidControlCategory(category))
+	{
+		var is_first = true;
+		var index_first_tab = 0;
+		var count_tab = 0;
+		$("#tab_list li").css("display", "none");
+
+		$("#tab_list").find("li").each(function(index, value){
+			var supported_category_list = $(this).data("category");
+			if (supported_category_list.indexOf(category) > -1)
+			{
+				$(this).css("display", "inline");
+				count_tab++;
+				if (is_first == true)
+				{
+					index_first_tab = index;
+					is_first = false;
+				}
+			}
+		})
+
+		var container_height = $(".ui-tabs").height();
+		if (container_height == null || container_height < 0)
+		container_height = 540;
+
+		$(".ui-tabs-nav li").css("height", Math.floor(container_height/count_tab) + "px");
+
+		$("#tabs").tabs({
+			active : index_first_tab
+		});
+
+		$("#tabs").tabs("refresh");
+	}
+}
+
+function isValidControlCategory(category)
+{
+	return true; // will be implemented later
+}
 
 function initializeControlPalette(){
 	
@@ -55,14 +101,15 @@ function initializeControlPalette(){
 }
 
 function initializeDefalutBackgroundThere(){
-	var folder = "../../images/background/";
 	
+	var folder = "./editor_asset/images/background/";
+
 	$.ajax({
 	    url : folder,
 	    success: function (data) {
 	        $(data).find("a").attr("href", function (i, val) {
 	            if( val.match(/\.jpg|\.png|\.gif/) ) {
-	                $('<li><img src="' + folder + val + '" class="bg_editor_thumbnail" alt="'
+	                $('<li><img src="{{ asset(\'' + folder + val + '\')}}" class="bg_editor_thumbnail" alt="'
 	    					+ "test" + '"></li>').appendTo('#bg_editor_default_images_list').click(function(){
 	    						console.log($(this).find("img").attr("src"));
 	    						setBackgroundImage($("#container_background-1_div-1") , $(this).find("img").attr("src"));
