@@ -9,6 +9,7 @@
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
         <link href="{{ asset('/dist/css/editor-master.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('/dist/css/AdminLTE.min.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('/select-icon/css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css" />
         
 		@yield('header-style')
 		@yield('header-script')
@@ -95,5 +96,6 @@
 </nav>
         
 		@yield('content')
+        <script src="{{ asset('/select-icon/js/bootstrap-select.min.js') }}"></script>
 	</body>
 </html>
