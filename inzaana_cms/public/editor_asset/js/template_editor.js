@@ -125,15 +125,17 @@ $(function(){
      * */
     $(".add-menu").on('click',function(){
         BootstrapDialog.show({
-             title: 'Create new page',
+            title: 'Create new page',
             message: '<div class="form-group"><label for="pageType">Page event type:</label><select class="form-control selectpicker"><option data-icon="glyphicon-book">Academic</option><option data-icon="glyphicon-heart">Marriage</option><option data-icon="glyphicon-plane">Trip</option></select></div> <label for="pageType">Page Name:</label><input type="text" class="form-control">',
             buttons: [{
                 label: 'Ok',
                 cssClass: 'btn-info btn-flat',
                 action: function(dialogRef) {
                     var newMenu = dialogRef.getModalBody().find('input').val();
-                    addNewMenu(newMenu);
-                    updateControlPaletteTabList("custom");
+                    var menuType = dialogRef.getModalBody().find('select').find(":selected").text().toLowerCase();
+                    //addNewMenu(newMenu);
+                    alert(menuType);
+                    updateControlPaletteTabList(menuType);
                     dialogRef.close();
                 }
             } ,

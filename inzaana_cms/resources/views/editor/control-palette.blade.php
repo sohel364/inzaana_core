@@ -31,20 +31,53 @@
 	        <li data-category='["general"]'>
 	            <a href="#btn_template_palette">Button</a>
 	        </li>
-	        <li data-category='["general", "custom"]'>
+	        <li data-category='["general"]'>
 	            <a href="#images">Image</a>
 	        </li>
-	        <li data-category='["general", "custom"]'>
+	        <li data-category='["general"]'>
 	            <a href="#slider">Slider</a>
 	        </li>
 	        <li data-category='["general"]'>
 	            <a href="#text">Text</a>
 	        </li>
-	        <li data-category='["general", "custom"]'>
+	        <li data-category='["general"]'>
 	            <a href="#form">Form</a>
 	        </li>
 	        <li data-category='["general"]'>
 	            <a href="#space">Space</a>
+	        </li>
+
+	        <!-- for Academic  -->
+	        <li data-category='["academic"]'>
+	            <a href="#academic">Acdmc1</a>
+	        </li>
+	        <li data-category='["academic"]'>
+	            <a href="#academic">Acdmc2</a>
+	        </li>
+	        <li data-category='["academic"]'>
+	            <a href="#academic">Acdmc3</a>
+	        </li>
+
+	        <!-- for Marriage  -->
+	        <li data-category='["marriage"]'>
+	            <a href="#marriage">Mrg1</a>
+	        </li>
+	        <li data-category='["marriage"]'>
+	            <a href="#marriage">Mrg2</a>
+	        </li>
+	        <li data-category='["marriage"]'>
+	            <a href="#marriage">Mrg3</a>
+	        </li>
+
+	        <!-- for Trip  -->
+	        <li data-category='["trip"]'>
+	            <a href="#trip">Trip1</a>
+	        </li>
+	        <li data-category='["trip"]'>
+	            <a href="#trip">Trip2</a>
+	        </li>
+	        <li data-category='["trip"]'>
+	            <a href="#trip">Trip3</a>
 	        </li>
 	    </ul>
 
@@ -86,6 +119,18 @@
 	    </div>
 	    <div id="space">
 	    	<h1 name='space' class='selectorField draggableField'>New Space</h1>
+	    </div>
+
+	    <div id="academic">
+	    	<h1 name='textarea' class='selectorField draggableField'>Academic Control</h1>
+	    </div>
+
+	    <div id="marriage">
+	    	<h1 name='textarea' class='selectorField draggableField'>Marriage Control</h1>
+	    </div>
+
+	    <div id="trip">
+	    	<h1 name='textarea' class='selectorField draggableField'>Trip Control</h1>
 	    </div>
 
 	<!-- End Section Add control tab body -->
