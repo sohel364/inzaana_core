@@ -47,12 +47,12 @@
 
 @section('content')
 	<div>
-		@if (Auth::check())
-			<button class="template_save_btn btn btn-success"
-				onclick="savePage(user_id, template_id);" style="display: block;">Save
-			</button>
-		@endif
-		<canvas id="hidden-canvas" style="display:none"></canvas>
+		<!-- WE ALREADY HAVE ANOTHER SAVE BUTTON FOR IN MASTER PAGE - SO WE PUT HERE AS HIDDEN -->
+		<button class="template_save_btn btn btn-success hidden"
+			onclick="savePage(user_id, template_id);" style="display: block;">Save
+		</button>
+		<!-- BELOW CANVAS IS MOVED TO MASTER PAGE WILL BE DEPRECATED IN FUTURE -->
+		<!-- <canvas id="hidden-canvas" style="display:none"></canvas> -->
 	</div>
 
 	<br />

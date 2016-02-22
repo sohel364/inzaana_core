@@ -199,17 +199,19 @@ function traverseImages() {
  * Calls ajax to save the page contents(menu, submenu, contents etc)
  * @returns {undefined}
  */
-function savePage(user_id, template_id) {
+function savePage(user_id, template_id, isEdit) {
     //var user_id = 'id', template_id = '87349q64';
     //return;
 
 
-    if(isUserLoggedIn === null || isUserLoggedIn === "0") {
-        alert("Please sign in to save the template");
-        var redirectURL = getBaseUrl();
-        window.location.href = redirectURL;
-        return;
-    }
+    // INFO: BELOW PART IS CHECKED FROM VIEWS AND TEMPLATE CONTROLLER
+    // if(isUserLoggedIn === null || isUserLoggedIn === "0") {
+    //     alert("Please sign in to save the template");
+    //     var redirectURL = getBaseUrl();
+    //     window.location.href = redirectURL;
+    //     return;
+    // }
+
     console.log("[WB-D] savePage: " + user_id + "$##$" + template_id);
     traverseImages();
     console.log("[WB-D] savePage: " + user_id + "$##$" + template_id);
@@ -276,40 +278,32 @@ function testBodyHTML() {
 function insertPage(url, menuList, template_id, user_id, savedName) {
 
     //testBodyHTML();
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
     $.ajax({
             type: "POST",
-            url: url,
+            url: '/template_view/create', //url,
             dataType: 'json',
+            // contentType: 'application/json; charset=utf-8',
             data: {
                 menulists: menuList,
-                menucontentlist: menuContens, 
+                // menucontentlist: menuContens, 
                 templateid: template_id, //template_id,
                 savedname: savedName,
-                categoryname:currentCategory, 
-                templatename:currentTemplate
+                // templatename:currentTemplate,
+                _token: CSRF_TOKEN
             },
-            success: function (obj, textstatus) {
-                hideSavingIcon();
-                if (!('error' in obj)) {
-                    //yourVariable = obj.result;
-                    if(obj.saveUserTemplate === '1' && 'savedTemplateId' in obj) {
-                        alert('Saved Successfully!!!');
-                        var savedTemplateID = obj.savedTemplateId;
-                        var redirectURL = getBaseUrl()+'/views/content_views/template_editor.php?category='+currentCategory+'&template='+currentTemplate+'&templateid='+savedTemplateID;
+            success: function (data) {
+                // hideSavingIcon();
+                
+                alert('Saved Successfully!!!' + data.templateid);
+                // var savedTemplateID = obj.savedTemplateId;
+                // var redirectURL = getBaseUrl()+'/views/content_views/template_editor.php?category='+currentCategory+'&template='+currentTemplate+'&templateid='+savedTemplateID;
 
-                        saveImages(user_id, savedTemplateID);
+                // TODO: Image upload before page template create
+                // saveImages(user_id, savedTemplateID);
 
-                        window.location.href = redirectURL;
-                    } else {
-                        alert('Error occured during saving!!!');
-                    }
-                    
-                }
-                else {
-                    console.log(obj.error);
-                    alert('Error: ' + obj.error);
-                }
+                window.location.href = '/editor/' + '{{ $category }}' + '/' + data.templateid;//redirectURL;
             },
             error: function(xhr, status, error) {
                 hideSavingIcon();

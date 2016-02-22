@@ -3,6 +3,7 @@
 namespace Inzaana\Http\Controllers;
 
 use Illuminate\Http\Request as TemplateRequest;
+use Illuminate\Http\Response;
 
 use Inzaana\Http\Requests;
 use Inzaana\Http\Controllers\Controller;
@@ -30,14 +31,21 @@ class TemplateController extends Controller
     public function editor($category, $template)
     {
         // TODO: check author
-        return view('editor.template-editor', [ 'category' => $category, 'template_id' => $template ]);
+        $isEdit = false;
+        return view('editor.template-editor', 
+            [ 'category' => $category, 'template_id' => $template, 'isEdit' => $isEdit ]);
     }
 
     public function create(TemplateRequest $request)
     {
+        if( $request->ajax() )
+        {
+            return response()->json($request->all());
+        }
         // TODO: create a new Template
         $template = Template::create();
-        return view('view_template');
+        // return view('view_template');
+        return $request->all();
     }
 
     public function show($template_id)
