@@ -2,7 +2,7 @@
 
 namespace Inzaana\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Request as TemplateRequest;
 
 use Inzaana\Http\Requests;
 use Inzaana\Http\Controllers\Controller;
@@ -11,58 +11,46 @@ use Auth;
 class TemplateController extends Controller
 {
     //
+    /**
+     * Create a new authentication controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     
-    public function gettemplate()
+    public function index()
     {
         //
-        $productsCount = 0;
-        return view('view_template', compact('productsCount'));
-    }
-    public function viewcategory()
-    {
-        //
-        $productsCount = 0;
-        return view('add_category', compact('productsCount'));
-    }
-    public function userdashboard()
-    {
-        //
-        $productsCount = 0;
-        return view('user_dashboard', compact('productsCount'));
-    }
-    public function usermyorder()
-    {
-        //
-        $productsCount = 0;
-        return view('user_my_order', compact('productsCount'));
-    }
-    public function userproductreturn()
-    {
-        //
-        $productsCount = 0;
-        return view('user_product_return', compact('productsCount'));
-    }
-    public function userrewardpoints()
-    {
-        //
-        $productsCount = 0;
-        return view('user_reward_points', compact('productsCount'));
-    }
-    public function userwallet()
-    {
-        //
-        $productsCount = 0;
-        return view('user_wallet', compact('productsCount'));
+        return view('view_template');
     }
 
-    public function geteditor($category, $template)
+    public function editor($category, $template)
     {
-        $user_id = NULL;
-        if (Auth::check())
-        {
-            $user_id = Auth::user()->name;
-        }
-        return view('editor.template-editor', ['category'=>$category, 'template_id'=>$template]);
+        // TODO: check author
+        return view('editor.template-editor', [ 'category' => $category, 'template_id' => $template ]);
     }
 
+    public function create(TemplateRequest $request)
+    {
+        // TODO: create a new Template
+        $template = Template::create();
+        return view('view_template');
+    }
+
+    public function show($template_id)
+    {
+        $template = Templates::all()->find($template_id);
+        // TODO: do something to view
+        return view('view_template', compact('template'));
+    }
+
+    public function edit($template_id)
+    {
+        $template = Templates::all()->find($template_id);
+        // TODO: do something to edit
+        return view('view_template', compact('template'));
+    }
 }

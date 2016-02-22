@@ -22,8 +22,6 @@ Route::group([ 'as' => 'guest::' ], function() {
 	Route::get('/', [ 'uses' => 'HomeController@index', 'as' => 'home' ]);     
 });
 
-Route::get('/editor/{category}/{template}', ['as'=>'template.editor', 'uses'=>'TemplateController@geteditor']);
-
 Route::group(['middleware' => 'web'], function () {
 
 	Route::get('/register/confirm/{token}', 'Auth\AuthController@confirmEmail');
@@ -36,14 +34,18 @@ Route::group(['middleware' => 'web'], function () {
 
         // User controller
     	Route::get('/dashboard', [ 'uses' => 'UserController@index', 'as' => 'home' ]);
+        Route::get('/user_dashboard', [ 'uses' => 'UserController@userdashboard', 'as' => 'home.customer' ]);
+        Route::get('/user_my_order', [ 'uses' => 'UserController@usermyorder', 'as' => 'orders' ]);
+        Route::get('/user_product_return', [ 'uses' => 'UserController@userproductreturn', 'as' => 'products.return' ]);
+        Route::get('/user_reward_points', [ 'uses' => 'UserController@userrewardpoints', 'as' => 'reward-points' ]);
+        Route::get('/user_wallet', [ 'uses' => 'UserController@userwallet', 'as' => 'wallet' ]);
 
         // Template Controller
-        Route::get('/template_view', [ 'uses' => 'TemplateController@gettemplate', 'as' => 'template' ]);
-        Route::get('/user_dashboard', [ 'uses' => 'TemplateController@userdashboard', 'as' => 'udashboard' ]);
-        Route::get('/user_my_order', [ 'uses' => 'TemplateController@usermyorder', 'as' => 'umyorder' ]);
-        Route::get('/user_product_return', [ 'uses' => 'TemplateController@userproductreturn', 'as' => 'uproductreturn' ]);
-        Route::get('/user_reward_points', [ 'uses' => 'TemplateController@userrewardpoints', 'as' => 'urewardpoints' ]);
-        Route::get('/user_wallet', [ 'uses' => 'TemplateController@userwallet', 'as' => 'uwallet' ]);
+        Route::get('/template_view', [ 'uses' => 'TemplateController@index', 'as' => 'templates' ]);
+        Route::post('/template_view', [ 'uses' => 'TemplateController@create', 'as' => 'templates.create' ]);
+        Route::get('/template_view/{template_id}', [ 'uses' => 'TemplateController@show', 'as' => 'templates.show' ]);
+        Route::get('/template_view/{template_id}', [ 'uses' => 'TemplateController@show', 'as' => 'templates.edit' ]);
+        Route::get('/editor/{category}/{template}', [ 'uses'=>'TemplateController@editor', 'as'=>'templates.editor' ]);
 
         // Product controller
         Route::get('/products', [ 'uses' => 'ProductController@index', 'as' => 'products' ]);

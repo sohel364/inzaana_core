@@ -137,7 +137,7 @@
                 </select>
               </div>
               <div class="col-sm-2">
-                  <button class="btn btn-info btn-flat"><i class="fa fa-plus"></i> </button>
+                  <button formmethod="GET" formaction="{{ route('user::categories') }}" class="btn btn-info btn-flat"><i class="fa fa-plus"></i> </button>
               </div>
             </div>
             <div class="form-group{{ $errors->has('product_title') ? ' has-error' : '' }}">

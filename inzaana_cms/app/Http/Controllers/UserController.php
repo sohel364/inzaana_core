@@ -116,4 +116,34 @@ class UserController extends Controller
     {
         //
     }
+
+    public function userdashboard()
+    {
+        //
+        return view('user_dashboard');
+    }
+
+    public function usermyorder()
+    {
+        //
+        return view('user_my_order');
+    }
+
+    public function userproductreturn()
+    {
+        //
+        return view('user_product_return');
+    }
+
+    public function userrewardpoints()
+    {
+        //
+        return view('user_reward_points');
+    }
+
+    public function userwallet()
+    {
+        //
+        return view('user_wallet');
+    }
 }
