@@ -1,0 +1,63 @@
+@media only screen and (min-width: 960px) and (max-width: 1200px) {
+/*---Slider----*/
+.carousel-caption{
+  top:15%;
+  bottom:60px !important;
+  right:20% !important;
+  left: 20% !important;
+}
+.sbig {font-size:74px;}
+
+}
+
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+/*---Slider----*/
+.carousel-caption{
+  top:12%;
+  bottom:50px !important;
+  right:20% !important;
+  left: 20% !important;
+}
+.sbig {font-size:60px;}
+
+}	
+
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+.navbar-brand h2 {
+    margin-top: 0px !important;
+}
+/*---Slider----*/
+.carousel-caption{
+  top:10%;
+  bottom:40px !important;
+  right:10% !important;
+  left: 10% !important;
+}
+.sbig {font-size:36px;}
+.awe-hr { margin:5px 0px;}
+.tabs-menu .nav-tabs li, .tabs-shop .nav-tabs li {
+    margin: 15px 5px !important;
+}
+	
+} 
+
+@media only screen and (min-width: 200px) and (max-width: 480px) {
+.navbar-brand h2 {
+    margin-top: 0px !important;
+}
+/*---Slider----*/
+.carousel-caption{
+  top:-5%;
+  bottom:30px !important;
+  right:5% !important;
+  left: 5% !important;
+}
+.blog-sm-box { float: none; margin: 0 0 30px 0; }
+.sbig {font-size:24px; margin:5px 0px !important;}
+.awe-hr { margin:5px 0px;}
+.home-content .xmd {font-size: 14px !important;}	
+.tabs-menu .nav-tabs li, .tabs-shop .nav-tabs li {
+    margin: 15px 5px !important;
+}
+
+}
