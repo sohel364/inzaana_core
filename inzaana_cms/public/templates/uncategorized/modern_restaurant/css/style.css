@@ -148,14 +148,14 @@ a{text-decoration:none !important;}
     -moz-border-radius:0px;
     border-radius:0px;
 }
-.navbar-nav .open .dropdown-menu > li > a, .navbar-nav .open .dropdown-menu .dropdown-header {
+/*.navbar-nav .open .dropdown-menu > li > a, .navbar-nav .open .dropdown-menu .dropdown-header {
     padding: 12px 15px;
 	margin: 0 8px;
 }
 .navbar-right .dropdown-menu {
     left: 0;
     right: 0;
-}
+}*/
 /*----------Home Slider----------------------------*/ 
 .homepage-mycarousel { padding-bottom: 80px; margin: 0 0 0px; }
 #carousel-example-generic .active > div { display: block; }
@@ -1013,18 +1013,18 @@ textarea.form-control {
 }
 
 #mainNav {
-	/* background: #e5e5e5; */
-	font-size: 20px;
-	font-weight: bold;
-	background: radial-gradient(white, #efefef);
-	border-radius: 10px;
-	float: left;
+  background: #e5e5e5;
+  font-size: 20px;
+  font-family: fantasy;
+  font-weight: bold;
+  background: radial-gradient(white, #efefef);
+  border-radius: 10px;
 }
 
 #menu {
-	margin-left: 150px;
-	text-align: center;
-	justify-content: center;
+  margin-left: 300px !important;
+  text-align: center;
+  justify-content: center;
 }
 
 .slide_content{
