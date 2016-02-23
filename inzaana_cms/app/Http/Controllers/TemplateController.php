@@ -9,6 +9,8 @@ use Inzaana\Http\Requests;
 use Inzaana\Http\Controllers\Controller;
 use Auth;
 
+use Inzaana\Template;
+
 class TemplateController extends Controller
 {
     //
@@ -31,21 +33,34 @@ class TemplateController extends Controller
     public function editor($category, $template)
     {
         // TODO: check author
-        $isEdit = false;
+        $isEdit = Template::all()->where('template_name', $template)->count();
         return view('editor.template-editor', 
-            [ 'category' => $category, 'template_id' => $template, 'isEdit' => $isEdit ]);
+            [ 'category_name' => $category, 'template_name' => $template, 'isEdit' => $isEdit ]);
     }
 
     public function create(TemplateRequest $request)
     {
         if( $request->ajax() )
         {
-            return response()->json($request->all());
+            // TODO: create a new Template
+            $template = Template::create([
+                'user_id' => Auth::user()->id,
+                'saved_name' => $request->input('_saved_name'),
+                'template_name' => $request->input('_template_name'),
+                'category_name' => $request->input('_category_name'),
+            ]);
+            $success = true;
+            $message = 'Congratulations! Your template (' . $template->saved_name . ') is saved successfully!';
+            if(!$template)
+            {
+                $success = false;
+                $message = 'Your template (' . $request->input('_saved_name') . ') is failed to save! Help: why template is not saved?';
+                return response()->json(compact('success', 'message'));
+            }
+            return response()->json(compact('success', 'message', 'template'));
         }
-        // TODO: create a new Template
-        $template = Template::create();
-        // return view('view_template');
-        return $request->all();
+        return view('editor.template-editor', 
+            [ 'category_name' => $request->input('_category_name'), 'template_name' => $request->input('_template_name'), 'isEdit' => false ]);
     }
 
     public function show($template_id)

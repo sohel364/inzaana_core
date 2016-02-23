@@ -51,21 +51,21 @@
               </ul>
               <ul class="nav navbar-nav navbar-right">
                 <form class="navbar-form navbar-left" role="save">
-                    <button class="btn btn-default btn-flat{{ Auth::check() ? '' : ' hidden' }}" onclick="savePage('{{ Auth::user()->id }}', '{{ $template_id }}');">Save</button>
+                    <button class="btn btn-default btn-flat{{ Auth::check() ? '' : ' hidden' }}" onclick="savePage('{{ $category_name }}', '{{ $template_name }}', {{ $isEdit }});">Save</button>
                     <canvas id="hidden-canvas" style="display:none"></canvas>
                 </form>
                 <li><a href="#">Preview</a></li>
                 <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="user-image" alt="User Image"/>
-                            <span class="hidden-xs">User Name</span>
+                            <span class="hidden-xs">{{ Auth::user()->name }}</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header">
                                     <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image" />
                                     <p>
-                                    User Name - Web Developer
+                                    {{ Auth::user()->name }} - Web Developer
                                     <small>Member since Nov. 2012</small>
                                     </p>
                                 </li>

@@ -31,7 +31,7 @@
 	<script src="{{ asset('editor_asset/js/main.js') }}"></script>
 
 	<?php
-		include ("templates/$category/$template_id/header.html");
+		include ("templates/$category_name/$template_name/header.html");
 	?>
 	<script src="{{ asset('editor_asset/js/savePage.js') }}"></script>
 	<script src="{{ asset('editor_asset/js/drag_drop.js') }}"></script>
@@ -73,7 +73,7 @@
 					</button>
 				</div>
 				<div id="mainNav" class="collapse navbar-collapse">
-					<?php include ("templates/$category/$template_id/menu.html");?>
+					<?php include ("templates/$category_name/$template_name/menu.html");?>
 				</div>
 			</div>
 		</div>
@@ -81,11 +81,11 @@
 		@include('editor.control-template')
 		
 		<div id="body" contentEditable="false" >
-	        <?php include ("templates/$category/$template_id/body.html");?>
+	        <?php include ("templates/$category_name/$template_name/body.html");?>
 	    </div>
 
 		<div id="footer">
-			<?php include ("templates/$category/$template_id/footer.html");?>
+			<?php include ("templates/$category_name/$template_name/footer.html");?>
 		</div>
 	</div>
 

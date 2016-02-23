@@ -199,10 +199,9 @@ function traverseImages() {
  * Calls ajax to save the page contents(menu, submenu, contents etc)
  * @returns {undefined}
  */
-function savePage(user_id, template_id, isEdit) {
+function savePage(category_name, template_name, isEdit) {
     //var user_id = 'id', template_id = '87349q64';
     //return;
-
 
     // INFO: BELOW PART IS CHECKED FROM VIEWS AND TEMPLATE CONTROLLER
     // if(isUserLoggedIn === null || isUserLoggedIn === "0") {
@@ -212,9 +211,9 @@ function savePage(user_id, template_id, isEdit) {
     //     return;
     // }
 
-    console.log("[WB-D] savePage: " + user_id + "$##$" + template_id);
+    console.log("[WB-D] savePage: " + category_name + "$##$" + template_name);
     traverseImages();
-    console.log("[WB-D] savePage: " + user_id + "$##$" + template_id);
+    console.log("[WB-D] savePage: " + category_name + "$##$" + template_name);
 
     makeTemplateComponetsNotEditable();
     saveCurrentMenuText();
@@ -231,7 +230,7 @@ function savePage(user_id, template_id, isEdit) {
             var url = getPageSaverUrl();
             savedName = prompt("Enter webpage name : ", "Enter page name");
 
-            insertPage(url, menuList, template_id, user_id, savedName);
+            insertPage(url, menuList, template_name, category_name, savedName);
 
         } else {
             var url = getPageUpdaterUrl();
@@ -241,11 +240,11 @@ function savePage(user_id, template_id, isEdit) {
                 savedName = prompt("Update webpage name : ", "Enter page name");
             }
 
-            saveImages(user_id, template_id);
+            saveImages(category_name, template_name);
 
             allImages = [];
 
-            updatePage(url, menuList, template_id, savedName);
+            updatePage(url, menuList, template_name, savedName);
         }
     }
     
@@ -275,7 +274,7 @@ function testBodyHTML() {
     });
 }
 
-function insertPage(url, menuList, template_id, user_id, savedName) {
+function insertPage(url, menuList, template_name, category_name, savedName) {
 
     //testBodyHTML();
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -284,26 +283,25 @@ function insertPage(url, menuList, template_id, user_id, savedName) {
             type: "POST",
             url: '/template_view/create', //url,
             dataType: 'json',
-            // contentType: 'application/json; charset=utf-8',
             data: {
-                menulists: menuList,
-                // menucontentlist: menuContens, 
-                templateid: template_id, //template_id,
-                savedname: savedName,
-                // templatename:currentTemplate,
+                _category_name: category_name,
+                _menus: menuList,
+                _menu_contents: menuContens, 
+                _template_name: template_name, //template_id,
+                _saved_name: savedName,
                 _token: CSRF_TOKEN
             },
             success: function (data) {
-                // hideSavingIcon();
-                
-                alert('Saved Successfully!!!' + data.templateid);
-                // var savedTemplateID = obj.savedTemplateId;
-                // var redirectURL = getBaseUrl()+'/views/content_views/template_editor.php?category='+currentCategory+'&template='+currentTemplate+'&templateid='+savedTemplateID;
+                hideSavingIcon();
+
+                alert(data.message);
 
                 // TODO: Image upload before page template create
-                // saveImages(user_id, savedTemplateID);
-
-                window.location.href = '/editor/' + '{{ $category }}' + '/' + data.templateid;//redirectURL;
+                if(data.success)
+                {
+                    // saveImages(category_name, savedTemplateID);
+                }
+                window.location.href = '/editor/' + data.template.category_name + '/' + data.template.template_name;//redirectURL;
             },
             error: function(xhr, status, error) {
                 hideSavingIcon();
@@ -313,7 +311,7 @@ function insertPage(url, menuList, template_id, user_id, savedName) {
         });
 }
 
-function updatePage(url, menuList, template_id, savedName) {
+function updatePage(url, menuList, template_name, savedName) {
 
     //testBodyHTML();
 
@@ -321,7 +319,7 @@ function updatePage(url, menuList, template_id, savedName) {
             type: "POST",
             url: url,
             dataType: 'json',
-            data: {menulists: menuList, menucontentlist: menuContens, templateid: template_id, savedname: savedName, categoryname:currentCategory, templatename:currentTemplate, menuidlist:user_menu_id_array},
+            data: {menulists: menuList, menucontentlist: menuContens, templateid: template_name, savedname: savedName, categoryname:currentCategory, templatename:currentTemplate, menuidlist:user_menu_id_array},
             success: function (obj, textstatus) {
                 //console.log("[WB]" + textstatus + "%%%####");
                 hideSavingIcon();
@@ -330,7 +328,7 @@ function updatePage(url, menuList, template_id, savedName) {
                     if(obj.saveUserTemplate === '1') {
                         alert('Updated Successfully!!!');
                         ///views/content_views/template_editor.php?category=uncategorized&template=part1&templateid=uncategorized_part1_1_2015_08_13_04_56_32_pm
-                        var redirectURL = getBaseUrl()+'/views/content_views/template_editor.php?category='+currentCategory+'&template='+currentTemplate+'&templateid='+template_id;
+                        var redirectURL = getBaseUrl()+'/views/content_views/template_editor.php?category='+currentCategory+'&template='+currentTemplate+'&templateid='+template_name;
                         window.location.href = redirectURL;
                     } else {
                         alert('Error occured during saving!!!');
