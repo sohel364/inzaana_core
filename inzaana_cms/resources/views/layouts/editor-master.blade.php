@@ -51,8 +51,11 @@
               </ul>
               <ul class="nav navbar-nav navbar-right">
                 <form class="navbar-form navbar-left" role="save">
-                    <button class="btn btn-default btn-flat{{ Auth::check() ? '' : ' hidden' }}" onclick="savePage('{{ $category_name }}', '{{ $template_name }}', {{ $isEdit }});">Save</button>
+
+                    <button class="btn btn-default btn-flat{{ Auth::check() ? '' : ' hidden' }}" onclick="savePage('{{ $category_name }}', '{{ $isEdit ? $template_id : $template_name }}', '{{ $isEdit ? true : false }}' );">Save</button>
+
                     <canvas id="hidden-canvas" style="display:none"></canvas>
+
                 </form>
                 <li><a href="#">Preview</a></li>
                 <li class="dropdown user user-menu">

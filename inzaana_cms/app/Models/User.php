@@ -79,4 +79,12 @@ class User extends Model implements AuthenticatableContract,
     {
         return $this->hasMany('Inzaana\Product');
     }
+
+    /**
+     *
+     */
+    public function templates()
+    {        
+        return $this->hasMany('Inzaana\Template');
+    }
 }

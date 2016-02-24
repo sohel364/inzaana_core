@@ -289,7 +289,7 @@
                 </li>
               </ul>
             </li>
-            <li class=" treeview">
+            <li class="treeview">
       			  <a href="{{ route('user::templates') }}">
         				<span>Template View</span>
         				<i class="fa fa-angle-left pull-right"></i>

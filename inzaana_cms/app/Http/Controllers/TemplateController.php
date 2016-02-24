@@ -30,18 +30,32 @@ class TemplateController extends Controller
         return view('view_template');
     }
 
-    public function editor($category, $template)
+    public function browse($category, $template)
     {
         // TODO: check author
-        $isEdit = Template::all()->where('template_name', $template)->count();
         return view('editor.template-editor', 
-            [ 'category_name' => $category, 'template_name' => $template, 'isEdit' => $isEdit ]);
+            [ 'category_name' => $category, 'template_name' => $template, 'isEdit' => false ]);
+    }
+
+    // request: http://localhost:8000/editor/uncategorized/tailor/2
+    public function editor($category, $template, $template_id)
+    {
+        // TODO: check author
+        $category_name = $category;
+        $template_name = $template;
+        $template = Auth::user()->templates()->find($template_id);
+        $isEdit = ( $template->count() == 1 );
+        return view('editor.template-editor', 
+            compact('category_name', 'template_name', 'isEdit', 'template_id') );
     }
 
     public function create(TemplateRequest $request)
     {
         if( $request->ajax() )
         {
+            $success = true;
+            $message = 'Congratulations! Your fake template is saved successfully!';
+
             // TODO: create a new Template
             $template = Template::create([
                 'user_id' => Auth::user()->id,
@@ -49,8 +63,6 @@ class TemplateController extends Controller
                 'template_name' => $request->input('_template_name'),
                 'category_name' => $request->input('_category_name'),
             ]);
-            $success = true;
-            $message = 'Congratulations! Your template (' . $template->saved_name . ') is saved successfully!';
             if(!$template)
             {
                 $success = false;
@@ -59,8 +71,7 @@ class TemplateController extends Controller
             }
             return response()->json(compact('success', 'message', 'template'));
         }
-        return view('editor.template-editor', 
-            [ 'category_name' => $request->input('_category_name'), 'template_name' => $request->input('_template_name'), 'isEdit' => false ]);
+        return redirect()->route('user::templates');
     }
 
     public function show($template_id)
@@ -70,10 +81,51 @@ class TemplateController extends Controller
         return view('view_template', compact('template'));
     }
 
-    public function edit($template_id)
+    public function categories($category_name)
     {
-        $template = Templates::all()->find($template_id);
+        return 'Show templates by categories';
+    }
+
+    public function edit(TemplateRequest $request, $template_id)
+    {
+        if( $request->ajax() )
+        {
+            $template = Auth::user()->templates()->find($template_id);
+            if(!$template)
+            {
+                $success = false;
+                $message = 'No such template named (' . $request->input('_saved_name') . ') is found to modify! Please contact your admin for assistance.';
+                return response()->json(compact('success', 'message'));
+            }
+            $template->saved_name = $request->input('_saved_name');
+            $success = true;
+            $message = 'Your template (' . $template->saved_name . ') is modified successfully!';
+            if(!$template->save())
+            {
+                $success = false;
+                $message = 'Your template (' . $request->input('_saved_name') . ') is failed to update! Help: why template is not modified?';
+                return response()->json(compact('success', 'message'));
+            }
+            return response()->json(compact('success', 'message', 'template'));
+        }
         // TODO: do something to edit
-        return view('view_template', compact('template'));
+        return redirect()->route('user::templates');
+    }
+
+    public function info(TemplateRequest $request, $template_id)
+    {
+        if( $request->ajax() )
+        {
+            $success = true;
+            $template = Auth::user()->templates()->find($template_id);
+            if(!$template)
+            {
+                $success = false;
+                $message = 'The requested template is not found!';
+                return response()->json(compact('success', 'message'));
+            }
+            return response()->json(compact('template', 'message', 'success'));
+        }
+        return redirect()->route('user::templates');
     }
 }

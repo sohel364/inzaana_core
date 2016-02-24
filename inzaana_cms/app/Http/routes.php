@@ -41,11 +41,16 @@ Route::group(['middleware' => 'web'], function () {
         Route::get('/user_wallet', [ 'uses' => 'UserController@userwallet', 'as' => 'wallet' ]);
 
         // Template Controller
-        Route::get('/template_view', [ 'uses' => 'TemplateController@index', 'as' => 'templates' ]);
-        Route::post('/template_view/create', [ 'uses' => 'TemplateController@create', 'as' => 'templates.create' ]);
-        Route::get('/template_view/{template_id}', [ 'uses' => 'TemplateController@show', 'as' => 'templates.show' ]);
-        Route::get('/template_view/{template_id}', [ 'uses' => 'TemplateController@show', 'as' => 'templates.edit' ]);
-        Route::get('/editor/{category}/{template}', [ 'uses'=>'TemplateController@editor', 'as'=>'templates.editor' ]);
+        Route::get('/templates/gallery', [ 'uses' => 'TemplateController@index', 'as' => 'templates' ]);
+        Route::get('/templates/info/{template_id}', [ 'uses' => 'TemplateController@info', 'as' => 'templates.info' ]);
+        Route::get('/templates/template/{template_id}', [ 'uses' => 'TemplateController@show', 'as' => 'templates.show' ]);
+        Route::get('/templates/category/{category_name}', [ 'uses' => 'TemplateController@categories', 'as' => 'templates.categories.show' ]);
+
+        Route::get('/editor/{category}/{template}', [ 'uses'=>'TemplateController@browse', 'as'=>'templates.editor.browse' ]);
+        Route::get('/editor/{category}/{template}/{template_id}', [ 'uses'=>'TemplateController@editor', 'as'=>'templates.editor.edit' ]);
+
+        Route::post('/templates/create', [ 'uses' => 'TemplateController@create', 'as' => 'templates.create' ]);
+        Route::post('/templates/edit/{template_id}', [ 'uses' => 'TemplateController@edit', 'as' => 'templates.edit' ]);
 
         // Product controller
         Route::get('/products', [ 'uses' => 'ProductController@index', 'as' => 'products' ]);
