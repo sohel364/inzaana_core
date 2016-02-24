@@ -291,12 +291,18 @@
             </li>
             <li class="treeview">
       			  <a href="{{ route('user::templates') }}">
-        				<span>Template View</span>
+        				<span>Browse Templates</span>
         				<i class="fa fa-angle-left pull-right"></i>
       			  </a>
       			  <ul class="treeview-menu">
       				  @include('editor.template-list-view')
       			  </ul>
+            </li>
+            <li class=" treeview">
+      			  <a href="#">
+        				<span>My Templates</span>
+        				<!--<i class="fa fa-angle-left pull-right"></i>-->
+      			  </a>
             </li>
           </ul>
         </section>
