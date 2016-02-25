@@ -1,0 +1,117 @@
+@media only screen and (min-width: 960px) and (max-width: 1200px) {
+/*----Book Now on slider---*/
+.book_now_section{
+	margin-top:0px !important;
+	margin-bottom:30px;
+	position: relative !important;
+}
+.carousel-caption {
+    top:0% !important;
+    bottom:0px !important;
+}
+
+}
+
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+/*----Book Now on slider---*/
+.book_now_section{
+	margin-top:0px !important;
+	margin-bottom:30px;
+	position: relative !important;
+}
+.search-box-top {padding-left:0px !important;}
+.navbar-brand {padding: 0px !important;}
+.header-social-icon{float:left !important;}
+.carousel-caption h1{
+    font-size:48px;
+	padding:8px 10px;
+	margin-bottom:10px;
+}
+.carousel-caption p{
+    font-size:18px;
+	padding:8px 10px;
+	line-height:25px;
+	margin:0 5px !important;
+}
+.carousel-caption {
+    top:0% !important;
+    bottom:0px !important;
+}
+.view-all-btn{ 
+  font-size: 12px;
+  margin:10px 0px;
+  padding:10px 15px;
+} 
+
+}	
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+/*----Book Now on slider---*/
+.book_now_section{
+	margin-top:0px !important;
+	margin-bottom:30px;
+	position: relative !important;
+}
+.search-box-top {padding-left:0px !important;}
+.navbar-brand {padding: 0px !important;}
+.header-social-icon{float:left !important;}
+.carousel-caption h1{
+    font-size:30px;
+	padding:8px 10px;
+	margin-bottom:10px;
+}
+.carousel-caption p{
+    font-size:16px;
+	padding:8px 10px;
+	line-height:20px;
+	margin:0 5px !important;
+}
+.carousel-caption {
+    top:0% !important;
+    bottom:0px !important;
+}
+.view-all-btn{ 
+  font-size: 10px;
+  margin:10px 0px;
+  padding:8px 15px;
+}
+.navbar-brand img {
+ padding-bottom:10px;
+} 
+	
+} 
+
+@media only screen and (min-width: 200px) and (max-width: 480px) {
+/*----Book Now on slider---*/
+.book_now_section{
+	margin-top:0px !important;
+	margin-bottom:30px;
+	position: relative !important;
+}
+.search-box-top {padding-left:0px !important;}
+.navbar-brand {padding: 0px !important;}
+.header-social-icon{float:left !important;}
+.carousel-caption h1{
+    font-size:18px;
+	padding:6px 10px;
+	margin-bottom:8px;
+}
+.carousel-caption p{
+    font-size:10px;
+	padding:4px 10px;
+	line-height:16px;
+	margin:0 !important;
+}
+.carousel-caption {
+    top:0% !important;
+    bottom:0px !important;
+}
+.view-all-btn{ 
+  font-size: 10px;
+  margin:5px 0px;
+  padding:6px 10px;
+} 
+.navbar-brand img {
+ padding-bottom:10px;
+}
+
+}

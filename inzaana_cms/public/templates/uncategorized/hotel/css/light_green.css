@@ -1,0 +1,334 @@
+/*-----------------------------Custom Css------------------------------------------ */
+.section-title h1 {
+  color:#0c242e;
+}
+.section-title  p {
+  color:#0c242e;
+}
+.callout-title h1, .callout-title p {
+  color: #eee !important;
+}
+/*--------------- Menu-css------------- */ 
+.header-section{
+  background-color: #fff;
+}
+.header-bottom{
+	background-color: #6fbf4d;
+}
+ul.contact-top li{
+	color:#fff;
+}
+ul.header-social-icon li a i{
+	color: #fff;
+}
+.facebook:hover{
+     background:#3b5998;
+}
+.twitter:hover {
+     background:#4099FF;
+}
+.skype:hover {
+     background:#00aff0;
+}
+.google-plus:hover {
+     background:#d34836;
+}
+/*----Top Search Box-------*/
+.input-group > .form-control {
+	background-color: transparent;
+    border: 1px solid #6fbf4d;
+}
+.input-group > .input-group-addon {
+    background-color: #6fbf4d;
+    border: 1px solid #6fbf4d;
+    color: #fff;
+}
+.navbar {
+	border-top: 1px solid #202020 !important;
+	background-color:#fff !important;
+}
+.navbar-default .navbar-nav > li > a {
+	color:#0c242e !important;
+}
+.navbar-default .navbar-nav > li > a:hover {
+	color:#fff !important;
+	background-color:#6fbf4d !important
+}
+/*-------Dropdown Menus & Submenus Css------*/
+.dropdown-menu {
+	background-color: #2f3338;
+	box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.5);	
+}
+.dropdown-menu > li > a {
+    color:#fff !important;
+	background-color: #6fbf4d;
+    border-bottom: 1px dotted #eee !important;
+}
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+	color:#fff !important;
+    background-color:#0c242e !important
+}
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+   color:#fff !important;
+   background-color: #6fbf4d !important;
+}
+.nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+   color:#fff !important;
+   background-color:#6fbf4d !important
+}
+.navbar-default .navbar-toggle .icon-bar {
+    background-color:#fff !important;
+}
+.navbar-default .navbar-toggle {
+    border-color:#6fbf4d !important;
+	background-color:#6fbf4d !important;
+}
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+    background-color: #0c242e !important;
+}
+/*-----------Main Carousel--------------*/
+.carousel-caption h1{
+	background-color:rgba(0,0,0,0.8);
+}
+.carousel-caption p{
+	background-color:rgba(0,0,0,0.8);
+}
+.view-all-btn{ 
+  color: #eceff3;
+  background-color: #6fbf4d; 
+  border: solid 1px #6fbf4d;
+}
+.view-all-btn:hover{ 
+    color:#fff;
+	background-color: #0c242e;
+    border: solid 1px #0c242e;
+}
+
+/* Direction Nav */
+.carou-direction-nav a {
+	background-color:rgba(0,0,0,0.7);
+}
+.carou-direction-nav :hover .carou-prev { opacity: 1; left: 20px;  background-color:#0c242e;}
+.carou-direction-nav :hover .carou-next { opacity: 1; right: 20px;  background-color:#0c242e;}
+.carou-direction-nav :hover .carou-next:hover, 
+.carou-direction-nav :hover .carou-prev:hover {
+	 color:#fff !important;
+}
+.carou-direction-nav .carou-disabled { opacity: 0!important; filter: alpha(opacity=0); cursor: default; }
+.carou-direction-nav a:before {
+	color:#fff;
+}	
+/*-----------Book Now Section--------------*/
+.book_now_section{
+	background-color: rgba(0,0,0,0.9);
+}
+.white{color:#fff!important}
+.coll-form-control {
+    color: #fff !important;
+    background-color: transparent !important;
+    border: 1px solid #fff !important;
+}
+.main-btn {
+    color: #fff;
+	background-color: #6fbf4d;
+    border: solid 1px #6fbf4d;
+}
+.main-btn:hover {
+    color:#fff;
+	background-color: #0c242e;
+    border: solid 1px #0c242e;
+}
+/*-----------Service Section--------------*/
+.pagetitle-separator {
+	background: url("../resource/images/divider_green.png") no-repeat;
+}
+span.room-title {
+	background: rgba(0, 0, 0, 0.8);
+    color: #ffffff;
+}
+.home-room-col .home-room-details h3 a{
+	color:#0c242e;
+	font-size:22px;
+}
+.home-room-col:hover .home-room-details h3 a{
+	color:#196575;
+}
+.room-showcase-overlay {
+	background: #000000;
+}
+.home-room-img .room-showcase-icons a {
+	color:#fff;
+}
+.home-room-col.room-showcase-icons a > i{
+	color:#fff;
+}
+/*----------Home Feature Section--------------------*/
+.feature-col i {
+	color: #6fbf4d;
+}
+.feature-col  h3 > a {
+   color:#0c242e;
+}
+.feature-col:hover.feature-col  h3  a {
+   color:#196575;
+}
+
+.feature-col p{
+	color: #818387;
+}
+/*------------------Footer----------------------------------------*/
+.footer {
+  background-color:#0c242e;
+  color: #eee;
+}
+.footer-widget h4{
+  color:#fff;
+}
+.footer-widget ul li a {
+    color: #ccc;
+}
+.contact_link a {
+    color: #ccc;
+}
+.contact_link a i {
+	color:#fff;
+}
+.footer-social-icon a {
+	border:1px solid #eee;	
+}
+.footer-social-icon a i{
+	color: #fff;
+}
+.f-facebook:hover{
+     background:#3b5998;
+	 border:1px solid #3b5998;
+}
+.f-twitter:hover {
+     background:#4099FF;
+	 border:1px solid #4099FF;
+}
+.f-skype:hover {
+     background:#00aff0;
+	 border:1px solid #00aff0;
+}
+.f-google-plus:hover {
+     background:#d34836;
+	 border:1px solid #d34836;
+}
+.form-control {
+    color: #333;
+}
+.btn_1 {
+    color: #fff;
+    background:#196575;
+}
+/*Callout Section-----------------------------------------------------------------------------------------------*/
+.callout-section {
+    background: url("../resource/images/bg-2.jpg") no-repeat fixed 0 0 / cover rgba(0, 0, 0, 0);
+}
+.callout-section .overlay {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.7);
+}
+.callout-section h1 {
+    color: #fff;
+}
+.callout-section p {
+	color: #ffffff;
+}
+/*----------------Page Title Section Css--------------------------*/
+.page-title-section {
+	background: url("../resource/images/bg-2.jpg") no-repeat fixed 0 0 / cover rgba(0, 0, 0, 0);
+}
+.page-title-section .overlay {
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0.6);
+}
+.page-title h1 {
+	color: #ffffff;
+}
+/*-------------About Page-----------------------------------------------------------*/
+.panel-default > .panel-heading a {
+	background-color:#fff !important;
+    color:#0c242e !important;
+}
+.panel-default > .panel-heading a:not(.collapsed) {
+    background:#6fbf4d !important;
+    color: #fff !important;
+}	
+.about-column h2 {
+    color:#fff !important;
+}
+.about-column h2 ,.about-column p{
+    color:#fff !important;
+}
+.countbox {
+    background: none repeat scroll 0 0 #eee;
+}
+.countbox > h3 {
+    color: #0c242e;
+}
+.countbox > span {
+    color: #0c242e;
+}
+.countbox i {
+    color: #0c242e;
+}
+/*--------Team Section-------------*/
+.social-icon a {
+	background-color:#eee;
+	border:1px solid #ddd; 	
+}
+.social-icon a i{
+	color:#0c242e;
+}
+.social-icon i:hover {
+     color: #fff !important;
+}
+.social-icon.f-facebook:hover{
+     background:#3b5998;
+	 border:1px solid #3b5998;
+}
+.social-icon.f-twitter:hover {
+     background:#4099FF;
+	 border:1px solid #4099FF;
+}
+.social-icon.f-skype:hover {
+     background:#00aff0;
+	 border:1px solid #00aff0;
+}
+.social-icon.f-google-plus:hover {
+     background:#d34836;
+	 border:1px solid #d34836;
+}	
+.post-text{
+ color:#0c242e;
+}
+.member-name{
+ color:#196575;
+}
+/*-------Room Page-------------------------------------*/
+.room-tabs li a {
+    color: #0c242e;
+	background-color:#eee;
+	border:1px solid #ddd;
+}
+.room-tabs li.active > a, .room-tabs li > a:hover {
+     background-color: #6fbf4d;
+	 color:#fff;
+}
+/*--------------------Contact Page----------------------------------------*/
+.contact-title {
+	color: #0c242e;
+}
+.contact-title h2 {
+	color: #0c242e;
+}
+.cont-info address ,.cont-info address > a {
+    color: #0c242e;
+}
+.cont-info address > i {
+	color: #6fbf4d;
+}
+.cop_google_map{
+ border:6px solid #6fbf4d;;
+}

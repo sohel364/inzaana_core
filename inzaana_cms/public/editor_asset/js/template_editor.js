@@ -111,6 +111,9 @@ $(function(){
             evictee = $('#menu li:eq('+iAfter+')');
             evictor = $('#menu li:eq('+iBefore+')');
 
+            console.log(evictee);
+            console.log(evictor);
+
             evictee.replaceWith(evictor);
             if(iBefore > iAfter)
                 evictor.after(evictee);
@@ -133,8 +136,7 @@ $(function(){
                 action: function(dialogRef) {
                     var newMenu = dialogRef.getModalBody().find('input').val();
                     var menuType = dialogRef.getModalBody().find('select').find(":selected").text().toLowerCase();
-                    //addNewMenu(newMenu);
-                    alert(menuType);
+                    addNewMenu(newMenu);
                     updateControlPaletteTabList(menuType);
                     dialogRef.close();
                 }

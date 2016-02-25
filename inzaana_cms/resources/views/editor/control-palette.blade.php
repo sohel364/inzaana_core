@@ -79,12 +79,19 @@
 	        <li data-category='["trip"]'>
 	            <a href="#trip">Trip3</a>
 	        </li>
+
+	        <li data-category='["trip"]'>
+	        	<a href="#test">Test</a>
+	        </li>
 	    </ul>
 
 	    <!-- Start Section Add Control Tab List -->
 
 	    <!-- Start Section Add control tab body -->
 
+	    <div id="test">
+	    	<h1 name="header" class="selectorField draggableField">THis is test</h1>
+	    </div>
 	    <div id="btn_template_palette">
 	        <!-- <button name='button' class='selectorField draggableField btn-primary btn-lg'>Click Me</button> -->
 	    </div>
@@ -185,4 +192,4 @@
 	<p>Add Media</p>
 </div>
 
-<button id="btn_collasp_cp" class="collasp_cp btn btn-info">Collasp</button>
+<!-- <button id="btn_collasp_cp" class="collasp_cp btn btn-info">Collasp</button> -->
