@@ -20,6 +20,9 @@
 @endsection
 
 @section('header-script')
+	<script>
+		var isInEditor = true;
+	</script>
 	<script src="{{ asset('editor_asset/js/tinymce/tinymce.min.js') }}"></script>
 	<script src="{{ asset('editor_asset/js/jquery-2.1.1.min.js') }}"></script>
 	<script src="{{ asset('editor_asset/js/jquery.flexisel.js') }}"></script>

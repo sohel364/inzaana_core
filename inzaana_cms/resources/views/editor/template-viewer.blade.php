@@ -20,6 +20,9 @@
 @endsection
 
 @section('header-script')
+    <script>
+        var isInEditor = false;
+    </script>
     <script src="{{ asset('editor_asset/js/tinymce/tinymce.min.js') }}"></script>
     <script src="{{ asset('editor_asset/js/jquery-2.1.1.min.js') }}"></script>
     <script src="{{ asset('editor_asset/js/jquery.flexisel.js') }}"></script>
@@ -43,9 +46,6 @@
     <script src="{{ asset('editor_asset/js/control_palette.js') }}"></script>
     <script src="{{ asset('editor_asset/js/jquery.path.js') }}"></script>
     <script src="{{ asset('editor_asset/js/control_editor.js') }}"></script>
-    <script>
-        isInEditor = false; 
-    </script>
 @endsection
 
 @section('content')
@@ -76,16 +76,19 @@
                     </button>
                 </div>
                 <div id="mainNav" class="collapse navbar-collapse">
+                    <!-- Menu must be loaded from the database  -->
                     <?php include ("templates/$category/$template_id/menu.html");?>
                 </div>
             </div>
         </div>
         
         <div id="body" contentEditable="false" >
+            <!-- body must be loaded from the database  -->
             <?php include ("templates/$category/$template_id/body.html");?>
         </div>
 
         <div id="footer">
+            <!-- footer must be loaded from the database  -->
             <?php include ("templates/$category/$template_id/footer.html");?>
         </div>
     </div>
