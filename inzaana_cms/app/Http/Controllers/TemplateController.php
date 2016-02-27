@@ -30,6 +30,12 @@ class TemplateController extends Controller
         return view('view_template');
     }
 
+    public function showsavedtemplates()
+    {
+        // for temp use
+        return view('my_template_view');
+    }
+
     public function browse($category, $template)
     {
         // TODO: check author

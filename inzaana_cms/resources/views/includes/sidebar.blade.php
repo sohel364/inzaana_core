@@ -299,7 +299,7 @@
       			  </ul>
             </li>
             <li class=" treeview">
-      			  <a href="#">
+      			  <a href="{{ route('user::templates.saved_templates') }}">
         				<span>My Templates</span>
         				<!--<i class="fa fa-angle-left pull-right"></i>-->
       			  </a>
