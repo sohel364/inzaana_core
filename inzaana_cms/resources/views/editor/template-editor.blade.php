@@ -30,7 +30,6 @@
 	<script src="{{ asset('editor_asset/js/bootstrap-dialog.js') }}"></script>
 	<script src="{{ asset('editor_asset/js/jquery-ui.min.js') }}"></script>
 	<script src="{{ asset('editor_asset/js/spectrum.js') }}"></script>
-	<script src="{{ asset('editor_asset/js/jquery.sortable.js') }}"></script>
 	<script src="{{ asset('editor_asset/js/main.js') }}"></script>
 
 	<?php
