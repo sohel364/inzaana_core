@@ -1,0 +1,142 @@
+@charset "utf-8";
+/* CSS Document */
+
+@media only screen and (width : 1024px){
+	
+	.mynavbar{padding:0;}
+	.mynavbar ul{padding-left:0;}
+	.myrightnav{padding-left:52px;}
+	
+	.big-img{height:430px;}
+	.mg-img .caption h4{font-size:15px;}
+	.mg-img .caption ul li{padding:10px 17.5px;}
+	.newsletter_inner h2{font-size:13px;}
+	.newsletter_inner p{font-size:12px; padding-bottom:5px;}
+	.newsletter_inner input[type="submit"]{padding:4px 26px; font-size:12px;}
+	.newsletter_inner input[type="email"]{margin-bottom:0; height:26px;}
+	.tips_inner ul li{font-size:7px;}
+	.tips_inner h2{font-size:13px; padding-bottom:13px;}
+	.tips_inner a{padding:7px 20px; font-size:12px;}
+	
+	.main-nav{bottom:-91px;}
+	.main-nav .navbar-default .navbar-nav li a{padding:25px 33px;}
+	.main-nav .navbar-default .navbar-nav li i{display:none;}
+}
+
+
+@media only screen and (min-width : 768px) and (max-width : 1023px){
+	
+	
+	.mynavbar{padding:0;}
+	.mynavbar ul{padding-left:0;}
+	.myrightnav{padding-left:50px;}
+	.myrightnav ul{padding-left:0;}
+	
+	
+	.big-img{height:auto;}
+	.banner .carousel-caption p{width:81%; font-size:11px;}
+	.mg-img .caption h4{font-size:15px;}
+	.mg-img .caption ul li{padding:10px 5.2px;}
+	.newsletter{padding:8px;}
+	.newsletter_inner{padding:12px;}
+	.newsletter_inner h2{font-size:13px;}
+	.newsletter_inner p{font-size:12px; padding-bottom:5px;}
+	.newsletter_inner input[type="submit"]{padding:4px 26px; font-size:12px;}
+	.newsletter_inner input[type="email"]{margin-bottom:0; height:26px;}
+	.tips{padding:8px;}
+	.tips_inner{padding:12px;}
+	.tips_inner ul li{font-size:7px;}
+	.tips_inner h2{font-size:13px; padding-bottom:13px;}
+	.tips_inner a{padding:7px 20px; font-size:12px;}
+	
+	.welcome .page-header{margin-top:0;}
+	.tabsection .nav-pills li a{padding:28px 50px 5px;}
+	.nbs-flexisel-nav-right{right:-20px;}
+	.nbs-flexisel-nav-left{left:-17px;}
+	
+	.footer-top ul li{font-size:13px;}
+	.footer-top ul li a{padding:0 3px;}
+	.main-nav{background:none; font-size:12px; bottom:-83px; left:-2px;}
+	.main-nav .navbar-default .navbar-nav li a{padding:19px 22px;}
+	.main-nav .navbar-default .navbar-nav li i{display:none;}	
+}
+
+
+@media only screen and (width : 640px){
+	.tabsection .nav-pills li a{font-size:17px !important; padding:11px 29px 5px !important;}
+	.whitepart .navbar-default .navbar-toggle{position:absolute; right:0; top:29px !important;}
+}
+
+
+@media only screen and (min-width : 480px) and (max-width : 767px){
+	
+	.mynavbar{padding:0;}
+	.mynavbar ul{padding-left:0;}
+	.mynavbar ul li a{padding:2px 31px;}
+	.myrightnav{padding-left:0;}
+	.myrightnav li{border:inherit;}
+	.myrightnav ul li a{padding:2px 4px !important;}
+	.whitepart .navbar-default .navbar-toggle{position:absolute; right:0; top:13px;}
+	.whitepart h1{margin-bottom:20px;}
+	.whitepart h1 img{width:100%;}
+	#custom-search-input{width:100%;}
+	.whitepart input[type="text"]{width:100%;}
+	.whitepart .btn-info{padding-left:23px; padding-right:23px;}
+	.banner .carousel-caption p{font-size:8px; width:73%;}
+	.banner .carousel-indicators{bottom:20px;}
+	.mg-img{width:100%;}
+	.mg-img .caption{width:100%;}
+	
+	.tabsection .nav-pills li a{font-size:13px; padding:11px 20px 5px;}
+	.nbs-flexisel-nav-left{left:-11px;}
+	.nbs-flexisel-nav-right{right:-10px;}
+	#flexiselDemo2 .nbs-flexisel-item{margin:0 47px;}
+	.three_boxes{margin-bottom:50px;}
+	.footer-top .social-icons2 ul{text-align:center;}
+	
+	.main-nav{background:none; position:static;}
+	.main-nav .container-fluid{padding-right:7px;}
+	.banner{margin-bottom:8px;}
+	
+	.manufacturers{padding:26px 0;}
+	.greypart{padding:26px 0;}
+}
+
+@media only screen and (min-width : 320px) and (max-width : 479px){
+	
+	.mynavbar{padding:0;}
+	.mynavbar ul{padding-left:0;}
+	.mynavbar ul li a{padding:2px 11px;}
+	.myrightnav{padding-left:0;}
+	.myrightnav ul{padding:0;}
+	.myrightnav li{border:inherit;}
+	.myrightnav ul li a{padding:2px 4px !important;}
+	.whitepart .navbar-default .navbar-toggle{position:absolute; right:0;}
+	.whitepart h1{margin-bottom:20px;}
+	.whitepart h1 img{width:100%;}
+	#custom-search-input{width:100%;}
+	.whitepart input[type="text"]{width:100%;}
+	.whitepart .btn-info{padding-left:12px; padding-right:12px;}
+	.big-img{height:auto;}
+	.banner{margin-bottom:0;}
+	.welcome{margin-top:30px;}
+	.tabsection .nav-pills li a{font-size:10px; padding:11px 8px 5px;}
+	
+	.nbs-flexisel-item img{width:auto;}
+	.nbs-flexisel-nav-left{left:-10px;}
+	.nbs-flexisel-nav-right{right:-12px;}
+	#flexiselDemo2 .nbs-flexisel-item{margin:0 80px;}
+	.three_boxes{margin-bottom:50px;}
+	.footer-top .social-icons2 ul{text-align:center;}
+	
+	.main-nav{background:none; position:static;}
+	.carousel-caption{display:none;}
+	.main-nav .container-fluid{padding-right:7px;}
+	.banner .carousel-indicators{bottom:-6px; left:47%;}
+	
+	.mynavbar .navbar-nav li{border:none; text-align:center;}
+	.welcome .page-header h1{font-size:27px;}
+	
+	.manufacturers{padding:26px 0;}
+	.greypart{padding:26px 0;}
+}

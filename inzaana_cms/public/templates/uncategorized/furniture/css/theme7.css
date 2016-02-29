@@ -1,0 +1,170 @@
+@charset "utf-8";
+/* CSS Document */
+
+@charset "utf-8";
+/* CSS Document */
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800,300);
+@import url(http://fonts.googleapis.com/css?family=Righteous);
+
+html{margin:0; padding:0;}
+body{margin:0; padding:0; background:#000000}
+header,aside,nav,section,article,figure,footer,p,h1,h2,h3,h4,h5,h6{margin:0; padding:0;}
+ul,li,ol{list-style:none;}
+a{text-decoration:none;}
+table,tr,td{
+	margin:0;
+	padding:0;
+	outline:0;
+	vertical-align:top;
+}
+
+
+
+.header-top{
+	background:#733b45;
+}
+.logo, .logo1, .logo2, .logo3, .logo4 .logo5{display:none;}
+.logo6{display:block;}
+.whitepart{
+	background:#000;
+}
+.whitepart .btn-info{
+	background:#2c0402;
+	border:1px solid #fff;
+}
+.whitepart input[type="text"]{
+	height:40px;
+}
+.mynavbar ul li a:hover{
+	color:#e93254;
+}
+.mynavbar ul li.active a{
+	color:#e93254;
+}
+.main-nav{
+	background:url(../resource/images/main-nav-bg7.png) no-repeat center;
+}
+.main-nav .navbar-collapse{
+	background:#e93254;
+}
+.main-nav .navbar-default .navbar-nav li{
+	background:url(../resource/images/nav-border7.png) no-repeat center right;
+}
+.main-nav .navbar-default .navbar-nav li a:hover{
+	background:#cc237d;
+}
+.main-nav .navbar-default .navbar-nav li.active a{
+	background:#cc237d;
+}
+.banner .carousel-caption{
+	background:rgba(39,8,15,0.8);
+}
+.banner .carousel-indicators li{
+	background:#6b334c;
+}
+.banner .carousel-indicators .active{
+	background:#e93254;
+}
+.mg-img .caption{
+	background:rgba(61,10,29,0.7);
+}
+.mg-img .caption h4{
+	color:#d08984;
+}
+.shop{
+	color:#d08984;
+}
+.price{
+	color:#e5d5b2;
+}
+.newsletter{
+	background:#da1338;
+}
+.newsletter_inner{
+	background:#e93254;
+	border:none;
+}
+/*.newsletter_inner a{
+	background:#22022c;
+}*/
+.newsletter_inner p{
+	color:#000;
+}
+.tips{
+	background:#bd0d6b;
+}
+.tips_inner{
+	background:#cc237d;
+	border:none;
+}
+.tips_inner h2{
+	color:#fff;
+}
+.tips_inner a{
+	background:#22022c;
+}
+
+.tabsection{
+	border-top:2px solid #cf265f;
+}
+.tabsection .nav-pills li.active a{
+	background: url("../resource/images/top-arrow7.png") no-repeat scroll center top -1px;
+}
+.tabsection .nav-pills li a:hover{
+	border-bottom:2px solid #b33b63;
+	background: url("../resource/images/top-arrow7.png") no-repeat scroll center top -1px;
+}
+.tabsection .nav-pills li.active a{
+	border-bottom:2px solid #b72d88;
+}
+.nbs-flexisel-item p{
+	color:#b33b63;
+}
+.nbs-flexisel-item .addtocart{
+	background:#2c1402;
+}
+.greypart{
+	border-bottom:3px solid #ba306d;
+	background:#300a11;
+}
+.footer-top{
+	background:#4e2029;
+}
+.border{
+	border:1px solid #6f444c;
+}
+.four_boxes ul li{
+	border-bottom:1px solid #582b33;
+}
+.footer-bottom{
+	background:#cf265f;
+}
+.footer-bottom ul li a{
+	color:#2c0402;
+}
+.footer-bottom p{
+	color:#2c0402;
+}
+.welcome .page-header h1 {
+    color: #fff;
+}
+.welcome p{
+	color:#d9cccb;
+}
+.manufacturers h2{
+	color:#FFF;
+}
+/*new addd------------------*/
+.three_boxes h2{
+	color:#FFF;
+}
+.three_boxes p {
+    color: #c5b9b8;
+}
+.footer-top ul li.active a {
+    color: #cf265f;
+}
+.footer-top ul li a:hover{
+	color:#cf265f;;
+}

@@ -1,0 +1,117 @@
+@charset "utf-8";
+/* CSS Document */
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800,300);
+@import url(http://fonts.googleapis.com/css?family=Righteous);
+
+html{margin:0; padding:0;}
+body{margin:0; padding:0;}
+header,aside,nav,section,article,figure,footer,p,h1,h2,h3,h4,h5,h6{margin:0; padding:0;}
+ul,li,ol{list-style:none;}
+a{text-decoration:none;}
+table,tr,td{
+	margin:0;
+	padding:0;
+	outline:0;
+	vertical-align:top;
+}
+
+.logo, .logo2, .logo3, .logo4, .logo5, logo6{display:none;}
+.logo5{display:block;}
+
+.header-top{
+	background:#467d49;
+}
+.main-nav{
+	background:rgba(0, 0, 0, 0) url("../resource/images/main-nav-bg0.png") no-repeat;
+}
+.mynavbar ul li a:hover{
+	color:#000;
+}
+.mynavbar ul li.active a{
+	color:#000;
+}
+.main-nav .navbar-collapse{
+	background:#c3c91e;
+}
+.main-nav .navbar-default .navbar-nav li a:hover{
+	background:#809303;
+}
+.main-nav .navbar-default .navbar-nav li.active a{
+	background:#809303;
+}
+.banner .carousel-caption{
+	background:rgba(40,41,2,0.8);
+}
+.banner .carousel-indicators li{
+	background:#60741e;
+}
+.banner .carousel-indicators .active{
+	background:#99d911;
+}
+.mg-img .caption{
+	background:rgba(62,54,21,0.8);
+}
+.mg-img .caption h4{
+	color:#c3c91e;
+}
+.shop{
+	color:#c3c91e;
+}
+.price{
+	color:#e4ffac;
+}
+.newsletter{
+	background:#b8be19;
+}
+.newsletter_inner{
+	background:#c3c91e;
+	border:1px solid #99ad19;
+}
+.tips{
+	background:#758602;
+}
+.tips_inner{
+	background:#809303;
+	border:1px solid #687702;
+}
+.tips_inner h2{
+	color:#ddff00;
+}
+.tabsection{
+	border-top:2px solid #467d49;
+}
+.tabsection .nav-pills li.active a{
+	background: url("../resource/images/top-arrow1.png") no-repeat scroll center top -1px;
+}
+.tabsection .nav-pills li a:hover{
+	border-bottom:2px solid #467d49;
+	background: url("../resource/images/top-arrow1.png") no-repeat scroll center top -1px;
+}
+.tabsection .nav-pills li.active a{
+	border-bottom:2px solid #467d49;
+}
+.nbs-flexisel-item p{
+	color:#467d49;
+}
+.greypart{
+	border-bottom:3px solid #c3c91e;
+}
+.footer-top{
+	background:#244b26;
+}
+.border{
+	border:1px solid #4d6a49;
+}
+.four_boxes ul li{
+	border-bottom:1px solid #4d6a49;
+}
+.footer-bottom{
+	background:#788a03;
+}
+.footer-bottom ul li a{
+	color:#053b08;
+}
+.footer-bottom p{
+	color:#053b08;
+}

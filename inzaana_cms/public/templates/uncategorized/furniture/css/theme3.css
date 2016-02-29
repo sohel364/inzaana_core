@@ -1,0 +1,135 @@
+@charset "utf-8";
+/* CSS Document */
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800,300);
+@import url(http://fonts.googleapis.com/css?family=Righteous);
+
+html{margin:0; padding:0;}
+body{margin:0; padding:0;}
+header,aside,nav,section,article,figure,footer,p,h1,h2,h3,h4,h5,h6{margin:0; padding:0;}
+ul,li,ol{list-style:none;}
+a{text-decoration:none;}
+table,tr,td{
+	margin:0;
+	padding:0;
+	outline:0;
+	vertical-align:top;
+}
+
+
+
+.header-top{
+	background:#02518e;
+}
+.logo, .logo1, .logo3, .logo4,.logo5, .logo6{display:none;}
+.logo2{display:block;}
+
+.whitepart .btn-info{
+	background:#2c0402;
+	border:1px solid #fff;
+}
+.whitepart input[type="text"]{
+	height:40px;
+}
+.mynavbar ul li a:hover{
+	color:#000;
+}
+.mynavbar ul li.active a{
+	color:#000;
+}
+.main-nav{
+	background:url(../resource/images/main-nav-bg1.png) no-repeat center;
+}
+.main-nav .navbar-collapse{
+	background:#05dee1;
+}
+.main-nav .navbar-default .navbar-nav li{
+	background:url(../resource/images/nav-border1.png) no-repeat center right;
+}
+.main-nav .navbar-default .navbar-nav li a:hover{
+	background:#5b99a0;
+}
+.main-nav .navbar-default .navbar-nav li.active a{
+	background:#5b99a0;
+}
+.banner .carousel-caption{
+	background:rgba(0,28,49,0.8);
+}
+.banner .carousel-indicators li{
+	background:#1b6e7c;
+}
+.banner .carousel-indicators .active{
+	background:#05dee1;
+}
+.mg-img .caption{
+	background:rgba(0,28,49,0.7);
+}
+.mg-img .caption h4{
+	color:#dbfdfd;
+}
+.shop{
+	color:#dbfdfd;
+}
+.price{
+	color:#dbfdfd;
+}
+.newsletter{
+	background:#06cbad;
+}
+.newsletter_inner{
+	background:#05d6b6;
+	border:1px solid #09b298;
+}
+.tips{
+	background:#357a82;
+}
+.tips_inner{
+	background:#44858c;
+	border:1px solid #20646c;
+}
+.tips_inner h2{
+	color:#c5f9ff;
+}
+.tips_inner a{
+	background:#03355b;
+}
+.tabsection{
+	border-top:2px solid #02518e;
+}
+.tabsection .nav-pills li.active a{
+	background: url("../resource/images/top-arrow2.png") no-repeat scroll center top -1px;
+}
+.tabsection .nav-pills li a:hover{
+	border-bottom:2px solid #02518e;
+	background: url("../resource/images/top-arrow2.png") no-repeat scroll center top -1px;
+}
+.tabsection .nav-pills li.active a{
+	border-bottom:2px solid #02518e;
+}
+.nbs-flexisel-item p{
+	color:#02518e;
+}
+.nbs-flexisel-item .addtocart{
+	background:#03355b;
+}
+.greypart{
+	border-bottom:3px solid #03aedf;
+}
+.footer-top{
+	background:#034374;
+}
+.border{
+	border:1px solid #205780;
+}
+.four_boxes ul li{
+	border-bottom:1px solid #205780;
+}
+.footer-bottom{
+	background:#03aedf;
+}
+.footer-bottom ul li a{
+	color:#002d4f;
+}
+.footer-bottom p{
+	color:#002d4f;
+}
