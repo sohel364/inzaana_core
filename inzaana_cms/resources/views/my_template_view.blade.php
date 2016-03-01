@@ -18,32 +18,44 @@
 
 <div class="box box-info">
     <div class="box-header with-border text-center">
-        <h1 class="box-title">My Templates</h1>
+        <h1 class="box-title">My Templates ( {{ $templatesCount }} )</h1>
     </div>
-</div>
 
+    <div class="box-body">
 
+        <div class="row"> 
 
-      <div class="row">
-    
-          <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-            <div class="hovereffect">
+            @if($templatesCount > 0)
 
-                <img class="img-responsive" src="{{ URL::asset('images/template/01.jpg') }}">
-                <div class="overlay">
-                    <table id="parent" border="0">
-                        <tr>
-                            <td id="child" class="text-left"><h2>Price: Free </h2></td>
-                            <td id="child" class="text-right"><h2><a class="btn-link" href="">More Info</a></h2></td>
-                        </tr>
-                    </table>
+                @foreach($savedTemplates as $template)
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                <div class="hovereffect">
 
-                    <a class="info btn btn-info btn-flat" href="#">Edit</a>
-                    <a class="info btn btn-info btn-flat" href="#">View</a>
+                    <img class="img-responsive" src="{{ URL::asset('images/template/01.jpg') }}">
+                    <div class="overlay">
+                        <table id="parent" border="0">
+                            <tr>
+                                <td id="child" class="text-left"><h2>Price: Free </h2></td>
+                                <td id="child" class="text-right"><h2><a class="btn-link" href="">More Info</a></h2></td>
+                            </tr>
+                        </table>
+
+                        <a class="info btn btn-info btn-flat" href="{{ route('user::templates.editor.browse', [ 'category' => $template->category_name, 'template'=> $template->template_name ]) }}">Edit</a>
+                        <a class="info btn btn-info btn-flat" href="#">View</a>
+                    </div>
+                    <h4>{{ $template->template_name }}</h4>
                 </div>
-                <h4>Your Template Name</h4>
-            </div>
-          </div>
-   </div>
+                </div>
+                @endforeach
+
+            @else
+                {{ $message }}
+            @endif
+
+        </div>
+        
+    </div>
+
+</div>
 
 @endsection

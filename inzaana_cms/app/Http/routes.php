@@ -42,9 +42,7 @@ Route::group(['middleware' => 'web'], function () {
 
         // Template Controller
         Route::get('/templates/gallery', [ 'uses' => 'TemplateController@index', 'as' => 'templates' ]);
-
-        // Tempory routing for saved template view
-        Route::get('/templates/saved_templates', [ 'uses' => 'TemplateController@showsavedtemplates', 'as' => 'templates.saved_templates' ]);
+        Route::get('/templates/saved', [ 'uses' => 'TemplateController@showSaved', 'as' => 'templates.saved' ]);
         
         Route::get('/templates/info/{template_id}', [ 'uses' => 'TemplateController@info', 'as' => 'templates.info' ]);
         Route::get('/templates/template/{template_id}', [ 'uses' => 'TemplateController@show', 'as' => 'templates.show' ]);

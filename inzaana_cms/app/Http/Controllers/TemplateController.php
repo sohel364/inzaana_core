@@ -30,10 +30,12 @@ class TemplateController extends Controller
         return view('view_template');
     }
 
-    public function showsavedtemplates()
+    public function showSaved()
     {
-        // for temp use
-        return view('my_template_view');
+        $message = 'Looks like you have no template to show. Let\'s one';
+        $savedTemplates = Auth::user()->templates;
+        $templatesCount = $savedTemplates->count();
+        return view('my_template_view', compact('savedTemplates', 'templatesCount', 'message'));
     }
 
     public function browse($category, $template)
@@ -60,7 +62,6 @@ class TemplateController extends Controller
         if( $request->ajax() )
         {
             $success = true;
-            $message = 'Congratulations! Your fake template is saved successfully!';
 
             // TODO: create a new Template
             $template = Template::create([
@@ -75,6 +76,7 @@ class TemplateController extends Controller
                 $message = 'Your template (' . $request->input('_saved_name') . ') is failed to save! Help: why template is not saved?';
                 return response()->json(compact('success', 'message'));
             }
+            $message = 'Congratulations! Your template (' . $template->saved_name . ') is saved successfully!';
             return response()->json(compact('success', 'message', 'template'));
         }
         return redirect()->route('user::templates');
