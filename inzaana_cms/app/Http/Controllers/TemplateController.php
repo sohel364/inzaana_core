@@ -10,6 +10,7 @@ use Inzaana\Http\Controllers\Controller;
 use Auth;
 
 use Inzaana\Template;
+use Inzaana\HtmlViewMenu as TemplateMenu;
 
 class TemplateController extends Controller
 {
@@ -45,7 +46,6 @@ class TemplateController extends Controller
             [ 'category_name' => $category, 'template_name' => $template, 'isEdit' => false ]);
     }
 
-    // request: http://localhost:8000/editor/uncategorized/tailor/2
     public function editor($category, $template, $template_id)
     {
         // TODO: check author
@@ -106,6 +106,11 @@ class TemplateController extends Controller
                 return response()->json(compact('success', 'message'));
             }
             $template->saved_name = $request->input('_saved_name');
+            //
+            // $message = $request->input('_menu_contents');
+            // $success = true;
+            // return response()->json(compact('success', 'message'));
+            //
             $success = true;
             $message = 'Your template (' . $template->saved_name . ') is modified successfully!';
             if(!$template->save())

@@ -40,7 +40,8 @@
                             </tr>
                         </table>
 
-                        <a class="info btn btn-info btn-flat" href="{{ route('user::templates.editor.browse', [ 'category' => $template->category_name, 'template'=> $template->template_name ]) }}">Edit</a>
+                        <a class="info btn btn-info btn-flat"
+                            href="{{ route('user::templates.editor.edit', [ 'category' => $template->category_name, 'template' => $template->template_name, 'template_id' => $template->id ]) }}">Edit</a>
                         <a class="info btn btn-info btn-flat" href="#">View</a>
                     </div>
                     <h4>{{ $template->template_name }}</h4>
@@ -49,7 +50,7 @@
                 @endforeach
 
             @else
-                {{ $message }}
+                <h4> {{ $message }} </h4>
             @endif
 
         </div>

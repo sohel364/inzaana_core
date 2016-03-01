@@ -22,6 +22,7 @@ class CreateHtmlViewMenusTable extends Migration
             // If we don't put template_id ->unsigned() it will remain only as big integer.
             $table->bigInteger('template_id')->unsigned();
             $table->string('menu_title')->comment('Menu title of the HTML view');
+            $table->string('href')->comment('Menu href of the HTML view');
             $table->boolean('has_sub_menu')->default(false)->comment('If this menu has any sub menu');
 
             $table->softDeletes()->comment('If we want to keep track of deletion without actually deleting a record');

@@ -14,4 +14,13 @@ class Template extends Model
     {    	
         return $this->belongsTo('Inzaana\User');
     }
+
+    /**
+     * relationship with template and its view manus
+     */
+    public function htmlViewMenus()
+    {
+        return $this->hasMany('Inzaana\HtmlViewMenu');
+    }
+
 }

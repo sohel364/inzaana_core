@@ -75,7 +75,18 @@
 					</button>
 				</div>
 				<div id="mainNav" class="collapse navbar-collapse">
-					<?php include ("templates/$category_name/$template_name/menu.html");?>
+					@if( $template_id && Auth::user()->templates->find($template_id)->htmlViewMenus->count() > 0 )
+						<ul id="menu" class="nav navbar-nav navbar">
+							@foreach(Auth::user()->templates->find($template_id)->htmlViewMenus as $viewMenu)
+							<li>
+								<a href="#" onclick="onMenuClick(this);">{{ $viewMenu->menu_title }}</a>
+							</li>
+							@endforeach
+							<li class="add-menu"><a>+</a></li>
+						</ul>
+					@else
+						<?php include ("templates/$category_name/$template_name/menu.html");?>
+					@endif
 				</div>
 			</div>
 		</div>
