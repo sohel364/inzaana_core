@@ -336,8 +336,8 @@ function makeBodyDroppable() {
 					var is_group_builder = false;
 
 					if (droppable_name == "button") {
-						draggable = $("#button_template");
-
+						//draggable = $("#button_template");
+						draggable = ui.helper;
 					} else if (droppable_name == "textarea") {
 						draggable = $("#text_box_template");
 

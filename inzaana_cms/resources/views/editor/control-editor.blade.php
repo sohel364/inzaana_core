@@ -1,22 +1,18 @@
 
 <div id="control_option_dialog" class="dialog">
-		<button id="dialog_btn_edit" class="btn dialog_btn "
-			style="width: 100%">
+		<button id="dialog_btn_edit" class="btn dialog_btn option_dlg_btn">
 			<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
 			Edit
 		</button>
-		<button id="dialog_btn_resize" class="btn dialog_btn"
-			style="width: 100%">
+		<button id="dialog_btn_resize" class="btn dialog_btn option_dlg_btn">
 			<span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span>
 			Resize
 		</button>
-		<button id="dialog_btn_delete" class="btn dialog_btn"
-			style="width: 100%">
+		<button id="dialog_btn_delete" class="btn dialog_btn option_dlg_btn">
 			<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
 			Delete
 		</button>
-		<button id="dialog_btn_cancel" class="btn dialog_btn"
-			style="width: 100%">
+		<button id="dialog_btn_cancel" class="btn dialog_btn option_dlg_btn">
 			<span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
 			Cancel
 		</button>
@@ -24,19 +20,19 @@
 	</div>
 
 	<div id="btn_edit_dialog" class="dialog">
-		<p style="font-weight: lighter; font-size: small;">Add Text and Link
+		<p class="btn_edit_dlg_header">Add Text and Link
 			to your Button. Chnage the style to make it look as you want</p>
-		<div
-			style="height: 150px; border: 1px solid lightgrey; border-radius: 8px; padding: 5px">
-			<p style="padding-top: 5px; font-weight: lighter; font-size: small;">Button
+		<div class="btn_edit_dlg_input_container">
+			<p class="btn_edit_dlg_btn_txt_label">Button
 				Text</p>
 			<input id="btn_text" type="text" placeholder="Click Me"
-				style="width: 100%; border: .5px solid lightgrey; border-radius: 5px;">
+				class="btn_edit_dlg_btn_txt_input">
 
-				<p style="padding-top: 5px; font-weight: lighter; font-size: small">Link
-					To</p> <input id="btn_link" type="text" name="btn_link"
+				<p class="btn_edit_dlg_btn_link_label">Link
+					To</p>
+				<input id="btn_link" type="text" name="btn_link"
 				placeholder="Fill in your URL"
-				style="width: 100%; border: .5px solid lightgrey; border-radius: 5px;">
+				class="btn_edit_dlg_btn_link_input">
 		
 		</div>
 		<hr></hr>
@@ -44,11 +40,10 @@
 		 -->
 		<input type='text' id="color_picker" />
 		<hr></hr>
-		<button id="btn_dialog_cancel"
-			style="border-radius: 5px; float: right; margin: 5px; background: white">
+		<button id="btn_dialog_cancel" class="btn_edit_dlg_btn_cancel">
 			Cancel</button>
 		<button id="btn_dialog_save"
-			style="border-radius: 5px; float: right; margin: 5px; background: white">
+			class="btn_edit_dlg_btn_save">
 			Save</button>
 	</div>
 	

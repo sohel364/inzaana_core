@@ -76,3 +76,64 @@
 .bg_editor_button {
 	float: right;
 }
+
+/*Style for Control Option Dialog*/
+
+.option_dlg_btn {
+	width: 100%;
+}
+
+/*Style for Button Edit Dialog*/
+
+.btn_edit_dlg_header {
+	font-weight: lighter;
+	font-size: small;	
+}
+
+.btn_edit_dlg_input_container {
+	height: 150px;
+	border: 1px solid lightgrey;
+	border-radius: 8px;
+	padding: 5px;
+}
+
+.btn_edit_dlg_btn_txt_label {
+	padding-top: 5px;
+	font-weight: lighter;
+	font-size: small;
+}
+
+.btn_edit_dlg_btn_txt_input {
+	width: 100%;
+	border: .5px solid lightgrey;
+	border-radius: 5px;
+}
+
+.btn_edit_dlg_btn_link_label {
+	padding-top: 5px;
+	font-weight: lighter;
+	font-size: small;
+}
+
+.btn_edit_dlg_btn_link_input {
+	width: 100%;
+	border: .5px solid lightgrey;
+	border-radius: 5px;
+}
+
+.btn_edit_dlg_btn_cancel {
+
+	border-radius: 5px;
+	float: right;
+	margin: 5px;
+	background: white;
+}
+
+.btn_edit_dlg_btn_save {
+	border-radius: 5px;
+	float: right;
+	margin: 5px;
+	background: white;
+}
+
+/*Style for Button Edit Dialog*/
