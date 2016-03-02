@@ -50,7 +50,13 @@
                 @endforeach
 
             @else
-                <div class="alert alert-info">{{ $message }}</div>
+                <div class="container">
+                <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="alert alert-info">{!! $message !!}</div>
+                </div>
+                </div>
+                </div>
             @endif
 
         </div>

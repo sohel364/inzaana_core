@@ -33,7 +33,7 @@ class TemplateController extends Controller
 
     public function showSaved()
     {
-        $message = 'Looks like you have no template to show. Let\'s one';
+        $message = 'Looks like you have no template to show. Let\'s create one from <a class="btn btn-primary btn-flat" href="' . route("user::templates") . '">Template Gallery</a>';
         $savedTemplates = Auth::user()->templates;
         $templatesCount = $savedTemplates->count();
         return view('my_template_view', compact('savedTemplates', 'templatesCount', 'message'));
