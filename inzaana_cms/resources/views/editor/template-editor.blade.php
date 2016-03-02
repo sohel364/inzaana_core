@@ -95,7 +95,13 @@
 		
 		<div id="body" contentEditable="false" >
 			@if($isEdit)
-				<div class="alert alert-info">{{ 'No contents found for selected menu.' }}</div>
+                <div class="container">
+                <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="alert alert-info">{!! $message !!}</div>
+                </div>
+                </div>
+                </div>
 			@else
 	        	<?php include ("templates/$category_name/$template_name/body.html");?>
 

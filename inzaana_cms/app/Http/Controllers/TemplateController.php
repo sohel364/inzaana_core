@@ -49,12 +49,13 @@ class TemplateController extends Controller
     public function editor($category, $template, $template_id)
     {
         // TODO: check author
+        $message = 'No contents found for the selected menu.';
         $category_name = $category;
         $template_name = $template;
         $template = Auth::user()->templates()->find($template_id);
         $isEdit = ( $template->count() == 1 );
         return view('editor.template-editor', 
-            compact('category_name', 'template_name', 'isEdit', 'template_id') );
+            compact('category_name', 'template_name', 'isEdit', 'template_id', 'message') );
     }
 
     public function create(TemplateRequest $request)
