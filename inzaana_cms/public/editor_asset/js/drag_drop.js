@@ -23,11 +23,11 @@ var isSaved = false;
 var isResizeOn = false;
 var allawable_control_array = [ "button", "textarea", "radiobutton",
 		"dropdown", "image", "imageslider", "header", "group",
-		"separator", "textinput", "form", "link" ]
+		"separator", "textinput", "form", "link", "mrg_control" ]
 
 var allawable_group_control_array = [ "group_button", "group_textarea", "group_radiobutton",
                         		"group_dropdown", "group_image", "group_imageslider", "group_header",
-                        		"group_separator", "group_textinput", "group_link" ]
+                        		"group_separator", "group_textinput", "group_link", "group_mrg_control" ]
 var deleted_image_list = [];
 
 var currentMousePos = {
@@ -339,10 +339,10 @@ function makeBodyDroppable() {
 						//draggable = $("#button_template");
 						draggable = ui.helper;
 					} else if (droppable_name == "textarea") {
-						draggable = $("#text_box_template");
+						draggable = $("#text_box_template"); // preview
 
 					} else if (droppable_name == "dropdown") {
-						draggable = $("#dropdown_template");
+						draggable = $("#dropdown_template"); // preview
 
 					} else if (droppable_name == "radiobutton") {
 						draggable = $("#radiobutton_template");
@@ -367,8 +367,11 @@ function makeBodyDroppable() {
 					} else if (droppable_name == "space") {
 						$('<div style="height:200px"></div>').appendTo($("#body"));
 						return;
+					} else if (droppable_name == "mrg_control") {
+						draggable = ui.helper;
 					}
 					
+
 					if (draggable.data("is_dropped") == null
 							|| draggable.data("is_dropped") == "false") {
 
@@ -668,6 +671,8 @@ function showEditPanel() {
 		makeControlNonEditable(editable_control);
 	} else if (editable_control_name.indexOf("textinput") >= 0) {
 		showTextInputEditPanel();
+	} else if (editable_control_name.indexOf("mrg_control") >= 0) {
+		showTextEditPanel();
 	}
 
 	/*
@@ -684,7 +689,8 @@ function makeControlEditable(control) {
 	control.draggable("disable");
 	control.unbind("click", droppedItemClickAction);
 	if ($("#"+clicked_dropped_item_id).attr('name').indexOf("textarea") >= 0
-			|| $("#"+clicked_dropped_item_id).attr('name').indexOf("header") >= 0) {
+			|| $("#"+clicked_dropped_item_id).attr('name').indexOf("header") >= 0
+			|| $("#"+clicked_dropped_item_id).attr('name').indexOf("mrg_control") >= 0) {
 		control.prop('contenteditable', 'true');
 	}
 
@@ -779,7 +785,9 @@ function droppedItemClickAction() {
 		title = "TEXT INPUT ..."; 
 	} else if (clicked_dropped_item_name.indexOf("form") >= 0) {
 		title = "FORM ..."; 
-	}
+	} else if (clicked_dropped_item_name.indexOf("mrg_control") >= 0) {
+		title = "MARRIAGE CONTROL ..."; 
+	} 
 	
 	
 	if ($("#"+clicked_dropped_item_id).attr("name").indexOf("group_") >= 0) {

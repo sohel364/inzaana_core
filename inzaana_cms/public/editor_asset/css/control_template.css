@@ -5,3 +5,11 @@
 	width: 150px;
 	margin: 20px;
 }
+
+.marriage_control_template_non_editable {
+	display: none;
+	position: relative;
+	height: 50px;
+	width: 200px;
+	background-color: red;
+}

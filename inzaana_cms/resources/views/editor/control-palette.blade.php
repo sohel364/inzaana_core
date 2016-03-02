@@ -68,6 +68,9 @@
 	        <li data-category='["marriage"]'>
 	            <a href="#marriage">Mrg3</a>
 	        </li>
+	        <li data-category='["general", "marriage"]'>
+	        	<a href="#marriage_control_template_palette">Mrg4</a>
+	        </li>
 
 	        <!-- for Trip  -->
 	        <li data-category='["trip"]'>
@@ -88,6 +91,10 @@
 	    <!-- Start Section Add Control Tab List -->
 
 	    <!-- Start Section Add control tab body -->
+
+	    <div id="marriage_control_template_palette">
+	    	
+	    </div>
 
 	    <div id="test">
 	    	<h1 name="header" class="selectorField draggableField">THis is test</h1>

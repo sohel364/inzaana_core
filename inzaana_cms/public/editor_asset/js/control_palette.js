@@ -84,6 +84,7 @@ function initializeControlPalette(){
 	});
 	
 	initiateControls("btn_template");
+	initiateControls("marriage_control_template");
 //	var control = $("#btn_template_1").clone();
 ////	control.css('left', '100px');
 ////	control.css('top', '200px');
@@ -182,7 +183,8 @@ function initiateControls(control_name){
 	while (control_template.data("type") != undefined) {
 		var control = control_template.clone();
 		control.css('display', 'block');
-		control.css('left', '50px');
+		control.css('left', '100px');
+		control.css('top', '20px');
 		control.addClass("selectorField");
 		control.addClass("draggableField");
 		control.appendTo($("#" + control_name + "_palette"));
