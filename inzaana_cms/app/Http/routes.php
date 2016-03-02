@@ -68,5 +68,8 @@ Route::group(['middleware' => 'web'], function () {
         Route::post('/categories/create', [ 'uses' => 'CategoryController@create', 'as' => 'categories.create' ]);
         Route::post('/categories/edit/{category_id}', [ 'uses' => 'CategoryController@edit', 'as' => 'categories.edit' ]);
         Route::post('/categories/delete/{category_id}', [ 'uses' => 'CategoryController@delete', 'as' => 'categories.delete' ]);
+
+        // HTML view menu controller
+        Route::get('/html-view-menus/create/{template_id}', [ 'uses' => 'HtmlViewMenuController@create', 'as' => 'html-view-menus.create' ]);
     });
 });

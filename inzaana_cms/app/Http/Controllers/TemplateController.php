@@ -107,11 +107,20 @@ class TemplateController extends Controller
                 return response()->json(compact('success', 'message'));
             }
             $template->saved_name = $request->input('_saved_name');
-            //
-            // $message = $request->input('_menu_contents');
-            // $success = true;
-            // return response()->json(compact('success', 'message'));
-            //
+            $viewMenusTemplateId = $template->id;
+            $viewMenus = json_encode($request->input('_menus'));
+            $viewMenuContents = json_encode($request->input('_menu_contents'));
+
+            session(compact('viewMenus'));
+            $jsonResponse = redirect()->route('user::html-view-menus.create', [ $template ]);
+
+            if(!$jsonResponse)
+            {
+                $success = session('success');
+                $message = session('message');
+                return response()->json(compact('success', 'message'));
+            }
+
             $success = true;
             $message = 'Your template (' . $template->saved_name . ') is modified successfully!';
             if(!$template->save())

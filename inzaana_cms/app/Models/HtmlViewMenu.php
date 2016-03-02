@@ -8,4 +8,5 @@ class HtmlViewMenu extends Model
 {
     //
     protected $table = 'html_view_menus';
+    protected $guarded = [];
 }
