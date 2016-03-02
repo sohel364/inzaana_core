@@ -75,7 +75,7 @@
 					</button>
 				</div>
 				<div id="mainNav" class="collapse navbar-collapse">
-					@if( $template_id && Auth::user()->templates->find($template_id)->htmlViewMenus->count() > 0 )
+					@if( $isEdit && Auth::user()->templates->find($template_id)->htmlViewMenus->count() > 0 )
 						<ul id="menu" class="nav navbar-nav navbar">
 							@foreach(Auth::user()->templates->find($template_id)->htmlViewMenus as $viewMenu)
 							<li>
@@ -94,12 +94,16 @@
 		@include('editor.control-template')
 		
 		<div id="body" contentEditable="false" >
-	        <?php include ("templates/$category_name/$template_name/body.html");?>
-	    </div>
+			@if($isEdit)
+				<div class="alert alert-info">{{ 'No contents found for selected menu.' }}</div>
+			@else
+	        	<?php include ("templates/$category_name/$template_name/body.html");?>
 
-		<div id="footer">
-			<?php include ("templates/$category_name/$template_name/footer.html");?>
-		</div>
+				<div id="footer">
+					<?php include ("templates/$category_name/$template_name/footer.html");?>
+				</div>
+	        @endif
+	    </div>
 	</div>
 
 	<div id="control_palette" style="z-index: 100000000000000 !important">

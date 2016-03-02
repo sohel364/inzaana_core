@@ -44,13 +44,13 @@
                             href="{{ route('user::templates.editor.edit', [ 'category' => $template->category_name, 'template' => $template->template_name, 'template_id' => $template->id ]) }}">Edit</a>
                         <a class="info btn btn-info btn-flat" href="#">View</a>
                     </div>
-                    <h4>{{ $template->template_name }}</h4>
+                    <h4>{{ $template->saved_name }}</h4>
                 </div>
                 </div>
                 @endforeach
 
             @else
-                <h4> {{ $message }} </h4>
+                <div class="alert alert-info">{{ $message }}</div>
             @endif
 
         </div>
