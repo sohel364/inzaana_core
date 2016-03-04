@@ -48,20 +48,20 @@
 @endsection
 
 @section('content')
-	<div>
+	<!-- <div> -->
 		<!-- WE ALREADY HAVE ANOTHER SAVE BUTTON FOR IN MASTER PAGE - SO WE PUT HERE AS HIDDEN -->
-		<button class="template_save_btn btn btn-success hidden"
+<!-- 		<button class="template_save_btn btn btn-success hidden"
 			onclick="savePage(user_id, template_id);" style="display: block;">Save
-		</button>
+		</button> -->
 		<!-- BELOW CANVAS IS MOVED TO MASTER PAGE WILL BE DEPRECATED IN FUTURE -->
 		<!-- <canvas id="hidden-canvas" style="display:none"></canvas> -->
-	</div>
+	<!-- </div> -->
 
 	<br />
 	<br />
 	<br />
 
-		<!-- Template Elements  Here -->
+	<!-- Template Elements  Here -->
 
 	<div id="frame" class="droppedFields">
 		<div style="background-color: white;">
@@ -75,16 +75,18 @@
 					</button>
 				</div>
 				<div id="mainNav" class="collapse navbar-collapse">
-					@if( $isEdit && Auth::user()->templates->find($template_id)->htmlViewMenus->count() > 0 )
+					@if( $isEdit && $viewMenus->count() > 0)
+					
 						<ul id="menu" class="nav navbar-nav navbar">
-							@foreach(Auth::user()->templates->find($template_id)->htmlViewMenus as $viewMenu)
+							@foreach($viewMenus as $viewMenu)
 							<li>
 								<a href="#" onclick="onMenuClick(this);">{{ $viewMenu->menu_title }}</a>
 							</li>
 							@endforeach
-							<li class="add-menu"><a>+</a></li>
 						</ul>
+
 					@else
+
 						<?php include ("templates/$category_name/$template_name/menu.html");?>
 					@endif
 				</div>
@@ -98,7 +100,7 @@
                 <div class="container">
                 <div class="row">
                 <div class="col-md-12 text-center">
-                    <div class="alert alert-info">{!! $message !!}</div>
+                    <div class="alert {{ $alert_type }}">{!! $message !!}</div>
                 </div>
                 </div>
                 </div>

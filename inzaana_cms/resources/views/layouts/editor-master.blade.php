@@ -37,10 +37,11 @@
               <li><a id="btn_collasp_cp">Collasp</a></li>
                 <li class="active"><a href="{{ route('user::home') }}">Dashboard <span class="sr-only">(current)</span></a></li>
                 <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Back to ... <span class="caret"></span></a>
                   <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
+                    <li><a href="{{ route('user::home') }}">Dashboard</a></li>
+                    <li><a href="{{ route('user::templates.saved') }}">My templates</a></li>
+                    <li><a href="{{ route('user::templates') }}">Template Gallery</a></li>
                     <li><a href="#">Something else here</a></li>
                     <li role="separator" class="divider"></li>
                     <li><a href="#">Separated link</a></li>

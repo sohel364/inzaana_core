@@ -39,23 +39,29 @@ class TemplateController extends Controller
         return view('my_template_view', compact('savedTemplates', 'templatesCount', 'message'));
     }
 
+    // template save action
     public function browse($category, $template)
     {
         // TODO: check author
-        return view('editor.template-editor', 
-            [ 'category_name' => $category, 'template_name' => $template, 'isEdit' => false ]);
+        $viewData = [ 'category_name' => $category, 'template_name' => $template,
+                'isEdit' => false, 'alert_type' => 'alert-info', 'viewMenus' => $viewMenus ];
+        $viewMenus = Auth::user()->templates->find($template_id)->htmlviewmenus;
+        return view('editor.template-editor',  $viewData);
     }
 
+    // template edit action
     public function editor($category, $template, $template_id)
     {
         // TODO: check author
+        $alert_type = 'alert-danger';
         $message = 'No contents found for the selected menu.';
         $category_name = $category;
         $template_name = $template;
-        $template = Auth::user()->templates()->find($template_id);
-        $isEdit = ( $template->count() == 1 );
+        $template = Auth::user()->templates->find($template_id);
+        $viewMenus = $template->htmlviewmenus;
+        $isEdit = $template->count() == 1;
         return view('editor.template-editor', 
-            compact('category_name', 'template_name', 'isEdit', 'template_id', 'message') );
+            compact('category_name', 'template_name', 'isEdit', 'template_id', 'message', 'alert_type', 'viewMenus') );
     }
 
     public function create(TemplateRequest $request)
@@ -107,19 +113,6 @@ class TemplateController extends Controller
                 return response()->json(compact('success', 'message'));
             }
             $template->saved_name = $request->input('_saved_name');
-            $viewMenusTemplateId = $template->id;
-            $viewMenus = json_encode($request->input('_menus'));
-            $viewMenuContents = json_encode($request->input('_menu_contents'));
-
-            session(compact('viewMenus'));
-            $jsonResponse = redirect()->route('user::html-view-menus.create', [ $template ]);
-
-            if(!$jsonResponse)
-            {
-                $success = session('success');
-                $message = session('message');
-                return response()->json(compact('success', 'message'));
-            }
 
             $success = true;
             $message = 'Your template (' . $template->saved_name . ') is modified successfully!';
@@ -129,7 +122,7 @@ class TemplateController extends Controller
                 $message = 'Your template (' . $request->input('_saved_name') . ') is failed to update! Help: why template is not modified?';
                 return response()->json(compact('success', 'message'));
             }
-            return response()->json(compact('success', 'message', 'template'));
+            return response()->json(compact('success', 'message', 'template', 'jsonResponse'));
         }
         // TODO: do something to edit
         return redirect()->route('user::templates');

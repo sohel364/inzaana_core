@@ -205,7 +205,7 @@ function savePage(category_name, template_name, isEdit)
     traverseImages();
     console.log("[WB-D] savePage: " + category_name + "$##$" + template_name);
 
-    makeTemplateComponetsNotEditable();
+    // makeTemplateComponetsNotEditable();
     saveCurrentMenuText();
 
     var menuList = getMenuList();
@@ -236,7 +236,7 @@ function savePage(category_name, template_name, isEdit)
                 dataType: 'json',
                 success: function (data) {
 
-                    alert('msg: ' + data.message);
+                    // alert('msg: ' + data.message);
                     if(data.success)
                     {
                         savedName = prompt("Enter webpage name : ", data.template.saved_name);
@@ -324,6 +324,7 @@ function insertPage(menuList, template_name, category_name, savedName) {
                 hideSavingIcon();
                 var err =  xhr.responseText;
                 alert(err);
+                // window.location.href = '/templates/gallery';
             }
         });
 }
@@ -348,22 +349,74 @@ function updatePage(menuList, template, category_name, savedName) {
             },
             success: function (data) {
                 hideSavingIcon();
-                alert(data.message);
                 // TODO: Image upload before page template create
+                var nextUrl = '/editor/' + data.template.category_name + '/' + data.template.template_name + '/' + data.template.id;
                 if(data.success)
                 {
-                    // saveImages(category_name, savedTemplateID);
-                    allImages = [];
+                    var message = [];
+                    message['template'] = data.message;
+                    saveViewManus(template.id, menuList, menuContens, nextUrl, message);
+                    return;
                 }
-                window.location.href = '/editor/' + data.template.category_name + '/' + data.template.template_name + '/' + data.template.id;
+                alert(data.message);
+                window.location.href = nextUrl;
             },
             error: function(xhr, status, error) {
                 hideSavingIcon();
                 var err =  xhr.responseText;
                 alert(err);
+                // window.location.href = '/templates/gallery';
             }
         });
 }
+
+
+function saveViewManus(template_id, viewMenus, menuContents, nextUrl, message)
+{
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        type: "POST",
+        url: '/html-view-menus/create/' + template_id,
+        dataType: 'json',
+        data: {
+            _menus: viewMenus,
+            _token: CSRF_TOKEN
+        },
+        success: function (data) {
+            hideSavingIcon();
+            // TODO: Image upload before page template create
+            if(data.success)
+            {
+                message['menu'] = data.message;
+                saveContents(data.templateViewMenus, menuContens, nextUrl, message);
+                return;
+            }
+            alert('ERROR: Failed to create template menus!');
+        },
+        error: function(xhr, status, error) {
+            hideSavingIcon();
+            var err =  xhr.responseText;
+            alert(err);            
+        }
+    });
+}
+
+function saveContents(templateViewMenus, menuContents, nextUrl, message)
+{
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+    // saveImages(category_name, savedTemplateID);
+    allImages = [];
+
+    alert(message['menu']);
+    alert(templateViewMenus[0].menu_title);
+    alert(message['template']);
+
+    window.location.href = nextUrl;
+
+    return true;
+}
+
 /*
  * Shows loading icons while saving operation is ongoing
  */

@@ -12,7 +12,8 @@ for($i=2;$i<sizeof($dirs);$i++)
 		{
 		?>
 		 	<li>
-		 		<a href="{{ route('user::templates.editor.browse', [ 'category' => $dirs[$i], 'template'=> $templates[$j] ]) }}"><i class="fa"></i> {{ $templates[$j] }}</a>
+		 		<!-- <a href="{{ route('user::templates.editor.browse', [ 'category' => $dirs[$i], 'template'=> $templates[$j] ]) }}"><i class="fa"></i> {{ $templates[$j] }}</a> -->
+		 		<a href="{{ route('user::templates') }}"><i class="fa"></i> {{ $templates[$j] }}</a>		 		
 			</li>
 		
 		<?php 

@@ -70,6 +70,6 @@ Route::group(['middleware' => 'web'], function () {
         Route::post('/categories/delete/{category_id}', [ 'uses' => 'CategoryController@delete', 'as' => 'categories.delete' ]);
 
         // HTML view menu controller
-        Route::get('/html-view-menus/create/{template_id}', [ 'uses' => 'HtmlViewMenuController@create', 'as' => 'html-view-menus.create' ]);
+        Route::post('/html-view-menus/create/{template_id}', [ 'uses' => 'HtmlViewMenuController@create', 'as' => 'html-view-menus.create' ]);
     });
 });
