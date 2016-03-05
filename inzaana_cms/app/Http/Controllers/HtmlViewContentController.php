@@ -58,7 +58,11 @@ class HtmlViewContentController extends Controller
     		$content = $viewMenusMatched->first()->content;
     		if($content)
     		{
-    			$content->save();
+                if(collect($viewMenuContents)->has($value->menuTitle))
+                {
+                    $content->content_html = $viewMenuContents[$value->menuTitle];
+                    $content->save();
+                }
     		}
     		else
     		{
