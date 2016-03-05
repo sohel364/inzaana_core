@@ -97,13 +97,24 @@
 		
 		<div id="body" contentEditable="false" >
 			@if($isEdit)
-                <div class="container">
-                <div class="row">
-                <div class="col-md-12 text-center">
-                    <div class="alert {{ $alert_type }}">{!! $message !!}</div>
-                </div>
-                </div>
-                </div>
+
+				@if(session()->has('selected_menu_title') && session('selected_menu_title'))
+					
+					@foreach($viewMenus as $viewMenu)
+						@if($viewMenu->menu_title == session('selected_menu_title'))
+							{!! $viewMenu->content->content_html !!}
+						@endif
+					@endforeach
+
+				@else
+	                <div class="container">
+	                <div class="row">
+	                <div class="col-md-12 text-center">
+	                    <div class="alert {{ $alert_type }}">{!! $message !!}</div>
+	                </div>
+	                </div>
+	                </div>
+                @endif
 			@else
 	        	<?php include ("templates/$category_name/$template_name/body.html");?>
 

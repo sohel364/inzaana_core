@@ -71,5 +71,8 @@ Route::group(['middleware' => 'web'], function () {
 
         // HTML view menu controller
         Route::post('/html-view-menus/create/{template_id}', [ 'uses' => 'HtmlViewMenuController@create', 'as' => 'html-view-menus.create' ]);
+
+        // HTML view content controller
+        Route::post('/html-view-contents/create', [ 'uses' => 'HtmlViewContentController@create', 'as' => 'html-view-contents.create' ]);
     });
 });

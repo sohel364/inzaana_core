@@ -23,6 +23,9 @@ class CreateHtmlViewContentsTable extends Migration
             $table->softDeletes()->comment('If we want to keep track of deletion without actually deleting a record');
             $table->timestamps();
             $table->index(['id', 'html_view_menu_id', 'created_at'], 'html_view_contents_index');
+            $table->foreign('html_view_menu_id')
+                    ->references('id')->on('html_view_menus')
+                    ->onDelete('cascade');
         });
     }
 

@@ -28,18 +28,25 @@ class HtmlViewMenuController extends Controller
     // - savePage.js > insertPage()
     public function create(HtmlViewMenuRequest $request, $template_id)
     {
-        $viewMenu;
     	$success = true;
     	$viewMenus = json_encode($request->input('_menus'));
 
         $template = Auth::user()->templates->find($template_id);
+        if(!$template)
+        {
+            $success = false;
+            $message = 'FATAL ERROR: INVALID TEMPLATE!';
+            return response()->json(compact('message', 'success'));
+        }
+        // For the first time saving of a template it has no menus initially,
+        // So below collection will be empty - which is expected
         $templateViewMenus = $template->htmlviewmenus;
+        $hasMenus = $templateViewMenus->count() > 0;
 
     	foreach (json_decode($viewMenus) as $key => $value)
-    	{
+    	{            
             $viewMenu = $templateViewMenus->where('menu_title', $value->menuTitle)->first();
-            $menuExists = $viewMenu->count() == 1;
-    		if($menuExists)
+    		if($hasMenus && $viewMenu)
     		{
     			$viewMenu->menu_title = $value->menuTitle;
     			// $viewMenu->href = $value->aHref;
@@ -56,11 +63,11 @@ class HtmlViewMenuController extends Controller
 		    	{
 		    		$success = false;
 		    		$message = 'Failed to create view menus';
-    				return response()->json(compact('message', 'success', 'template_id', 'templateViewMenus'));
+    				return response()->json(compact('message', 'success', 'template_id'));
 		    	} 			
     		}
     	}
 		$message = 'All ' . collect(json_decode($viewMenus))->count() . ' template menus are created successfully!';
-    	return response()->json(compact('message', 'success', 'templateViewMenus'));
+    	return response()->json(compact('message', 'success'));
     }
 }

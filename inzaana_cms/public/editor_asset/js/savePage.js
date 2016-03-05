@@ -308,17 +308,17 @@ function insertPage(menuList, template_name, category_name, savedName) {
                 alert(data.message);
 
                 // TODO: Image upload before page template create
+                var nextUrl = '/editor/' + data.template.category_name + '/' + data.template.template_name + '/' + data.template.id;
                 if(data.success)
                 {
-                    // saveImages(category_name, savedTemplateID);
-                    // show template saved edit view
-                    window.location.href = '/editor/' + data.template.category_name + '/' + data.template.template_name + '/' + data.template.id;
+                    var message = [];
+                    message['template'] = data.message;
+                    saveViewMenus(data.template.id, menuList, menuContens, nextUrl, message);
+                    return;
                 }
-                else
-                {
-                    // show template sample view
-                    window.location.href = '/editor/' + category_name + '/' + template_name;
-                }
+                alert(data.message);
+                // show template sample view
+                window.location.href = '/editor/' + category_name + '/' + template_name;
             },
             error: function(xhr, status, error) {
                 hideSavingIcon();
@@ -355,11 +355,11 @@ function updatePage(menuList, template, category_name, savedName) {
                 {
                     var message = [];
                     message['template'] = data.message;
-                    saveViewManus(template.id, menuList, menuContens, nextUrl, message);
+                    saveViewMenus(template.id, menuList, menuContens, nextUrl, message);
                     return;
                 }
                 alert(data.message);
-                window.location.href = nextUrl;
+                window.location.href = '/templates/gallery';
             },
             error: function(xhr, status, error) {
                 hideSavingIcon();
@@ -371,7 +371,7 @@ function updatePage(menuList, template, category_name, savedName) {
 }
 
 
-function saveViewManus(template_id, viewMenus, menuContents, nextUrl, message)
+function saveViewMenus(template_id, viewMenus, menuContents, nextUrl, message)
 {
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
@@ -388,10 +388,10 @@ function saveViewManus(template_id, viewMenus, menuContents, nextUrl, message)
             if(data.success)
             {
                 message['menu'] = data.message;
-                saveContents(data.templateViewMenus, menuContens, nextUrl, message);
+                saveContents(viewMenus, menuContents, nextUrl, message);
                 return;
             }
-            alert('ERROR: Failed to create template menus!');
+            alert(data.message);
         },
         error: function(xhr, status, error) {
             hideSavingIcon();
@@ -404,17 +404,39 @@ function saveViewManus(template_id, viewMenus, menuContents, nextUrl, message)
 function saveContents(templateViewMenus, menuContents, nextUrl, message)
 {
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        type: "POST",
+        url: '/html-view-contents/create',
+        dataType: 'json',
+        data: {
+            _menus: templateViewMenus,
+            _menu_contents: menuContents,
+            _token: CSRF_TOKEN
+        },
+        success: function (data) {
+            hideSavingIcon();
+            // TODO: Image upload before page template create
+            if(data.success)
+            {
+                alert(message['menu']);
+                alert(message['template']);
+                alert(data.message);
 
-    // saveImages(category_name, savedTemplateID);
-    allImages = [];
+                // saveImages(category_name, savedTemplateID);
+                allImages = [];
 
-    alert(message['menu']);
-    alert(templateViewMenus[0].menu_title);
-    alert(message['template']);
-
-    window.location.href = nextUrl;
-
-    return true;
+                window.location.href = nextUrl;
+                return;
+            }
+            alert(data.message);
+            window.location.href = '/templates/gallery';
+        },
+        error: function(xhr, status, error) {
+            hideSavingIcon();
+            var err =  xhr.responseText;
+            alert(err);            
+        }
+    });
 }
 
 /*

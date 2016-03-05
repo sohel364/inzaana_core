@@ -39,17 +39,17 @@ class TemplateController extends Controller
         return view('my_template_view', compact('savedTemplates', 'templatesCount', 'message'));
     }
 
-    // template save action
+    // template view action for saving a new template
     public function browse($category, $template)
     {
         // TODO: check author
+        $viewMenus = [];
         $viewData = [ 'category_name' => $category, 'template_name' => $template,
                 'isEdit' => false, 'alert_type' => 'alert-info', 'viewMenus' => $viewMenus ];
-        $viewMenus = Auth::user()->templates->find($template_id)->htmlviewmenus;
         return view('editor.template-editor',  $viewData);
     }
 
-    // template edit action
+    // template editor view for progressing a template edit action
     public function editor($category, $template, $template_id)
     {
         // TODO: check author
@@ -58,12 +58,30 @@ class TemplateController extends Controller
         $category_name = $category;
         $template_name = $template;
         $template = Auth::user()->templates->find($template_id);
+        if(!$template)
+        {
+            flash()->error('The saved " ' . $template_name . ' " template is not found!');
+            return redirect()->route('user::templates');
+        }
         $viewMenus = $template->htmlviewmenus;
-        $isEdit = $template->count() == 1;
+        if($viewMenus->count() == 0)
+        {
+            flash()->error('The " ' . $template->saved_name . ' " template has no menus!');
+            return redirect()->route('user::templates');
+        }
+        $isEdit = $viewMenus->count() > 0;
+
+        if($isEdit)
+        {
+            $selected_menu_title = $viewMenus->first()->menu_title;
+            session(compact('selected_menu_title'));
+        }
+
         return view('editor.template-editor', 
             compact('category_name', 'template_name', 'isEdit', 'template_id', 'message', 'alert_type', 'viewMenus') );
     }
 
+    // template save action
     public function create(TemplateRequest $request)
     {
         if( $request->ajax() )
@@ -101,6 +119,7 @@ class TemplateController extends Controller
         return 'Show templates by categories';
     }
 
+    // template edit action
     public function edit(TemplateRequest $request, $template_id)
     {
         if( $request->ajax() )
@@ -128,6 +147,7 @@ class TemplateController extends Controller
         return redirect()->route('user::templates');
     }
 
+    // get the template info
     public function info(TemplateRequest $request, $template_id)
     {
         if( $request->ajax() )
