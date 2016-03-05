@@ -158,6 +158,7 @@ function onMenuClick(menu) {
     traverseImages();
 
     var menuText = $(menu).text();
+
     curMenu = menuText;
     //menuClickHistory[menuClickHistoryIndex] = menuText;
     if(menuContens[menuText] === null || typeof menuContens[menuText] === 'undefined') {

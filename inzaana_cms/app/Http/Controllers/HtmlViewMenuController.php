@@ -70,4 +70,13 @@ class HtmlViewMenuController extends Controller
 		$message = 'All ' . collect(json_decode($viewMenus))->count() . ' template menus are created successfully!';
     	return response()->json(compact('message', 'success'));
     }
+
+    // called from client side ajax request when a menu title is clicked
+    public function select($menu_title)
+    {
+        $success = true;
+        $message = 'Menu ( ' . $menu_title . ' ) is selected.';
+        session([ 'selected_menu_title' => $menu_title ]);
+        return response()->json(compact('message', 'success'));
+    }
 }
