@@ -348,6 +348,17 @@
 	<div class="bg_eidtor">
 		<div id="bg_editor_sample_images_section" class="bg_sample_image_palette">
 			<ul id = "bg_editor_sample_images_list" class="bg_sample_image_grid">
+				<?php
+				$dirs=scandir("./templates/$category_name/$template_name/resource/images/background");
+				for($i=2;$i<sizeof($dirs);$i++)
+				{		
+				?>
+					<li>
+						<img src='{{asset("/templates/$category_name/$template_name/resource/images/background/$dirs[$i]")}}' class="bg_editor_thumbnail" alt="test">
+					</li>		
+				<?php 
+				}
+				?>
 			</ul>
 		</div>
 		<div id="bg_editor_section" class="section_bg_editor">

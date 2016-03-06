@@ -164,6 +164,17 @@
 	<div class="background_theme">
 		<br />
 		<ul id="bg_editor_default_images_list">
+			<?php
+			$dirs=scandir("./editor_asset/images/background");
+			for($i=2;$i<sizeof($dirs);$i++)
+			{		
+			?>
+				<li>
+					<img src='{{asset("/editor_asset/images/background/$dirs[$i]")}}' class="bg_editor_thumbnail" alt="test">
+				</li>		
+			<?php 
+			}
+			?>
 		</ul>
 	
 	</div>

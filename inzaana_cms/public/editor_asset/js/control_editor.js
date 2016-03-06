@@ -267,22 +267,26 @@ function openBGEditor(control){
 		},
 
 	});
-	
-	var folder = "../../templates/"+ currentCategory + "/" + currentTemplate + "/resource/images/background/";
-	
-	$.ajax({
-	    url : folder,
-	    success: function (data) {
-	        $(data).find("a").attr("href", function (i, val) {
-	            if( val.match(/\.jpg|\.png|\.gif/) ) {
-	                $('<li><img src="' + folder + val + '" class="bg_editor_thumbnail" alt="'
-	    					+ "test" + '"></li>').appendTo('#bg_editor_sample_images_list').click(function(){
-	    						setBackgroundImage(editable_bg_control , $(this).find("img").attr("src"));
-	    					});
-	            } 
-	        });
-	    }
+
+	$("#bg_editor_sample_images_list").find('li').click(function(){
+		setBackgroundImage(editable_bg_control , $(this).find("img").attr("src"));
 	});
+	
+	// var folder = "../../templates/"+ currentCategory + "/" + currentTemplate + "/resource/images/background/";
+	
+	// $.ajax({
+	//     url : folder,
+	//     success: function (data) {
+	//         $(data).find("a").attr("href", function (i, val) {
+	//             if( val.match(/\.jpg|\.png|\.gif/) ) {
+	//                 $('<li><img src="' + folder + val + '" class="bg_editor_thumbnail" alt="'
+	//     					+ "test" + '"></li>').appendTo('#bg_editor_sample_images_list').click(function(){
+	//     						setBackgroundImage(editable_bg_control , $(this).find("img").attr("src"));
+	//     					});
+	//             } 
+	//         });
+	//     }
+	// });
 }
 
 
