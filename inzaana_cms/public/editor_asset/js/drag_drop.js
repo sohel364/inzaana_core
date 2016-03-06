@@ -74,40 +74,40 @@ function makeTemplateComponetsEditable() {
 		
 	});
 	
-	$("#footer").find("*").each(function() {
-		var control_id = $(this).attr("id");
-		var control_name = $(this).attr("name");
+	// $("#footer").find("*").each(function() {
+	// 	var control_id = $(this).attr("id");
+	// 	var control_name = $(this).attr("name");
 
-		//console.log(control_id + " : " + control_name);
+	// 	//console.log(control_id + " : " + control_name);
 
-		if (allawable_control_array.indexOf(control_name) > -1) {
-			//console.log(" [Allowable Control] Control Type : " + control_name);
-			if ($(this).attr("id") == null)
-			{
-				$(this).attr("id", $(this).attr("name") + "_dropped" + counter++);
-			}
-			$(this).data("is_dropped","true");
+	// 	if (allawable_control_array.indexOf(control_name) > -1) {
+	// 		//console.log(" [Allowable Control] Control Type : " + control_name);
+	// 		if ($(this).attr("id") == null)
+	// 		{
+	// 			$(this).attr("id", $(this).attr("name") + "_dropped" + counter++);
+	// 		}
+	// 		$(this).data("is_dropped","true");
 			
-			makeDroppedControlsDraggable($(this));
+	// 		makeDroppedControlsDraggable($(this));
 
-			$(this).click(droppedItemClickAction);
-		}
+	// 		$(this).click(droppedItemClickAction);
+	// 	}
 		
-		if (control_name == "imageslider" || control_name == "group_imageslider" )
-		{
-			startImageSlider($(this));
-		}
+	// 	if (control_name == "imageslider" || control_name == "group_imageslider" )
+	// 	{
+	// 		startImageSlider($(this));
+	// 	}
 		
-		if ($(this).is("a")){
-			$(this).data("href", $(this).attr("href"));
-			$(this).attr("href", null);
-		}
+	// 	if ($(this).is("a")){
+	// 		$(this).data("href", $(this).attr("href"));
+	// 		$(this).attr("href", null);
+	// 	}
 		
-		if ($(this).is("button")){
-			$(this).data("onclick", $(this).attr("onclick"));
-			$(this).attr("onclick", null);
-		}
-	});
+	// 	if ($(this).is("button")){
+	// 		$(this).data("onclick", $(this).attr("onclick"));
+	// 		$(this).attr("onclick", null);
+	// 	}
+	// });
 }
 
 function makeTemplateComponetsNotEditable() {
@@ -138,30 +138,30 @@ function makeTemplateComponetsNotEditable() {
 		}
 	});
 	
-	$("#footer").find("*").each(function() {
-		var control_id = $(this).attr("id");
-		var control_name = $(this).attr("name");
+	// $("#footer").find("*").each(function() {
+	// 	var control_id = $(this).attr("id");
+	// 	var control_name = $(this).attr("name");
 
-		//console.log(control_id + " : " + control_name);
+	// 	//console.log(control_id + " : " + control_name);
 
-		if (allawable_control_array.indexOf(control_name) > -1) {
-			//console.log(" [Allowable Control] Control Type : " + control_name);
-			$(this).attr("id", $(this).attr("name") + "_dropped" + counter++);
+	// 	if (allawable_control_array.indexOf(control_name) > -1) {
+	// 		//console.log(" [Allowable Control] Control Type : " + control_name);
+	// 		$(this).attr("id", $(this).attr("name") + "_dropped" + counter++);
 
-			$(this).draggable("destroy");
+	// 		$(this).draggable("destroy");
 
-			$(this).click(function() {
-			});
-		}
+	// 		$(this).click(function() {
+	// 		});
+	// 	}
 		
-		if ($(this).is("a")){
-			$(this).attr("href", $(this).data("href"));
-		}
+	// 	if ($(this).is("a")){
+	// 		$(this).attr("href", $(this).data("href"));
+	// 	}
 		
-		if ($(this).is("button")){
-			$(this).attr("onclick", $(this).data("onclick"));
-		}
-	});
+	// 	if ($(this).is("button")){
+	// 		$(this).attr("onclick", $(this).data("onclick"));
+	// 	}
+	// });
 }
 
 function makeControlsOfPaletteDraggable() {
