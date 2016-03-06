@@ -415,3 +415,43 @@
 	</div>
 	
 </div>
+
+
+	<!-- The option Menu -->
+
+	<div id="page_option" style="display: none;" class="edit_option">
+		<table style="">
+			<caption style="font-weight: bold; text-align: center;">Page Control
+				Options</caption>
+			<tr>
+				<td style=""></td>
+				<td><button class="btn btn-xs btn-danger" id="page_delete_btn">
+						<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+						Delete
+					</button></td>
+			</tr>
+
+			<tr>
+				<td>Page Name</td>
+				<td><input id="input_page_name" type="text"></td>
+			</tr>
+
+
+			<tr>
+				<td>other Options</td>
+				<td>.........</td>
+			</tr>
+			<tr>
+				<td>other Options</td>
+				<td>.........</td>
+			</tr>
+
+			<tr>
+				<td><button class="btn btn-sm btn-success" id="page_save_btn">
+						<span class="glyphicon glyphicon-saved" aria-hidden="true"></span>Save
+					</button></td>
+				<td><button class="btn btn-xs btn-warning page_close_btn">Close</button></td>
+			</tr>
+
+		</table>
+	</div>

@@ -180,7 +180,7 @@ $(function(){
      Page Options
      */
     var selectedPageIndex;
-    $("#ul_tree_menu_list").on('dblclick','li',function(e){
+    $("#ul_tree_menu_list").on('click','li',function(e){
         selectedPageIndex=$(this).index();
         if(selectedPageIndex == $("#ul_tree_menu_list li").size()-1)
         {
