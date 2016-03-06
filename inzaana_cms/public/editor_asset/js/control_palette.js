@@ -103,22 +103,28 @@ function initializeControlPalette(){
 
 function initializeDefalutBackgroundThere(){
 	
-	var folder = "./editor_asset/images/background/";
-
-	$.ajax({
-	    url : folder,
-	    success: function (data) {
-	        $(data).find("a").attr("href", function (i, val) {
-	            if( val.match(/\.jpg|\.png|\.gif/) ) {
-	                $('<li><img src="{{ asset(\'' + folder + val + '\')}}" class="bg_editor_thumbnail" alt="'
-	    					+ "test" + '"></li>').appendTo('#bg_editor_default_images_list').click(function(){
-	    						console.log($(this).find("img").attr("src"));
-	    						setBackgroundImage($("#container_background-1_div-1") , $(this).find("img").attr("src"));
-	    					});
-	            } 
-	        });
-	    }
+	$("#bg_editor_default_images_list").find('li').click(function(){
+		setBackgroundImage($("#container_background-1_div-1") , $(this).find("img").attr("src"));
 	});
+
+	// var folder = "/editor_asset/images/background/";
+
+	// $.ajax({
+	//     url : folder,
+	//     success: function (data) {
+	//     	alert("success is called");
+	//         $(data).find("a").attr("href", function (i, val) {
+	//         	alert("{{ asset(folder + val)}}");
+	//             if( val.match(/\.jpg|\.png|\.gif/) ) {
+	//                 $('<li><img src="{{ asset(folder + val)}}" class="bg_editor_thumbnail" alt="'
+	//     					+ "test" + '"></li>').appendTo('#bg_editor_default_images_list').click(function(){
+	//     						console.log($(this).find("img").attr("src"));
+	//     						setBackgroundImage($("#container_background-1_div-1") , $(this).find("img").attr("src"));
+	//     					});
+	//             } 
+	//         });
+	//     }
+	// });
 }
 
 function collaspControlPalette(){
