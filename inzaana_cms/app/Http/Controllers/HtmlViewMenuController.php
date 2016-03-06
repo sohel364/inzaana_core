@@ -23,6 +23,31 @@ class HtmlViewMenuController extends Controller
         $this->middleware('auth');
     }
 
+    public function contents(HtmlViewMenuRequest $request, $template_id)
+    {
+        $success = true;
+        $message = 'All contents are served.';
+        $htmlViewMenus = Auth::user()->templates->find($template_id)->htmlviewmenus;
+        if($htmlViewMenus->count() == 0)
+        {
+            $success = false;
+            $message = 'No menu exists for the template!';
+            return response()->json(compact('message', 'success'));
+        }
+        $menuContents = [];
+        foreach ($htmlViewMenus as $key => $menu) 
+        {
+            $menuContents[$menu->menu_title] = $menu->content ? $menu->content->content_html : $request->input('_default_content');
+        }
+        if(collect($menuContents)->count() == 0)
+        {
+            $success = false;
+            $message = 'No content exists for the template!';
+            return response()->json(compact('message', 'success'));
+        }
+        return response()->json(compact('message', 'success', 'menuContents'));
+    }
+
     // called from ... 
     // - savePage.js > updatePage()
     // - savePage.js > insertPage()
@@ -69,14 +94,5 @@ class HtmlViewMenuController extends Controller
     	}
 		$message = 'All ' . collect(json_decode($viewMenus))->count() . ' template menus are created successfully!';
     	return response()->json(compact('message', 'success'));
-    }
-
-    // called from client side ajax request when a menu title is clicked
-    public function select($menu_title)
-    {
-        $success = true;
-        $message = 'Menu ( ' . $menu_title . ' ) is selected.';
-        session([ 'selected_menu_title' => $menu_title ]);
-        return response()->json(compact('message', 'success'));
     }
 }

@@ -70,8 +70,8 @@ Route::group(['middleware' => 'web'], function () {
         Route::post('/categories/delete/{category_id}', [ 'uses' => 'CategoryController@delete', 'as' => 'categories.delete' ]);
 
         // HTML view menu controller
+        Route::post('/html-view-menus/{template_id}', [ 'uses' => 'HtmlViewMenuController@contents', 'as' => 'html-view-menus.contents' ]);
         Route::post('/html-view-menus/create/{template_id}', [ 'uses' => 'HtmlViewMenuController@create', 'as' => 'html-view-menus.create' ]);
-        Route::get('/html-view-menus/content/{menu_title}', [ 'uses' => 'HtmlViewMenuController@select', 'as' => 'html-view-menus.content.select' ]);
 
         // HTML view content controller
         Route::post('/html-view-contents/create', [ 'uses' => 'HtmlViewContentController@create', 'as' => 'html-view-contents.create' ]);

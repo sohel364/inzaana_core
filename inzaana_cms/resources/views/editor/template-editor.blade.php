@@ -75,13 +75,15 @@
 					</button>
 				</div>
 				<div id="mainNav" class="collapse navbar-collapse">
-					@if( $isEdit && $viewMenus->count() > 0)
+					@if( $isEdit )
 					
 						<ul id="menu" class="nav navbar-nav navbar">
 							@foreach($viewMenus as $viewMenu)
-							<li>
-								<a href="#" onclick="onMenuClick(this);">{{ $viewMenu->menu_title }}</a>
-							</li>
+								@if($viewMenu->content)
+									<li>
+										<a href="#" onclick="onMenuClick(this);">{{ $viewMenu->menu_title }}</a>
+									</li>
+								@endif
 							@endforeach
 						</ul>
 
@@ -96,26 +98,7 @@
 		@include('editor.control-template')
 		
 		<div id="body" contentEditable="false" >
-			@if($isEdit)
-
-				@if(session()->has('selected_menu_title') && session('selected_menu_title'))
-					
-					@foreach($viewMenus as $viewMenu)
-						@if($viewMenu->menu_title == session('selected_menu_title'))
-							{!! $viewMenu->content->content_html !!}
-						@endif
-					@endforeach
-
-				@else
-	                <div class="container">
-	                <div class="row">
-	                <div class="col-md-12 text-center">
-	                    <div class="alert {{ $alert_type }}">{!! $message !!}</div>
-	                </div>
-	                </div>
-	                </div>
-                @endif
-			@else
+			@if(!$isEdit)
 	        	<?php include ("templates/$category_name/$template_name/body.html");?>
 
 				<div id="footer">

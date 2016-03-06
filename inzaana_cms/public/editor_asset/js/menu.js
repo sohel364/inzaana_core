@@ -14,6 +14,7 @@ var imageObjects = {};
 var imageCounter = -1;
 var imageArrayLength = 0;
 var curMenuForImage;
+var _user_id, _template_id;
 
 // onload functionalities
 $(document).ready(function() {
@@ -86,6 +87,49 @@ function loadMediasOfPages() {
     }
 }
 
+function loadContents()
+{
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+    var isEditor = $('#hidden-div-is-edit').text();
+    var template_id = $('#hidden-div-template-current').text();
+
+    if(!isEditor) return;
+
+    $.ajax({
+        type: "POST",
+        url: '/html-view-menus/' + template_id,
+        dataType: 'json',
+        data: {
+            _is_editor: isEditor,
+            _default_content: defaultMenuHtml,
+            _token: CSRF_TOKEN
+        },
+        success: function (data) {
+
+            if(data.success)
+            {
+                // alert(data.message);
+                if(data.menuContents == null)
+                {
+                    alert('ERROR: Empty contents!');
+                    return;
+                }
+                menuContens = data.menuContents;
+                setBodyHtmlString(menuContens[curMenu]);
+                return;
+            }
+            alert(data.message);
+        },
+        error: function(xhr, status, error) {
+            hideSavingIcon();
+            var err =  xhr.responseText;
+            alert(err);
+            resetMenuContent();
+        }
+    });
+}
+
 /*
  * Sets the initial menu contents to menu array and initialize the global variables
  */
@@ -110,6 +154,9 @@ function onLoadMenus() {
         menuContens[curMenu] = getBodyHtmlString();
     }
     defaultMenuHtml = getBodyHtmlString();
+
+    // for laravel implementation
+    loadContents();
 }
 
 /*
@@ -144,14 +191,12 @@ function resetMenuContent() {
     //menuContens[curMenu] = defaultMenuHtml;
 }
 
-//var menuClickHistory = [];
-//var menuClickHistoryIndex = 0;
-
 /*
  * Function executes while clicking any menu
  * @param {type} menu
  */
 function onMenuClick(menu) {
+
 	closeAllEditDialogPanel();
     saveCurrentMenuText();
 
@@ -160,6 +205,7 @@ function onMenuClick(menu) {
     var menuText = $(menu).text();
 
     curMenu = menuText;
+
     //menuClickHistory[menuClickHistoryIndex] = menuText;
     if(menuContens[menuText] === null || typeof menuContens[menuText] === 'undefined') {
         //alert("RESETTING MENU CONTENT!!! ALERT!!" + menuContens[menuText]);
@@ -181,10 +227,10 @@ function onMenuClick(menu) {
 
 
 function getSavedMenuContents() {
+
     menuContens = user_menu_content_array;
     setBodyHtmlString(menuContens[curMenu]);
 }
-var _user_id, _template_id;
 
 var imageType = "png";
 var _callbackFn = null;

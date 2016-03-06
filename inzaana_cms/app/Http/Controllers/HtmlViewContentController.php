@@ -61,30 +61,41 @@ class HtmlViewContentController extends Controller
                 if(collect($viewMenuContents)->has($value->menuTitle))
                 {
                     $content->content_html = $viewMenuContents[$value->menuTitle];
-                    $content->save();
                 }
+                else
+                {
+                    $content->content_html = $request->has('_default_content') ? 
+                                                $request->input('_default_content') : '<div class="alert alert-danger">An empty content!</div>';
+                }
+                $content->save();
     		}
     		else
     		{
+                $htmlViewContent;
                 if(collect($viewMenuContents)->has($value->menuTitle))
                 {
                     $htmlViewContent = HtmlViewContent::create([
                            'html_view_menu_id' => $viewMenusMatched->first()->id,
                            'content_html' => $viewMenuContents[$value->menuTitle],
                     ]); 
+                }
+                else
+                {   
+                    $htmlViewContent = HtmlViewContent::create([
+                           'html_view_menu_id' => $viewMenusMatched->first()->id,
+                           'content_html' => $request->has('_default_content') ? 
+                                                $request->input('_default_content') : '<div class="alert alert-danger">An empty content!</div>',
+                    ]); 
+                }
 
-                    if(!$htmlViewContent)
-                    {
-                        $success = false;
-                        $message = 'ERROR: Failed to save view contents for menu (' . $value->menuTitle . ')';
-                        return response()->json(compact('message', 'success'));
-                    }
+                if(!$htmlViewContent)
+                {
+                    $success = false;
+                    $message = 'ERROR: Failed to save view contents for menu (' . $value->menuTitle . ')';
+                    return response()->json(compact('message', 'success'));
                 }
     		}
     	}
-
-        $selected_menu_title = collect(json_decode($viewMenus))->first()->menuTitle;
-        session(compact('selected_menu_title'));
 
 		$message = 'All ' . collect($viewMenuContents)->count() . ' contents are saved successfully!';
     	return response()->json(compact('message', 'success'));

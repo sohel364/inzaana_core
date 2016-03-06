@@ -201,14 +201,16 @@ function traverseImages() {
  */
 function savePage(category_name, template_name, isEdit) 
 {
-    console.log("[WB-D] savePage: " + category_name + "$##$" + template_name);
+    // console.log("[WB-D] savePage: " + category_name + "$##$" + template_name);
     traverseImages();
-    console.log("[WB-D] savePage: " + category_name + "$##$" + template_name);
+    // console.log("[WB-D] savePage: " + category_name + "$##$" + template_name);
 
     makeTemplateComponetsNotEditable();
     saveCurrentMenuText();
 
     var menuList = getMenuList();
+
+    alert('Menu ( ' + menuList.length + ' ) found');
     
     if (typeof menuList.length !== 'undefined' && menuList.length > 1) 
     {
@@ -300,12 +302,11 @@ function insertPage(menuList, template_name, category_name, savedName) {
                 _menu_contents: menuContens, 
                 _template_name: template_name,
                 _saved_name: savedName,
+                _default_content: defaultMenuHtml,
                 _token: CSRF_TOKEN
             },
             success: function (data) {
                 hideSavingIcon();
-
-                alert(data.message);
 
                 // TODO: Image upload before page template create
                 var nextUrl = '/editor/' + data.template.category_name + '/' + data.template.template_name + '/' + data.template.id;
@@ -345,6 +346,7 @@ function updatePage(menuList, template, category_name, savedName) {
                 _template_name: template.template_name,
                 _saved_name: savedName,
                 _category_name: category_name,
+                _default_content: defaultMenuHtml,
                 _token: CSRF_TOKEN
             },
             success: function (data) {
@@ -383,7 +385,6 @@ function saveViewMenus(template_id, viewMenus, menuContents, nextUrl, message)
             _token: CSRF_TOKEN
         },
         success: function (data) {
-            hideSavingIcon();
             // TODO: Image upload before page template create
             if(data.success)
             {
@@ -411,10 +412,10 @@ function saveContents(templateViewMenus, menuContents, nextUrl, message)
         data: {
             _menus: templateViewMenus,
             _menu_contents: menuContents,
+            _default_content: defaultMenuHtml,
             _token: CSRF_TOKEN
         },
         success: function (data) {
-            hideSavingIcon();
             // TODO: Image upload before page template create
             if(data.success)
             {

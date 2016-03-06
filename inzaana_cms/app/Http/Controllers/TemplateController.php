@@ -71,12 +71,6 @@ class TemplateController extends Controller
         }
         $isEdit = $viewMenus->count() > 0;
 
-        if($isEdit)
-        {
-            $selected_menu_title = $viewMenus->first()->menu_title;
-            session(compact('selected_menu_title'));
-        }
-
         return view('editor.template-editor', 
             compact('category_name', 'template_name', 'isEdit', 'template_id', 'message', 'alert_type', 'viewMenus') );
     }
@@ -87,6 +81,8 @@ class TemplateController extends Controller
         if( $request->ajax() )
         {
             $success = true;
+
+            session(['default_content' => $request->has('_default_content')]);
 
             // TODO: create a new Template
             $template = Template::create([
@@ -124,6 +120,8 @@ class TemplateController extends Controller
     {
         if( $request->ajax() )
         {
+            session(['default_content' => $request->has('_default_content')]);
+            
             $template = Auth::user()->templates()->find($template_id);
             if(!$template)
             {

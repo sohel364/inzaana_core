@@ -57,6 +57,9 @@
 
                     <canvas id="hidden-canvas" style="display:none"></canvas>
 
+                    <div id="hidden-div-template-current" style="display:none">{{ $isEdit ? $template_id : $template_name }}</div>
+                    <div id="hidden-div-is-edit" style="display:none">{{ $isEdit }}</div>
+
                 </form>
                 <li><a >Preview</a></li>
                 <li class="dropdown user user-menu">
