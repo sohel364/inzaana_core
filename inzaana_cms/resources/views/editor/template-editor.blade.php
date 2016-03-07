@@ -85,6 +85,9 @@
 									</li>
 								@endif
 							@endforeach
+							@if($viewMenus->count() > 0)
+								<li class="add-menu"><a>+</a></li>
+							@endif
 						</ul>
 
 					@else

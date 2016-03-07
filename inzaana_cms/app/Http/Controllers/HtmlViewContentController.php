@@ -9,6 +9,7 @@ use Inzaana\Http\Controllers\Controller;
 
 use Inzaana\HtmlViewMenu;
 use Inzaana\HtmlViewContent;
+use Auth;
 
 class HtmlViewContentController extends Controller
 {
@@ -34,6 +35,7 @@ class HtmlViewContentController extends Controller
         {
             $success = false;
             $message = 'FATAL ERROR: Empty menu list.';
+            flash()->error($message);
             return response()->json(compact('message', 'success'));
         }
         $viewMenus = json_encode($request->input('_menus'));
@@ -42,62 +44,66 @@ class HtmlViewContentController extends Controller
         {
             $success = false;
             $message = 'FATAL ERROR: Empty contents list.';
+            flash()->error($message);
             return response()->json(compact('message', 'success'));
         }
-    	
+        if(!$request->has('_template_id'))
+        {            
+            $success = false;
+            $message = 'ERROR: No template ID found for the content.';
+            flash()->error($message);
+            return response()->json(compact('message', 'success'));
+        }
+        $template = Auth::user()->templates->find($request->input('_template_id'));
+        if(!$template)
+        {
+            return responseWithflashError('ERROR: the template does not exist!');
+        }
+
     	foreach (json_decode($viewMenus) as $key => $value)
     	{
-    		// var_dump($value);
-            $viewMenusMatched = HtmlViewMenu::where('menu_title', $value->menuTitle);
-            if($viewMenusMatched->count() == 0)
+            $defaultContent = $request->has('_default_content') ? 
+                                $request->input('_default_content') : 
+                                '<div class="alert alert-danger">An empty content!</div>';
+
+            $menuContentExists = collect($viewMenuContents)->has($value->menuTitle);
+
+            $viewMenusMatched = $template->htmlviewmenus->where('menu_title', $value->menuTitle);
+            if(!$viewMenusMatched)
             {
-                $success = false;
-                $message = 'FATAL ERROR: view menu of content is mismatched.';
-                return response()->json(compact('message', 'success'));
+                return responseWithflashError('ERROR: menu does (' . $value->menuTitle . ') not exist');
             }
     		$content = $viewMenusMatched->first()->content;
     		if($content)
     		{
-                if(collect($viewMenuContents)->has($value->menuTitle))
+                $content->content_html = $menuContentExists ? $viewMenuContents[$value->menuTitle] : $defaultContent;
+                if(!$content->save())
                 {
-                    $content->content_html = $viewMenuContents[$value->menuTitle];
+                    return responseWithflashError('ERROR: Failed to save view contents for menu (' . $value->menuTitle . ')');
                 }
-                else
-                {
-                    $content->content_html = $request->has('_default_content') ? 
-                                                $request->input('_default_content') : '<div class="alert alert-danger">An empty content!</div>';
-                }
-                $content->save();
-    		}
+            }
     		else
     		{
-                $htmlViewContent;
-                if(collect($viewMenuContents)->has($value->menuTitle))
-                {
-                    $htmlViewContent = HtmlViewContent::create([
-                           'html_view_menu_id' => $viewMenusMatched->first()->id,
-                           'content_html' => $viewMenuContents[$value->menuTitle],
-                    ]); 
-                }
-                else
-                {   
-                    $htmlViewContent = HtmlViewContent::create([
-                           'html_view_menu_id' => $viewMenusMatched->first()->id,
-                           'content_html' => $request->has('_default_content') ? 
-                                                $request->input('_default_content') : '<div class="alert alert-danger">An empty content!</div>',
-                    ]); 
-                }
+                $htmlViewContent = HtmlViewContent::create([
+                       'html_view_menu_id' => $viewMenusMatched->first()->id,
+                       'content_html' => $menuContentExists ? $viewMenuContents[$value->menuTitle] : $menuContentExists,
+                ]);
 
                 if(!$htmlViewContent)
                 {
-                    $success = false;
-                    $message = 'ERROR: Failed to save view contents for menu (' . $value->menuTitle . ')';
-                    return response()->json(compact('message', 'success'));
+                    return responseWithflashError('ERROR: Failed to save view contents for menu (' . $value->menuTitle . ')');
                 }
     		}
     	}
 
 		$message = 'All ' . collect($viewMenuContents)->count() . ' contents are saved successfully!';
     	return response()->json(compact('message', 'success'));
+    }
+
+    protected function responseWithflashError($message)
+    {
+        $success = false;
+        flash()->error($message);
+        return response()->json(compact('message', 'success'));
     }
 }

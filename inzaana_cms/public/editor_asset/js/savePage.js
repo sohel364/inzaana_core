@@ -92,7 +92,9 @@ function getMenuList() {
          }*/
         menu['menuTitle'] = menu_text;
         menu['aHref'] = a_href;
-        menuList.push(menu);
+        
+        if(menu['menuTitle'] != '+')
+            menuList.push(menu);
     });
     return menuList;
 }
@@ -389,7 +391,7 @@ function saveViewMenus(template_id, viewMenus, menuContents, nextUrl, message)
             if(data.success)
             {
                 message['menu'] = data.message;
-                saveContents(viewMenus, menuContents, nextUrl, message);
+                saveContents(template_id, viewMenus, menuContents, nextUrl, message);
                 return;
             }
             alert(data.message);
@@ -402,7 +404,7 @@ function saveViewMenus(template_id, viewMenus, menuContents, nextUrl, message)
     });
 }
 
-function saveContents(templateViewMenus, menuContents, nextUrl, message)
+function saveContents(template_id, templateViewMenus, menuContents, nextUrl, message)
 {
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
@@ -413,6 +415,7 @@ function saveContents(templateViewMenus, menuContents, nextUrl, message)
             _menus: templateViewMenus,
             _menu_contents: menuContents,
             _default_content: defaultMenuHtml,
+            _template_id: template_id,
             _token: CSRF_TOKEN
         },
         success: function (data) {
