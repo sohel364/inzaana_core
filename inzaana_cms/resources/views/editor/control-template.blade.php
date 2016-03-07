@@ -3,11 +3,11 @@
 
 <!--  Control Template for button -->
 <button type="button" id="btn_template_1" name="button" data-type="1" class="button_template btn btn-default">Click Me</button>
-<button type="button" id="btn_template_2" name="button" data-type="2" class="button_template btn btn-primary">Click Me</button>
-<button type="button" id="btn_template_3" name="button" data-type="3" class="button_template btn btn-success">Click Me</button>
-<button type="button" id="btn_template_4" name="button" data-type="4" class="button_template btn btn-info">Click Me</button>
-<button type="button" id="btn_template_5" name="button" data-type="5" class="button_template btn btn-warning">Click Me</button>
-<button type="button" id="btn_template_6" name="button" data-type="6" class="button_template btn btn-danger">Click Me</button>
+<button type="button" id="btn_template_2" name="button" data-type="2" class="button_template btn btn-primary">Add</button>
+<button type="button" id="btn_template_3" name="button" data-type="3" class="button_template btn btn-success">Yes</button>
+<button type="button" id="btn_template_4" name="button" data-type="4" class="button_template btn btn-info">No</button>
+<button type="button" id="btn_template_5" name="button" data-type="5" class="button_template btn btn-warning">Cancel</button>
+<button type="button" id="btn_template_6" name="button" data-type="6" class="button_template btn btn-danger">Submit</button>
 
 <!-- Control Template for Marriage -->
 

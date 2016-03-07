@@ -430,7 +430,7 @@
 
 	<!-- The option Menu -->
 
-	<div id="page_option" style="display: none;" class="edit_option">
+	<div id="page_option" style="display: none; position: fixed;" class="edit_option">
 		<table style="">
 			<caption style="font-weight: bold; text-align: center;">Page Control
 				Options</caption>

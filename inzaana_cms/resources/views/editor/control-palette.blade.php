@@ -28,16 +28,16 @@
 		<!-- Start Section Add Control Tab List -->
 
 	    <ul id="tab_list">
-	        <li data-category='["general"]'>
+	        <li data-category='["general", "academic", "marriage", "trip"]'>
 	            <a href="#btn_template_palette">Button</a>
 	        </li>
-	        <li data-category='["general"]'>
+	        <li data-category='["general", "academic", "marriage", "trip"]'>
 	            <a href="#images">Image</a>
 	        </li>
 	        <li data-category='["general"]'>
 	            <a href="#slider">Slider</a>
 	        </li>
-	        <li data-category='["general"]'>
+	        <li data-category='["general", "academic", "marriage", "trip"]'>
 	            <a href="#text">Text</a>
 	        </li>
 	        <li data-category='["general"]'>
@@ -48,42 +48,42 @@
 	        </li>
 
 	        <!-- for Academic  -->
-	        <li data-category='["academic"]'>
+	        <li data-category='[""]'>
 	            <a href="#academic">Acdmc1</a>
 	        </li>
-	        <li data-category='["academic"]'>
+	        <li data-category='[""]'>
 	            <a href="#academic">Acdmc2</a>
 	        </li>
-	        <li data-category='["academic"]'>
+	        <li data-category='[""]'>
 	            <a href="#academic">Acdmc3</a>
 	        </li>
 
 	        <!-- for Marriage  -->
-	        <li data-category='["marriage"]'>
+	        <li data-category='[""]'>
 	            <a href="#marriage">Mrg1</a>
 	        </li>
-	        <li data-category='["marriage"]'>
+	        <li data-category='[""]'>
 	            <a href="#marriage">Mrg2</a>
 	        </li>
-	        <li data-category='["marriage"]'>
+	        <li data-category='[""]'>
 	            <a href="#marriage">Mrg3</a>
 	        </li>
-	        <li data-category='["general", "marriage"]'>
+	        <li data-category='[""]'>
 	        	<a href="#marriage_control_template_palette">Mrg4</a>
 	        </li>
 
 	        <!-- for Trip  -->
-	        <li data-category='["trip"]'>
+	        <li data-category='[""]'>
 	            <a href="#trip">Trip1</a>
 	        </li>
-	        <li data-category='["trip"]'>
+	        <li data-category='[""]'>
 	            <a href="#trip">Trip2</a>
 	        </li>
-	        <li data-category='["trip"]'>
+	        <li data-category='[""]'>
 	            <a href="#trip">Trip3</a>
 	        </li>
 
-	        <li data-category='["trip"]'>
+	        <li data-category='[""]'>
 	        	<a href="#test">Test</a>
 	        </li>
 	    </ul>
