@@ -28,16 +28,16 @@
 		<!-- Start Section Add Control Tab List -->
 
 	    <ul id="tab_list">
-	        <li data-category='["general", "academic", "marriage", "trip"]'>
+	        <li data-category='["general"]'>
 	            <a href="#btn_template_palette">Button</a>
 	        </li>
-	        <li data-category='["general", "academic", "marriage", "trip"]'>
+	        <li data-category='["general"]'>
 	            <a href="#images">Image</a>
 	        </li>
 	        <li data-category='["general"]'>
 	            <a href="#slider">Slider</a>
 	        </li>
-	        <li data-category='["general", "academic", "marriage", "trip"]'>
+	        <li data-category='["general"]'> <!-- , "academic", "marriage", "trip" -->
 	            <a href="#text">Text</a>
 	        </li>
 	        <li data-category='["general"]'>
@@ -48,44 +48,41 @@
 	        </li>
 
 	        <!-- for Academic  -->
-	        <li data-category='[""]'>
-	            <a href="#academic">Acdmc1</a>
+	        <li data-category='["academic"]'>
+	            <a href="#btn_template_palette">Acd<br>Buttons</a>
 	        </li>
-	        <li data-category='[""]'>
-	            <a href="#academic">Acdmc2</a>
+	        <li data-category='["academic"]'>
+	            <a href="#images">Acd<br>Images</a>
 	        </li>
-	        <li data-category='[""]'>
-	            <a href="#academic">Acdmc3</a>
+	        <li data-category='["academic"]'>
+	            <a href="#text">Acd<br>Text</a>
 	        </li>
 
 	        <!-- for Marriage  -->
-	        <li data-category='[""]'>
-	            <a href="#marriage">Mrg1</a>
+	        <li data-category='["marriage"]'>
+	            <a href="#images">Mrg<br>Images</a>
 	        </li>
-	        <li data-category='[""]'>
-	            <a href="#marriage">Mrg2</a>
+	        <li data-category='["marriage"]'>
+	            <a href="#text">Mrg<br>Text</a>
 	        </li>
-	        <li data-category='[""]'>
-	            <a href="#marriage">Mrg3</a>
+	        <li data-category='["marriage"]'>
+	            <a href="#btn_template_palette">Mrg<br>Buttons</a>
 	        </li>
 	        <li data-category='[""]'>
 	        	<a href="#marriage_control_template_palette">Mrg4</a>
 	        </li>
 
 	        <!-- for Trip  -->
-	        <li data-category='[""]'>
-	            <a href="#trip">Trip1</a>
+	        <li data-category='["trip"]'>
+	            <a href="#text">Trip<br>Text</a>
 	        </li>
-	        <li data-category='[""]'>
-	            <a href="#trip">Trip2</a>
+	        <li data-category='["trip"]'>
+	            <a href="#btn_template_palette">Trip<br>Buttons</a>
 	        </li>
-	        <li data-category='[""]'>
-	            <a href="#trip">Trip3</a>
+	        <li data-category='["trip"]'>
+	            <a href="#images">Trip<br>Images</a>
 	        </li>
-
-	        <li data-category='[""]'>
-	        	<a href="#test">Test</a>
-	        </li>
+	        
 	    </ul>
 
 	    <!-- Start Section Add Control Tab List -->
@@ -97,7 +94,7 @@
 	    </div>
 
 	    <div id="test">
-	    	<h1 name="header" class="selectorField draggableField">THis is test</h1>
+	    	<!-- <h1 name="header" class="selectorField draggableField">THis is test</h1> -->
 	    </div>
 	    <div id="btn_template_palette">
 	        <!-- <button name='button' class='selectorField draggableField btn-primary btn-lg'>Click Me</button> -->
@@ -136,15 +133,15 @@
 	    </div>
 
 	    <div id="academic">
-	    	<h1 name='textarea' class='selectorField draggableField'>Academic Control</h1>
+	    	<!-- <h1 name='textarea' class='selectorField draggableField'>Academic Control</h1> -->
 	    </div>
 
 	    <div id="marriage">
-	    	<h1 name='textarea' class='selectorField draggableField'>Marriage Control</h1>
+	    	<!-- <h1 name='textarea' class='selectorField draggableField'>Marriage Control</h1> -->
 	    </div>
 
 	    <div id="trip">
-	    	<h1 name='textarea' class='selectorField draggableField'>Trip Control</h1>
+	    	<!-- <h1 name='textarea' class='selectorField draggableField'>Trip Control</h1> -->
 	    </div>
 
 	<!-- End Section Add control tab body -->
