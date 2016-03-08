@@ -23,11 +23,34 @@ class HtmlViewMenuController extends Controller
         $this->middleware('auth');
     }
 
+    public function baseContent(HtmlViewMenuRequest $request, $template_id)
+    {
+        $success = true;
+        $message = 'Default contents are served.';
+        $template = Auth::user()->templates->find($template_id);
+        if($template)
+        {
+            flash()->info('ERROR: INVALIAD TEMPLATE!');
+            return response()->view('flash', compact('message', 'success'))
+                                ->header('Content-Type', 'html');;
+        }
+        return response()->view('includes.default-content', 
+                                [ 'category_name' => $template->category_name, 'template_name' => $template->template_name ])
+                        ->header('Content-Type', 'html');;
+    }
+
     public function contents(HtmlViewMenuRequest $request, $template_id)
     {
         $success = true;
         $message = 'All contents are served.';
-        $htmlViewMenus = Auth::user()->templates->find($template_id)->htmlviewmenus;
+        $template = Auth::user()->templates->find($template_id);
+        if(!$template)
+        {
+            $success = false;
+            $message = 'No such template exists!';
+            return response()->json(compact('message', 'success'));
+        }
+        $htmlViewMenus = $template->htmlviewmenus;
         if($htmlViewMenus->count() == 0)
         {
             $success = false;
@@ -35,9 +58,15 @@ class HtmlViewMenuController extends Controller
             return response()->json(compact('message', 'success'));
         }
         $menuContents = [];
+        $defaultContent = $request->has('_default_content') ? 
+                            $request->input('_default_content') : 
+                            '<div class="alert alert-danger">An empty content!</div>';
         foreach ($htmlViewMenus as $key => $menu) 
         {
-            $menuContents[$menu->menu_title] = $menu->content ? $menu->content->content_html : $request->input('_default_content');
+            if($menu->content)
+            {
+                $menuContents[$menu->menu_title] = $menu->content->content_html;
+            }
         }
         if(collect($menuContents)->count() == 0)
         {
@@ -54,14 +83,21 @@ class HtmlViewMenuController extends Controller
     public function create(HtmlViewMenuRequest $request, $template_id)
     {
     	$success = true;
+        if(!$request->has('_menus'))
+        {
+            return $this->responseWithflashError('FATAL ERROR: Empty menu list.');
+        }
     	$viewMenus = json_encode($request->input('_menus'));
+        if(!$request->has('_menu_contents'))
+        {
+            return $this->responseWithflashError('FATAL ERROR: Empty contents list.');
+        }
+        $viewMenuContents = $request->input('_menu_contents');
 
         $template = Auth::user()->templates->find($template_id);
         if(!$template)
         {
-            $success = false;
-            $message = 'FATAL ERROR: INVALID TEMPLATE!';
-            return response()->json(compact('message', 'success'));
+            return $this->responseWithflashError('FATAL ERROR: INVALID TEMPLATE!');
         }
         // For the first time saving of a template it has no menus initially,
         // So below collection will be empty - which is expected
@@ -70,29 +106,40 @@ class HtmlViewMenuController extends Controller
 
     	foreach (json_decode($viewMenus) as $key => $value)
     	{            
-            $viewMenu = $templateViewMenus->where('menu_title', $value->menuTitle)->first();
-    		if($hasMenus && $viewMenu)
-    		{
-    			$viewMenu->menu_title = $value->menuTitle;
-    			// $viewMenu->href = $value->aHref;
-    			$viewMenu->save();
-    		}
-    		else
-    		{
-				$htmlViewMenu = HtmlViewMenu::create([
-				       'template_id' => $template_id,
-				       'menu_title' => $value->menuTitle,
-				       // 'href' => $value->aHref,
-				]);   
-		    	if(!$htmlViewMenu)
-		    	{
-		    		$success = false;
-		    		$message = 'Failed to create view menus';
-    				return response()->json(compact('message', 'success', 'template_id'));
-		    	} 			
-    		}
+            $menuContentExists = collect($viewMenuContents)->has($value->menuTitle);
+            if($menuContentExists)
+            {
+                $viewMenu = $templateViewMenus->where('menu_title', $value->menuTitle)->first();
+                if($hasMenus && $viewMenu)
+                {
+                    $viewMenu->menu_title = $value->menuTitle;
+                    // $viewMenu->href = $value->aHref;
+                    $viewMenu->save();
+                }
+                else
+                {
+                    $htmlViewMenu = HtmlViewMenu::create([
+                           'template_id' => $template_id,
+                           'menu_title' => $value->menuTitle,
+                           // 'href' => $value->aHref,
+                    ]);   
+                    if(!$htmlViewMenu)
+                    {
+                        $success = false;
+                        $message = 'Failed to create view menus';
+                        return response()->json(compact('message', 'success', 'template_id'));
+                    }           
+                }
+            }
     	}
-		$message = 'All ' . collect(json_decode($viewMenus))->count() . ' template menus are created successfully!';
+		$message = 'All ' . collect($viewMenuContents)->count() . ' template menus are created successfully!';
     	return response()->json(compact('message', 'success'));
+    }
+
+    protected function responseWithflashError($message)
+    {
+        $success = false;
+        flash()->error($message);
+        return response()->json(compact('message', 'success'));
     }
 }

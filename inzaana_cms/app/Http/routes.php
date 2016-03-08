@@ -51,6 +51,8 @@ Route::group(['middleware' => 'web'], function () {
         Route::get('/editor/{category}/{template}', [ 'uses'=>'TemplateController@browse', 'as'=>'templates.editor.browse' ]);
         Route::get('/editor/{category}/{template}/{template_id}', [ 'uses'=>'TemplateController@editor', 'as'=>'templates.editor.edit' ]);
 
+        Route::get('/viewer/{saved_name}/{template_id}', [ 'uses'=>'TemplateController@show', 'as'=>'templates.viewer' ]);
+
         Route::post('/templates/create', [ 'uses' => 'TemplateController@create', 'as' => 'templates.create' ]);
         Route::post('/templates/edit/{template_id}', [ 'uses' => 'TemplateController@edit', 'as' => 'templates.edit' ]);
 
@@ -70,8 +72,9 @@ Route::group(['middleware' => 'web'], function () {
         Route::post('/categories/delete/{category_id}', [ 'uses' => 'CategoryController@delete', 'as' => 'categories.delete' ]);
 
         // HTML view menu controller
-        Route::post('/html-view-menus/{template_id}', [ 'uses' => 'HtmlViewMenuController@contents', 'as' => 'html-view-menus.contents' ]);
-        Route::post('/html-view-menus/create/{template_id}', [ 'uses' => 'HtmlViewMenuController@create', 'as' => 'html-view-menus.create' ]);
+        Route::post('/html-view-menus/{template_id}', [ 'uses' => 'HtmlViewMenuController@contents', 'as' => 'menus.contents' ]);
+        Route::post('/html-view-menus/content-default/{template_id}', [ 'uses' => 'HtmlViewMenuController@baseContent', 'as' => 'menus.content.default' ]);
+        Route::post('/html-view-menus/create/{template_id}', [ 'uses' => 'HtmlViewMenuController@create', 'as' => 'menus.create' ]);
 
         // HTML view content controller
         Route::post('/html-view-contents/create', [ 'uses' => 'HtmlViewContentController@create', 'as' => 'html-view-contents.create' ]);

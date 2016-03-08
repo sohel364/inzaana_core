@@ -34,7 +34,7 @@
     <script src="{{ asset('editor_asset/js/main.js') }}"></script>
 
     <?php
-        include ("templates/$category/$template_id/header.html");
+        include ("templates/$category_name/$template_name/header.html");
     ?>
     <script src="{{ asset('editor_asset/js/savePage.js') }}"></script>
     <script src="{{ asset('editor_asset/js/drag_drop.js') }}"></script>
@@ -49,14 +49,6 @@
 @endsection
 
 @section('content')
-    <!-- <div>
-        @if (Auth::check())
-            <button class="template_save_btn btn btn-success"
-                onclick="savePage(user_id, template_id);" style="display: block;">Save
-            </button>
-        @endif
-        <canvas id="hidden-canvas" style="display:none"></canvas>
-    </div> -->
 
     <br />
     <br />
@@ -76,20 +68,20 @@
                     </button>
                 </div>
                 <div id="mainNav" class="collapse navbar-collapse">
-                    <!-- Menu must be loaded from the database  -->
-                    <?php include ("templates/$category/$template_id/menu.html");?>
+                    <ul id="menu" class="nav navbar-nav navbar">
+                        @foreach($viewMenus as $viewMenu)
+                            @if($viewMenu->content)
+                                <li>
+                                    <a href="#" onclick="onMenuClick(this);">{{ $viewMenu->menu_title }}</a>
+                                </li>
+                            @endif
+                        @endforeach
+                    </ul>
                 </div>
             </div>
         </div>
         
         <div id="body" contentEditable="false" >
-            <!-- body must be loaded from the database  -->
-            <?php include ("templates/$category/$template_id/body.html");?>
-        </div>
-
-        <div id="footer">
-            <!-- footer must be loaded from the database  -->
-            <?php include ("templates/$category/$template_id/footer.html");?>
         </div>
     </div>
 @endsection

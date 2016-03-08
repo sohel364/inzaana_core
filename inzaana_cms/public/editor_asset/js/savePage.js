@@ -211,8 +211,6 @@ function savePage(category_name, template_name, isEdit)
     saveCurrentMenuText();
 
     var menuList = getMenuList();
-
-    alert('Menu ( ' + menuList.length + ' ) found');
     
     if (typeof menuList.length !== 'undefined' && menuList.length > 1) 
     {
@@ -369,7 +367,7 @@ function updatePage(menuList, template, category_name, savedName) {
                 hideSavingIcon();
                 var err =  xhr.responseText;
                 alert(err);
-                // window.location.href = '/templates/gallery';
+                window.location.href = '/templates/gallery';
             }
         });
 }
@@ -384,6 +382,7 @@ function saveViewMenus(template_id, viewMenus, menuContents, nextUrl, message)
         dataType: 'json',
         data: {
             _menus: viewMenus,
+            _menu_contents: menuContents,
             _token: CSRF_TOKEN
         },
         success: function (data) {
@@ -395,11 +394,13 @@ function saveViewMenus(template_id, viewMenus, menuContents, nextUrl, message)
                 return;
             }
             alert(data.message);
+            window.location.href = nextUrl;
         },
         error: function(xhr, status, error) {
             hideSavingIcon();
             var err =  xhr.responseText;
-            alert(err);            
+            alert(err);    
+            window.location.href = nextUrl;        
         }
     });
 }
@@ -438,7 +439,8 @@ function saveContents(template_id, templateViewMenus, menuContents, nextUrl, mes
         error: function(xhr, status, error) {
             hideSavingIcon();
             var err =  xhr.responseText;
-            alert(err);            
+            alert(err);  
+            window.location.href = nextUrl;          
         }
     });
 }

@@ -91,17 +91,17 @@ function loadContents()
 {
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
-    var isEditor = $('#hidden-div-is-edit').text();
+    var isEdit = $('#hidden-div-is-edit').text();
     var template_id = $('#hidden-div-template-current').text();
 
-    if(!isEditor) return;
+    if(isInEditor /* Is in editor or viewer */ && !isEdit /* Is template editor in edit mode or save mode */) return;
 
     $.ajax({
         type: "POST",
         url: '/html-view-menus/' + template_id,
         dataType: 'json',
         data: {
-            _is_editor: isEditor,
+            _is_edit: isEdit,
             _default_content: defaultMenuHtml,
             _token: CSRF_TOKEN
         },
@@ -112,7 +112,7 @@ function loadContents()
                 // alert(data.message);
                 if(data.menuContents == null)
                 {
-                    alert('ERROR: Empty contents!');
+                    resetMenuContent();
                     return;
                 }
                 menuContens = data.menuContents;
@@ -120,9 +120,9 @@ function loadContents()
                 return;
             }
             alert(data.message);
+            window.location.href = '/templates/saved';
         },
         error: function(xhr, status, error) {
-            hideSavingIcon();
             var err =  xhr.responseText;
             alert(err);
             resetMenuContent();
@@ -134,6 +134,10 @@ function loadContents()
  * Sets the initial menu contents to menu array and initialize the global variables
  */
 function onLoadMenus() {
+    // var isViewer = $('#hidden-div-is-view').text();
+    // isView = isViewer;
+    var isEdit = $('#hidden-div-is-edit').text();
+
     //alert(user_menu_content_array);
     $ul = $('#menu');
     $lis = $ul.find('li'); /* Finds all sub li under menu ul(find all menus) */
@@ -141,20 +145,27 @@ function onLoadMenus() {
     $ahref = $(curLi).find('a');
     curMenu = $ahref.text();
 
-    loadMediasOfPages();
+    // loadMediasOfPages();
 
     if (typeof isEdit !== 'undefined' && isEdit) {
-        getSavedMenuContents();
+        // update mode
+        // getSavedMenuContents();
+        // alert('In edit mode');
         makeTemplateComponetsEditable();
         //onTemplateMenuLoad();
-    } else if(typeof isView !== 'undefined' && isView){
-        getSavedMenuContents();
-        //makeTemplateComponetsNotEditable();
-    } else {
+    }
+    else if(typeof isView !== 'undefined' && isView)
+    {
+        // alert('In viewer mode');
+        makeTemplateComponetsNotEditable();
+    }
+    else 
+    {
+        // insert mode
+        // alert('In saving mode');
         menuContens[curMenu] = getBodyHtmlString();
     }
     defaultMenuHtml = getBodyHtmlString();
-
     // for laravel implementation
     loadContents();
 }
@@ -188,7 +199,31 @@ function setBodyHtmlString(bodyHtml) {
  */
 function resetMenuContent() {
     setBodyHtmlString(defaultMenuHtml);
-    //menuContens[curMenu] = defaultMenuHtml;
+    menuContens[curMenu] = defaultMenuHtml;
+}
+
+function setDefaultMenuContent()
+{
+    $.ajax({
+        type: "POST",
+        url: '/html-view-menus/content-default/' + template_id,
+        dataType: 'json',
+        data: {
+            _menu_title: menuText,
+            _token: CSRF_TOKEN
+        },
+        success: function (data) {
+            if(data.success)
+            {
+                defaultMenuHtml = data.defaultMenuContent;
+            }
+            alert(data.message);
+        },
+        error: function(xhr, status, error) {
+            var err =  xhr.responseText;
+            alert(err);
+        }        
+    });
 }
 
 /*
@@ -197,10 +232,12 @@ function resetMenuContent() {
  */
 function onMenuClick(menu) {
 
+    var isEdit = $('#hidden-div-is-edit').text();
+
 	closeAllEditDialogPanel();
     saveCurrentMenuText();
 
-    traverseImages();
+    // traverseImages();
 
     var menuText = $(menu).text();
 
@@ -208,8 +245,11 @@ function onMenuClick(menu) {
 
     //menuClickHistory[menuClickHistoryIndex] = menuText;
     if(menuContens[menuText] === null || typeof menuContens[menuText] === 'undefined') {
-        //alert("RESETTING MENU CONTENT!!! ALERT!!" + menuContens[menuText]);
-        resetMenuContent();
+        // resetMenuContent();
+
+        setDefaultMenuContent(menuText);
+        // alert("RESETTING MENU CONTENT!!! ALERT!!" + defaultMenuHtml);
+
     } else {
         //var previousMenuClicked = menuClickHistory[menuClickHistoryIndex - 1];
         //alert("SAVING PREVIOUS MENU CONTENT!!! -> " + menuText + "###" + menuContens[menuText]);

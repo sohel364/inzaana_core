@@ -53,12 +53,13 @@
               <ul class="nav navbar-nav navbar-right">
                 <form class="navbar-form navbar-left" role="save">
 
-                    <button class="btn btn-default btn-flat{{ Auth::check() ? '' : ' hidden' }}" onclick="savePage('{{ $category_name }}', '{{ $isEdit ? $template_id : $template_name }}', '{{ $isEdit ? true : false }}' );">Save</button>
+                    <button class="btn btn-default btn-flat{{ ( Auth::check() && !$isView ) ? '' : ' hidden' }}" onclick="savePage('{{ $category_name }}', '{{ $isEdit ? $template_id : $template_name }}', '{{ $isEdit ? true : false }}' );">Save</button>
 
                     <canvas id="hidden-canvas" style="display:none"></canvas>
 
-                    <div id="hidden-div-template-current" style="display:none">{{ $isEdit ? $template_id : $template_name }}</div>
-                    <div id="hidden-div-is-edit" style="display:none">{{ $isEdit }}</div>
+                    <div id="hidden-div-template-current" style="display:none">{{ ($isEdit || $isView) ? $template_id : $template_name }}</div>
+                    <div id="hidden-div-is-edit" style="display:none">{{ $isEdit ? true : false }}</div>
+                    <div id="hidden-div-is-view" style="display:none">{{ $isView ? true : false }}</div>
 
                 </form>
                 <li><a >Preview</a></li>

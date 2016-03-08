@@ -42,7 +42,8 @@
 
                         <a class="info btn btn-info btn-flat"
                             href="{{ route('user::templates.editor.edit', [ 'category' => $template->category_name, 'template' => $template->template_name, 'template_id' => $template->id ]) }}">Edit</a>
-                        <a class="info btn btn-info btn-flat" href="#">View</a>
+                        <a class="info btn btn-info btn-flat" 
+                            href="{{ route('user::templates.viewer', [ 'saved_name' => str_slug($template->saved_name), 'template_id' => $template->id ]) }}">View</a>
                     </div>
                     <h4>{{ $template->saved_name }}</h4>
                 </div>

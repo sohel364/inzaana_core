@@ -31,33 +31,24 @@ class HtmlViewContentController extends Controller
     {
         $viewMenuContents;
     	$success = true;
-        if(!$request->input('_menus'))
+        if(!$request->has('_menus'))
         {
-            $success = false;
-            $message = 'FATAL ERROR: Empty menu list.';
-            flash()->error($message);
-            return response()->json(compact('message', 'success'));
+            return $this->responseWithflashError('FATAL ERROR: Empty menu list.');
         }
         $viewMenus = json_encode($request->input('_menus'));
-    	$viewMenuContents = $request->input('_menu_contents');
-        if(!$viewMenuContents)
+        if(!$request->has('_menu_contents'))
         {
-            $success = false;
-            $message = 'FATAL ERROR: Empty contents list.';
-            flash()->error($message);
-            return response()->json(compact('message', 'success'));
+            return $this->responseWithflashError('FATAL ERROR: Empty contents list.');
         }
+        $viewMenuContents = $request->input('_menu_contents');
         if(!$request->has('_template_id'))
-        {            
-            $success = false;
-            $message = 'ERROR: No template ID found for the content.';
-            flash()->error($message);
-            return response()->json(compact('message', 'success'));
+        {
+            return $this->responseWithflashError('ERROR: No template ID found for the content.');
         }
         $template = Auth::user()->templates->find($request->input('_template_id'));
         if(!$template)
         {
-            return responseWithflashError('ERROR: the template does not exist!');
+            return $this->responseWithflashError('ERROR: the template does not exist!');
         }
 
     	foreach (json_decode($viewMenus) as $key => $value)
@@ -68,32 +59,35 @@ class HtmlViewContentController extends Controller
 
             $menuContentExists = collect($viewMenuContents)->has($value->menuTitle);
 
-            $viewMenusMatched = $template->htmlviewmenus->where('menu_title', $value->menuTitle);
-            if(!$viewMenusMatched)
+            if($menuContentExists)
             {
-                return responseWithflashError('ERROR: menu does (' . $value->menuTitle . ') not exist');
-            }
-    		$content = $viewMenusMatched->first()->content;
-    		if($content)
-    		{
-                $content->content_html = $menuContentExists ? $viewMenuContents[$value->menuTitle] : $defaultContent;
-                if(!$content->save())
+                $viewMenusMatched = $template->htmlviewmenus->where('menu_title', $value->menuTitle);
+                if(!$viewMenusMatched || $viewMenusMatched->count() == 0)
                 {
-                    return responseWithflashError('ERROR: Failed to save view contents for menu (' . $value->menuTitle . ')');
+                    return $this->responseWithflashError('ERROR: menu (' . $value->menuTitle . ') does not exist');
                 }
-            }
-    		else
-    		{
-                $htmlViewContent = HtmlViewContent::create([
-                       'html_view_menu_id' => $viewMenusMatched->first()->id,
-                       'content_html' => $menuContentExists ? $viewMenuContents[$value->menuTitle] : $menuContentExists,
-                ]);
+                $content = $viewMenusMatched->first()->content;
+                if($content)
+                {
+                    $content->content_html = $viewMenuContents[$value->menuTitle];
+                    if(!$content->save())
+                    {
+                        return $this->responseWithflashError('ERROR: Failed to save view contents for menu (' . $value->menuTitle . ')');
+                    }
+                }
+                else
+                {
+                    $htmlViewContent = HtmlViewContent::create([
+                           'html_view_menu_id' => $viewMenusMatched->first()->id,
+                           'content_html' => $viewMenuContents[$value->menuTitle],
+                    ]);
 
-                if(!$htmlViewContent)
-                {
-                    return responseWithflashError('ERROR: Failed to save view contents for menu (' . $value->menuTitle . ')');
+                    if(!$htmlViewContent)
+                    {
+                        return $this->responseWithflashError('ERROR: Failed to save view contents for menu (' . $value->menuTitle . ')');
+                    }
                 }
-    		}
+            }
     	}
 
 		$message = 'All ' . collect($viewMenuContents)->count() . ' contents are saved successfully!';

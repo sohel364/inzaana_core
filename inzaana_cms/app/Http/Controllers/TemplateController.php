@@ -34,8 +34,11 @@ class TemplateController extends Controller
     public function showSaved()
     {
         $message = 'Looks like you have no template to show. Let\'s create one from <a class="btn btn-primary btn-flat" href="' . route("user::templates") . '">Template Gallery</a>';
-        $savedTemplates = Auth::user()->templates;
-        $templatesCount = $savedTemplates->count();
+        $templates = Auth::user()->templates;
+        $savedTemplates = array_where($templates, function ($key, $template) {
+            return $template->htmlviewmenus->count() > 0;
+        });
+        $templatesCount = collect($savedTemplates)->count();
         return view('my_template_view', compact('savedTemplates', 'templatesCount', 'message'));
     }
 
@@ -45,7 +48,7 @@ class TemplateController extends Controller
         // TODO: check author
         $viewMenus = [];
         $viewData = [ 'category_name' => $category, 'template_name' => $template,
-                'isEdit' => false, 'alert_type' => 'alert-info', 'viewMenus' => $viewMenus ];
+                'isEdit' => false, 'isView' => false, 'viewMenus' => $viewMenus ];
         return view('editor.template-editor',  $viewData);
     }
 
@@ -66,13 +69,18 @@ class TemplateController extends Controller
         $viewMenus = $template->htmlviewmenus;
         if($viewMenus->count() == 0)
         {
-            flash()->error('The " ' . $template->saved_name . ' " template has no menus!');
+            flash()->error('FATAL ERROR: Template is not editable. The " ' . $template->saved_name . ' " template has no menus!');
             return redirect()->route('user::templates');
         }
+        // NOTE: menu count can be zero only first time the user browse
+        // the basic template when the template does not exits yet
+        // if $isEdit is false that means action will create a fresh new template
+        // if $isEdit is true that means action will update an existing template
         $isEdit = $viewMenus->count() > 0;
+        $isView = false;
 
         return view('editor.template-editor', 
-            compact('category_name', 'template_name', 'isEdit', 'template_id', 'message', 'alert_type', 'viewMenus') );
+            compact('category_name', 'template_name', 'isEdit', 'isView', 'template_id', 'viewMenus') );
     }
 
     // template save action
@@ -103,11 +111,29 @@ class TemplateController extends Controller
         return redirect()->route('user::templates');
     }
 
-    public function show($template_id)
+    public function show($saved_name, $template_id)
     {
-        $template = Templates::all()->find($template_id);
+        $viewMenus = [];
+        $template = Auth::user()->templates->find($template_id);
+        if(!$template)
+        {
+            flash()->error('Your requested template is not ready to view or it does not exist. Please contact your administrator for further assistance');
+            return redirect()->route('user::templates.saved');
+        }
+        $viewMenus = $template->htmlviewmenus;
+        if($viewMenus->count() == 0)
+        {
+            flash()->error('The " ' . $template->saved_name . ' " template has no view menus!');
+            return redirect()->route('user::templates');
+        }
+        // Here in this case $isEdit is false means content is not editable and $isView checks if the its a template viewer
+        $viewData = [ 'category_name' => $template->category_name, 
+                        'template_name' => $template->template_name,
+                        'template_id' => $template->id,
+                        'isEdit' => false, 'isView' => true, 'viewMenus' => $viewMenus ];
+
         // TODO: do something to view
-        return view('view_template', compact('template'));
+        return view('editor.template-viewer', $viewData );
     }
 
     public function categories($category_name)

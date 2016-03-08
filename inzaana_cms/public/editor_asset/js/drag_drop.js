@@ -1260,6 +1260,8 @@ function initializeAllDialogButton() {
 } 
 
 $(function() {
+    var isViewer = $('#hidden-div-is-view').text();
+    isView = isViewer;
 
 	makeControlsOfPaletteDraggable();
 	
