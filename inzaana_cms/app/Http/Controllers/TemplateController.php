@@ -48,7 +48,8 @@ class TemplateController extends Controller
         // TODO: check author
         $viewMenus = [];
         $viewData = [ 'category_name' => $category, 'template_name' => $template,
-                'isEdit' => false, 'isView' => false, 'viewMenus' => $viewMenus ];
+                'isEdit' => false, 'isView' => false, 'viewMenus' => $viewMenus, 
+                'saved_name' => str_slug('UserTemplate1'), 'template_id' => -1 ];
         return view('editor.template-editor',  $viewData);
     }
 
@@ -78,9 +79,10 @@ class TemplateController extends Controller
         // if $isEdit is true that means action will update an existing template
         $isEdit = $viewMenus->count() > 0;
         $isView = false;
+        $saved_name = $template->saved_name;
 
         return view('editor.template-editor', 
-            compact('category_name', 'template_name', 'isEdit', 'isView', 'template_id', 'viewMenus') );
+            compact('category_name', 'template_name', 'isEdit', 'isView', 'template_id', 'viewMenus', 'saved_name') );
     }
 
     // template save action
@@ -130,7 +132,9 @@ class TemplateController extends Controller
         $viewData = [ 'category_name' => $template->category_name, 
                         'template_name' => $template->template_name,
                         'template_id' => $template->id,
-                        'isEdit' => false, 'isView' => true, 'viewMenus' => $viewMenus ];
+                        'isEdit' => false, 'isView' => true,
+                        'viewMenus' => $viewMenus,
+                        'saved_name' => $template->saved_name ];
 
         // TODO: do something to view
         return view('editor.template-viewer', $viewData );

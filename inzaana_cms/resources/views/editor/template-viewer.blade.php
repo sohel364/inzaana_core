@@ -1,5 +1,5 @@
 @extends('layouts.editor-master') 
-@section('title', 'Edit Template') 
+@section('title', 'Preview Template') 
 
 @section('header-style')
     <link href="{{ asset('editor_asset/css/main.css') }}" rel="stylesheet" />

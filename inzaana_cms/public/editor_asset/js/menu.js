@@ -134,8 +134,9 @@ function loadContents()
  * Sets the initial menu contents to menu array and initialize the global variables
  */
 function onLoadMenus() {
-    // var isViewer = $('#hidden-div-is-view').text();
-    // isView = isViewer;
+    // makeTemplateComponetsEditable();
+    var isViewer = $('#hidden-div-is-view').text();
+    isView = isViewer;
     var isEdit = $('#hidden-div-is-edit').text();
 
     //alert(user_menu_content_array);
@@ -164,6 +165,7 @@ function onLoadMenus() {
         // insert mode
         // alert('In saving mode');
         menuContens[curMenu] = getBodyHtmlString();
+        makeTemplateComponetsEditable();
     }
     defaultMenuHtml = getBodyHtmlString();
     // for laravel implementation

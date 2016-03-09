@@ -207,12 +207,12 @@ function savePage(category_name, template_name, isEdit)
     traverseImages();
     // console.log("[WB-D] savePage: " + category_name + "$##$" + template_name);
 
-    makeTemplateComponetsNotEditable();
+    // makeTemplateComponetsNotEditable();
     saveCurrentMenuText();
 
-    var menuList = getMenuList();
+    var menuList = getMenuList();      
     
-    if (typeof menuList.length !== 'undefined' && menuList.length > 1) 
+    if (typeof menuList.length !== 'undefined' && menuList.length >= 1) 
     {
         showSavingIcon();
         var savedName; 
@@ -224,6 +224,7 @@ function savePage(category_name, template_name, isEdit)
             {
                 alert('Enter a valid page name! Page is not saved.');
                 window.location.href = '/editor/' + category_name + '/' + template_name;
+                return;
             }
             insertPage(menuList, template_name, category_name, savedName);
         } 
@@ -238,7 +239,7 @@ function savePage(category_name, template_name, isEdit)
                 dataType: 'json',
                 success: function (data) {
 
-                    // alert('msg: ' + data.message);
+                    // alert('msg: ' + data.message );
                     if(data.success)
                     {
                         savedName = prompt("Enter webpage name : ", data.template.saved_name);
@@ -251,7 +252,8 @@ function savePage(category_name, template_name, isEdit)
                     if(savedName == null)
                     {
                         alert('Enter a valid page name! Page is not saved.');
-                        window.location.href = '/templates/gallery';
+                        window.location.href = '/editor/' + data.template.category_name + '/' + data.template.template_name + '/' + data.template.id;
+                        return;
                     }
                     updatePage(menuList, data.template, category_name, savedName);
                 },
@@ -424,13 +426,25 @@ function saveContents(template_id, templateViewMenus, menuContents, nextUrl, mes
             if(data.success)
             {
                 alert(message['menu']);
-                alert(message['template']);
                 alert(data.message);
+                alert(message['template']);
 
-                // saveImages(category_name, savedTemplateID);
-                allImages = [];
+                swal({
+                    html: true,
+                    title: "Sweet!",
+                    text: '<div class="alert alert-success">' + message['template'] + '</div>',
+                    imageUrl: "/dist/img/thumbs-up.jpg"
+                },
+                function() {
 
-                window.location.href = nextUrl;
+                    window.location.href = nextUrl;
+                    // saveImages(category_name, savedTemplateID);
+                    allImages = [];
+
+                    makeTemplateComponetsEditable();
+
+                });
+
                 return;
             }
             alert(data.message);

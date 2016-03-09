@@ -62,7 +62,9 @@
                     <div id="hidden-div-is-view" style="display:none">{{ $isView ? true : false }}</div>
 
                 </form>
-                <li><a >Preview</a></li>
+                <li><a class="{{ ( Auth::check() && $isEdit ) ? '' : 'hidden' }}" 
+                        href="{{ route('user::templates.viewer', [ 'saved_name' => str_slug($saved_name), 'template_id' => $template_id ]) }}">Preview</a></li>
+
                 <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="user-image" alt="User Image"/>
