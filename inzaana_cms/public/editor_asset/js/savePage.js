@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+
 // onload functionalities
 $(document).ready(function() {
     hideSavingIcon();
@@ -214,19 +215,30 @@ function savePage(category_name, template_name, isEdit)
     
     if (typeof menuList.length !== 'undefined' && menuList.length >= 1) 
     {
-        showSavingIcon();
         var savedName; 
         if(!isEdit)
         {
-            savedName = prompt("Enter webpage name : ", "Enter page name");
+            var inputWriter = {  title: "Save your template",
+                    text: "Enter webpage name : ",
+                    type: "input",
+                    showCancelButton: true,
+                    closeOnConfirm: false,
+                    animation: "slide-from-top",
+                    inputPlaceholder: "Enter page name" };
 
-            if(savedName == null)
-            {
-                alert('Enter a valid page name! Page is not saved.');
-                window.location.href = '/editor/' + category_name + '/' + template_name;
-                return;
-            }
-            insertPage(menuList, template_name, category_name, savedName);
+            // savedName = prompt("Enter webpage name : ", "Enter page name");
+            swal( inputWriter, 
+
+            function(inputValue){   
+                if (inputValue === false) return false;
+                if (inputValue === "") {
+                    swal.showInputError('You need to write something! Enter a valid page name. Page is not saved.');
+                    // window.location.href = '/editor/' + category_name + '/' + template_name;
+                    return false;  
+                }
+                showSavingIcon();
+                insertPage(menuList, template_name, category_name, inputValue);
+            });
         } 
         else 
         {
@@ -240,22 +252,35 @@ function savePage(category_name, template_name, isEdit)
                 success: function (data) {
 
                     // alert('msg: ' + data.message );
+                    var inputWriter = {  title: "Save your template",
+                            text: "Enter webpage name : ",
+                            type: "input",
+                            showCancelButton: true,
+                            closeOnConfirm: false,
+                            animation: "slide-from-top",
+                            inputPlaceholder: "Enter page name" };
+
                     if(data.success)
                     {
-                        savedName = prompt("Enter webpage name : ", data.template.saved_name);
+                        inputWriter.inputValue = data.template.saved_name;
                     }
                     else
                     {
-                        savedName = prompt("Update webpage name : ", "Enter page name");
+                        inputWriter.inputPlaceholder = "Enter page name";
                     }
 
-                    if(savedName == null)
-                    {
-                        alert('Enter a valid page name! Page is not saved.');
-                        window.location.href = '/editor/' + data.template.category_name + '/' + data.template.template_name + '/' + data.template.id;
-                        return;
-                    }
-                    updatePage(menuList, data.template, category_name, savedName);
+                    swal( inputWriter, 
+
+                    function(inputValue){   
+                        if (inputValue === false) return false;
+                        if (inputValue === "") {
+                            swal.showInputError('You need to write something! Enter a valid page name. Page is not saved.');
+                            // window.location.href = '/editor/' + data.template.category_name + '/' + data.template.template_name + '/' + data.template.id;
+                            return false;  
+                        }
+                        showSavingIcon();
+                        updatePage(menuList, data.template, category_name, inputValue);
+                    });
                 },
                 error: function(xhr, status, error) {
 
@@ -308,7 +333,6 @@ function insertPage(menuList, template_name, category_name, savedName) {
                 _token: CSRF_TOKEN
             },
             success: function (data) {
-                hideSavingIcon();
 
                 // TODO: Image upload before page template create
                 var nextUrl = '/editor/' + data.template.category_name + '/' + data.template.template_name + '/' + data.template.id;
@@ -319,15 +343,19 @@ function insertPage(menuList, template_name, category_name, savedName) {
                     saveViewMenus(data.template.id, menuList, menuContens, nextUrl, message);
                     return;
                 }
-                alert(data.message);
-                // show template sample view
-                window.location.href = '/editor/' + category_name + '/' + template_name;
+                errorAlert(data.message, function() {
+
+                    window.location.href = '/editor/' + category_name + '/' + template_name; 
+                });
             },
             error: function(xhr, status, error) {
                 hideSavingIcon();
                 var err =  xhr.responseText;
-                alert(err);
-                // window.location.href = '/templates/gallery';
+                
+                errorAlert(data.message, function() {
+
+                    window.location.href = nextUrl;   
+                });
             }
         });
 }
@@ -352,7 +380,6 @@ function updatePage(menuList, template, category_name, savedName) {
                 _token: CSRF_TOKEN
             },
             success: function (data) {
-                hideSavingIcon();
                 // TODO: Image upload before page template create
                 var nextUrl = '/editor/' + data.template.category_name + '/' + data.template.template_name + '/' + data.template.id;
                 if(data.success)
@@ -362,14 +389,19 @@ function updatePage(menuList, template, category_name, savedName) {
                     saveViewMenus(template.id, menuList, menuContens, nextUrl, message);
                     return;
                 }
-                alert(data.message);
-                window.location.href = '/templates/gallery';
+                errorAlert(data.message, function() {
+
+                    window.location.href = '/templates/gallery';
+                });
             },
             error: function(xhr, status, error) {
                 hideSavingIcon();
                 var err =  xhr.responseText;
-                alert(err);
-                window.location.href = '/templates/gallery';
+
+                errorAlert(data.message, function() {
+
+                    window.location.href = nextUrl;
+                });
             }
         });
 }
@@ -395,14 +427,19 @@ function saveViewMenus(template_id, viewMenus, menuContents, nextUrl, message)
                 saveContents(template_id, viewMenus, menuContents, nextUrl, message);
                 return;
             }
-            alert(data.message);
-            window.location.href = nextUrl;
+            errorAlert(data.message, function() {
+
+                window.location.href = nextUrl;
+            });
         },
         error: function(xhr, status, error) {
             hideSavingIcon();
             var err =  xhr.responseText;
-            alert(err);    
-            window.location.href = nextUrl;        
+
+            errorAlert(err, function() {
+
+                window.location.href = nextUrl; 
+            });     
         }
     });
 }
@@ -425,36 +462,43 @@ function saveContents(template_id, templateViewMenus, menuContents, nextUrl, mes
             // TODO: Image upload before page template create
             if(data.success)
             {
-                alert(message['menu']);
-                alert(data.message);
-                alert(message['template']);
+                // NOTE: for debuggin success messages
+                // alert(message['menu']);
+                // alert(data.message);
+                // alert(message['template']);
 
-                swal({
+                var sweetAlert = {
                     html: true,
                     title: "Sweet!",
                     text: '<div class="alert alert-success">' + message['template'] + '</div>',
                     imageUrl: "/dist/img/thumbs-up.jpg"
-                },
-                function() {
+                };
+
+                swal( sweetAlert , function() {
 
                     window.location.href = nextUrl;
                     // saveImages(category_name, savedTemplateID);
                     allImages = [];
 
                     makeTemplateComponetsEditable();
+                    hideSavingIcon();
 
                 });
 
                 return;
             }
-            alert(data.message);
-            window.location.href = '/templates/gallery';
+            errorAlert(err, function() {
+
+                window.location.href = '/templates/gallery';
+            });
         },
         error: function(xhr, status, error) {
             hideSavingIcon();
             var err =  xhr.responseText;
-            alert(err);  
-            window.location.href = nextUrl;          
+            errorAlert(err, function() {
+
+                window.location.href = nextUrl;  
+            });
         }
     });
 }
@@ -463,11 +507,29 @@ function saveContents(template_id, templateViewMenus, menuContents, nextUrl, mes
  * Shows loading icons while saving operation is ongoing
  */
 function showSavingIcon() {
-    $('#showsaveicon').show();
+    var sweetAlert = {
+        title: "Processing ...",
+        text: 'Please wait!',
+        imageUrl: '/dist/img/loading40.gif',
+        imageSize: '220x20',
+        type: 'info',
+        showConfirmButton: false
+    };
+    swal( sweetAlert );
 }
 /*
  * Hides loading icon after finishing saving operation
  */
 function hideSavingIcon() {
-    $('#showsaveicon').hide();
+    swal.close();
+}
+
+function errorAlert(message, callback)
+{    
+    var sweetAlert = {
+        title: "Sorry!",
+        text: message,
+        type: 'error'
+    };
+    swal( sweetAlert , callback);
 }
