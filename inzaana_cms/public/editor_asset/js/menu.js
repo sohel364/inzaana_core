@@ -89,6 +89,7 @@ function loadMediasOfPages() {
 
 function loadContents()
 {
+    console.log("[DEBUG] loadContents");
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
     var isEdit = $('#hidden-div-is-edit').text();
@@ -119,7 +120,7 @@ function loadContents()
                 setBodyHtmlString(menuContens[curMenu]);
                 return;
             }
-            alert(data.message);
+            //alert(data.message);
             window.location.href = '/templates/saved';
         },
         error: function(xhr, status, error) {
@@ -135,6 +136,7 @@ function loadContents()
  */
 function onLoadMenus() {
     // makeTemplateComponetsEditable();
+    console.log("[DEBUG] onLoadMenus called");
     var isViewer = $('#hidden-div-is-view').text();
     isView = isViewer;
     var isEdit = $('#hidden-div-is-edit').text();
@@ -152,20 +154,14 @@ function onLoadMenus() {
         // update mode
         // getSavedMenuContents();
         // alert('In edit mode');
-        makeTemplateComponetsEditable();
-        //onTemplateMenuLoad();
     }
     else if(typeof isView !== 'undefined' && isView)
-    {
-        // alert('In viewer mode');
-        makeTemplateComponetsNotEditable();
-    }
+    {}
     else 
     {
         // insert mode
         // alert('In saving mode');
         menuContens[curMenu] = getBodyHtmlString();
-        makeTemplateComponetsEditable();
     }
     defaultMenuHtml = getBodyHtmlString();
     // for laravel implementation
@@ -176,6 +172,7 @@ function onLoadMenus() {
  * Save current menu context while switching to another menu
  */
 function saveCurrentMenuText() {
+    makeTemplateComponetsNotEditable();
     menuContens[curMenu] = getBodyHtmlString();
 }
 
@@ -194,6 +191,12 @@ function getBodyHtmlString() {
  */
 function setBodyHtmlString(bodyHtml) {
     $('#body').html(bodyHtml);
+    if(typeof isView !== 'undefined' && isView)
+    {}
+    else
+    {
+        makeTemplateComponetsEditable();
+    }
 }
 
 /*
@@ -204,8 +207,11 @@ function resetMenuContent() {
     menuContens[curMenu] = defaultMenuHtml;
 }
 
-function setDefaultMenuContent()
+function setDefaultMenuContent(menuText)
 {
+    console.log("[DEBUG] setDefaultMenuContent");
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
     $.ajax({
         type: "POST",
         url: '/html-view-menus/content-default/' + template_id,
@@ -219,11 +225,11 @@ function setDefaultMenuContent()
             {
                 defaultMenuHtml = data.defaultMenuContent;
             }
-            alert(data.message);
+            //alert(data.message);
         },
         error: function(xhr, status, error) {
             var err =  xhr.responseText;
-            alert(err);
+            //alert(err);
         }        
     });
 }
@@ -233,9 +239,9 @@ function setDefaultMenuContent()
  * @param {type} menu
  */
 function onMenuClick(menu) {
+    console.log("[DEBUG] onMenuClick");
 
     var isEdit = $('#hidden-div-is-edit').text();
-
 	closeAllEditDialogPanel();
     saveCurrentMenuText();
 
@@ -256,15 +262,10 @@ function onMenuClick(menu) {
         //var previousMenuClicked = menuClickHistory[menuClickHistoryIndex - 1];
         //alert("SAVING PREVIOUS MENU CONTENT!!! -> " + menuText + "###" + menuContens[menuText]);
         setBodyHtmlString(menuContens[menuText]);
+
     }
     //console.log("menu is clicked history count: " + menuClickHistoryIndex);
     //menuClickHistoryIndex++;
-    if(typeof isView !== 'undefined' && isView){
-        makeTemplateComponetsNotEditable();
-    } else {
-        makeTemplateComponetsEditable();
-        onTemplateMenuLoad();
-    }
 }
 
 

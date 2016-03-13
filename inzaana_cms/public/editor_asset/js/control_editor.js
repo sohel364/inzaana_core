@@ -620,6 +620,10 @@ function showResizePanel() {
 }
 
 function makeControlResizable() {
+	var background_div = null;
+	if (editable_control.attr("name") == "group")
+		background_div = editable_control.children();
+
 	editable_control.resizable({
 		ghost : false,
 		animate : false,
@@ -645,6 +649,12 @@ function makeControlResizable() {
 
 		},
 		stop : function(event, ui) {
+			if (background_div != null)
+			{
+				background_div.css("height", ui.size.height);
+				background_div.css("width", ui.size.width);	
+			}
+			
 //			animateImageSlider(editable_control, editable_control.width(),
 //					editable_control.data("speed"), editable_control.data("pause"));
 		},

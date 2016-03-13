@@ -521,7 +521,7 @@ function showSavingIcon() {
  * Hides loading icon after finishing saving operation
  */
 function hideSavingIcon() {
-    swal.close();
+    //swal.close();
 }
 
 function errorAlert(message, callback)
