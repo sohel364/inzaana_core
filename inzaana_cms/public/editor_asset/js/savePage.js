@@ -208,7 +208,6 @@ function savePage(category_name, template_name, isEdit)
     traverseImages();
     // console.log("[WB-D] savePage: " + category_name + "$##$" + template_name);
 
-    // makeTemplateComponetsNotEditable();
     saveCurrentMenuText();
 
     var menuList = getMenuList();      
@@ -480,7 +479,7 @@ function saveContents(template_id, templateViewMenus, menuContents, nextUrl, mes
                     // saveImages(category_name, savedTemplateID);
                     allImages = [];
 
-                    makeTemplateComponetsEditable();
+                    //makeTemplateComponetsEditable();
                     hideSavingIcon();
 
                 });

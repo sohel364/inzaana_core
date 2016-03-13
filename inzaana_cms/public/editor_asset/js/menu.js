@@ -172,7 +172,11 @@ function onLoadMenus() {
  * Save current menu context while switching to another menu
  */
 function saveCurrentMenuText() {
-    makeTemplateComponetsNotEditable();
+    if (typeof isEdit !== 'undefined' && isEdit)
+    {
+        closeAllEditDialogPanel();
+        makeTemplateComponetsNotEditable();
+    }
     menuContens[curMenu] = getBodyHtmlString();
 }
 
@@ -192,7 +196,9 @@ function getBodyHtmlString() {
 function setBodyHtmlString(bodyHtml) {
     $('#body').html(bodyHtml);
     if(typeof isView !== 'undefined' && isView)
-    {}
+    {
+        LoadTemplateAnimations();
+    }
     else
     {
         makeTemplateComponetsEditable();
@@ -242,19 +248,17 @@ function onMenuClick(menu) {
     console.log("[DEBUG] onMenuClick");
 
     var isEdit = $('#hidden-div-is-edit').text();
-	closeAllEditDialogPanel();
+
     saveCurrentMenuText();
 
     // traverseImages();
 
     var menuText = $(menu).text();
-
     curMenu = menuText;
 
     //menuClickHistory[menuClickHistoryIndex] = menuText;
     if(menuContens[menuText] === null || typeof menuContens[menuText] === 'undefined') {
         // resetMenuContent();
-
         setDefaultMenuContent(menuText);
         // alert("RESETTING MENU CONTENT!!! ALERT!!" + defaultMenuHtml);
 

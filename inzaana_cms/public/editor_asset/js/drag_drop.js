@@ -59,7 +59,7 @@ function makeTemplateComponetsEditable() {
 		
 		if (control_name == "imageslider" || control_name == "group_imageslider" )
 		{
-			//startImageSlider($(this));
+			startImageSlider($(this));
 		}
 		
 		if ($(this).is("a")){
@@ -72,6 +72,21 @@ function makeTemplateComponetsEditable() {
 			$(this).attr("onclick", null);
 		}
 		
+	});
+}
+
+function LoadTemplateAnimations()
+{
+	$("#body").find("*").each(function() {
+		var control_id = $(this).attr("id");
+		var control_name = $(this).attr("name");
+
+		if (allawable_control_array.indexOf(control_name) > -1) {}
+		
+		if (control_name == "imageslider" || control_name == "group_imageslider" )
+		{
+			startImageSlider($(this));
+		}
 	});
 }
 
@@ -100,11 +115,6 @@ function makeTemplateComponetsNotEditable() {
 
 			$(this).click(function() {
 			});
-		}
-
-		if (control_name == "imageslider" || control_name == "group_imageslider" )
-		{
-			//startImageSlider($(this));
 		}
 		
 		if ($(this).is("a")){
