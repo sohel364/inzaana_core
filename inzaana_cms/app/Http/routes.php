@@ -78,5 +78,10 @@ Route::group(['middleware' => 'web'], function () {
 
         // HTML view content controller
         Route::post('/html-view-contents/create', [ 'uses' => 'HtmlViewContentController@create', 'as' => 'html-view-contents.create' ]);
+
+        // Media Archive Controller
+        Route::post('/medias/save', [ 'uses' => 'MediaController@save', 'as' => 'medias.save' ]);
+        Route::get('/medias/template/{template_id}', [ 'uses' => 'MediaController@reload', 'as' => 'medias.reload' ]);
+
     });
 });

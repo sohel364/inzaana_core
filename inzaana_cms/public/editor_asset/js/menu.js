@@ -14,12 +14,22 @@ var imageObjects = {};
 var imageCounter = -1;
 var imageArrayLength = 0;
 var curMenuForImage;
+var pagesEdited = [];
 var _user_id, _template_id;
 
 // onload functionalities
 $(document).ready(function() {
     onLoadMenus();
 });
+
+function onMediaFoundSuccess(data, textStatus, xhr)
+{
+    if(data.success)
+    {
+        // handleReceivedImageData(xhr);
+    }
+    errorAlert(data.message, function() {});
+}
 
 function handleReceivedImageData(xhr) {
     //alert( "replied:: " + xhr.readyState + "/"+ xhr.status);
@@ -73,7 +83,7 @@ function loadMediasOfPages() {
     if (xhr)
     {
         var url = getBaseUrl() + "/views/content_views/media_info_loader.php";
-        //alert(template_id);
+        // alert(template_id);
         var payload = "template_id=" + template_id;
         xhr.open("POST",url,true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded ');
@@ -85,6 +95,25 @@ function loadMediasOfPages() {
         };
         xhr.send(payload);
     }
+}
+
+function findMediasOfTemplate(id, onSuccess, onError)
+{
+    var routing_url = '/medias/template/' + id;
+
+    $.ajax({
+
+        type: "GET",
+        url: routing_url,
+        dataType: 'json',
+        success: onSuccess,
+        error: onError,
+        statusCode: {
+            404: function() {
+                swal( "Sorry!" , "Your requested page is not found!", 'error');
+            }
+        }
+    });
 }
 
 function loadContents()
@@ -119,13 +148,19 @@ function loadContents()
                 setBodyHtmlString(menuContens[curMenu]);
                 return;
             }
-            alert(data.message);
-            window.location.href = '/templates/saved';
+            // alert(data.message);
+            errorAlert(data.message, function() {
+
+                window.location.href = '/templates/saved'; 
+            });
         },
         error: function(xhr, status, error) {
             var err =  xhr.responseText;
-            alert(err);
-            resetMenuContent();
+            // alert(err);
+            errorAlert(err, function() {
+
+                resetMenuContent();
+            });
         }
     });
 }
@@ -138,6 +173,7 @@ function onLoadMenus() {
     var isViewer = $('#hidden-div-is-view').text();
     isView = isViewer;
     var isEdit = $('#hidden-div-is-edit').text();
+    var template_id = $('#hidden-div-template-current').text();
 
     //alert(user_menu_content_array);
     $ul = $('#menu');
@@ -147,6 +183,13 @@ function onLoadMenus() {
     curMenu = $ahref.text();
 
     // loadMediasOfPages();
+    // findMediasOfTemplate(
+    //     template_id,
+    //     onMediaFoundSuccess,
+    // function(xhr, status, error) {
+
+    //     swal(status, error + ' ##### ' + xhr.responseText, 'error');
+    // });
 
     if (typeof isEdit !== 'undefined' && isEdit) {
         // update mode
@@ -239,26 +282,20 @@ function onMenuClick(menu) {
 	closeAllEditDialogPanel();
     saveCurrentMenuText();
 
-    // traverseImages();
+    traverseImages();
 
     var menuText = $(menu).text();
 
     curMenu = menuText;
 
-    //menuClickHistory[menuClickHistoryIndex] = menuText;
     if(menuContens[menuText] === null || typeof menuContens[menuText] === 'undefined') {
         // resetMenuContent();
-
         setDefaultMenuContent(menuText);
         // alert("RESETTING MENU CONTENT!!! ALERT!!" + defaultMenuHtml);
-
     } else {
-        //var previousMenuClicked = menuClickHistory[menuClickHistoryIndex - 1];
         //alert("SAVING PREVIOUS MENU CONTENT!!! -> " + menuText + "###" + menuContens[menuText]);
         setBodyHtmlString(menuContens[menuText]);
     }
-    //console.log("menu is clicked history count: " + menuClickHistoryIndex);
-    //menuClickHistoryIndex++;
     if(typeof isView !== 'undefined' && isView){
         makeTemplateComponetsNotEditable();
     } else {
@@ -301,12 +338,13 @@ function saveCurrentPageImages(isEdit, imageObj) {
         sendRequest(imageObj);
         if(imageObj.src.indexOf("blob") != -1)
         {
-            alert("[WB] on insert image-menu: " + imageObj.src);
+            // alert("[WB] on insert image-menu: " + imageObj.src);
+            swal('Saving ...', "[WB] on insert image-menu: " + imageObj.src, 'info');
         }
     }
     else
     {
-        //if(!isEmpty(imageObj.src))
+        // if(!isEmpty(imageObj.src))
         //    alert("[WB] on update image-src: \"" + imageObj.src + "\"");
 
         if(imageObj.src.indexOf("localhost") == -1)
@@ -333,11 +371,15 @@ function isImageExists(id, menu_item)
 
 function saveImages(user_id, template_id) {
 
+    var isEdit = $('#hidden-div-is-edit').text();
+
     console.log("[WB-D] saveImages: " + user_id + "$##$" + template_id);
 
     loadImages(user_id, template_id, function(imageObj){
 
-        console.log("[WB-D] [REPLIED] image-src: " + imageObj.src_arch );
+        // console.log("[WB-D] [REPLIED] image-src: " + imageObj.src_arch );
+
+        swal('REPLIED', mageObj.src_arch, 'info');
 
     });
 
@@ -479,18 +521,21 @@ function createXHR()
 
 function sendRequest(imageObj)
 {
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     var xhr = createXHR();
 
     if (xhr)
     {
-        var url = "http://localhost/webbuilder/views/content_views/uploader.php";
+        // var url = "http://localhost/webbuilder/views/content_views/uploader.php";
+        var url = '/medias/save';
         var payload = "image=" + imageObj.data
                     + "&type=" + imageObj.type
                     + "&userId=" + _user_id
                     + "&templateId=" + _template_id
                     + "&image_src=" + imageObj.src
                     + "&image_id=" + imageObj.id
-                    + "&menu_id=" + imageObj.menu;
+                    + "&menu_id=" + imageObj.menu
+                    + "&_token=" + CSRF_TOKEN;
         xhr.open("POST",url,true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded ');
         xhr.setRequestHeader("Content-length", payload.length);
@@ -533,5 +578,9 @@ function handleResponse(xhr)
             alert("[WB] RESP URL:" + $('#' + imageObj.image_id).css("background-image"));
         }
         _callbackFn(imageObj);
+    }
+    else
+    {
+        errorAlert(xhr.responseText, function() {});
     }
 }

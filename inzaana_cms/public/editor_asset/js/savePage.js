@@ -226,7 +226,6 @@ function savePage(category_name, template_name, isEdit)
                     animation: "slide-from-top",
                     inputPlaceholder: "Enter page name" };
 
-            // savedName = prompt("Enter webpage name : ", "Enter page name");
             swal( inputWriter, 
 
             function(inputValue){   
@@ -345,16 +344,17 @@ function insertPage(menuList, template_name, category_name, savedName) {
                 }
                 errorAlert(data.message, function() {
 
+                    hideSavingIcon();
                     window.location.href = '/editor/' + category_name + '/' + template_name; 
                 });
             },
             error: function(xhr, status, error) {
-                hideSavingIcon();
                 var err =  xhr.responseText;
                 
                 errorAlert(data.message, function() {
 
-                    window.location.href = nextUrl;   
+                    hideSavingIcon();
+                    window.location.href = nextUrl;
                 });
             }
         });
@@ -395,11 +395,11 @@ function updatePage(menuList, template, category_name, savedName) {
                 });
             },
             error: function(xhr, status, error) {
-                hideSavingIcon();
                 var err =  xhr.responseText;
 
                 errorAlert(data.message, function() {
 
+                    hideSavingIcon();
                     window.location.href = nextUrl;
                 });
             }
@@ -429,15 +429,16 @@ function saveViewMenus(template_id, viewMenus, menuContents, nextUrl, message)
             }
             errorAlert(data.message, function() {
 
+                hideSavingIcon();
                 window.location.href = nextUrl;
             });
         },
         error: function(xhr, status, error) {
-            hideSavingIcon();
             var err =  xhr.responseText;
 
             errorAlert(err, function() {
 
+                hideSavingIcon();
                 window.location.href = nextUrl; 
             });     
         }
@@ -476,27 +477,45 @@ function saveContents(template_id, templateViewMenus, menuContents, nextUrl, mes
 
                 swal( sweetAlert , function() {
 
-                    window.location.href = nextUrl;
-                    // saveImages(category_name, savedTemplateID);
-                    allImages = [];
+                    findTemplate(
+                        template_id,
+                    function(data) {
 
-                    makeTemplateComponetsEditable();
-                    hideSavingIcon();
+                        if(data.success)
+                        {
+                            // INFO: template info is found
+                            saveImages(data.template.user_id, data.template.id);
 
+                            allImages = [];
+
+                            makeTemplateComponetsEditable();
+
+                            // window.location.href = nextUrl;
+                        }
+
+                    },
+                    function(xhr, status, error) {
+
+                        errorAlert(xhr.responseText, function() {
+
+                            hideSavingIcon();
+                        });
+                    });
                 });
 
                 return;
             }
             errorAlert(err, function() {
 
+                hideSavingIcon();
                 window.location.href = '/templates/gallery';
             });
         },
         error: function(xhr, status, error) {
-            hideSavingIcon();
             var err =  xhr.responseText;
             errorAlert(err, function() {
 
+                hideSavingIcon();
                 window.location.href = nextUrl;  
             });
         }
@@ -528,8 +547,45 @@ function errorAlert(message, callback)
 {    
     var sweetAlert = {
         title: "Sorry!",
-        text: message,
-        type: 'error'
+        text: 'You actions did\'t completed due to some errors!',
+        type: 'error',
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, show me more!",
+        cancelButtonText: "No, continue!",
+        closeOnConfirm: false,
+        closeOnCancel: false
     };
-    swal( sweetAlert , callback);
+    swal( sweetAlert , function(isConfirm) {
+        if (isConfirm)
+        {
+            swal({
+                title: "Error!",
+                type: 'error',
+                text: message,
+                html: true,
+                customClass: 'httpError',
+                confirmButtonText: "Close",
+                allowOutsideClick: true,
+                showLoaderOnConfirm: true
+            });
+        }
+        else
+        {
+            hideSavingIcon();
+        }
+        callback();    
+    });
+}
+
+function findTemplate(id, onSuccess, onError)
+{
+    $.ajax({
+
+        type: "GET",
+        url: '/templates/info/' + id,
+        dataType: 'json',
+        success: onSuccess,
+        error: onError
+    });
 }

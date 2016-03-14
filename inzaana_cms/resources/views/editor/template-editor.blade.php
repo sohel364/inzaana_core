@@ -19,6 +19,14 @@
 	<link href="{{ asset('editor_asset/css/control_editor.css') }}" rel="stylesheet" />
     <!-- For sweet message box alert -->
     <link href="{{ asset('dist/sweetalert.css') }}" rel="stylesheet" type="text/css">
+    <style type="text/css">
+    .httpError
+    {
+    	overflow: auto;
+  		height: 50%;
+  		width: 50%;
+    }
+    </style>
 @endsection
 
 @section('header-script')
