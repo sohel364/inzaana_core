@@ -95,8 +95,13 @@ function loadContents()
     var isEdit = $('#hidden-div-is-edit').text();
     var template_id = $('#hidden-div-template-current').text();
 
-    if(isInEditor /* Is in editor or viewer */ && !isEdit /* Is template editor in edit mode or save mode */) return;
+    if(isInEditor /* Is in editor or viewer */ && !isEdit /* Is template editor in edit mode or save mode */)
+    {
+        makeTemplateComponetsEditable();
+        return;
+    }
 
+    console.log("[DEBUG] Calling Ajax");
     $.ajax({
         type: "POST",
         url: '/html-view-menus/' + template_id,
@@ -107,7 +112,7 @@ function loadContents()
             _token: CSRF_TOKEN
         },
         success: function (data) {
-
+            console.log("[DEBUG] Ajax success");
             if(data.success)
             {
                 // alert(data.message);
@@ -124,11 +129,14 @@ function loadContents()
             window.location.href = '/templates/saved';
         },
         error: function(xhr, status, error) {
+            console.log("[DEBUG] ajax error");
             var err =  xhr.responseText;
             alert(err);
             resetMenuContent();
         }
     });
+
+    console.log("[DEBUG] loadContents ends");
 }
 
 /*
