@@ -73,57 +73,45 @@ function makeTemplateComponetsEditable() {
 		}
 		
 	});
-	
-	// $("#footer").find("*").each(function() {
-	// 	var control_id = $(this).attr("id");
-	// 	var control_name = $(this).attr("name");
-
-	// 	//console.log(control_id + " : " + control_name);
-
-	// 	if (allawable_control_array.indexOf(control_name) > -1) {
-	// 		//console.log(" [Allowable Control] Control Type : " + control_name);
-	// 		if ($(this).attr("id") == null)
-	// 		{
-	// 			$(this).attr("id", $(this).attr("name") + "_dropped" + counter++);
-	// 		}
-	// 		$(this).data("is_dropped","true");
-			
-	// 		makeDroppedControlsDraggable($(this));
-
-	// 		$(this).click(droppedItemClickAction);
-	// 	}
-		
-	// 	if (control_name == "imageslider" || control_name == "group_imageslider" )
-	// 	{
-	// 		startImageSlider($(this));
-	// 	}
-		
-	// 	if ($(this).is("a")){
-	// 		$(this).data("href", $(this).attr("href"));
-	// 		$(this).attr("href", null);
-	// 	}
-		
-	// 	if ($(this).is("button")){
-	// 		$(this).data("onclick", $(this).attr("onclick"));
-	// 		$(this).attr("onclick", null);
-	// 	}
-	// });
 }
 
-function makeTemplateComponetsNotEditable() {
-	console.log("Making Template Control Not Editable");
-
+function LoadTemplateAnimations()
+{
 	$("#body").find("*").each(function() {
 		var control_id = $(this).attr("id");
 		var control_name = $(this).attr("name");
 
+		if (allawable_control_array.indexOf(control_name) > -1) {}
+		
+		if (control_name == "imageslider" || control_name == "group_imageslider" )
+		{
+			startImageSlider($(this));
+		}
+	});
+}
+
+function makeTemplateComponetsNotEditable() {
+	console.log("Making Tempate Controls Not Editable");
+
+	$("#body").find("*").each(function() {
+		var control_id = $(this).attr("id");
+		var control_name = $(this).attr("name");
+		
 		//console.log(control_id + " : " + control_name);
 
 		if (allawable_control_array.indexOf(control_name) > -1) {
 			//console.log(" [Allowable Control] Control Type : " + control_name);
 			$(this).attr("id", $(this).attr("name") + "_dropped" + counter++);
 
-			$(this).draggable("destroy");
+			if ($(this).draggable("instance") != undefined)
+				{
+					$(this).draggable("destroy");
+					$(this).removeClass("droppedFields");
+					$(this).removeClass("draggableField");
+					$(this).removeClass("ui-draggable");
+					$(this).removeClass("ui-draggable-handle");
+					$(this).removeClass("ui-draggable-dragging");
+				}
 
 			$(this).click(function() {
 			});
@@ -137,31 +125,6 @@ function makeTemplateComponetsNotEditable() {
 			$(this).attr("onclick", $(this).data("onclick"));
 		}
 	});
-	
-	// $("#footer").find("*").each(function() {
-	// 	var control_id = $(this).attr("id");
-	// 	var control_name = $(this).attr("name");
-
-	// 	//console.log(control_id + " : " + control_name);
-
-	// 	if (allawable_control_array.indexOf(control_name) > -1) {
-	// 		//console.log(" [Allowable Control] Control Type : " + control_name);
-	// 		$(this).attr("id", $(this).attr("name") + "_dropped" + counter++);
-
-	// 		$(this).draggable("destroy");
-
-	// 		$(this).click(function() {
-	// 		});
-	// 	}
-		
-	// 	if ($(this).is("a")){
-	// 		$(this).attr("href", $(this).data("href"));
-	// 	}
-		
-	// 	if ($(this).is("button")){
-	// 		$(this).attr("onclick", $(this).data("onclick"));
-	// 	}
-	// });
 }
 
 function makeControlsOfPaletteDraggable() {
@@ -179,11 +142,20 @@ function makeControlsOfPaletteDraggable() {
 	});
 }
 
+var tmp_z_index = 0;
+
 function makeDroppedControlsDraggable(control) {
 	control.draggable({
 		containment : $("#frame"),
 		cursor : "move",
 		cancel : false,
+		start : function(){
+			tmp_z_index = $(this).css("z-index");
+			$(this).css("z-index", "1000");
+		},
+		stop : function(){
+			$(this).css("z-index", tmp_z_index);
+		},
 	});
 }
 
@@ -1262,49 +1234,17 @@ function initializeAllDialogButton() {
 $(function() {
     var isViewer = $('#hidden-div-is-view').text();
     isView = isViewer;
-
-	makeControlsOfPaletteDraggable();
 	
 	if (typeof isInEditor !== 'undefined' && isInEditor) {
-        makeTemplateComponetsEditable();
-        //onTemplateMenuLoad();
+		console.log("[DEBUG] Is In Editor");
+        makeControlsOfPaletteDraggable();
+        startMonitoringMousePosition();
+		makeBodyDroppable();
+		makeImageSliderThumbnailSortable();
+		initializeAllDialogButton();
     } else if(typeof isView !== 'undefined' && isView){
+    	console.log("[DEBUG] Is In Viewer");
     } else {
     	alert("Can't recognize Whether it is editor or viewer");
     }
-	
-	startMonitoringMousePosition();
-	makeBodyDroppable();
-	makeImageSliderThumbnailSortable();
-	initializeAllDialogButton();
-	
-	
-
-	// $(document).mouseup(function(e){
-	// var clicked_item = e.target;
-	//		
-	// if ( editable_control != null ){
-	// if (editable_control.is(clicked_item))
-	// {
-	// console.log("Matched");
-	// }
-	// }
-	// });
-
-	/*
-	 * $("#frame").find("*").draggable({ containment : "#frame", // cancel :
-	 * null });
-	 */
-
-	/*
-	 * $("a.tab").click(function() { // switch all tabs off
-	 * $(".active").removeClass("active"); // switch this tab on
-	 * $(this).addClass("active"); // slide all elements with the class
-	 * 'content' up $(".content").slideUp(); // Now figure out what the 'title'
-	 * attribute value is and find the element with that id. Then slide that
-	 * down. var content_show = $(this).attr("title"); $("#" +
-	 * content_show).slideDown();
-	 * 
-	 * });
-	 */
 });

@@ -10,10 +10,10 @@ $(window).load(function(){
 		'slideEndAnimation' : true
 	});
 	//initSlider();
-	onTemplateMenuLoad();
+	//onTemplateMenuLoad();
 });
 
 
 function onTemplateMenuLoad(){
-	console.log("onTemplateMenuLoad Clicked");
+	//console.log("onTemplateMenuLoad Clicked");
 }

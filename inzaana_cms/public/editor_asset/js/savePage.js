@@ -208,7 +208,6 @@ function savePage(category_name, template_name, isEdit)
     traverseImages();
     // console.log("[WB-D] savePage: " + category_name + "$##$" + template_name);
 
-    // makeTemplateComponetsNotEditable();
     saveCurrentMenuText();
 
     var menuList = getMenuList();      

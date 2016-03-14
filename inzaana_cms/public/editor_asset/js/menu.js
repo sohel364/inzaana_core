@@ -118,13 +118,19 @@ function findMediasOfTemplate(id, onSuccess, onError)
 
 function loadContents()
 {
+    console.log("[DEBUG] loadContents");
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
     var isEdit = $('#hidden-div-is-edit').text();
     var template_id = $('#hidden-div-template-current').text();
 
-    if(isInEditor /* Is in editor or viewer */ && !isEdit /* Is template editor in edit mode or save mode */) return;
+    if(isInEditor /* Is in editor or viewer */ && !isEdit /* Is template editor in edit mode or save mode */)
+    {
+        makeTemplateComponetsEditable();
+        return;
+    }
 
+    console.log("[DEBUG] Calling Ajax");
     $.ajax({
         type: "POST",
         url: '/html-view-menus/' + template_id,
@@ -135,7 +141,7 @@ function loadContents()
             _token: CSRF_TOKEN
         },
         success: function (data) {
-
+            console.log("[DEBUG] Ajax success");
             if(data.success)
             {
                 // alert(data.message);
@@ -155,6 +161,7 @@ function loadContents()
             });
         },
         error: function(xhr, status, error) {
+            console.log("[DEBUG] ajax error");
             var err =  xhr.responseText;
             // alert(err);
             errorAlert(err, function() {
@@ -163,6 +170,8 @@ function loadContents()
             });
         }
     });
+
+    console.log("[DEBUG] loadContents ends");
 }
 
 /*
@@ -170,6 +179,7 @@ function loadContents()
  */
 function onLoadMenus() {
     // makeTemplateComponetsEditable();
+    console.log("[DEBUG] onLoadMenus called");
     var isViewer = $('#hidden-div-is-view').text();
     isView = isViewer;
     var isEdit = $('#hidden-div-is-edit').text();
@@ -195,20 +205,14 @@ function onLoadMenus() {
         // update mode
         // getSavedMenuContents();
         // alert('In edit mode');
-        makeTemplateComponetsEditable();
-        //onTemplateMenuLoad();
     }
     else if(typeof isView !== 'undefined' && isView)
-    {
-        // alert('In viewer mode');
-        makeTemplateComponetsNotEditable();
-    }
+    {}
     else 
     {
         // insert mode
         // alert('In saving mode');
         menuContens[curMenu] = getBodyHtmlString();
-        makeTemplateComponetsEditable();
     }
     defaultMenuHtml = getBodyHtmlString();
     // for laravel implementation
@@ -219,6 +223,11 @@ function onLoadMenus() {
  * Save current menu context while switching to another menu
  */
 function saveCurrentMenuText() {
+    if (typeof isEdit !== 'undefined' && isEdit)
+    {
+        closeAllEditDialogPanel();
+        makeTemplateComponetsNotEditable();
+    }
     menuContens[curMenu] = getBodyHtmlString();
 }
 
@@ -237,6 +246,14 @@ function getBodyHtmlString() {
  */
 function setBodyHtmlString(bodyHtml) {
     $('#body').html(bodyHtml);
+    if(typeof isView !== 'undefined' && isView)
+    {
+        LoadTemplateAnimations();
+    }
+    else
+    {
+        makeTemplateComponetsEditable();
+    }
 }
 
 /*
@@ -247,8 +264,11 @@ function resetMenuContent() {
     menuContens[curMenu] = defaultMenuHtml;
 }
 
-function setDefaultMenuContent()
+function setDefaultMenuContent(menuText)
 {
+    console.log("[DEBUG] setDefaultMenuContent");
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
     $.ajax({
         type: "POST",
         url: '/html-view-menus/content-default/' + template_id,
@@ -262,11 +282,11 @@ function setDefaultMenuContent()
             {
                 defaultMenuHtml = data.defaultMenuContent;
             }
-            alert(data.message);
+            //alert(data.message);
         },
         error: function(xhr, status, error) {
             var err =  xhr.responseText;
-            alert(err);
+            //alert(err);
         }        
     });
 }
@@ -276,6 +296,7 @@ function setDefaultMenuContent()
  * @param {type} menu
  */
 function onMenuClick(menu) {
+    console.log("[DEBUG] onMenuClick");
 
     var isEdit = $('#hidden-div-is-edit').text();
 
@@ -295,6 +316,7 @@ function onMenuClick(menu) {
     } else {
         //alert("SAVING PREVIOUS MENU CONTENT!!! -> " + menuText + "###" + menuContens[menuText]);
         setBodyHtmlString(menuContens[menuText]);
+
     }
     if(typeof isView !== 'undefined' && isView){
         makeTemplateComponetsNotEditable();
@@ -339,7 +361,7 @@ function saveCurrentPageImages(isEdit, imageObj) {
         if(imageObj.src.indexOf("blob") != -1)
         {
             // alert("[WB] on insert image-menu: " + imageObj.src);
-            swal('Saving ...', "[WB] on insert image-menu: " + imageObj.src, 'info');
+            //swal('Saving ...', "[WB] on insert image-menu: " + imageObj.src, 'info');
         }
     }
     else
@@ -379,7 +401,7 @@ function saveImages(user_id, template_id) {
 
         // console.log("[WB-D] [REPLIED] image-src: " + imageObj.src_arch );
 
-        swal('REPLIED', mageObj.src_arch, 'info');
+        //swal('REPLIED', mageObj.src_arch, 'info');
 
     });
 
