@@ -31,7 +31,7 @@ function updateControlPaletteTabList(category){
 		$("#tab_list li").css("display", "none");
 
 		$("#tab_list").find("li").each(function(index, value){
-			var supported_category_list = $(this).data("category");
+			var supported_category_list = $(this).attr("data-category");
 			if (supported_category_list.indexOf(category) > -1)
 			{
 				$(this).css("display", "inline");
@@ -186,7 +186,7 @@ function collaspControlPalette(){
 function initiateControls(control_name){
 	var count = 1;
 	var control_template = $("#" + control_name + "_" + count);
-	while (control_template.data("type") != undefined) {
+	while (control_template.attr("data-type") != undefined) {
 		var control = control_template.clone();
 		control.css('display', 'block');
 		control.css('left', '100px');
@@ -256,7 +256,7 @@ function showControlPalette(cp){
 	
 	$(".pointer").show();
 	
-	if(cp.data("top") != undefined){	
+	if(cp.attr("data-top") != undefined){	
 		$("#cp_pointer_outcurve_top").hide();
 	}
 	

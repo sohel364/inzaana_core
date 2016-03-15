@@ -50,7 +50,7 @@ function makeTemplateComponetsEditable() {
 			{
 				$(this).attr("id", $(this).attr("name") + "_dropped" + counter++);
 			}
-			$(this).data("is_dropped","true");
+			$(this).attr("data-is_dropped","true");
 
 			makeDroppedControlsDraggable($(this));
 
@@ -63,14 +63,14 @@ function makeTemplateComponetsEditable() {
 		}
 		
 		if ($(this).is("a")){
-			$(this).data("href", $(this).attr("href"));
+			$(this).attr("data-href", $(this).attr("href"));
 			$(this).attr("href", null);
 		}
 		
-		if ($(this).is("button")){
-			$(this).data("onclick", $(this).attr("onclick"));
-			$(this).attr("onclick", null);
-		}
+		// if ($(this).is("button")){
+		// 	$(this).attr("data-onclick", $(this).attr("onclick"));
+		// 	$(this).attr("onclick", null);
+		// }
 		
 	});
 }
@@ -81,7 +81,19 @@ function LoadTemplateAnimations()
 		var control_id = $(this).attr("id");
 		var control_name = $(this).attr("name");
 
-		if (allawable_control_array.indexOf(control_name) > -1) {}
+		if (allawable_control_array.indexOf(control_name) > -1) {
+			if ($(this).is("button")){
+				if ($(this).attr("data-onclick") != null)
+				{
+					$(this).click(function(){
+						var url = $(this).attr("data-onclick")
+						if (url.indexOf("http://") < 0)
+							url = "http://" + url;
+						location.href = url;	
+					});
+				}
+			}
+		}
 		
 		if (control_name == "imageslider" || control_name == "group_imageslider" )
 		{
@@ -104,26 +116,26 @@ function makeTemplateComponetsNotEditable() {
 			$(this).attr("id", $(this).attr("name") + "_dropped" + counter++);
 
 			if ($(this).draggable("instance") != undefined)
-				{
-					$(this).draggable("destroy");
-					$(this).removeClass("droppedFields");
-					$(this).removeClass("draggableField");
-					$(this).removeClass("ui-draggable");
-					$(this).removeClass("ui-draggable-handle");
-					$(this).removeClass("ui-draggable-dragging");
-				}
+			{
+				$(this).draggable("destroy");
+			}
+			$(this).removeClass("droppedFields");
+			$(this).removeClass("draggableField");
+			$(this).removeClass("ui-draggable");
+			$(this).removeClass("ui-draggable-handle");
+			$(this).removeClass("ui-draggable-dragging");	
 
-			$(this).click(function() {
-			});
+			// $(this).click(function() {
+			// });
 		}
 		
 		if ($(this).is("a")){
-			$(this).attr("href", $(this).data("href"));
+			$(this).attr("href", $(this).attr("data-href"));
 		}
 		
-		if ($(this).is("button")){
-			$(this).attr("onclick", $(this).data("onclick"));
-		}
+		// if ($(this).is("button")){
+		// 	$(this).attr("onclick", $(this).attr("data-onclick"));
+		// }
 	});
 }
 
@@ -273,12 +285,12 @@ function createImageSlider(imageSliderImageList) {
 					+ '"' + ' id=' + tmp_id + '></li>').appendTo(target_slider)
 	});
 	
-	target_slider.data("total_item", imageSliderImageList.length);
+	target_slider.attr("data-total_item", imageSliderImageList.length);
 
 	startImageSlider(editable_control);
 	
 //	animateImageSlider(editable_control, editable_control.width(),
-//			editable_control.data("speed"), editable_control.data("pause"));
+//			editable_control.attr("data-speed"), editable_control.attr("data-pause"));
 
 }
 
@@ -328,11 +340,11 @@ function makeBodyDroppable() {
 						draggable = $("#image_slider_template");
 						is_image_slider = true;
 					} else if (droppable_name == "group") {
-						if (ui.helper.data("form_type") == "feedback"){
+						if (ui.helper.attr("data-form_type") == "feedback"){
 							draggable = $("#form_template_feedback");
-						}else if (ui.helper.data("form_type") == "contact"){
+						}else if (ui.helper.attr("data-form_type") == "contact"){
 							draggable = $("#form_template_contact");
-						}else if (ui.helper.data("form_type") == "leavemsg"){
+						}else if (ui.helper.attr("data-form_type") == "leavemsg"){
 							draggable = $("#form_template_leavemsg");
 						}
 						is_group_builder = true;
@@ -344,8 +356,8 @@ function makeBodyDroppable() {
 					}
 					
 
-					if (draggable.data("is_dropped") == null
-							|| draggable.data("is_dropped") == "false") {
+					if (draggable.attr("data-is_dropped") == null
+							|| draggable.attr("data-is_dropped") == "false") {
 
 						draggable = draggable.clone();
 						draggable.css('left', currentMousePos.x + 'px');
@@ -354,26 +366,26 @@ function makeBodyDroppable() {
 						draggable.removeClass("selectorField");
 						draggable.addClass("droppedFields");
 
-						if (draggable.data("id") == null){
+						if (draggable.attr("data-id") == null){
 							draggable[0].id = droppable_name + "_dropped_" + (counter++);
 						}else{
 							if (draggable.attr("name") == "image"){
-								draggable[0].id = draggable.data("id") + "-" + (counter++);
+								draggable[0].id = draggable.attr("data-id") + "-" + (counter++);
 								draggable.find("img").attr("id", draggable[0].id + "_img-" + (counter++));
 							}else if (draggable.attr("name") == "imageslider"){
-								draggable[0].id = draggable.data("id") + "-" + (counter++);
+								draggable[0].id = draggable.attr("data-id") + "-" + (counter++);
 								draggable.find("ul").find('li').find("img").each(
 										function(index, value) {
 											$(this).attr("id", draggable[0].id + "_img-" + (counter++))
 										});
 							}
 							else{
-							draggable[0].id = draggable.data("id");
+							draggable[0].id = draggable.attr("data-id");
 							}
 						}
 						
 						
-						draggable.data("is_dropped","true");
+						draggable.attr("data-is_dropped","true");
 
 						if (is_radio_button) {
 							var radio_btn_template_array = [ {
@@ -416,8 +428,8 @@ function makeBodyDroppable() {
 
 function startSlider(control, width, animation_speed, pause) {
 	
-	console.log("Speed : " + animation_speed + " : " + control.data("speed"));
-	console.log("Pause : " + pause + " : " + control.data("pause"));
+	console.log("Speed : " + animation_speed + " : " + control.attr("data-speed"));
+	console.log("Pause : " + pause + " : " + control.attr("data-pause"));
 	
 	var current_slide = 1;
 	var $slider_container = control.children('ul');
@@ -439,15 +451,15 @@ function startSlider(control, width, animation_speed, pause) {
 		
 	}, pause);
 	
-	control.data("interval", interval);
+	control.attr("data-interval", interval);
 }
 
 function stopSlider(control) {
-	console.log("Stop Slider : " + control.attr("id") + " : " + control.data("interval") );
+	console.log("Stop Slider : " + control.attr("id") + " : " + control.attr("data-interval") );
 	
-	if(control.data("interval") != undefined)
+	if(control.attr("data-interval") != undefined)
 	{
-		clearInterval(control.data("interval"));
+		clearInterval(control.attr("data-interval"));
 	}	
 }
 
@@ -469,9 +481,9 @@ function startImageSlider(control){
 //	console.log("ID: " + control.attr("id"));
 	
 	var slider = control.find("ul");
-	var visible_items = slider.data("visible_items");
-	var animation_speed = slider.data("animation_speed");
-	var pause_time = slider.data("pause_time");
+	var visible_items = parseInt(slider.attr("data-visible_items"));
+	var animation_speed = parseInt(slider.attr("data-animation_speed"));
+	var pause_time = parseInt(slider.attr("data-pause_time"));
 	
 	slider.flexisel({
         visibleItems: visible_items,
@@ -900,7 +912,7 @@ function initializeAllDialogButton() {
 			console.log("[DELETE_IMAGESLIDER]: " + clicked_dropped_item_id);
 			stopSlider($("#" + clicked_dropped_item_id));
 			var target_slider = $("#" + clicked_dropped_item_id).find('ul');
-			var count_image = target_slider.data("total_item");
+			var count_image = parseInt(target_slider.attr("data-total_item"));
 			target_slider.find("li").each(function(index, value){
 				if(index < count_image){
 					var deleted_img = $(this).find("img");			
@@ -1002,34 +1014,34 @@ function initializeAllDialogButton() {
 
 	$("#btn_txt_editor_bold").click(function() {
 
-		if (editable_control.data("isbold") == null) {
-			editable_control.data("isbold", "false");
+		if (editable_control.attr("data-isbold") == null) {
+			editable_control.attr("data-isbold", "false");
 		}
 
-		if (editable_control.data("isbold") == "false") {
+		if (editable_control.attr("data-isbold") == "false") {
 			editable_control.css('font-weight', 'bold');
-			editable_control.data("isbold", "true");
+			editable_control.attr("data-isbold", "true");
 
 		} else {
 			editable_control.css('font-weight', 'normal');
-			editable_control.data("isbold", "false");
+			editable_control.attr("data-isbold", "false");
 		}
 
 	});
 
 	$("#btn_txt_editor_italic").click(function() {
 
-		if (editable_control.data("isitalic") == null) {
-			editable_control.data("isitalic", "false");
+		if (editable_control.attr("data-isitalic") == null) {
+			editable_control.attr("data-isitalic", "false");
 		}
 
-		if (editable_control.data("isitalic") == "false") {
+		if (editable_control.attr("data-isitalic") == "false") {
 			editable_control.css('font-style', 'italic');
-			editable_control.data("isitalic", "true");
+			editable_control.attr("data-isitalic", "true");
 
 		} else {
 			editable_control.css('font-style', 'normal');
-			editable_control.data("isitalic", "false");
+			editable_control.attr("data-isitalic", "false");
 		}
 
 	});
@@ -1141,17 +1153,17 @@ function initializeAllDialogButton() {
 	
 	$("#dropdown_slider_pause_time").on("change", function() {
 		var new_pause = this.value*1000;
-		editable_control.find('ul').data("pause_time", new_pause);
+		editable_control.find('ul').attr("data-pause_time", new_pause);
 	});
 
 	$("#dropdown_slider_animation_speed").on("change", function() {
 		var new_speed = this.value*1000;
-		editable_control.find('ul').data("animation_speed", new_speed);
+		editable_control.find('ul').attr("data-animation_speed", new_speed);
 	});
 	
 	$("#dropdown_slider_visible_item").on("change", function() {
 		var visible_item = this.value;
-		editable_control.find('ul').data("visible_items", visible_item);
+		editable_control.find('ul').attr("data-visible_items", visible_item);
 	});
 
 	/*

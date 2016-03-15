@@ -129,8 +129,6 @@ function loadContents()
         makeTemplateComponetsEditable();
         return;
     }
-
-    console.log("[DEBUG] Calling Ajax");
     $.ajax({
         type: "POST",
         url: '/html-view-menus/' + template_id,
@@ -141,7 +139,6 @@ function loadContents()
             _token: CSRF_TOKEN
         },
         success: function (data) {
-            console.log("[DEBUG] Ajax success");
             if(data.success)
             {
                 // alert(data.message);
@@ -170,8 +167,6 @@ function loadContents()
             });
         }
     });
-
-    console.log("[DEBUG] loadContents ends");
 }
 
 /*
@@ -185,7 +180,6 @@ function onLoadMenus() {
     var isEdit = $('#hidden-div-is-edit').text();
     var template_id = $('#hidden-div-template-current').text();
 
-    //alert(user_menu_content_array);
     $ul = $('#menu');
     $lis = $ul.find('li'); /* Finds all sub li under menu ul(find all menus) */
     var curLi = $lis[0];
@@ -248,6 +242,7 @@ function setBodyHtmlString(bodyHtml) {
     $('#body').html(bodyHtml);
     if(typeof isView !== 'undefined' && isView)
     {
+        makeTemplateComponetsNotEditable();
         LoadTemplateAnimations();
     }
     else
@@ -300,9 +295,7 @@ function onMenuClick(menu) {
 
     var isEdit = $('#hidden-div-is-edit').text();
 
-	closeAllEditDialogPanel();
     saveCurrentMenuText();
-
     traverseImages();
 
     var menuText = $(menu).text();
@@ -317,12 +310,6 @@ function onMenuClick(menu) {
         //alert("SAVING PREVIOUS MENU CONTENT!!! -> " + menuText + "###" + menuContens[menuText]);
         setBodyHtmlString(menuContens[menuText]);
 
-    }
-    if(typeof isView !== 'undefined' && isView){
-        makeTemplateComponetsNotEditable();
-    } else {
-        makeTemplateComponetsEditable();
-        onTemplateMenuLoad();
     }
 }
 

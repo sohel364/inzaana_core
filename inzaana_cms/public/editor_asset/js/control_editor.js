@@ -300,15 +300,17 @@ function showButtonEditPanel() {
 
 	var old_btn_text = editable_control.text();
 	var old_color = editable_control.css('backgroundColor');
+	var old_link = editable_control.attr("data-onclick");
 
 	$("#btn_text").val(old_btn_text);
-	$("#btn_link").val('');
+	$("#btn_link").val(old_link);
 
 	function restoreInitialState() {
 		// If cancel button is pressed, this function will be called
 		isSaved = false;
 		editable_control.html(old_btn_text);
 		editable_control.css("background", old_color);
+		editable_control.attr("data-onclick", old_link);		
 	}
 
 	$("#btn_edit_dialog").dialog({
@@ -329,6 +331,10 @@ function showButtonEditPanel() {
 			makeControlNonEditable(editable_control);
 			if (isSaved == false) {
 				restoreInitialState();
+			}
+			else
+			{
+				editable_control.attr("data-onclick", $("#btn_link").val());
 			}
 		},
 
@@ -469,14 +475,14 @@ function showImageSliderEditPanel() {
 	var file_name = "test_image";
 
 	console.log(target_slider.find('li').length);
-	var count_image = target_slider.data("total_item");
+	var count_image = parseInt(target_slider.attr("data-total_item"));
 	
-	var pause_time = target_slider.data("pause_time")/1000;
-	var animation_speed = target_slider.data("animation_speed")/1000;
+	var pause_time = parseInt(target_slider.attr("data-pause_time"))/1000;
+	var animation_speed = parseInt(target_slider.attr("data-animation_speed"))/1000;
 	
 	$("select#dropdown_slider_pause_time").val(pause_time);
 	$("select#dropdown_slider_animation_speed").val(animation_speed);
-	$("select#dropdown_slider_visible_item").val(target_slider.data("visible_items"));
+	$("select#dropdown_slider_visible_item").val(target_slider.attr("data-visible_items"));
 
 	target_slider.find('li').each(
 			function(index, value) {
@@ -495,14 +501,14 @@ function showImageSliderEditPanel() {
 
 	updateImageSliderThumbnail();
 	
-//	if(editable_control.data("pause") != undefined){
+//	if(editable_control.attr("data-pause") != undefined){
 //	}else{
-//		editable_control.data("pause", SLIDER_PAUSE);
+//		editable_control.attr("data-pause", SLIDER_PAUSE);
 //	}
 //	
-//	if(editable_control.data("speed") != undefined){
+//	if(editable_control.attr("data-speed") != undefined){
 //	}else{
-//		editable_control.data("speed", SLIDER_ANIMATION_SPEED);
+//		editable_control.attr("data-speed", SLIDER_ANIMATION_SPEED);
 //	}
 
 	function restoreInitialState() {
@@ -656,7 +662,7 @@ function makeControlResizable() {
 			}
 			
 //			animateImageSlider(editable_control, editable_control.width(),
-//					editable_control.data("speed"), editable_control.data("pause"));
+//					editable_control.attr("data-speed"), editable_control.attr("data-pause"));
 		},
 	});
 }
@@ -664,7 +670,7 @@ function makeControlResizable() {
 function showGroupEditPanel() {
 	editable_group = editable_control;
 	
-	if (editable_control.data("is_form") != null){
+	if (editable_control.attr("data-is_form") != null){
 		$("#btn_group_edit_add_label").css("display", "none");
 	}else{
 		$("#btn_group_edit_add_label").css("display", "block");
