@@ -400,6 +400,28 @@ function showButtonEditPanel() {
 function showTextEditPanel() {
 
 	// $(".ui-dialog-titlebar-close").css("display", true);
+// var text = editable_control.html();
+// BootstrapDialog.show({
+//                 title: 'Text Editor',
+//                 message: text,
+//                 buttons: [{
+//                     label: 'Save',
+//                     cssClass: 'btn-info btn-flat',
+//                     action: function(dialogRef) {
+//                         dialogRef.close();
+//                     }
+//                 } ,
+//                     {
+//                         label: 'Cancel',
+//                         cssClass: 'btn-info btn-flat',
+//                         action: function(dialogRef) {
+//                             dialogRef.close();
+//                         }
+//                     }
+//                 ]
+//             });
+
+//////////////////////////////////////////////////////
 
 	$("#text_edit_dialog").dialog({
 		dialogClass : "no-close",
@@ -424,6 +446,9 @@ function showTextEditPanel() {
 		},
 
 	});
+
+/////////////////////////////////////////////////////
+
 
 	// $("#text_edit_dialog").addClass("ui-dialog-titlebar-close");
 
@@ -685,6 +710,12 @@ function makeControlResizable() {
 			{
 				background_div.css("height", ui.size.height);
 				background_div.css("width", ui.size.width);	
+			}
+
+			if (editable_control.attr("name") == "image")
+			{
+				editable_control.find("img").css("height", ui.size.height);
+				editable_control.find("img").css("width", ui.size.width);
 			}
 			
 //			animateImageSlider(editable_control, editable_control.width(),

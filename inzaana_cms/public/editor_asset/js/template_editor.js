@@ -126,30 +126,38 @@ $(function(){
     /*
      *Add New Menu
      * */
+    var is_menu_dialog_open = false;
     $(".add-menu").on('click',function(){
-        BootstrapDialog.show({
-            title: 'Create new page',
-            message: '<div class="form-group"><label for="pageType">Page event type:</label><select Id="pageType"><option>Academic</option><option>Marriage</option><option>Trip</option></select></div> <label for="pageType">Page Name:</label><input type="text" class="form-control">',
-            buttons: [{
-                label: 'Ok',
-                cssClass: 'btn-info btn-flat',
-                action: function(dialogRef) {
-                    var newMenu = dialogRef.getModalBody().find('input').val();
-                    var menuType = dialogRef.getModalBody().find('select').find(":selected").text().toLowerCase();
-                    addNewMenu(newMenu);
-                    updateControlPaletteTabList(menuType);
-                    dialogRef.close();
-                }
-            } ,
-                {
-                    label: 'Cancel',
+        if (!is_menu_dialog_open)
+        {
+            is_menu_dialog_open = true;
+
+            BootstrapDialog.show({
+                title: 'Create new page',
+                message: '<div class="form-group"><label for="pageType">Page event type:</label><select Id="pageType"><option>Academic</option><option>Marriage</option><option>Trip</option></select></div> <label for="pageType">Page Name:</label><input type="text" class="form-control">',
+                buttons: [{
+                    label: 'Ok',
                     cssClass: 'btn-info btn-flat',
                     action: function(dialogRef) {
+                        var newMenu = dialogRef.getModalBody().find('input').val();
+                        var menuType = dialogRef.getModalBody().find('select').find(":selected").text().toLowerCase();
+                        addNewMenu(newMenu);
+                        updateControlPaletteTabList(menuType);
+                        is_menu_dialog_open = false;
                         dialogRef.close();
                     }
-                }
-            ]
-        });
+                } ,
+                    {
+                        label: 'Cancel',
+                        cssClass: 'btn-info btn-flat',
+                        action: function(dialogRef) {
+                            is_menu_dialog_open = false;
+                            dialogRef.close();
+                        }
+                    }
+                ]
+            });
+        }
 
     });
 
