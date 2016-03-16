@@ -93,6 +93,7 @@ function initializeControlPalette(){
 ////	$("#btn_template_palette").append(control);
 	
 	$("#btn_open_bg_editor").click(function(){
+		closeAllControlPalette()
 		openBGEditor($("#container_background-1"));
 	});
 	

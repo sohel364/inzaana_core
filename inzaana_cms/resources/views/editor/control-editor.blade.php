@@ -421,8 +421,8 @@
 				</ul>
 			</div>
 		</div>
-		<button id="btn_bg_editor_save" class="btn btn-default bg_editor_button">Cancel</button>
-		<button id="btn_bg_editor_cancel"class="btn btn-default bg_editor_button">Save</button>
+		<button id="btn_bg_editor_cancel" class="btn btn-default bg_editor_button">Cancel</button>
+		<button id="btn_bg_editor_save"class="btn btn-default bg_editor_button">Save</button>
 	</div>
 	
 </div>

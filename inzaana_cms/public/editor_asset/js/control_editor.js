@@ -88,10 +88,12 @@ function initializeBGEditor(){
 	});
 	
 	$("#btn_bg_editor_save").click(function(){
+		isSaved = true;
 		$("#dialog_bg_editor").dialog("close");
 	});
 	
 	$("#btn_bg_editor_cancel").click(function(){
+		isSaved = false;
 		$("#dialog_bg_editor").dialog("close");
 	});
 	
@@ -249,6 +251,26 @@ function initializeColorPickers(){
 
 function openBGEditor(control){
 	editable_bg_control = $("#" + control.attr("id") + "_div-1");
+	var old_bg_color = editable_bg_control.css("background-color");
+	var old_bg_image_src = editable_bg_control.css("background-image");
+	var old_bg_image_position = editable_bg_control.css("background-position");
+	var old_bg_image_repeat = editable_bg_control.css("background-repeat");
+	var old_bg_image_attachment = editable_bg_control.css("background-attachment");
+
+	function restoreInitialState() {
+		// If cancel button is pressed, this function will be called
+		console.log("old_bg_color : " + old_bg_color);
+		console.log("old_bg_image_src : " + old_bg_image_src);
+		console.log("old_bg_image_position : " + old_bg_image_position);
+		console.log("old_bg_image_repeat : " + old_bg_image_repeat);
+		console.log("old_bg_image_attachment : " + old_bg_image_attachment);
+		isSaved = false;
+		editable_bg_control.css("background", old_bg_color);
+		editable_bg_control.css("background-image", old_bg_image_src);
+		editable_bg_control.css("background-position", old_bg_image_position);
+		editable_bg_control.css("background-repeat", old_bg_image_repeat);
+		editable_bg_control.css("background-attachment", old_bg_image_attachment);	
+	}
 	
 	$("#dialog_bg_editor").dialog({
 		dialogClass : "no-close",
@@ -264,6 +286,10 @@ function openBGEditor(control){
 			direction : "up"
 		},
 		beforeClose : function(event, ui) {
+			if (isSaved == false)
+			{
+				restoreInitialState();
+			}
 		},
 
 	});
