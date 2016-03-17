@@ -36,7 +36,7 @@ var currentMousePos = {
 };
 
 function makeTemplateComponetsEditable() {
-	console.log("Making Template Control Editable");
+	console.log("[INFO] Making Template Control Editable");
 
 	$("#body").find("*").each(function() {
 		var control_id = $(this).attr("id");
@@ -103,7 +103,7 @@ function LoadTemplateAnimations()
 }
 
 function makeTemplateComponetsNotEditable() {
-	console.log("Making Tempate Controls Not Editable");
+	console.log("[INFO] Making Tempate Controls Not Editable");
 
 	$("#body").find("*").each(function() {
 		var control_id = $(this).attr("id");
@@ -132,10 +132,22 @@ function makeTemplateComponetsNotEditable() {
 		if ($(this).is("a")){
 			$(this).attr("href", $(this).attr("data-href"));
 		}
-		
-		// if ($(this).is("button")){
-		// 	$(this).attr("onclick", $(this).attr("data-onclick"));
-		// }
+
+
+		if (control_name == "imageslider" || control_name == "group_imageslider")
+		{
+			var target_slider = $(this).find("ul");
+			var tmp_slider_image_list = target_slider.clone();
+			var count_image = parseInt(target_slider.attr("data-total_item"));
+			target_slider.empty();
+
+			tmp_slider_image_list.find('li').each(
+				function(index, value) {
+					if (index < count_image) {
+						$(this).appendTo(target_slider);
+				}
+			});
+		}
 	});
 }
 

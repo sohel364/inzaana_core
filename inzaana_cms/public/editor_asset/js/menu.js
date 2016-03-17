@@ -217,8 +217,10 @@ function onLoadMenus() {
  * Save current menu context while switching to another menu
  */
 function saveCurrentMenuText() {
-    if (typeof isEdit !== 'undefined' && isEdit)
+    console.log("Saving Current menu Text: ");
+    if (isInEditor)
     {
+        console.log("In Editor");
         closeAllEditDialogPanel();
         makeTemplateComponetsNotEditable();
     }
@@ -240,7 +242,7 @@ function getBodyHtmlString() {
  */
 function setBodyHtmlString(bodyHtml) {
     $('#body').html(bodyHtml);
-    if(typeof isView !== 'undefined' && isView)
+    if(!isInEditor)
     {
         makeTemplateComponetsNotEditable();
         LoadTemplateAnimations();
