@@ -82,6 +82,7 @@ Route::group(['middleware' => 'web'], function () {
         // Media Archive Controller
         Route::post('/medias/save', [ 'uses' => 'MediaController@save', 'as' => 'medias.save' ]);
         Route::get('/medias/template/{template_id}', [ 'uses' => 'MediaController@reload', 'as' => 'medias.reload' ]);
+        Route::get('/medias/images/{filename}', [ 'uses' => 'MediaController@image', 'as' => 'medias.image' ]);
 
     });
 });

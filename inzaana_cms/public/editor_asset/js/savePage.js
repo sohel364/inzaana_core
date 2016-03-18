@@ -7,7 +7,7 @@
 
 // onload functionalities
 $(document).ready(function() {
-    hideSavingIcon();
+    // hideSavingIcon();
 });
 
 
@@ -122,7 +122,9 @@ function traverseImages() {
                 {
                     //console.log('[WB][container-parts [child]: ' + parts + '][' + $('#' + element.id)[0].nodeName + ']');
                     //console.log('[WB][container-parts [child][style:background(url)]: ' + $('#' + element.id).attr("style") + ']'); //$("#stylediv").attr('style')
-                    if ($('#' + element.id).css("background-image") == "none" || $('#' + element.id).css("background-image") == "undefined") {
+                    if ($('#' + element.id).css("background-image") == "none"
+                        || $('#' + element.id).css("background-image") == "undefined"
+                        || $('#' + element.id).css("background-image") === "") {
                         //console.log('[WB][container-parts [child][index]: ' + index + ']');
                         //console.log('[WB][container-parts [child][style:background(url)]: ' + $('#' + element.id).css("background-image") + ']');//img.attr("src").split('.').pop()
                     }
@@ -152,13 +154,15 @@ function traverseImages() {
                         {
                             containers.push(containerObj);
                         }
-                        //console.log('[WB][container-json]: ' + containerObj);
+                        console.log('[WB][container-json]: ' + containerObj);
                     }
                 }
                 else
                 {
-                    //console.log('[WB][container-parts [child]: ' + parts + '][' + $('#' + element.id)[0].nodeName + ']');
-                    if ($('#' + element.id).attr("src") == "undefined" || $('#' + element.id).attr("src") == "none") {
+                    // console.log('[WB][container-parts [child]: ' + parts + '][' + $('#' + element.id)[0].nodeName + ']');
+                    if ($('#' + element.id).attr("src") == "undefined" 
+                        || $('#' + element.id).attr("src") == "none" 
+                        || $('#' + element.id).attr("src") === "") {
                         //console.log('[WB][container-parts [child][index]: ' + index + ']');
                         //console.log('[WB][container-parts [child][style:src]: ' + $('#' + element.id).attr("src") + ']'); //$("#stylediv").attr('src')
                     }
@@ -188,14 +192,14 @@ function traverseImages() {
                         {
                             containers.push(containerObj);
                         }
-                        //console.log('[WB][container-json]: ' + containerObj);
+                        console.log('[WB][container-json]: ' + containerObj);
                     }
                 }
             }
         });
-        console.log('[WB-D][container-count: ' + allElements.length + ']');
+        allImages[curMenu] = containers;
+        console.log('[WB-D][container-curMenuImage-count: ' + allImages[curMenu].length + ']');
     });
-    allImages[curMenu] = containers;
 }
 
 /*
@@ -423,14 +427,18 @@ function saveViewMenus(template_id, viewMenus, menuContents, nextUrl, message)
             if(data.success)
             {
                 message['menu'] = data.message;
+
+                makeTemplateComponetsEditable();
+
                 saveContents(template_id, viewMenus, menuContents, nextUrl, message);
                 return;
             }
-            errorAlert(data.message, function() {
+            alert(data.message);
+            // errorAlert(data.message, function() {
 
-                hideSavingIcon();
-                window.location.href = nextUrl;
-            });
+            //     hideSavingIcon();
+            //     window.location.href = nextUrl;
+            // });
         },
         error: function(xhr, status, error) {
             var err =  xhr.responseText;
@@ -467,44 +475,23 @@ function saveContents(template_id, templateViewMenus, menuContents, nextUrl, mes
                 // alert(data.message);
                 // alert(message['template']);
 
-                var sweetAlert = {
-                    html: true,
-                    title: "Sweet!",
-                    text: '<div class="alert alert-success">' + message['template'] + '</div>',
-                    imageUrl: "/dist/img/thumbs-up.jpg"
-                };
+                // find template to save its medias
+                findTemplate(
+                    template_id,
+                function(data) {
+                  onSuccessFoundTemplate(data, nextUrl, message);
+                },
+                function(xhr, status, error) {
 
-                swal( sweetAlert , function() {
+                    errorAlert(xhr.responseText, function() {
 
-                    findTemplate(
-                        template_id,
-                    function(data) {
-
-                        if(data.success)
-                        {
-                            // INFO: template info is found
-                            saveImages(data.template.user_id, data.template.id);
-
-                            allImages = [];
-
-                            makeTemplateComponetsEditable();
-
-                            // window.location.href = nextUrl;
-                        }
-
-                    },
-                    function(xhr, status, error) {
-
-                        errorAlert(xhr.responseText, function() {
-
-                            hideSavingIcon();
-                        });
+                        hideSavingIcon();
+                        window.location.href = nextUrl; 
                     });
                 });
-
                 return;
             }
-            errorAlert(err, function() {
+            errorAlert(data.message, function() {
 
                 hideSavingIcon();
                 window.location.href = '/templates/gallery';
@@ -512,12 +499,51 @@ function saveContents(template_id, templateViewMenus, menuContents, nextUrl, mes
         },
         error: function(xhr, status, error) {
             var err =  xhr.responseText;
+            // alert(err);
             errorAlert(err, function() {
 
                 hideSavingIcon();
                 window.location.href = nextUrl;  
             });
         }
+    });
+}
+
+// When template is found saves its medias
+function onSuccessFoundTemplate(data, nextUrl, message) {
+
+    if(data.success)
+    {
+        // INFO: template info is found
+        saveImages(data.template.user_id, data.template.id, function(imageCount) {
+            
+            // alert('Image uploaded:' + imageCount);
+            // hideSavingIcon();
+
+            // TODO: when all medias are uploaded done show sucess
+            var sweetAlert = {
+                html: true,
+                title: "Sweet!",
+                text: '<div class="alert alert-success">' + message['template'] + '</div>',
+                imageUrl: "/dist/img/thumbs-up.jpg"
+            };
+
+            swal( sweetAlert , function() {
+
+                allImages = [];
+                
+                // MUST BE REDIRECTED
+                // window.location.href = nextUrl;
+            });
+
+        });
+        return;
+    }
+    // alert(data.message);
+    errorAlert(data.message, function() {
+
+        hideSavingIcon();
+        window.location.href = nextUrl; 
     });
 }
 
@@ -539,7 +565,7 @@ function showSavingIcon() {
  * Hides loading icon after finishing saving operation
  */
 function hideSavingIcon() {
-    //swal.close();
+    swal.close();
 }
 
 function errorAlert(message, callback)

@@ -19,7 +19,7 @@ table,tr,td{
 }
 
 #body {
-/* 	background-image: url("../resource/images/banner1.png"); */
+/* 	background-image: url("/templates/uncategorized/tailor/resource/images/banner1.png"); */
 	/* background-repeat: repeat-y;
     background-attachment: fixed;
     background-color: black; */
@@ -28,7 +28,7 @@ table,tr,td{
 
 
 .header-top{
-	background:url(../resource/images/header-top.jpg) repeat-x;
+	background:url(/templates/uncategorized/tailor/resource/images/header-top.jpg) repeat-x;
 	padding:19px 0;
 	text-transform:capitalize;
 }
@@ -73,7 +73,7 @@ table,tr,td{
 	border-bottom:5px solid #dde4eb;
 }
 .header-bottom input[type="text"]{
-	background:url(../resource/images/magnifying-glass.png) no-repeat center left 8px;
+	background:url(/templates/uncategorized/tailor/resource/images/magnifying-glass.png) no-repeat center left 8px;
 	border:1px solid #c3cbdc;
 	width:360px;
 	padding:5px 0 5px 30px;
@@ -223,7 +223,7 @@ table,tr,td{
 	position:relative;
 	overflow:hidden;
 	width:100%;
-	background:url(../resource/images/pattern.jpg) repeat;
+	background:url(/templates/uncategorized/tailor/resource/images/pattern.jpg) repeat;
 	height:595px;	
 }
 
@@ -232,7 +232,7 @@ table,tr,td{
 	width:100%; 
 /*	height:400px; when responsive, comment this out */
 	margin:0 auto;
-	background:url(../resource/images/pattern.jpg) repeat;
+	background:url(/templates/uncategorized/tailor/resource/images/pattern.jpg) repeat;
 }
 
 @media only screen and (min-width: 1000px){
@@ -270,7 +270,8 @@ table,tr,td{
 	color:#000;
 }
 .purple{
-	background:url(../resource/images/purple-bg.jpg) no-repeat center;
+	/*background:url(../resource/images/purple-bg.jpg) no-repeat center;*/
+	background:url(/templates/uncategorized/tailor/resource/images/purple-bg.jpg) no-repeat center;
 	padding:100px 0;
 	background-size:cover;
 }
@@ -509,14 +510,14 @@ display:none;
 
 .nbs-flexisel-nav-left {
     left: -21px;
-    background: url(../resource/images/button-previous.png) no-repeat;
+    background: url(/templates/uncategorized/tailor/resource/images/button-previous.png) no-repeat;
 	height:43px;
 	width:21px;
 }
 
 .nbs-flexisel-nav-right {
     right: -26px;
-    background: url(../resource/images/button-next.png) no-repeat;
+    background: url(/templates/uncategorized/tailor/resource/images/button-next.png) no-repeat;
 	height:43px;
 	width:21px;
 }
@@ -534,7 +535,7 @@ display:none;
 	padding-bottom:50px;
 }
 .text{
-	background:url(../resource/images/quote.png) no-repeat bottom right;
+	background:url(/templates/uncategorized/tailor/resource/images/quote.png) no-repeat bottom right;
 }
 .text h3{
 	font-weight:600;
@@ -600,7 +601,7 @@ display:none;
 	padding-left:10px;
 }
 .footer-top{
-	background:url(../resource/images/footer-bg.jpg) repeat;
+	background:url(/templates/uncategorized/tailor/resource/images/footer-bg.jpg) repeat;
 }
 .footer-top .newsletter{
 	padding:50px 0;

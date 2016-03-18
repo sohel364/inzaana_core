@@ -24,11 +24,11 @@ $(document).ready(function() {
 
 function onMediaFoundSuccess(data, textStatus, xhr)
 {
-    if(data.success)
-    {
-        // handleReceivedImageData(xhr);
-    }
-    errorAlert(data.message, function() {});
+    // if(data.success)
+    // {
+    //     // handleReceivedImageData(xhr);
+    // }
+    // errorAlert(data.message, function() {});
 }
 
 function handleReceivedImageData(xhr) {
@@ -198,14 +198,16 @@ function onLoadMenus() {
     if (typeof isEdit !== 'undefined' && isEdit) {
         // update mode
         // getSavedMenuContents();
-        // alert('In edit mode');
+        // alert('In edit mode in editor');
     }
     else if(typeof isView !== 'undefined' && isView)
-    {}
+    {
+        // alert('In viewer mode');
+    }
     else 
     {
         // insert mode
-        // alert('In saving mode');
+        // alert('In saving mode in editor');
         menuContens[curMenu] = getBodyHtmlString();
     }
     defaultMenuHtml = getBodyHtmlString();
@@ -279,11 +281,11 @@ function setDefaultMenuContent(menuText)
             {
                 defaultMenuHtml = data.defaultMenuContent;
             }
-            //alert(data.message);
+            // alert(data.message);
         },
         error: function(xhr, status, error) {
             var err =  xhr.responseText;
-            //alert(err);
+            // alert(err);
         }        
     });
 }
@@ -296,6 +298,7 @@ function onMenuClick(menu) {
     console.log("[DEBUG] onMenuClick");
 
     var isEdit = $('#hidden-div-is-edit').text();
+    var isView = !isInEditor;
 
     saveCurrentMenuText();
     traverseImages();
@@ -311,7 +314,6 @@ function onMenuClick(menu) {
     } else {
         //alert("SAVING PREVIOUS MENU CONTENT!!! -> " + menuText + "###" + menuContens[menuText]);
         setBodyHtmlString(menuContens[menuText]);
-
     }
 }
 
@@ -346,21 +348,24 @@ function loadImages(user_id, template_id, callbackFunc)
 function saveCurrentPageImages(isEdit, imageObj) {
 
     if(!isEdit) {
-        sendRequest(imageObj);
+        // sendRequest(imageObj);
+        sendImageUploadRequest(imageObj);
         if(imageObj.src.indexOf("blob") != -1)
         {
             // alert("[WB] on insert image-menu: " + imageObj.src);
-            //swal('Saving ...', "[WB] on insert image-menu: " + imageObj.src, 'info');
+            swal('Saving ...', "[WB] on insert image-menu: " + imageObj.src, 'info');
         }
     }
     else
     {
-        // if(!isEmpty(imageObj.src))
-        //    alert("[WB] on update image-src: \"" + imageObj.src + "\"");
+        if(isEmpty(imageObj.src))
+           alert("[WB] on update empty image-src: \"" + imageObj.src + "\"");
 
-        if(imageObj.src.indexOf("localhost") == -1)
+
+        // if(imageObj.src.indexOf("localhost") == -1)
         {
-            sendRequest(imageObj);
+            // sendRequest(imageObj);
+            sendImageUploadRequest(imageObj);
             //console.log("[WB] on update image-menu: " + imageObj.src);
             // alert("[WB] on update image-menu: " + imageObj.src);
         }
@@ -380,8 +385,9 @@ function isImageExists(id, menu_item)
     return false;
 }
 
-function saveImages(user_id, template_id) {
+function saveImages(user_id, template_id, onUploadSuccess) {
 
+    var imageCount = 0;
     var isEdit = $('#hidden-div-is-edit').text();
 
     console.log("[WB-D] saveImages: " + user_id + "$##$" + template_id);
@@ -390,8 +396,9 @@ function saveImages(user_id, template_id) {
 
         // console.log("[WB-D] [REPLIED] image-src: " + imageObj.src_arch );
 
-        //swal('REPLIED', mageObj.src_arch, 'info');
-
+        console.log('[ ' + imageObj.image_index + ' ] [ ' + imageObj.image_name);
+        if(imageCounter == imageCount)
+            onUploadSuccess(imageCount);
     });
 
     var menu_items = Object.keys(allImages);
@@ -411,9 +418,11 @@ function saveImages(user_id, template_id) {
 
             //console.log("[WB-D] info: " + user_id + "#" + template_id + "#" + imageObj.id + " SAVED!!!");
         });
+        imageCount += image_items.length;
         //alert("images count: " + image_items.length);
     });
-    //alert("menu count: " + menu_items.length);
+    // alert("menu count: " + menu_items.length);
+    // onUploadSuccess(imageCount);
 }
 
 function test_upload_image(){
@@ -427,6 +436,9 @@ function test_upload_image(){
 
 }
 
+/* @param img, image tag <IMG> HTML element
+ * @param id, a hidden HTML canvas element id where the image is rendered
+ */
 function getBase64ImageForImageElement(img, id) {
 
     // Create an empty canvas element
@@ -530,6 +542,57 @@ function createXHR()
     return null;
 }
 
+function sendImageUploadRequest(imageObj)
+{
+    imageCounter = 0;
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+    var request = $.ajax({
+        type: "POST",
+        url: '/medias/save',
+        dataType: 'json',
+        data: {
+            image: imageObj.data,
+            type: imageObj.type,
+            userId: _user_id,
+            templateId: _template_id,
+            image_src: imageObj.src,
+            image_id: imageObj.id,
+            image_index: imageObj.index,
+            menu_id: imageObj.menu,
+            _token: CSRF_TOKEN
+        }
+    });
+
+    request.done( function(data) {
+
+            // alert("[WB] RESP " + data.imageProfile);
+            var imageObj = JSON.parse(data.imageProfile);
+            // alert("[WB] RESP " + imageObj);
+
+            // alert("[WB] RESP " + imageObj.image_name);
+            // Change image source
+            if($('#' + imageObj.image_id)[0].nodeName == "IMG")
+            {
+                $('#' + imageObj.image_id).attr("src", imageObj.src_arch);
+                //console.log("[WB] RESP SRC:" +  $('#' + imageObj.image_id).attr("src"));
+                // alert("[WB] RESP SRC:" +  $('#' + imageObj.image_id).attr("src"));
+            }
+            else
+            {
+                $('#' + imageObj.image_id).css("background-image", "url(" + imageObj.src_arch  + ")");
+                //console.log("[WB] RESP URL:" + $('#' + imageObj.image_id).css("background-image"));
+                // alert("[WB] RESP URL:" + $('#' + imageObj.image_id).css("background-image"));
+            }
+            imageCounter++;
+            _callbackFn(imageObj);
+
+        }).fail( function(xhr, status) {
+            var err =  xhr.responseText;
+            swal(status, 'Upload failed: ' + err, 'info');
+            window.location.href = nextUrl; 
+        });
+}
+
 function sendRequest(imageObj)
 {
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -545,6 +608,7 @@ function sendRequest(imageObj)
                     + "&templateId=" + _template_id
                     + "&image_src=" + imageObj.src
                     + "&image_id=" + imageObj.id
+                    + "&image_index=" + imageObj.index
                     + "&menu_id=" + imageObj.menu
                     + "&_token=" + CSRF_TOKEN;
         xhr.open("POST",url,true);
@@ -565,7 +629,7 @@ function handleResponse(xhr)
 
     if (xhr.readyState == 4  && xhr.status == 200)
     {
-        //alert(xhr.responseText);
+        // alert(xhr.responseText);
         //console.log("[WB]" + xhr.readyState + '#' + xhr.status + '#' + _template_id);
         //var responseImage = document.getElementById("responseImage");
         //responseImage.src = (imageType == "png" ? "data:image/png;base64," : "data:image/jpeg;base64,") + xhr.responseText;
@@ -580,18 +644,18 @@ function handleResponse(xhr)
         {
             $('#' + imageObj.image_id).attr("src", imageObj.src_arch);
             //console.log("[WB] RESP SRC:" +  $('#' + imageObj.image_id).attr("src"));
-            alert("[WB] RESP SRC:" +  $('#' + imageObj.image_id).attr("src"));
+            // alert("[WB] RESP SRC:" +  $('#' + imageObj.image_id).attr("src"));
         }
         else
         {
             $('#' + imageObj.image_id).css("background-image", "url(" + imageObj.src_arch  + ")");
             //console.log("[WB] RESP URL:" + $('#' + imageObj.image_id).css("background-image"));
-            alert("[WB] RESP URL:" + $('#' + imageObj.image_id).css("background-image"));
+            // alert("[WB] RESP URL:" + $('#' + imageObj.image_id).css("background-image"));
         }
         _callbackFn(imageObj);
     }
     else
     {
-        errorAlert(xhr.responseText, function() {});
+        console.log("[WB][ERROR]" + xhr.responseText);
     }
 }
