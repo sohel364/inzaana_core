@@ -22,13 +22,97 @@ $(document).ready(function() {
     onLoadMenus();
 });
 
-function onMediaFoundSuccess(data, textStatus, xhr)
+function onUserFoundSuccess(user_id, medias)
 {
-    // if(data.success)
-    // {
-    //     // handleReceivedImageData(xhr);
-    // }
-    // errorAlert(data.message, function() {});
+    var data_rows = Object.keys(medias);
+    data_rows.forEach(function(data_row) {
+
+        var media = medias[data_row];
+        console.log(media.id + ' #### ' + user_id);
+
+        if(media.user_id != user_id)
+        {
+            // TODO: Redirecting to guest home
+            errorAlert(
+                'You are not authenticated or session expired. Redirecting to guest home. Please log in to edit your template',
+                function() {
+                    
+                    window.location.href = '/';
+                    hideSavingIcon();
+                })
+            return;
+        }
+
+        {
+            var user_template_id = media.user_id + '_' + media.template_id + '_';
+            var image_tree = media.media_name.replace( user_template_id ,'');
+            var image_name_parsed_array = image_tree.split('_');
+            var menu = image_name_parsed_array[0];
+            var id_hashed = image_name_parsed_array[image_name_parsed_array.length - 1];
+            var image_id = image_tree.replace(menu + '_', '').replace('_' + id_hashed, '');
+            //alert('[WB-D] [image-id]: ' + image_id);
+
+            // var src = getBaseUrl() + "/archive/" + media.media_name;
+            var src = '/medias/images/' + media.media_name;
+
+            //alert($('#' + image_id)[0].nodeName);
+            var parts = image_id.split('_');
+            var tagName = parts[parts.length - 1].split('-')[0];
+            // Change image source
+            if(tagName == "img")
+            {
+                $('#' + image_id).attr("src", src);
+                console.log("[WB-D] RESP SRC:" +  $('#' + image_id).attr("src"));
+            }
+            else
+            {
+                $('#' + image_id).css("background-image", "url(" + src  + ")");
+                console.log("[WB-D] RESP URL:" + $('#' + image_id).css("background-image"));
+            }
+        }// end-if for user checking
+    }); // end forEach
+    hideSavingIcon();
+}
+
+
+function viewTemplateMedias(medias)
+{
+    findCurrentAuthenticatedUser( function(data) {
+        if(!data.success)
+        {
+            errorAlert(
+                isEmpty(data.success) ? 'Something went wrong to find the authticated user!' : data.message,
+                function() {
+
+                    hideSavingIcon();
+                    window.location.href = '/';
+                });
+            hideSavingIcon();
+            return;
+        }
+        _user_id = data.user.id;
+        onUserFoundSuccess(_user_id, medias);
+
+    }, function(xhr, textStatus) {
+
+        errorAlert(
+            isEmpty(xhr.responseText) ? 'Something went wrong' : xhr.responseText,
+            function() {
+
+                hideSavingIcon();
+                window.location.href = '/';
+            });
+    }); // end findCurrentAuthenticatedUser
+}
+
+function onMediaFoundSuccess(data)
+{
+    if(data.success)
+    {
+        viewTemplateMedias(data.medias);
+        return;
+    }
+    errorAlert(data.message, function() {});
 }
 
 function handleReceivedImageData(xhr) {
@@ -37,44 +121,7 @@ function handleReceivedImageData(xhr) {
     {
         var dataset = JSON.parse(xhr.responseText);
         //alert("replied->:" + dataset);
-
-        var data_rows = Object.keys(dataset);
-        data_rows.forEach(function(data_row) {
-
-            var media = dataset[data_row];
-
-            //alert(media.id);
-
-            if(media.user_id == user_id)
-            {
-                var user_template_id = media.user_id + '_' + media.template_id + '_';
-                var image_tree = media.res_name.replace( user_template_id ,'');
-                var image_name_parsed_array = image_tree.split('_');
-                var menu = image_name_parsed_array[0];
-                var id_hashed = image_name_parsed_array[image_name_parsed_array.length - 1];
-                var image_id = image_tree.replace(menu + '_', '').replace('_' + id_hashed, '');
-                //alert('[WB-D] [image-id]: ' + image_id);
-
-                var src = getBaseUrl() + "/archive/" + media.res_name;
-
-                //alert($('#' + image_id)[0].nodeName);
-                var parts = image_id.split('_');
-                var tagName = parts[parts.length - 1].split('-')[0];
-                //alert(tagName);
-                // Change image source
-                if(tagName == "img")
-                {
-                    $('#' + image_id).attr("src", src);
-                    //alert("[WB-D] RESP SRC:" +  $('#' + image_id).attr("src"));
-                }
-                else
-                {
-                    $('#' + image_id).css("background-image", "url(" + src  + ")");
-                    //alert("[WB-D] RESP URL:" + $('#' + image_id).css("background-image"));
-                }
-            }// end-if for user checking
-
-        });
+        viewTemplateMedias(data);
     }
 }
 
@@ -97,23 +144,43 @@ function loadMediasOfPages() {
     }
 }
 
-function findMediasOfTemplate(id, onSuccess, onError)
+function findCurrentAuthenticatedUser(onSuccess, onError)
 {
-    var routing_url = '/medias/template/' + id;
+    var routing_url = '/who-am-i';
 
-    $.ajax({
+    var request = $.ajax({
 
         type: "GET",
         url: routing_url,
         dataType: 'json',
-        success: onSuccess,
-        error: onError,
+        statusCode: {
+            404: function() {
+                swal( "Sorry!" , "Your requested user is not found!", 'error');
+                window.location.href = '/';
+            }
+        }
+    });
+
+    request.done(onSuccess).fail(onError);
+}
+
+function findMediasOfTemplate(id, onSuccess, onError)
+{
+    var routing_url = '/medias/template/' + id;
+
+    var request = $.ajax({
+
+        type: "GET",
+        url: routing_url,
+        dataType: 'json',
         statusCode: {
             404: function() {
                 swal( "Sorry!" , "Your requested page is not found!", 'error');
             }
         }
     });
+
+    request.done(onSuccess).fail(onError);
 }
 
 function loadContents()
@@ -187,13 +254,15 @@ function onLoadMenus() {
     curMenu = $ahref.text();
 
     // loadMediasOfPages();
-    // findMediasOfTemplate(
-    //     template_id,
-    //     onMediaFoundSuccess,
-    // function(xhr, status, error) {
+    showPreparingIcon();
 
-    //     swal(status, error + ' ##### ' + xhr.responseText, 'error');
-    // });
+    findMediasOfTemplate(
+        template_id,
+        onMediaFoundSuccess,
+    function(xhr, status) {
+
+        swal(status, 'Template medias loading failed: ' + xhr.responseText, 'error');
+    });
 
     if (typeof isEdit !== 'undefined' && isEdit) {
         // update mode
@@ -398,7 +467,10 @@ function saveImages(user_id, template_id, onUploadSuccess) {
 
         console.log('[ ' + imageObj.image_index + ' ] [ ' + imageObj.image_name);
         if(imageCounter == imageCount)
+        {
             onUploadSuccess(imageCount);
+            imageCounter = imageCount = 0;
+        }
     });
 
     var menu_items = Object.keys(allImages);
@@ -573,22 +645,23 @@ function sendImageUploadRequest(imageObj)
             // Change image source
             if($('#' + imageObj.image_id)[0].nodeName == "IMG")
             {
-                $('#' + imageObj.image_id).attr("src", imageObj.src_arch);
-                //console.log("[WB] RESP SRC:" +  $('#' + imageObj.image_id).attr("src"));
-                // alert("[WB] RESP SRC:" +  $('#' + imageObj.image_id).attr("src"));
+                // $('#' + imageObj.image_id).attr("src", imageObj.src_arch);
+                $('#' + imageObj.image_id).attr("src", "/medias/images/" + imageObj.image_name);
+                console.log("[WB] RESP SRC:" +  $('#' + imageObj.image_id).attr("src"));
             }
             else
             {
-                $('#' + imageObj.image_id).css("background-image", "url(" + imageObj.src_arch  + ")");
-                //console.log("[WB] RESP URL:" + $('#' + imageObj.image_id).css("background-image"));
-                // alert("[WB] RESP URL:" + $('#' + imageObj.image_id).css("background-image"));
+                // $('#' + imageObj.image_id).css("background-image", "url(" + imageObj.src_arch  + ")");
+            $('#' + imageObj.image_id).css("background-image", "url(/medias/images/" + imageObj.image_name + ")");
+            // $('#' + imageObj.image_id).attr("style", "background-image: url(/medias/images/" + imageObj.image_name + ")");
+                console.log("[WB] RESP URL:" + $('#' + imageObj.image_id).css("background-image"));
             }
             imageCounter++;
             _callbackFn(imageObj);
 
         }).fail( function(xhr, status) {
             var err =  xhr.responseText;
-            swal(status, 'Upload failed: ' + err, 'info');
+            swal(status, 'Upload failed: ' + err, 'error');
             window.location.href = nextUrl; 
         });
 }
@@ -642,20 +715,37 @@ function handleResponse(xhr)
         // Change image source
         if($('#' + imageObj.image_id)[0].nodeName == "IMG")
         {
-            $('#' + imageObj.image_id).attr("src", imageObj.src_arch);
-            //console.log("[WB] RESP SRC:" +  $('#' + imageObj.image_id).attr("src"));
-            // alert("[WB] RESP SRC:" +  $('#' + imageObj.image_id).attr("src"));
+            // $('#' + imageObj.image_id).attr("src", imageObj.src_arch);
+            $('#' + imageObj.image_id).attr("src", "/medias/images/" + imageObj.image_name);
+            console.log("[WB] RESP SRC:" +  $('#' + imageObj.image_id).attr("src"));
         }
         else
         {
-            $('#' + imageObj.image_id).css("background-image", "url(" + imageObj.src_arch  + ")");
-            //console.log("[WB] RESP URL:" + $('#' + imageObj.image_id).css("background-image"));
-            // alert("[WB] RESP URL:" + $('#' + imageObj.image_id).css("background-image"));
+            // $('#' + imageObj.image_id).css("background-image", "url(" + imageObj.src_arch  + ")");
+            $('#' + imageObj.image_id).css("background-image", "url(/medias/images/" + imageObj.image_name + ")");
+            // $('#' + imageObj.image_id).attr("style", "background-image: url(/medias/images/" + imageObj.image_name + ")");
+            console.log("[WB] RESP URL:" + $('#' + imageObj.image_id).css("background-image"));
         }
+        imageCounter++;
         _callbackFn(imageObj);
     }
     else
     {
         console.log("[WB][ERROR]" + xhr.responseText);
     }
+}
+
+/*
+ * Shows loading icons while saving operation is ongoing
+ */
+function showPreparingIcon() {
+    var sweetAlert = {
+        title: "Please wait ...",
+        text: 'Inzaana is preparing your template.',
+        imageUrl: '/dist/img/loading40.gif',
+        imageSize: '220x20',
+        type: 'info',
+        showConfirmButton: false
+    };
+    swal( sweetAlert );
 }

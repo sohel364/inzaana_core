@@ -533,7 +533,7 @@ function onSuccessFoundTemplate(data, nextUrl, message) {
                 allImages = [];
                 
                 // MUST BE REDIRECTED
-                // window.location.href = nextUrl;
+                window.location.href = nextUrl;
             });
 
         });
@@ -561,6 +561,7 @@ function showSavingIcon() {
     };
     swal( sweetAlert );
 }
+/*
 /*
  * Hides loading icon after finishing saving operation
  */

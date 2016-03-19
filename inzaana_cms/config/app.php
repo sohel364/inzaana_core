@@ -158,7 +158,15 @@ return [
         /*
          * Extended Service Providers
          */
+        /*
+         * Session based flash notification of message service
+         */
         Laracasts\Flash\FlashServiceProvider::class,
+
+        /*
+         * Driver based image processing service
+         */
+        Intervention\Image\ImageServiceProvider::class,
 
     ],
 
@@ -208,6 +216,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
         'Flash'     => 'Laracasts\Flash\Flash',
+        'Image'     => Intervention\Image\Facades\Image::class,
 
     ],
 

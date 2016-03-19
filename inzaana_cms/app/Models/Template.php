@@ -23,4 +23,12 @@ class Template extends Model
         return $this->hasMany('Inzaana\HtmlViewMenu');
     }
 
+    /**
+     * relationship with template and its medias
+     */
+    public function medias()
+    {
+        return $this->hasMany('Inzaana\Media');
+    }
+
 }

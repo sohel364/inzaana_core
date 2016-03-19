@@ -34,11 +34,12 @@ Route::group(['middleware' => 'web'], function () {
 
         // User controller
     	Route::get('/dashboard', [ 'uses' => 'UserController@index', 'as' => 'home' ]);
-        Route::get('/user_dashboard', [ 'uses' => 'UserController@userdashboard', 'as' => 'home.customer' ]);
+        Route::get('/user_dashboard', [ 'uses' => 'UserController@userdashboard', 'as' => 'customer' ]);
         Route::get('/user_my_order', [ 'uses' => 'UserController@usermyorder', 'as' => 'orders' ]);
         Route::get('/user_product_return', [ 'uses' => 'UserController@userproductreturn', 'as' => 'products.return' ]);
         Route::get('/user_reward_points', [ 'uses' => 'UserController@userrewardpoints', 'as' => 'reward-points' ]);
         Route::get('/user_wallet', [ 'uses' => 'UserController@userwallet', 'as' => 'wallet' ]);
+        Route::get('/who-am-i', [ 'uses' => 'UserController@user', 'as' => 'info' ]);
 
         // Template Controller
         Route::get('/templates/gallery', [ 'uses' => 'TemplateController@index', 'as' => 'templates' ]);

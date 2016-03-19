@@ -20,7 +20,7 @@ class CreateMediasTable extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->string('media_name')->comment('Media name of the resource.');
             $table->enum('media_type', ['IMAGE', 'VIDEO', 'AUDIO'])->default('IMAGE')->comment('Media type of the resource.');
-            $table->enum('status', ['REMOVED', 'HIDDEN', 'SHOWED'])->default('SHOWED')->comment('Status of the media availability');
+            $table->enum('status', ['REMOVED', 'HIDDEN', 'VISIBLE'])->default('VISIBLE')->comment('Status of the media availability');
 
             $table->softDeletes()->comment('If we want to keep track of deletion without actually deleting a record');
             $table->timestamps();

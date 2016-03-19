@@ -8,7 +8,8 @@ use Inzaana\Http\Requests;
 use Inzaana\Http\Controllers\Controller;
 
 // import the Intervention Image Manager Class
-use Intervention\Image\Image as TemplateImage;
+use Intervention\Image\Image;
+use Intervention\Image\ImageManager;
 
 use Auth;
 use Storage;
@@ -32,19 +33,36 @@ class MediaController extends Controller
         $this->middleware('auth');
     }
 
+    // 1_51_Home_container_section-2_img-2_b995a302bc6ffe2d463d69f016a78042.jpeg
     // sources:
     // http://stackoverflow.com/questions/30191330/laravel-5-how-to-access-image-uploaded-in-storage-within-view
     // http://image.intervention.io/api/response
     public function image($filename)
     {
-        return TemplateImage::make(storage_path('app/media-archive/'. Auth::user()->id  .  '/')  . $filename)->response();
+        $mediaArchivePath = str_replace('\\', '\\\\', storage_path('app/media-archive/'. Auth::user()->id  .  '/'));
+        // return Storage::disk('local')->get('media-archive/'. Auth::user()->id  .  '/' . $filename );
+        $manager = new ImageManager();
+        return $manager->make($mediaArchivePath  . $filename)->response();
     }
 
     public function reload($template_id)
     {
-        $success = false;
-        $message = 'MediaController::reload for loading medias from template (' . $template_id . ') NOT IMPLEMENTED.';
-        return $this->responseWithflashError($message, 200);
+        $success = true;
+        $template = Auth::user()->templates->find($template_id);
+        if(!$template)
+        {
+            $success = false;
+            $message = 'The requested template (' . $template_id . ') not found';
+            return $this->responseWithflashError($message);
+        }
+        $medias = $template->medias;
+        if($medias && $medias->count() == 0)
+        {
+            $success = false;
+            $message = 'The requested medias of template (' . $template->saved_name . ') not found';
+            return $this->responseWithflashError($message);
+        }
+        return response()->json(compact('medias', 'success', 'message'));
     }
 
     public function save(MediaRequest $request)
@@ -90,6 +108,18 @@ class MediaController extends Controller
             return $this->responseWithflashError($message, 200);
         }
 
+        // TODO: Now save it to database
+        $media = TemplateMedia::create([
+            'template_id' => $template_id,
+            'user_id' => $user_id,
+            'media_name' => $strImageFileName
+        ]);
+        if(!$media)
+        {
+            $success = false;
+            $message = 'Image (' . $strImageFileName . ') saving failure.';
+            return $this->responseWithflashError($message, 200);
+        }
         // NOTE: if we don't replace windows directory separator '\' with escaped character '\\'
         // then in client side JSON.parse() will fail to parse json BE CAREFULL!
         $mediaArchivePath = str_replace('\\', '\\\\', storage_path('app/media-archive/'. Auth::user()->id  .  '/'));
@@ -104,7 +134,6 @@ class MediaController extends Controller
                         . '" }';
         $message = 'Image (' . $img_src . ') uploaded success.';
         return response()->json(compact('imageProfile', 'success', 'message'));
-                         // ->header('Content-type', 'application/json; charset=utf-8');
     }
 
     protected function responseWithflashError($message, $statusCode = 404)

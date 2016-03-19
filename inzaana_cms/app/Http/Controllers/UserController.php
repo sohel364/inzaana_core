@@ -66,6 +66,24 @@ class UserController extends Controller
         //
     }
 
+    // Find who is authenticated currently
+    public function user(Request $request)
+    {
+        if( $request->ajax() )
+        {
+            $success = true;
+            $user = User::find(Auth::user()->id);
+            if(!$user)
+            {
+                $success = false;
+                $message = 'User not authenticated. Redirecting to home ...';
+                return response()->json(compact('success', 'message', 'user'));    
+            }
+            return response()->json(compact('success', 'message', 'user'));
+        }
+        return redirect()->route('guest::home');
+    }
+
     /**
      * Display the specified resource.
      *
