@@ -35,7 +35,7 @@ function onUserFoundSuccess(user_id, medias)
     data_rows.forEach(function(data_row) {
 
         var media = medias[data_row];
-        console.log(media.user_id + ' #### ' + user_id);
+        // console.log(media.user_id + ' #### ' + user_id);
 
         if(media.user_id != user_id)
         {
@@ -70,7 +70,7 @@ function onUserFoundSuccess(user_id, medias)
          
             if(tagName == "img")
             {
-                console.log("[WB-D] PREV RESP ID:[" + image_id + "]/ SRC:" +  $('#' + image_id).attr("src"));
+                // console.log("[WB-D] PREV RESP ID:[" + image_id + "]/ SRC:" +  $('#' + image_id).attr("src"));
                 // TODO: BLOB image data is special - will work on it later!!! 
                 if($('#' + image_id).attr("src") != null && $('#' + image_id).attr("src").indexOf("blob") == -1)
                     $('#' + image_id).attr("src", src);
@@ -479,13 +479,13 @@ function saveImages(user_id, template_id, onUploadSuccess) {
     var imageCount = 0;
     var isEdit = $('#hidden-div-is-edit').text();
 
-    console.log("[WB-D] saveImages: " + user_id + "$##$" + template_id);
+    // console.log("[WB-D] saveImages: " + user_id + "$##$" + template_id);
 
     loadImages(user_id, template_id, function(imageObj){
 
         // console.log("[WB-D] [REPLIED] image-src: " + imageObj.src_arch );
 
-        console.log('[ ' + imageObj.image_index + ' ] [ ' + imageObj.image_name);
+        // console.log('[ ' + imageObj.image_index + ' ] [ ' + imageObj.image_name);
         console.log('[ ' + imageCounter + ' ] [ ' + imageCount);
         if(imageCounter == imageCount)
         {
@@ -672,14 +672,14 @@ function sendImageUploadRequest(imageObj)
             {
                 // $('#' + imageObj.image_id).attr("src", imageObj.src_arch);
                 $('#' + imageObj.image_id).attr("src", "/medias/images/" + imageObj.image_name);
-                console.log("[WB] RESP SRC:" +  $('#' + imageObj.image_id).attr("src"));
+                // console.log("[WB] RESP SRC:" +  $('#' + imageObj.image_id).attr("src"));
             }
             else
             {
                 // $('#' + imageObj.image_id).css("background-image", "url(" + imageObj.src_arch  + ")");
                 $('#' + imageObj.image_id).css("background-image", "url(/medias/images/" + imageObj.image_name + ")");
                 // $('#' + imageObj.image_id).attr("style", "background-image: url(/medias/images/" + imageObj.image_name + ")");
-                console.log("[WB] RESP URL:" + $('#' + imageObj.image_id).css("background-image"));
+                // console.log("[WB] RESP URL:" + $('#' + imageObj.image_id).css("background-image"));
             }
             imageCounter++;
             _callbackFn(imageObj);
@@ -745,14 +745,14 @@ function handleResponse(xhr)
         {
             // $('#' + imageObj.image_id).attr("src", imageObj.src_arch);
             $('#' + imageObj.image_id).attr("src", "/medias/images/" + imageObj.image_name);
-            console.log("[WB] RESP SRC:" +  $('#' + imageObj.image_id).attr("src"));
+            // console.log("[WB] RESP SRC:" +  $('#' + imageObj.image_id).attr("src"));
         }
         else
         {
             // $('#' + imageObj.image_id).css("background-image", "url(" + imageObj.src_arch  + ")");
             $('#' + imageObj.image_id).css("background-image", "url(/medias/images/" + imageObj.image_name + ")");
             // $('#' + imageObj.image_id).attr("style", "background-image: url(/medias/images/" + imageObj.image_name + ")");
-            console.log("[WB] RESP URL:" + $('#' + imageObj.image_id).css("background-image"));
+            // console.log("[WB] RESP URL:" + $('#' + imageObj.image_id).css("background-image"));
         }
         imageCounter++;
         _callbackFn(imageObj);

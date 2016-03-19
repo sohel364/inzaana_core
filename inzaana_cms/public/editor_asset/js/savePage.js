@@ -214,7 +214,7 @@ function traverseImages() {
                         {
                             containers.push(containerObj);
                         }
-                        console.log('[WB][container-json]: ' + containerObj);
+                        // console.log('[WB][container-json]: ' + containerObj);
                     }
                 }
             }
