@@ -60,6 +60,32 @@ function getPageSaverUrl() {
 function getPageUpdaterUrl() {
     return getBaseUrl()+'/views/content_views/pageUpdater.php';
 }
+
+function setPagesEdited(menuTitle, isEdited)
+{
+    if(pagesEditedCollection.length == 0)
+    {
+        pagesEdited[menuTitle] = isEdited;
+        pagesEditedCollection.push(pagesEdited);
+        console.log('Menu added (' + menuTitle + '): edited:' + pagesEdited[menuTitle]);
+        return;  
+    }
+    $.each(pagesEditedCollection, function( index, value ) {
+        console.log(value);
+        if(value[menuTitle] === null || typeof value[menuTitle] === 'undefined')
+        {
+            pagesEdited[menuTitle] = isEdited;
+            console.log('Menu added (' + menuTitle + '): edited:' + pagesEdited[menuTitle]);   
+            pagesEditedCollection.push(pagesEdited);
+        }
+        else
+        {
+            value[menuTitle] = isEdited;
+            console.log('Menu edited (' + menuTitle + '): edited:' + value[menuTitle]);   
+        }
+    });
+}
+
 /*
  * Find all the menus created by user
  * @returns {Array|getMenuList.menuList}
@@ -88,7 +114,10 @@ function getMenuList() {
         menu['aHref'] = a_href;
         
         if(menu['menuTitle'] != '+')
+        {
             menuList.push(menu);
+            setPagesEdited(menu['menuTitle'], false);
+        }
     });
     return menuList;
 }
@@ -140,14 +169,14 @@ function traverseImages() {
                             + '", "id": "' + element.id
                             + '", "data": "' + binary
                             + '", "menu": "' + curMenu
-                            + '", "tag": "' + $('#' + element.id)[0].nodeName
+                            + '", "tag": "' + ($('#' + element.id)[0].nodeName == null ? tagName : $('#' + element.id)[0].nodeName)
                             + '" }';
 
                         if(!isImageExists(element.id, curMenu))
                         {
                             containers.push(containerObj);
                         }
-                        console.log('[WB][container-json]: ' + containerObj);
+                        // console.log('[WB][container-json]: ' + containerObj);
                     }
                 }
                 else
@@ -178,7 +207,7 @@ function traverseImages() {
                             + '", "id": "' + element.id
                             + '", "data": "' + binary
                             + '", "menu": "' + curMenu
-                            + '", "tag": "' + $('#' + element.id)[0].nodeName
+                            + '", "tag": "' + ($('#' + element.id)[0].nodeName == null ? tagName : $('#' + element.id)[0].nodeName)
                             + '" }';
 
                         if(!isImageExists(element.id, curMenu))
@@ -191,7 +220,7 @@ function traverseImages() {
             }
         });
         allImages[curMenu] = containers;
-        console.log('[WB-D][container-curMenuImage-count: ' + allImages[curMenu].length + ']');
+        // console.log('[WB-D][container-curMenuImage-count: ' + allImages[curMenu].length + ']');
     });
 }
 
@@ -340,7 +369,6 @@ function insertPage(menuList, template_name, category_name, savedName) {
                 }
                 errorAlert(data.message, function() {
 
-                    hideSavingIcon();
                     window.location.href = '/editor/' + category_name + '/' + template_name; 
                 });
             },
@@ -349,7 +377,6 @@ function insertPage(menuList, template_name, category_name, savedName) {
                 
                 errorAlert(data.message, function() {
 
-                    hideSavingIcon();
                     window.location.href = nextUrl;
                 });
             }
@@ -395,7 +422,6 @@ function updatePage(menuList, template, category_name, savedName) {
 
                 errorAlert(data.message, function() {
 
-                    hideSavingIcon();
                     window.location.href = nextUrl;
                 });
             }
@@ -405,6 +431,8 @@ function updatePage(menuList, template, category_name, savedName) {
 
 function saveViewMenus(template_id, viewMenus, menuContents, nextUrl, message)
 {
+    console.log('Menu edited container:' + pagesEditedCollection.length);
+
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         type: "POST",
@@ -413,6 +441,7 @@ function saveViewMenus(template_id, viewMenus, menuContents, nextUrl, message)
         data: {
             _menus: viewMenus,
             _menu_contents: menuContents,
+            _menu_contents_edited: pagesEditedCollection,
             _token: CSRF_TOKEN
         },
         success: function (data) {
@@ -429,7 +458,7 @@ function saveViewMenus(template_id, viewMenus, menuContents, nextUrl, message)
             // alert(data.message);
             errorAlert(data.message, function() {
 
-                hideSavingIcon();
+                swal('Reloading ...');
                 window.location.href = nextUrl;
             });
         },
@@ -438,7 +467,7 @@ function saveViewMenus(template_id, viewMenus, menuContents, nextUrl, message)
 
             errorAlert(err, function() {
 
-                hideSavingIcon();
+                swal('Reloading ...');
                 window.location.href = nextUrl; 
             });     
         }
@@ -457,6 +486,7 @@ function saveContents(template_id, templateViewMenus, menuContents, nextUrl, mes
             _menu_contents: menuContents,
             _default_content: defaultMenuHtml,
             _template_id: template_id,
+            _menu_contents_edited: pagesEditedCollection,
             _token: CSRF_TOKEN
         },
         success: function (data) {
@@ -478,7 +508,6 @@ function saveContents(template_id, templateViewMenus, menuContents, nextUrl, mes
 
                     errorAlert(xhr.responseText, function() {
 
-                        hideSavingIcon();
                         window.location.href = nextUrl; 
                     });
                 });
@@ -486,7 +515,7 @@ function saveContents(template_id, templateViewMenus, menuContents, nextUrl, mes
             }
             errorAlert(data.message, function() {
 
-                hideSavingIcon();
+                swal('Reloading ...');
                 window.location.href = '/templates/gallery';
             });
         },
@@ -495,7 +524,7 @@ function saveContents(template_id, templateViewMenus, menuContents, nextUrl, mes
             // alert(err);
             errorAlert(err, function() {
 
-                hideSavingIcon();
+                swal('Reloading ...');
                 window.location.href = nextUrl;  
             });
         }
@@ -526,6 +555,7 @@ function onSuccessFoundTemplate(data, nextUrl, message) {
                 allImages = [];
                 
                 // MUST BE REDIRECTED
+                swal('Reloading ...');
                 window.location.href = nextUrl;
             });
 
@@ -535,7 +565,7 @@ function onSuccessFoundTemplate(data, nextUrl, message) {
     // alert(data.message);
     errorAlert(data.message, function() {
 
-        hideSavingIcon();
+        swal('Reloading ...');
         window.location.href = nextUrl; 
     });
 }
@@ -585,15 +615,21 @@ function errorAlert(message, callback)
                 html: true,
                 customClass: 'httpError',
                 confirmButtonText: "Close",
-                allowOutsideClick: true,
+                closeOnConfirm: false,
                 showLoaderOnConfirm: true
+            },
+            function(isClosed) {
+                if(isClosed)
+                {
+                    callback();
+                }
+                return;
             });
         }
         else
         {
             hideSavingIcon();
         }
-        callback();    
     });
 }
 

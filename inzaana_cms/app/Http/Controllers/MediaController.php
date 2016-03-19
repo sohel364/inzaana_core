@@ -85,6 +85,9 @@ class MediaController extends Controller
         $img_src = $request->input('image_src');
         $imgIndex = $request->input('image_index');
         $menu_id = $request->input('menu_id');
+
+        $menuTitle = str_slug($menu_id);
+
         $type = $request->input('type');
 
         $data = $request->input('image');
@@ -94,7 +97,7 @@ class MediaController extends Controller
         $binary = str_replace(' ', '+', $binary);
 
         // $strImagePath = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "webbuilder" . DIRECTORY_SEPARATOR . "archive" . DIRECTORY_SEPARATOR;
-        $strImageFileName = $user_id . '_' . $template_id . '_' . $menu_id . '_' . $img_id . '_' . md5($img_id) . '.' . $type;
+        $strImageFileName = $user_id . '_' . $template_id . '_' . $menuTitle . '_' . $img_id . '_' . md5($img_id) . '.' . $type;
         // $strFile = $strImagePath . $strImageFileName;
 
         $hostArchiveDir = "template-medias/";
@@ -129,6 +132,7 @@ class MediaController extends Controller
                         . '", "image_index" : ' . $imgIndex
                         . ', "src": "' . $img_src
                         . '", "image_name": "' . $strImageFileName
+                        . '", "tag_element": "' . $request->input('tagElement')
                         . '", "template_id": "' . $template_id
                         . '", "src_arch": "' . $mediaArchivePath . $strImageFileName
                         . '" }';

@@ -41,6 +41,13 @@ class HtmlViewContentController extends Controller
             return $this->responseWithflashError('FATAL ERROR: Empty contents list.');
         }
         $viewMenuContents = $request->input('_menu_contents');
+
+        if(!$request->has('_menu_contents_edited'))
+        {
+            return $this->responseWithflashError('FATAL ERROR: Empty array of edited menu collection.');
+        }
+        $editedMenus = $request->input('_menu_contents_edited');
+        
         if(!$request->has('_template_id'))
         {
             return $this->responseWithflashError('ERROR: No template ID found for the content.');
@@ -56,7 +63,12 @@ class HtmlViewContentController extends Controller
             $defaultContent = $request->has('_default_content') ? 
                                 $request->input('_default_content') : 
                                 '<div class="alert alert-danger">An empty content!</div>';
-
+      
+            $menuEditedExists= collect($editedMenus)->has($value->menuTitle);
+            if($menuEditedExists && $editedMenus[$value->menuTitle] == false)
+            {
+                continue;
+            }
             $menuContentExists = collect($viewMenuContents)->has($value->menuTitle);
 
             if($menuContentExists)

@@ -14,7 +14,14 @@ var imageObjects = {};
 var imageCounter = -1;
 var imageArrayLength = 0;
 var curMenuForImage;
-var pagesEdited = [];
+
+// INFO: this array (pagesEditedCollection[]) and object pagesEdited reference is used in 
+// 1. drag_drop.js:onMenuPageModified(...)
+// 2. savePage.js:getMenuList()
+// 3. menu.js:onUserFoundSuccess(...)
+var pagesEdited = {};
+var pagesEditedCollection = [];
+
 var _user_id, _template_id;
 
 // onload functionalities
@@ -28,7 +35,7 @@ function onUserFoundSuccess(user_id, medias)
     data_rows.forEach(function(data_row) {
 
         var media = medias[data_row];
-        console.log(media.id + ' #### ' + user_id);
+        console.log(media.user_id + ' #### ' + user_id);
 
         if(media.user_id != user_id)
         {
@@ -48,6 +55,7 @@ function onUserFoundSuccess(user_id, medias)
             var image_tree = media.media_name.replace( user_template_id ,'');
             var image_name_parsed_array = image_tree.split('_');
             var menu = image_name_parsed_array[0];
+
             var id_hashed = image_name_parsed_array[image_name_parsed_array.length - 1];
             var image_id = image_tree.replace(menu + '_', '').replace('_' + id_hashed, '');
             //alert('[WB-D] [image-id]: ' + image_id);
@@ -59,16 +67,22 @@ function onUserFoundSuccess(user_id, medias)
             var parts = image_id.split('_');
             var tagName = parts[parts.length - 1].split('-')[0];
             // Change image source
+         
             if(tagName == "img")
             {
-                $('#' + image_id).attr("src", src);
-                // console.log("[WB-D] RESP SRC:" +  $('#' + image_id).attr("src"));
+                console.log("[WB-D] PREV RESP ID:[" + image_id + "]/ SRC:" +  $('#' + image_id).attr("src"));
+                // TODO: BLOB image data is special - will work on it later!!! 
+                if($('#' + image_id).attr("src") != null && $('#' + image_id).attr("src").indexOf("blob") == -1)
+                    $('#' + image_id).attr("src", src);
+                // console.log("[WB-D] RESP ID:[" + image_id + "]/ SRC:" +  $('#' + image_id).attr("src"));
             }
             else
             {
-                $('#' + image_id).css("background-image", "url(" + src  + ")");
+                // TODO: BLOB image data is special - will work on it later!!! 
+                if($('#' + image_id).css("background-image") != null && $('#' + image_id).css("background-image").indexOf("blob") == -1)
+                    $('#' + image_id).css("background-image", "url(" + src  + ")");
                 // console.log("[WB-D] RESP URL:" + $('#' + image_id).css("background-image"));
-            }
+            } 
         }// end-if for user checking
     }); // end forEach
     hideSavingIcon();
@@ -207,7 +221,7 @@ function loadContents()
         success: function (data) {
             if(data.success)
             {
-                // alert(data.message);
+                console.log(data.message);
                 if(data.menuContents == null)
                 {
                     resetMenuContent();
@@ -215,9 +229,12 @@ function loadContents()
                 }
                 menuContens = data.menuContents;
                 setBodyHtmlString(menuContens[curMenu]);
+
+                setPagesEdited(curMenu, false);
+
                 return;
             }
-            // alert(data.message);
+            console.log(data.message);
             errorAlert(data.message, function() {
 
                 window.location.href = '/templates/saved'; 
@@ -226,7 +243,7 @@ function loadContents()
         error: function(xhr, status, error) {
             console.log("[DEBUG] ajax error");
             var err =  xhr.responseText;
-            // alert(err);
+            console.log(err);
             errorAlert(err, function() {
 
                 resetMenuContent();
@@ -255,14 +272,6 @@ function onLoadMenus() {
     // loadMediasOfPages();
     showPreparingIcon();
 
-    findMediasOfTemplate(
-        template_id,
-        onMediaFoundSuccess,
-    function(xhr, status) {
-
-        swal(status, 'Template medias loading failed: ' + xhr.responseText, 'error');
-    });
-
     if (typeof isEdit !== 'undefined' && isEdit) {
         // update mode
         // getSavedMenuContents();
@@ -281,6 +290,20 @@ function onLoadMenus() {
     defaultMenuHtml = getBodyHtmlString();
     // for laravel implementation
     loadContents();
+
+    if(isInEditor /* Is in editor or viewer */ && !isEdit /* Is template editor in edit mode or save mode */)
+    {
+        hideSavingIcon();
+        return;
+    }
+
+    findMediasOfTemplate(
+        template_id,
+        onMediaFoundSuccess,
+    function(xhr, status) {
+
+        swal(status, 'Template medias loading failed: ' + xhr.responseText, 'error');
+    });
 }
 
 /*
@@ -383,6 +406,7 @@ function onMenuClick(menu) {
         //alert("SAVING PREVIOUS MENU CONTENT!!! -> " + menuText + "###" + menuContens[menuText]);
         setBodyHtmlString(menuContens[menuText]);
     }
+    setPagesEdited(menuText, false);
 }
 
 
@@ -420,17 +444,14 @@ function saveCurrentPageImages(isEdit, imageObj) {
         sendImageUploadRequest(imageObj);
         if(imageObj.src.indexOf("blob") != -1)
         {
-            // alert("[WB] on insert image-menu: " + imageObj.src);
-            swal('Saving ...', "[WB] on insert image-menu: " + imageObj.src, 'info');
+            console.log("[WB-BLOB] on insert image-menu: " + imageObj.src);
         }
     }
     else
     {
-        if(isEmpty(imageObj.src))
-           alert("[WB] on update empty image-src: \"" + imageObj.src + "\"");
-
-
-        // if(imageObj.src.indexOf("localhost") == -1)
+        // if(isEmpty(imageObj.src))
+        //    alert("[WB] on update empty image-src: \"" + imageObj.src + "\"");
+        // if(imageObj.src.indexOf("/medias/images/") == -1)
         {
             // sendRequest(imageObj);
             sendImageUploadRequest(imageObj);
@@ -465,6 +486,7 @@ function saveImages(user_id, template_id, onUploadSuccess) {
         // console.log("[WB-D] [REPLIED] image-src: " + imageObj.src_arch );
 
         console.log('[ ' + imageObj.image_index + ' ] [ ' + imageObj.image_name);
+        console.log('[ ' + imageCounter + ' ] [ ' + imageCount);
         if(imageCounter == imageCount)
         {
             onUploadSuccess(imageCount);
@@ -627,6 +649,7 @@ function sendImageUploadRequest(imageObj)
             userId: _user_id,
             templateId: _template_id,
             image_src: imageObj.src,
+            tagElement: imageObj.tag,
             image_id: imageObj.id,
             image_index: imageObj.index,
             menu_id: imageObj.menu,
@@ -642,7 +665,10 @@ function sendImageUploadRequest(imageObj)
 
             // alert("[WB] RESP " + imageObj.image_name);
             // Change image source
-            if($('#' + imageObj.image_id)[0].nodeName == "IMG")
+            var tagElement = (imageObj.tag_element == null || imageObj.tag_element == "") ?
+                            $('#' + imageObj.image_id)[0].nodeName : imageObj.tag_element;
+       
+            if(tagElement == "IMG" || tagElement == "img")
             {
                 // $('#' + imageObj.image_id).attr("src", imageObj.src_arch);
                 $('#' + imageObj.image_id).attr("src", "/medias/images/" + imageObj.image_name);
@@ -651,8 +677,8 @@ function sendImageUploadRequest(imageObj)
             else
             {
                 // $('#' + imageObj.image_id).css("background-image", "url(" + imageObj.src_arch  + ")");
-            $('#' + imageObj.image_id).css("background-image", "url(/medias/images/" + imageObj.image_name + ")");
-            // $('#' + imageObj.image_id).attr("style", "background-image: url(/medias/images/" + imageObj.image_name + ")");
+                $('#' + imageObj.image_id).css("background-image", "url(/medias/images/" + imageObj.image_name + ")");
+                // $('#' + imageObj.image_id).attr("style", "background-image: url(/medias/images/" + imageObj.image_name + ")");
                 console.log("[WB] RESP URL:" + $('#' + imageObj.image_id).css("background-image"));
             }
             imageCounter++;
@@ -660,8 +686,10 @@ function sendImageUploadRequest(imageObj)
 
         }).fail( function(xhr, status) {
             var err =  xhr.responseText;
-            swal(status, 'Upload failed: ' + err, 'error');
-            window.location.href = nextUrl; 
+            errorAlert('Upload failed: ' + err, function() {
+
+                hideSavingIcon();
+            });
         });
 }
 
@@ -679,6 +707,7 @@ function sendRequest(imageObj)
                     + "&userId=" + _user_id
                     + "&templateId=" + _template_id
                     + "&image_src=" + imageObj.src
+                    + "&tagElement=" + imageObj.tag
                     + "&image_id=" + imageObj.id
                     + "&image_index=" + imageObj.index
                     + "&menu_id=" + imageObj.menu

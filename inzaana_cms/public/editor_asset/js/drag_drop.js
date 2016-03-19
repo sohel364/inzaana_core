@@ -153,7 +153,28 @@ function makeTemplateComponetsNotEditable() {
 
 function onMenuPageModified(menu_name, content_name, action)
 {
-	console.log(menu_name + " : " + content_name + " : " + action);
+    console.log('Menu:[' + menu_name + ']/ Content:[' + content_name + ']/ Action:[' + action + ']');   
+
+	if(pagesEditedCollection.length == 0)
+	{
+		pagesEdited[menu_name] = true;
+		pagesEditedCollection.push(pagesEdited);
+		return;
+	}
+
+	$.each(pagesEditedCollection, function( index, value ) {
+		if(typeof value[menu_name] === 'undefined')
+		{
+			pagesEdited[menu_name] = true;
+			pagesEditedCollection.push(pagesEdited);	
+            console.log('Menu added (' + menu_name + '): edited:' + pagesEdited[menu_name]);   
+		}
+		else
+		{
+			value[menu_name] = true;
+            console.log('Menu edited (' + menu_name + '): edited:' + pagesEdited[menu_name]);   
+		}
+	});
 }
 
 function makeControlsOfPaletteDraggable() {

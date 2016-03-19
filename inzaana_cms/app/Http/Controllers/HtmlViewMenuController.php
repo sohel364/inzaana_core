@@ -23,6 +23,7 @@ class HtmlViewMenuController extends Controller
         $this->middleware('auth');
     }
 
+    // returns default template menu contents
     public function baseContent(HtmlViewMenuRequest $request, $template_id)
     {
         $success = true;
@@ -39,6 +40,7 @@ class HtmlViewMenuController extends Controller
                         ->header('Content-Type', 'html');;
     }
 
+    // returns reference collection of all contents of all menus
     public function contents(HtmlViewMenuRequest $request, $template_id)
     {
         $success = true;
@@ -94,6 +96,12 @@ class HtmlViewMenuController extends Controller
         }
         $viewMenuContents = $request->input('_menu_contents');
 
+        if(!$request->has('_menu_contents_edited'))
+        {
+            return $this->responseWithflashError('FATAL ERROR: Empty array of edited menu collection.');
+        }
+        $editedMenus = $request->input('_menu_contents_edited');
+
         $template = Auth::user()->templates->find($template_id);
         if(!$template)
         {
@@ -106,6 +114,12 @@ class HtmlViewMenuController extends Controller
 
     	foreach (json_decode($viewMenus) as $key => $value)
     	{            
+            $menuEditedExists= collect($editedMenus)->has($value->menuTitle);
+            if($menuEditedExists && $editedMenus[$value->menuTitle] == false)
+            {
+                continue;
+            }
+
             $menuContentExists = collect($viewMenuContents)->has($value->menuTitle);
             if($menuContentExists)
             {
