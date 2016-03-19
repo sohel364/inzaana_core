@@ -259,11 +259,11 @@ function openBGEditor(control){
 
 	function restoreInitialState() {
 		// If cancel button is pressed, this function will be called
-		console.log("old_bg_color : " + old_bg_color);
-		console.log("old_bg_image_src : " + old_bg_image_src);
-		console.log("old_bg_image_position : " + old_bg_image_position);
-		console.log("old_bg_image_repeat : " + old_bg_image_repeat);
-		console.log("old_bg_image_attachment : " + old_bg_image_attachment);
+		console.log("[DEBUG] old_bg_color : " + old_bg_color);
+		console.log("[DEBUG] old_bg_image_src : " + old_bg_image_src);
+		console.log("[DEBUG] old_bg_image_position : " + old_bg_image_position);
+		console.log("[DEBUG] old_bg_image_repeat : " + old_bg_image_repeat);
+		console.log("[DEBUG] old_bg_image_attachment : " + old_bg_image_attachment);
 		isSaved = false;
 		editable_bg_control.css("background", old_bg_color);
 		editable_bg_control.css("background-image", old_bg_image_src);
@@ -289,6 +289,10 @@ function openBGEditor(control){
 			if (isSaved == false)
 			{
 				restoreInitialState();
+			}
+			else
+			{
+				onMenuPageModified(curMenu, editable_bg_control.attr("id"), "PROP-MODIFY");			
 			}
 		},
 
@@ -320,6 +324,91 @@ function openBGEditor(control){
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
+function showRadioButtonEditPanel() {
+
+	var count = 0;
+	var option_txt = "";
+	var old_radio_btn_array = [];
+
+	function restoreInitialState() {
+		// If cancel button is pressed, this function will be called
+		createRadioButtonTemplate(editable_control, old_radio_btn_array);
+
+		isSaved = false;
+	}
+
+	$("#" + editable_control.attr("id") + " :input").each(
+			function() {
+
+				var radio_id = $(this).attr("id");
+				var radio_name = $(this).attr("name");
+				var radio_txt = $('label[for=' + $(this).attr("id") + ']')
+						.text();
+
+				var radio_btn_info_array = [];
+				radio_btn_info_array["Id"] = radio_id;
+				radio_btn_info_array["Name"] = radio_name;
+				radio_btn_info_array["Text"] = radio_txt;
+
+				old_radio_btn_array[count++] = radio_btn_info_array;
+
+				console.log("Info For Radio Button : " + radio_id + " : "
+						+ radio_name + " : " + radio_txt);
+			});
+
+	$.each(old_radio_btn_array, function(index, value) {
+		option_txt += old_radio_btn_array[index]["Text"];
+		if (index != (old_radio_btn_array.length - 1)) {
+			option_txt += "\n";
+		}
+	});
+
+	$("#radio_btn_option_txt").val(option_txt);
+
+	$("#radio_btn_edit_dialog").dialog({
+		dialogClass : "no-close",
+		resizable : false,
+		draggable : true,
+		closeOnEscape : true,
+		title : "Button Edit Panel",
+		width : 250,
+		show : {
+			effect : "slide",
+			duration : 200,
+			direction : "up"
+		},
+		beforeClose : function(event, ui) {
+			makeControlNonEditable(editable_control);
+			if (!isSaved) {
+				restoreInitialState();
+			}
+			else {
+				onMenuPageModified(curMenu, editable_control.attr("id"), "PROP-MODIFY");
+				editable_control.empty();
+
+				var radio_options = $("#radio_btn_option_txt").val();
+				var new_radio_options = radio_options.split('\n');
+
+				if (new_radio_options[new_radio_options - 1] == null) {
+					// To Do
+					// if extra new lines are detected
+				}
+				var final_radio_options = [];
+
+				$.each(new_radio_options, function(index, value) {
+					var final_radio = [];
+					final_radio["Id"] = editable_control.attr("id") + index;
+					final_radio["Name"] = editable_control.attr("id");
+					final_radio["Text"] = value;
+					final_radio_options[index] = final_radio;
+				});
+
+				createRadioButtonTemplate(editable_control, final_radio_options);
+			}
+		},
+
+	});
+}
 
 
 function showButtonEditPanel() {
@@ -360,6 +449,7 @@ function showButtonEditPanel() {
 			}
 			else
 			{
+				onMenuPageModified(curMenu, editable_control.attr("id"), "PROP-MODIFY");
 				editable_control.attr("data-onclick", $("#btn_link").val());
 			}
 		},
@@ -421,6 +511,19 @@ function showTextEditPanel() {
 //                 ]
 //             });
 
+// var height = parseInt(editable_control.css("height"));
+// // CKEDITOR.disableAutoInline = true;
+// // 		CKEDITOR.inline( editable_control.attr("id"));
+// CKEDITOR.replace( editable_control.attr("id"), {
+// 			extraPlugins: 'sharedspace',
+// 			removePlugins: 'maximize,resize',
+// 			height: height,
+// 			sharedSpaces: {
+// 				top: 'top',
+// 				bottom: 'bottom'
+// 			}
+// 		} );
+
 //////////////////////////////////////////////////////
 
 	$("#text_edit_dialog").dialog({
@@ -443,6 +546,7 @@ function showTextEditPanel() {
 		},
 		beforeClose : function(event, ui) {
 			makeControlNonEditable(editable_control);
+			onMenuPageModified(curMenu, editable_control.attr("id"), "PROP-MODIFY");
 		},
 
 	});
@@ -493,6 +597,10 @@ function showImageEditPanel() {
 			if (isSaved == false) {
 				console.log("Restoring Initial State");
 				restoreInitialState();
+			}
+			else
+			{
+				onMenuPageModified(curMenu, editable_control.attr("id"), "PROP-MODIFY");
 			}
 		},
 
@@ -586,6 +694,28 @@ function showImageSliderEditPanel() {
 				console.log("Restoring Initial State");
 				restoreInitialState();
 			}
+			else
+			{
+				onMenuPageModified(curMenu, editable_control.attr("id"), "PROP-MODIFY");
+				var slider_image_list = [];
+				var first_image_url = "";
+
+				$("#imageslider_edit_panel_thumbnail").find('li').each(
+						function(index, value) {
+							slider_image_list[index] = $(this).children("img")
+									.attr("src");
+							if (index == 0) {
+								first_image_url = $(this).children("img").attr(
+										"src");
+							}
+						});
+				//slider_image_list.push(first_image_url);
+
+				isSaved = true;
+				console.log(slider_image_list);
+
+				createImageSlider(slider_image_list);
+			}
 		},
 
 	});
@@ -633,6 +763,18 @@ function showDropDownEditPanel() {
 			makeControlNonEditable(editable_control);
 			if (isSaved == false) {
 				restoreInitialState();
+			}
+			else{
+				onMenuPageModified(curMenu, editable_control.attr("id"), "PROP-MODIFY");
+				var dropdown_options = $("#dropdown_option_txt").val();
+				var new_dropdown_options = dropdown_options.split('\n');
+
+				if (new_dropdown_options[new_dropdown_options.length - 1] == null) {
+					// To Do
+					// if extra new lines are detected
+				}
+
+				createDropdownTemplate(new_dropdown_options);
 			}
 		},
 
@@ -704,6 +846,9 @@ function makeControlResizable() {
 //
 //			}
 
+		},
+		start : function(){
+			onMenuPageModified(curMenu, $(this).attr("id"), "RESIZE");
 		},
 		stop : function(event, ui) {
 			if (background_div != null)
@@ -806,6 +951,10 @@ function showTextInputEditPanel(){
 			makeControlNonEditable(editable_control);
 			if (isSaved == false) {
 				restoreInitialState();
+			}
+			else
+			{
+				onMenuPageModified(curMenu, editable_control.attr("id"), "PROP-MODIFY");
 			}
 		},
 
