@@ -36,7 +36,7 @@ function onUserFoundSuccess(user_id, medias)
             errorAlert(
                 'You are not authenticated or session expired. Redirecting to guest home. Please log in to edit your template',
                 function() {
-                    
+
                     window.location.href = '/';
                     hideSavingIcon();
                 })
@@ -62,18 +62,17 @@ function onUserFoundSuccess(user_id, medias)
             if(tagName == "img")
             {
                 $('#' + image_id).attr("src", src);
-                console.log("[WB-D] RESP SRC:" +  $('#' + image_id).attr("src"));
+                // console.log("[WB-D] RESP SRC:" +  $('#' + image_id).attr("src"));
             }
             else
             {
                 $('#' + image_id).css("background-image", "url(" + src  + ")");
-                console.log("[WB-D] RESP URL:" + $('#' + image_id).css("background-image"));
+                // console.log("[WB-D] RESP URL:" + $('#' + image_id).css("background-image"));
             }
         }// end-if for user checking
     }); // end forEach
     hideSavingIcon();
 }
-
 
 function viewTemplateMedias(medias)
 {
@@ -81,7 +80,7 @@ function viewTemplateMedias(medias)
         if(!data.success)
         {
             errorAlert(
-                isEmpty(data.success) ? 'Something went wrong to find the authticated user!' : data.message,
+                isEmpty(data.message) ? 'Something went wrong to find the authticated user!' : data.message,
                 function() {
 
                     hideSavingIcon();

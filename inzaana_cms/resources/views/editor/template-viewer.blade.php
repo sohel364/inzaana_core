@@ -17,6 +17,16 @@
     <link href="{{ asset('editor_asset/css/control_template.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link href="{{ asset('editor_asset/css/control_editor.css') }}" rel="stylesheet" />
+    <!-- For sweet message box alert -->
+    <link href="{{ asset('dist/sweetalert.css') }}" rel="stylesheet" type="text/css">
+    <style type="text/css">
+    .httpError
+    {
+        overflow: auto;
+        height: 50%;
+        width: 50%;
+    }
+    </style>
 @endsection
 
 @section('header-script')
@@ -33,6 +43,9 @@
     <script src="{{ asset('editor_asset/js/jquery.sortable.js') }}"></script>
     <script src="{{ asset('editor_asset/js/main.js') }}"></script>
 
+    <!-- For sweet message box alert -->
+    <script type="text/javascript" src="{{ asset('dist/sweetalert.min.js') }}"></script>
+    
     <?php
         include ("templates/$category_name/$template_name/header.html");
     ?>

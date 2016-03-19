@@ -4,13 +4,6 @@
  * and open the template in the editor.
  */
 
-
-// onload functionalities
-$(document).ready(function() {
-    // hideSavingIcon();
-});
-
-
 function executeBeforeSend() {
     if(isUserLoggedIn === null || isUserLoggedIn === "0") {
         alert("Please sign in to save the template");
@@ -433,12 +426,12 @@ function saveViewMenus(template_id, viewMenus, menuContents, nextUrl, message)
                 saveContents(template_id, viewMenus, menuContents, nextUrl, message);
                 return;
             }
-            alert(data.message);
-            // errorAlert(data.message, function() {
+            // alert(data.message);
+            errorAlert(data.message, function() {
 
-            //     hideSavingIcon();
-            //     window.location.href = nextUrl;
-            // });
+                hideSavingIcon();
+                window.location.href = nextUrl;
+            });
         },
         error: function(xhr, status, error) {
             var err =  xhr.responseText;
@@ -552,8 +545,8 @@ function onSuccessFoundTemplate(data, nextUrl, message) {
  */
 function showSavingIcon() {
     var sweetAlert = {
-        title: "Processing ...",
-        text: 'Please wait!',
+        title: "Please wait!",
+        text: 'Your template is saving ...',
         imageUrl: '/dist/img/loading40.gif',
         imageSize: '220x20',
         type: 'info',
