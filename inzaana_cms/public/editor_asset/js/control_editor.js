@@ -487,81 +487,83 @@ function showButtonEditPanel() {
 
 }
 
+function initializeTextEditor()
+{
+	//CKEDITOR.editorConfig = function( config ) {
+	CKEDITOR.config.toolbarGroups = [
+		{ name: 'colors', groups: [ 'colors' ] },
+		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+		{ name: 'paragraph', groups: [ 'align', 'list', 'indent', 'blocks', 'bidi', 'paragraph' ] },
+		{ name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+		'/',
+		{ name: 'insert', groups: [ 'insert' ] },
+		{ name: 'styles', groups: [ 'styles' ] },
+		{ name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+		'/',
+		{ name: 'links', groups: [ 'links' ] },
+		{ name: 'forms', groups: [ 'forms' ] },
+		{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+		{ name: 'tools', groups: [ 'tools' ] },
+		{ name: 'others', groups: [ 'others' ] },
+		{ name: 'about', groups: [ 'about' ] }
+	];
+
+	CKEDITOR.config.removeButtons = 'Save,Source,NewPage,Preview,Print,Templates,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,CreateDiv,Language,BidiLtr,BidiRtl,Anchor,Image,Flash,Smiley,PageBreak,Iframe,Maximize,ShowBlocks,About,Link,Unlink';
+	CKEDITOR.config.skin = 'office2013';
+	//};
+}
+
 function showTextEditPanel() {
+	isSaved = false;
+	var old_text = editable_control.html();
+	
+	function restoreInitialState() {
+		// If cancel button is pressed, this function will be called
+		isSaved = false;
+		editable_control.html(old_text);
+	}
 
-	// $(".ui-dialog-titlebar-close").css("display", true);
-// var text = editable_control.html();
-// BootstrapDialog.show({
-//                 title: 'Text Editor',
-//                 message: text,
-//                 buttons: [{
-//                     label: 'Save',
-//                     cssClass: 'btn-info btn-flat',
-//                     action: function(dialogRef) {
-//                         dialogRef.close();
-//                     }
-//                 } ,
-//                     {
-//                         label: 'Cancel',
-//                         cssClass: 'btn-info btn-flat',
-//                         action: function(dialogRef) {
-//                             dialogRef.close();
-//                         }
-//                     }
-//                 ]
-//             });
+	initializeTextEditor();
+	var text_editor = CKEDITOR.inline(editable_control.attr("id"));
+	editable_control.focus();
 
-// var height = parseInt(editable_control.css("height"));
-// // CKEDITOR.disableAutoInline = true;
-// // 		CKEDITOR.inline( editable_control.attr("id"));
-// CKEDITOR.replace( editable_control.attr("id"), {
-// 			extraPlugins: 'sharedspace',
-// 			removePlugins: 'maximize,resize',
-// 			height: height,
-// 			sharedSpaces: {
-// 				top: 'top',
-// 				bottom: 'bottom'
-// 			}
-// 		} );
-
-//////////////////////////////////////////////////////
-
-	$("#text_edit_dialog").dialog({
-		dialogClass : "no-close",
-		resizable : false,
-		draggable : true,
-		closeOnEscape : true,
-		title : "Text Editor",
-		height : 100,
-		width : 550,
-		show : {
-			effect : "slide",
-			duration : 200,
-			direction : "up"
-		},
-		position : {
-			my : "center bottom",
-			at : "center top-50",
-			of : editable_control
-		},
-		beforeClose : function(event, ui) {
-			makeControlNonEditable(editable_control);
-			onMenuPageModified(curMenu, editable_control.attr("id"), "PROP-MODIFY");
-		},
-
+	text_editor.on('blur', function(){
+		text_editor.destroy();
+		$("#text_edit_dialog").dialog({
+			dialogClass : "no-close",
+			resizable : false,
+			draggable : true,
+			closeOnEscape : true,
+			title : "Text Editor",
+			height : 150,
+			width : 250,
+			show : {
+				effect : "slide",
+				duration : 200,
+				direction : "up"
+			},
+			position : {
+				my : "center bottom",
+				at : "center top-50",
+				of : editable_control
+			},
+			beforeClose : function(event, ui) {
+				makeControlNonEditable(editable_control);
+				if (isSaved == false)
+				{
+					restoreInitialState();
+				}
+				else
+				{
+					onMenuPageModified(curMenu, editable_control.attr("id"), "PROP-MODIFY");
+				}
+			}
+		});
 	});
-
-/////////////////////////////////////////////////////
-
-
-	// $("#text_edit_dialog").addClass("ui-dialog-titlebar-close");
-
-	// var dialog_titlebar = this.uiDialog.find( ".ui-dialog-titlebar" );
-
 }
 
 function showImageEditPanel() {
-
+	
 	editable_image = findImage();
 	var old_image_path = editable_image.attr("src");
 	var old_image_height = "";

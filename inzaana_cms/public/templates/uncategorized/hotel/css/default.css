@@ -225,7 +225,7 @@ span.room-title {
 }
 /*Callout Section-----------------------------------------------------------------------------------------------*/
 .callout-section {
-    background: url("../resource/images/bg-2.jpg") no-repeat fixed 0 0 / cover rgba(0, 0, 0, 0);
+    /*background: url("../resource/images/bg-2.jpg") no-repeat fixed 0 0 / cover rgba(0, 0, 0, 0);*/
 }
 .callout-section .overlay {
     background: none repeat scroll 0 0 rgba(0, 0, 0, 0.7);
