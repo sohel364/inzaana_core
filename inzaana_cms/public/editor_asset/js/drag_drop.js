@@ -876,7 +876,7 @@ function initializeAllDialogButton() {
 	 	isSaved = true;
 	 	$(this).parent().dialog("close");
 	 });
-	 
+
 
 	/*
 	 * Button Initialization for Option Dialog Panel
