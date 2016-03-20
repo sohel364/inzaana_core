@@ -235,6 +235,7 @@ function savePage(category_name, template_name, isEdit)
     // console.log("[WB-D] savePage: " + category_name + "$##$" + template_name);
 
     saveCurrentMenuText();
+    makeTemplateComponetsEditable();
 
     var menuList = getMenuList();      
     
