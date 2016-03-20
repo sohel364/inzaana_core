@@ -541,9 +541,12 @@ function getBase64ImageForImageElement(img, id) {
     //console.log('[WB][size]:' + img.attr("width") + 'x' + img.attr("height"));
 
     var imageData = document.getElementById(img.attr("id"));
+
+    // BLOB data
+    if(typeof imageData.src === 'undefined') return null;
     //console.log('[WB][object]:' + imageData.id);
     //console.log('[WB][id]:' +  img.attr("id"));
-    //console.log('[WB][src]:' +  imageData.src);
+    // console.log('[WB][src]:' +  imageData.src);
     //console.log('[WB][width]:' +  imageData.width);
     //console.log('[WB][height]:' +  imageData.height);
 

@@ -140,7 +140,7 @@ function traverseImages() {
 
                 var tagName = parts[parts.length - 1].split('-')[0];
 
-                if ( tagName != 'img') // $('#' + element.id)[0].nodeName
+                if ( tagName != 'img' || $('#' + element.id)[0].nodeName != 'IMG') // $('#' + element.id)[0].nodeName
                 {
                     //console.log('[WB][container-parts [child]: ' + parts + '][' + $('#' + element.id)[0].nodeName + ']');
                     //console.log('[WB][container-parts [child][style:background(url)]: ' + $('#' + element.id).attr("style") + ']'); //$("#stylediv").attr('style')
@@ -159,6 +159,7 @@ function traverseImages() {
 
                         var binary = getBase64Image($('#' + element.id), "hidden-canvas");
                         var url = $('#' + element.id).css("background-image").replace("url", "").replace("(","").replace(")","").replace("\"","").replace("\"","").trim();
+                        // console.log('[WB] image id ' + element.id);
                         var imgType = (url.split('.').pop() == "jpg") ? "jpeg" : url.split('.').pop();
                         //console.log('[WB-D][image-type]: ' + imgType);
                         // TODO: Image Type is set after above line is executed [getBase64Image(images[i], "hidden-canvas");]
@@ -192,6 +193,7 @@ function traverseImages() {
 
                         var binary = getBase64ImageForImageElement($('#' + element.id), "hidden-canvas");
                         var url = $('#' + element.id).attr("src");
+                        // console.log('[WB] image id ' + element.id);
                         var imgType = (url.split('.').pop() == "jpg") ? "jpeg" : url.split('.').pop();
                         //console.log('[WB-D][image-type]: ' + imgType);
 
@@ -449,6 +451,7 @@ function saveViewMenus(template_id, viewMenus, menuContents, nextUrl, message)
             // TODO: Image upload before page template create
             if(data.success)
             {
+                console.log(data.message);
                 message['menu'] = data.message;
 
                 makeTemplateComponetsEditable();
@@ -456,7 +459,7 @@ function saveViewMenus(template_id, viewMenus, menuContents, nextUrl, message)
                 saveContents(template_id, viewMenus, menuContents, nextUrl, message);
                 return;
             }
-            // alert(data.message);
+            console.log(data.message);
             errorAlert(data.message, function() {
 
                 swal('Reloading ...');
@@ -554,6 +557,7 @@ function onSuccessFoundTemplate(data, nextUrl, message) {
             swal( sweetAlert , function() {
 
                 allImages = [];
+                pagesEditedCollection = [];
                 
                 // MUST BE REDIRECTED
                 swal('Reloading ...');
