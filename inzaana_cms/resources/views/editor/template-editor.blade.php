@@ -34,8 +34,7 @@
 		var isInEditor = true;
 	</script>
 	<script type="text/javascript" src="{{ asset('editor_asset/js/tinymce/tinymce.min.js') }}"></script>
-	<!-- <script type="text/javascript" src="{{ asset('editor_asset/js/ckeditor/ckeditor.js') }}"></script> -->
-	<script src="http://cdn.ckeditor.com/4.5.7/standard-all/ckeditor.js"></script>
+	<script type="text/javascript" src="{{ asset('editor_asset/js/ckeditor/ckeditor.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('editor_asset/js/jquery-2.1.1.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('editor_asset/js/jquery.flexisel.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('editor_asset/js/bootstrap.min.js') }}"></script>

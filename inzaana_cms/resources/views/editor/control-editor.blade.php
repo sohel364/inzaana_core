@@ -89,7 +89,7 @@
 	</div>
 
 	<div id="text_edit_dialog" class="dialog">
-		<select id="dropdown_txt_editor_font_family" class="text_editor_component">			
+		<!-- <select id="dropdown_txt_editor_font_family" class="text_editor_component">			
 			<option value="Arial" selected>Arial</option>
 			<option value="Times New Roman">Times New Roman</option>
 			<option value="Comic Sans MS">Comic Sans MS</option>
@@ -132,7 +132,16 @@
 		</button>
 		<button id="btn_txt_editor_close" class="text_editor_component">
 			<span class=" 	glyphicon glyphicon-remove" aria-hidden="true"></span>
-		</button>
+		</button> -->
+		<p>Do you want to save changes?</p>
+		<br>
+		<button id="btn_editor_cancel"
+			style="border-radius: 5px; float: right; margin: 5px; background: white">
+			Cancel</button>
+		<button id="btn_editor_save"
+			style="border-radius: 5px; float: right; margin: 5px; background: white">
+			Save</button>
+
 	</div>
 	
 	<div id="resize_dialog" class="dialog">

@@ -865,6 +865,20 @@ function getAllDeletedImages(){
 
 function initializeAllDialogButton() {
 	/*
+	 * Button Initialization for Common Dialog buttons
+	 */
+
+	 $("#btn_editor_cancel").click(function(){
+	 	$(this).parent().dialog("close");
+	 });
+
+	 $("#btn_editor_save").click(function(){
+	 	isSaved = true;
+	 	$(this).parent().dialog("close");
+	 });
+	 
+
+	/*
 	 * Button Initialization for Option Dialog Panel
 	 */
 
