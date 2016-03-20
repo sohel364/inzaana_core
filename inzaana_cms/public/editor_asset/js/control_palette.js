@@ -105,7 +105,61 @@ function initializeControlPalette(){
 function initializeDefalutBackgroundThere(){
 	
 	$("#bg_editor_default_images_list").find('li').click(function(){
-		setBackgroundImage($("#container_background-1_div-1") , $(this).find("img").attr("src"));
+		
+		var editable_bg_control = $("#container_background-1_div-1");
+		var old_bg_color = editable_bg_control.css("background-color");
+		var old_bg_image_src = editable_bg_control.css("background-image");
+		var old_bg_image_position = editable_bg_control.css("background-position");
+		var old_bg_image_repeat = editable_bg_control.css("background-repeat");
+		var old_bg_image_attachment = editable_bg_control.css("background-attachment");
+		isSaved = false;
+
+		setBackgroundImage(editable_bg_control , $(this).find("img").attr("src"));
+
+		function restoreInitialState() {
+			// If cancel button is pressed, this function will be called
+			isSaved = false;
+			console.log("[DEBUG] old_bg_color : " + old_bg_color);
+			console.log("[DEBUG] old_bg_image_src : " + old_bg_image_src);
+			console.log("[DEBUG] old_bg_image_position : " + old_bg_image_position);
+			console.log("[DEBUG] old_bg_image_repeat : " + old_bg_image_repeat);
+			console.log("[DEBUG] old_bg_image_attachment : " + old_bg_image_attachment);
+			editable_bg_control.css("background", old_bg_color);
+			editable_bg_control.css("background-image", old_bg_image_src);
+			editable_bg_control.css("background-position", old_bg_image_position);
+			editable_bg_control.css("background-repeat", old_bg_image_repeat);
+			editable_bg_control.css("background-attachment", old_bg_image_attachment);	
+		}
+
+		$("#change_confirmation_dialog").dialog({
+			dialogClass : "no-close",
+			resizable : false,
+			draggable : true,
+			closeOnEscape : true,
+			title : "Confirmation!!!",
+			height : 150,
+			width : 300,
+			show : {
+				effect : "slide",
+				duration : 200,
+				direction : "up"
+			},
+			// position : {
+			// 	my : "center bottom",
+			// 	at : "center top-50",
+			// 	of : null
+			// },
+			beforeClose : function(event, ui) {
+				if (isSaved == false)
+				{
+					restoreInitialState();
+				}
+				else
+				{
+					onMenuPageModified(curMenu, editable_bg_control.attr("id"), "PROP-MODIFY");
+				}
+			}
+		});
 	});
 
 	// var folder = "/editor_asset/images/background/";

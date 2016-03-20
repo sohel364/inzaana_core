@@ -143,6 +143,17 @@
 			Save</button>
 
 	</div>
+
+	<div id="change_confirmation_dialog" class="dialog">
+		<p>Do you want to save changes?</p>
+		<br>
+		<button id="btn_confirmation_editor_cancel"
+			style="border-radius: 5px; float: right; margin: 5px; background: white">
+			Cancel</button>
+		<button id="btn_confirmation_editor_save"
+			style="border-radius: 5px; float: right; margin: 5px; background: white">
+			Save</button>
+	</div>
 	
 	<div id="resize_dialog" class="dialog">
 		<label>Height :</label>

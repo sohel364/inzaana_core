@@ -877,6 +877,19 @@ function initializeAllDialogButton() {
 	 	$(this).parent().dialog("close");
 	 });
 
+	 /*
+	 * Button Initialization for Confirmation Dialog buttons
+	 */
+
+	 $("#btn_confirmation_editor_cancel").click(function(){
+	 	$(this).parent().dialog("close");
+	 });
+
+	 $("#btn_confirmation_editor_save").click(function(){
+	 	isSaved = true;
+	 	$(this).parent().dialog("close");
+	 });
+
 
 	/*
 	 * Button Initialization for Option Dialog Panel
