@@ -139,8 +139,9 @@ function traverseImages() {
             if (parts.length > 2) {
 
                 var tagName = parts[parts.length - 1].split('-')[0];
+                var nodeName = $('#' + element.id)[0].nodeName;
 
-                if ( tagName != 'img' || $('#' + element.id)[0].nodeName != 'IMG') // $('#' + element.id)[0].nodeName
+                if ( tagName != 'img' || (  typeof nodeName !== 'undefined' &&  nodeName != 'IMG')) // $('#' + element.id)[0].nodeName
                 {
                     //console.log('[WB][container-parts [child]: ' + parts + '][' + $('#' + element.id)[0].nodeName + ']');
                     //console.log('[WB][container-parts [child][style:background(url)]: ' + $('#' + element.id).attr("style") + ']'); //$("#stylediv").attr('style')
@@ -236,6 +237,7 @@ function savePage(category_name, template_name, isEdit)
     traverseImages();
     // console.log("[WB-D] savePage: " + category_name + "$##$" + template_name);
 
+    makeTemplateComponetsNotEditable();
     saveCurrentMenuText();
     makeTemplateComponetsEditable();
 
@@ -257,10 +259,15 @@ function savePage(category_name, template_name, isEdit)
             swal( inputWriter, 
 
             function(inputValue){   
-                if (inputValue === false) return false;
+                if (inputValue === false)
+                {                    
+                    makeTemplateComponetsEditable();
+                    return false;
+                }
                 if (inputValue === "") {
                     swal.showInputError('You need to write something! Enter a valid page name. Page is not saved.');
                     // window.location.href = '/editor/' + category_name + '/' + template_name;
+                    makeTemplateComponetsEditable();
                     return false;  
                 }
                 showSavingIcon();
@@ -299,10 +306,15 @@ function savePage(category_name, template_name, isEdit)
                     swal( inputWriter, 
 
                     function(inputValue){   
-                        if (inputValue === false) return false;
+                        if (inputValue === false)
+                        {                    
+                            makeTemplateComponetsEditable();
+                            return false;
+                        }
                         if (inputValue === "") {
                             swal.showInputError('You need to write something! Enter a valid page name. Page is not saved.');
                             // window.location.href = '/editor/' + data.template.category_name + '/' + data.template.template_name + '/' + data.template.id;
+                            makeTemplateComponetsEditable();
                             return false;  
                         }
                         showSavingIcon();
@@ -312,7 +324,8 @@ function savePage(category_name, template_name, isEdit)
                 error: function(xhr, status, error) {
 
                     var err =  xhr.responseText;
-                    alert(err);
+                    // alert(err);
+                    errorAlert(err, function() {});
                 }
             });
         }
