@@ -358,6 +358,16 @@ function setDefaultMenuContent(menuText)
 {
     console.log("[DEBUG] setDefaultMenuContent");
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+    
+    if(!isInEditor)
+    {
+        makeTemplateComponetsNotEditable();
+        LoadTemplateAnimations();
+    }
+    else
+    {
+        makeTemplateComponetsEditable();
+    }
 
     $.ajax({
         type: "POST",
@@ -370,7 +380,7 @@ function setDefaultMenuContent(menuText)
         success: function (data) {
             if(data.success)
             {
-                defaultMenuHtml = data.defaultMenuContent;
+                defaultMenuHtml = data.defaultMenuContent;               
             }
             // alert(data.message);
         },
@@ -379,6 +389,7 @@ function setDefaultMenuContent(menuText)
             // alert(err);
         }        
     });
+
 }
 
 /*
