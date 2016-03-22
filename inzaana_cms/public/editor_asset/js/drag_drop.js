@@ -113,21 +113,23 @@ function makeTemplateComponetsNotEditable() {
 
 		if (allawable_control_array.indexOf(control_name) > -1) {
 			//console.log(" [Allowable Control] Control Type : " + control_name);
-			$(this).attr("id", $(this).attr("name") + "_dropped" + counter++);
+			//$(this).attr("id", $(this).attr("name") + "_dropped" + counter++);
 
-			if ($(this).draggable("instance") != undefined)
-			{
-				$(this).draggable("destroy");
-			}
-			$(this).removeClass("droppedFields");
-			$(this).removeClass("draggableField");
-			$(this).removeClass("ui-draggable");
-			$(this).removeClass("ui-draggable-handle");
-			$(this).removeClass("ui-draggable-dragging");	
+				
 
 			// $(this).click(function() {
 			// });
 		}
+
+		if ($(this).draggable("instance") != undefined)
+		{
+			$(this).draggable("destroy");
+		}
+		$(this).removeClass("droppedFields");
+		$(this).removeClass("draggableField");
+		$(this).removeClass("ui-draggable");
+		$(this).removeClass("ui-draggable-handle");
+		$(this).removeClass("ui-draggable-dragging");
 		
 		if ($(this).is("a")){
 			$(this).attr("href", $(this).attr("data-href"));

@@ -360,6 +360,8 @@ function setDefaultMenuContent(menuText)
     var template_id = $('#hidden-div-template-current').text();
     var category_name = $('#hidden-div-category-current').text();
     var isEdit = $('#hidden-div-is-edit').text();
+    
+    makeTemplateComponetsEditable();
 
     $.ajax({
         type: "POST",
@@ -384,6 +386,7 @@ function setDefaultMenuContent(menuText)
             console.log(err);
         }        
     });
+
 }
 
 /*
