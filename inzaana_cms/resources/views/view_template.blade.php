@@ -55,7 +55,10 @@ for($i=2;$i<sizeof($dirs);$i++)
                     </tr>
                 </table>
                 
-                <a class="info btn btn-info btn-flat" href="{{ route('user::templates.editor.browse', [ 'category' => $dirs[$i], 'template'=> $templates[$j] ]) }}">Create Template</a>
+                <a class="info btn btn-info btn-flat" 
+                    href="{{ route('user::templates.editor.browse', [ 'category' => $dirs[$i], 'template'=> $templates[$j] ]) }}">
+                    Create Template
+                </a>
                 <!-- <a class="info btn btn-info btn-flat" href="#">View</a> -->
             </div>
             <h4>{{ $templates[$j] }}</h4>

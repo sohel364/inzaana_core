@@ -4,36 +4,6 @@
  * and open the template in the editor.
  */
 
-function executeBeforeSend() {
-    if(isUserLoggedIn === null || isUserLoggedIn === "0") {
-        alert("Please sign in to save the template");
-        var redirectURL = getBaseUrl();
-        window.location.href = redirectURL;
-        return;
-    }
-    saveCurrentMenuText();
-    saveCurrentPageImages();
-    var menuList = getMenuList();
-    
-    if (typeof menuList.length !== 'undefined' && menuList.length > 1) {
-        showSavingIcon();
-        var savedName; 
-        if(!isEdit) {
-            var url = getPageSaverUrl();
-            savedName = prompt("Enter webpage name : ", "Enter page name");
-            //insertPage(url, menuList, savedName);
-        } else {
-            var url = getPageUpdaterUrl();
-            if(typeof template_saved_name !== 'undefined' && template_saved_name.length>0) {
-                savedName = prompt("Enter webpage name : ", template_saved_name);
-            } else {
-                savedName = prompt("Enter webpage name : ", "Enter page name");
-            }
-            //updatePage(url, menuList, savedName);
-        }
-    }
-}
-
 /*
  * Finds the base url of the current page
  * @returns {String}
@@ -44,22 +14,6 @@ function getBaseUrl() {
     return baseUrl;
 }
 
-/*
- * Generates the page saver url with concatenating the base url
- * @returns {String}
- */
-function getPageSaverUrl() {
-    return getBaseUrl()+'/views/content_views/pageSaver.php';
-}
-
-
-/*
- * Generates the page 0updater url with concatenating the base url
- * @returns {String}
- */
-function getPageUpdaterUrl() {
-    return getBaseUrl()+'/views/content_views/pageUpdater.php';
-}
 
 function setPagesEdited(menuTitle, isEdited)
 {
@@ -246,7 +200,7 @@ function savePage(category_name, template_name, isEdit)
     if (typeof menuList.length !== 'undefined' && menuList.length >= 1) 
     {
         var savedName; 
-        if(!isEdit)
+        if(isEdit == 0)
         {
             var inputWriter = {  title: "Save your template",
                     text: "Enter webpage name : ",
@@ -283,6 +237,11 @@ function savePage(category_name, template_name, isEdit)
                 type: "GET",
                 url: '/templates/info/' + template_id,
                 dataType: 'json',
+                statusCode: {
+                    404: function() {
+                        swal( "Sorry!" , "Your requested page is not found!", 'error');
+                    }
+                },
                 success: function (data) {
 
                     // alert('msg: ' + data.message );
@@ -325,7 +284,9 @@ function savePage(category_name, template_name, isEdit)
 
                     var err =  xhr.responseText;
                     // alert(err);
-                    errorAlert(err, function() {});
+                    errorAlert(err, function() {
+                        hideSavingIcon();
+                    });
                 }
             });
         }

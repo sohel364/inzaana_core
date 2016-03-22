@@ -47,9 +47,14 @@ class TemplateController extends Controller
     {
         // TODO: check author
         $viewMenus = [];
-        $viewData = [ 'category_name' => $category, 'template_name' => $template,
-                'isEdit' => false, 'isView' => false, 'viewMenus' => $viewMenus, 
-                'saved_name' => str_slug('UserTemplate1'), 'template_id' => -1 ];
+        $isEdit = 0;
+        $isView = 0;
+        $template_id = -1;
+        $category_name = $category;
+        $template_name = $template;
+        $saved_name = str_slug('User Template 1');
+        $viewData = 
+            compact('category_name', 'template_name', 'isEdit', 'isView', 'template_id', 'viewMenus', 'saved_name');
         return view('editor.template-editor',  $viewData);
     }
 

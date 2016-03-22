@@ -26,18 +26,39 @@ class HtmlViewMenuController extends Controller
     // returns default template menu contents
     public function baseContent(HtmlViewMenuRequest $request, $template_id)
     {
-        $success = true;
-        $message = 'Default contents are served.';
-        $template = Auth::user()->templates->find($template_id);
-        if($template)
+        if(!$request->has('_is_edit'))
         {
-            flash()->info('ERROR: INVALIAD TEMPLATE!');
-            return response()->view('flash', compact('message', 'success'))
-                                ->header('Content-Type', 'html');;
+            flash()->warning('Something went wrong! Unknown editor state.');
+            return response()->view('flash', [], 404)
+                             ->header('Content-Type', 'html');
         }
-        return response()->view('includes.default-content', 
-                                [ 'category_name' => $template->category_name, 'template_name' => $template->template_name ])
-                        ->header('Content-Type', 'html');;
+        $isEdit = $request->input('_is_edit');
+        $viewData = [];
+        if($isEdit)
+        {
+            $template = Auth::user()->templates->find($template_id);
+            if(!$template)
+            {
+                flash()->error('Your requested template not found!');
+                return response()->view('flash', [], 404)
+                                 ->header('Content-Type', 'html');
+            }
+            $viewData = [ 'category_name' => $template->category_name, 'template_name' => $template->template_name ];
+        }
+        else
+        {
+            if(!$request->has('_category_name'))
+            {
+                flash()->warning('Something went wrong! Unknown category.');
+                return response()->view('flash', [], 404)
+                                 ->header('Content-Type', 'html');
+            }
+            $category_name = $request->input('_category_name');
+            $template_name = $template_id;
+            $viewData = compact('category_name', 'template_name');
+        }
+        return response()->view('includes.default-content', $viewData)
+                         ->header('Content-Type', 'html');
     }
 
     // returns reference collection of all contents of all menus

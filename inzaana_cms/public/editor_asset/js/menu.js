@@ -125,7 +125,9 @@ function onMediaFoundSuccess(data)
         viewTemplateMedias(data.medias);
         return;
     }
-    errorAlert(data.message, function() {});
+    errorAlert(data.message, function() {
+        hideSavingIcon();
+    });
 }
 
 function handleReceivedImageData(xhr) {
@@ -188,7 +190,7 @@ function findMediasOfTemplate(id, onSuccess, onError)
         dataType: 'json',
         statusCode: {
             404: function() {
-                swal( "Sorry!" , "Your requested page is not found!", 'error');
+                swal( "Sorry!" , "Your requested medias is not found!", 'error');
             }
         }
     });
@@ -272,12 +274,11 @@ function onLoadMenus() {
     // loadMediasOfPages();
     showPreparingIcon();
 
-    if (typeof isEdit !== 'undefined' && isEdit) {
+    if (typeof isEdit !== 'undefined' && isEdit == 1) {
         // update mode
-        // getSavedMenuContents();
         // alert('In edit mode in editor');
     }
-    else if(typeof isView !== 'undefined' && isView)
+    else if(typeof isView !== 'undefined' && isView == 1)
     {
         // alert('In viewer mode');
     }
@@ -286,16 +287,14 @@ function onLoadMenus() {
         // insert mode
         // alert('In saving mode in editor');
         menuContens[curMenu] = getBodyHtmlString();
-    }
-    defaultMenuHtml = getBodyHtmlString();
-    // for laravel implementation
-    loadContents();
-
-    if(isInEditor /* Is in editor or viewer */ && !isEdit /* Is template editor in edit mode or save mode */)
-    {
         hideSavingIcon();
         return;
     }
+    // TODO: We will load default html content from server side response so below is no longer needed
+    // defaultMenuHtml = getBodyHtmlString();
+
+    // for laravel implementation
+    loadContents();
 
     findMediasOfTemplate(
         template_id,
@@ -358,25 +357,31 @@ function setDefaultMenuContent(menuText)
 {
     console.log("[DEBUG] setDefaultMenuContent");
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+    var template_id = $('#hidden-div-template-current').text();
+    var category_name = $('#hidden-div-category-current').text();
+    var isEdit = $('#hidden-div-is-edit').text();
 
     $.ajax({
         type: "POST",
         url: '/html-view-menus/content-default/' + template_id,
-        dataType: 'json',
+        dataType: 'html',
         data: {
-            _menu_title: menuText,
+            _category_name: category_name,
+            _is_edit: isEdit,
             _token: CSRF_TOKEN
         },
         success: function (data) {
-            if(data.success)
-            {
-                defaultMenuHtml = data.defaultMenuContent;
-            }
-            // alert(data.message);
+            
+            defaultMenuHtml = data;
+            resetMenuContent();
+            // console.log(defaultMenuHtml);
         },
         error: function(xhr, status, error) {
             var err =  xhr.responseText;
-            // alert(err);
+            errorAlert(err, function() {
+                hideSavingIcon();
+            });
+            console.log(err);
         }        
     });
 }
@@ -398,22 +403,14 @@ function onMenuClick(menu) {
 
     curMenu = menuText;
 
-    if(menuContens[menuText] === null || typeof menuContens[menuText] === 'undefined') {
-        // resetMenuContent();
+    if(isInEditor && typeof menuContens[menuText] === 'undefined') {
         setDefaultMenuContent(menuText);
-        // alert("RESETTING MENU CONTENT!!! ALERT!!" + defaultMenuHtml);
+        console.log(menuText + ' has loaded default contents.');
     } else {
-        //alert("SAVING PREVIOUS MENU CONTENT!!! -> " + menuText + "###" + menuContens[menuText]);
+        console.log(menuText + ' has saved contents.');
         setBodyHtmlString(menuContens[menuText]);
     }
     setPagesEdited(menuText, false);
-}
-
-
-function getSavedMenuContents() {
-
-    menuContens = user_menu_content_array;
-    setBodyHtmlString(menuContens[curMenu]);
 }
 
 var imageType = "png";

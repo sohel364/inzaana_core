@@ -53,13 +53,15 @@
               <ul class="nav navbar-nav navbar-right">
                 <form class="navbar-form navbar-left" role="save">
 
-                    <button class="btn btn-default btn-flat{{ ( Auth::check() && !$isView ) ? '' : ' hidden' }}" onclick="savePage('{{ $category_name }}', '{{ $isEdit ? $template_id : $template_name }}', '{{ $isEdit ? true : false }}' );">Save</button>
+                    <button class="btn btn-default btn-flat{{ ( Auth::check() && !$isView ) ? '' : ' hidden' }}" onclick="savePage('{{ $category_name }}', '{{ $isEdit ? $template_id : $template_name }}', '{{ $isEdit ? 1 : 0 }}' );">Save</button>
 
                     <canvas id="hidden-canvas" style="display:none"></canvas>
 
                     <div id="hidden-div-template-current" style="display:none">{{ ($isEdit || $isView) ? $template_id : $template_name }}</div>
-                    <div id="hidden-div-is-edit" style="display:none">{{ $isEdit ? true : false }}</div>
-                    <div id="hidden-div-is-view" style="display:none">{{ $isView ? true : false }}</div>
+                    <div id="hidden-div-category-current" style="display:none">{{ $category_name }}</div>
+                    <div id="hidden-div-is-edit" style="display:none">{{ $isEdit ? 1 : 0 }}</div>
+                    <div id="hidden-div-is-view" style="display:none">{{ $isView ? 1 : 0 }}</div>
+                    <div id="hidden-div-saved-name" style="display:none">{{ $saved_name }}</div>
 
                 </form>
                 <li><a class="{{ ( Auth::check() && $isEdit ) ? '' : 'hidden' }}" 
@@ -76,7 +78,7 @@
                                     <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image" />
                                     <p>
                                     {{ Auth::user()->name }} - Web Developer
-                                    <small>Member since Nov. 2012</small>
+                                    <small>Member since {{ date('F d, Y', strtotime(Auth::user()->created_at)) }}</small>
                                     </p>
                                 </li>
                                 <!-- Menu Body -->
