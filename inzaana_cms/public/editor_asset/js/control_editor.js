@@ -100,8 +100,9 @@ function initializeBGEditor(){
 }
 
 function setBackgroundImage(control, image_url){
-	console.log(control.attr("id") + " : " + image_url );
+	console.log("[DEBUG] Setting BG Image : " + control.attr("id") + " : " + image_url );
 	control.css("background-image", "url(" + image_url + ")");
+	console.log("[DEBUG] BG Image URL : " + control.css("background-image"));
 }
 
 function updateGradientPalletes(){

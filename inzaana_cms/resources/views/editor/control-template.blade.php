@@ -158,3 +158,13 @@
 				<button name="group_button" class="btn btn-success btn-lg" style="float: right;">Submit</button>
 	</div>
 </div>
+
+<!-- <div id="test_template" style="display: none">
+ 	<div id="container_background-1" style="width: 100%; height: 900px;">
+ 		<div id="container_background-1_div-1">
+			<div id="hint" name="textarea" style="position: absolute; width: 70%; height: 300px; border: 2px lightgray dotted; left: 15%; top: 20%;">
+				<h1><span style="position: absolute; color: lightgray; left: 33%; top: 35%;">Body: Drop Items Here</span></h1>
+			</div>
+		</div>
+	</div>
+</div> -->

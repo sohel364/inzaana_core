@@ -649,8 +649,12 @@ function showEditPanel() {
 }
 
 function makeControlEditable(control) {
+	//console.log("[DEBUG] " + control.attr("id"));
 	control.addClass("editable_mode");
-	control.draggable("disable");
+	if (control.draggable("instance") != undefined)
+	{
+		control.draggable("disable");
+	}	
 	control.unbind("click", droppedItemClickAction);
 	if ($("#"+clicked_dropped_item_id).attr('name').indexOf("textarea") >= 0
 			|| $("#"+clicked_dropped_item_id).attr('name').indexOf("header") >= 0
@@ -663,7 +667,10 @@ function makeControlEditable(control) {
 function makeControlNonEditable(control) {
 	console.log("Making Control Non Editable");
 	control.removeClass("editable_mode");
-	control.draggable("enable");
+	if (control.draggable("instance") != undefined)
+	{
+		control.draggable("enable");
+	}
 	control.click(droppedItemClickAction);
 	if ($("#"+clicked_dropped_item_id).attr('name').indexOf("textarea") >= 0
 			|| $("#"+clicked_dropped_item_id).attr('name').indexOf("header") >= 0) {
