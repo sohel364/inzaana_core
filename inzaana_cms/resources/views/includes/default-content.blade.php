@@ -7,7 +7,6 @@
             </div>
         </div>
 </div>
-
 <div id="footer">
 	<?php //include ("templates/$category_name/$template_name/footer.html");?>
 </div>
