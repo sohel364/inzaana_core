@@ -26,6 +26,7 @@ class HtmlViewMenuController extends Controller
     // returns default template menu contents
     public function baseContent(HtmlViewMenuRequest $request, $template_id)
     {
+        $currentMenu = $request->input('_current_menu');
         if(!$request->has('_is_edit'))
         {
             flash()->warning('Something went wrong! Unknown editor state.');
@@ -43,7 +44,7 @@ class HtmlViewMenuController extends Controller
                 return response()->view('flash', [], 404)
                                  ->header('Content-Type', 'html');
             }
-            $viewData = [ 'category_name' => $template->category_name, 'template_name' => $template->template_name ];
+            $viewData = [ 'category_name' => $template->category_name, 'template_name' => $template->template_name, 'currentMenu' => $currentMenu ];
         }
         else
         {
@@ -55,7 +56,7 @@ class HtmlViewMenuController extends Controller
             }
             $category_name = $request->input('_category_name');
             $template_name = $template_id;
-            $viewData = compact('category_name', 'template_name');
+            $viewData = compact('category_name', 'template_name', 'currentMenu');
         }
         return response()->view('includes.default-content', $viewData)
                          ->header('Content-Type', 'html');
