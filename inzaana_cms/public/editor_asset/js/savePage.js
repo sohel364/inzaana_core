@@ -128,9 +128,12 @@ function traverseImages() {
                             + '", "tag": "' + ($('#' + element.id)[0].nodeName == null ? tagName : $('#' + element.id)[0].nodeName)
                             + '" }';
 
-                        if(!isImageExists(element.id, curMenu))
+                        if(url.indexOf("/medias/images/") == -1)
                         {
-                            containers.push(containerObj);
+                            if(!isImageExists(element.id, curMenu))
+                            {
+                                containers.push(containerObj);
+                            }
                         }
                         // console.log('[WB][container-json]: ' + containerObj);
                     }
@@ -167,9 +170,12 @@ function traverseImages() {
                             + '", "tag": "' + ($('#' + element.id)[0].nodeName == null ? tagName : $('#' + element.id)[0].nodeName)
                             + '" }';
 
-                        if(!isImageExists(element.id, curMenu))
+                        if(url.indexOf("/medias/images/") == -1)
                         {
-                            containers.push(containerObj);
+                            if(!isImageExists(element.id, curMenu))
+                            {
+                                containers.push(containerObj);
+                            }
                         }
                         // console.log('[WB][container-json]: ' + containerObj);
                     }
@@ -352,7 +358,7 @@ function insertPage(menuList, template_name, category_name, savedName) {
             error: function(xhr, status, error) {
                 var err =  xhr.responseText;
                 
-                errorAlert(data.message, function() {
+                errorAlert(err, function() {
 
                     window.location.href = nextUrl;
                 });
@@ -425,7 +431,7 @@ function saveViewMenus(template_id, viewMenus, menuContents, nextUrl, message)
             // TODO: Image upload before page template create
             if(data.success)
             {
-                console.log(data.message);
+                // console.log(data.message);
                 message['menu'] = data.message;
 
                 makeTemplateComponetsEditable();
@@ -471,16 +477,16 @@ function saveContents(template_id, templateViewMenus, menuContents, nextUrl, mes
             // TODO: Image upload before page template create
             if(data.success)
             {
-                // NOTE: for debuggin success messages
-                // alert(message['menu']);
-                // alert(data.message);
-                // alert(message['template']);
+
+                // NOTE: for debugging success messages
+                console.log(data.message);
 
                 // find template to save its medias
                 findTemplate(
                     template_id,
                 function(data) {
-                  onSuccessFoundTemplate(data, nextUrl, message);
+
+                    onSuccessFoundTemplate(data, nextUrl, message);
                 },
                 function(xhr, status, error) {
 
@@ -514,6 +520,11 @@ function onSuccessFoundTemplate(data, nextUrl, message) {
 
     if(data.success)
     {
+                    
+        // NOTE: for debugging success messages
+        console.log(message['menu']);
+        console.log(message['template']);
+        
         // INFO: template info is found
         saveImages(data.template.user_id, data.template.id, function(imageCount) {
             
@@ -553,9 +564,12 @@ function onSuccessFoundTemplate(data, nextUrl, message) {
  * Shows loading icons while saving operation is ongoing
  */
 function showSavingIcon() {
+    var imageContainerCount = $("body").find("*[id^='container_']").find("img");
+    var totalImageCount = (imageContainerCount !== 'undefined' && imageContainerCount.length > 30) ? 30 : 20;
     var sweetAlert = {
         title: "Please wait!",
         text: 'Your template is saving ...',
+        timer: 1000 * totalImageCount,
         imageUrl: '/dist/img/loading40.gif',
         imageSize: '220x20',
         type: 'info',

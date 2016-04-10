@@ -363,17 +363,6 @@ function setDefaultMenuContent(menuText)
     
     makeTemplateComponetsEditable();
 
-    // var test_template = 
-    // '<div id="container_background-1" style="width: 100%; height: 900px;">' +
-    //     '<div id="container_background-1_div-1">' +
-    //         '<div id="hint" name="textarea" style="position: absolute; width: 70%; height: 300px; border: 2px lightgray dotted; left: 15%; top: 30%;">' +
-    //             '<h1><span style="position: absolute; color: lightgray; left: 33%; top: 35%;">' + curMenu + ' Body: Drop Items Here</span></h1>' + 
-    //         '</div>' + 
-    //     '</div>' +
-    // '</div>';
-
-    // setBodyHtmlString(test_template);
-
     $.ajax({
         type: "POST",
         url: '/html-view-menus/content-default/' + template_id,
@@ -475,11 +464,18 @@ function saveCurrentPageImages(isEdit, imageObj) {
 
 function isImageExists(id, menu_item)
 {
-    if(allImages[menu_item] == null) return false;
-    var image_items = Object.keys(allImages[menu_item]);
-    image_items.forEach(function(image){
+    // if(allImages[menu_item] == null) return false;
+    // var image_items = Object.keys(allImages[menu_item]);
+    // image_items.forEach(function(image){
 
-        var imageObj = JSON.parse(allImages[menu_item][image]);
+    //     var imageObj = JSON.parse(allImages[menu_item][image]);
+    //     if(id == imageObj.id) return true;
+
+    // });
+    if(allImages[menu_item] == null) return false;
+    $.each(menu_item, function(index, item) {
+
+        var imageObj = JSON.parse(item);
         if(id == imageObj.id) return true;
 
     });
@@ -527,7 +523,10 @@ function saveImages(user_id, template_id, onUploadSuccess) {
         //alert("images count: " + image_items.length);
     });
     // alert("menu count: " + menu_items.length);
-    // onUploadSuccess(imageCount);
+    if(imageCount == 0)
+    {
+        onUploadSuccess(imageCount);
+    }
 }
 
 function test_upload_image(){
@@ -602,16 +601,18 @@ function getBase64Image(img, id)
         canvas.width = img.css("width").replace("px", "").trim();
         canvas.height = img.css("height").replace("px", "").trim();
 
-        //console.log('[WB-D][size]:' + canvas.width + 'x' + canvas.height);
-        //console.log('[WB-D][size]:' + img.css("width") + 'x' + img.css("height"));
+        console.log('[WB-D][size]:' + canvas.width + 'x' + canvas.height);
+        // console.log('[WB-D][size]:' + img.css("width") + 'x' + img.css("height"));
 
         // Copy the image contents to the canvas
         var ctx = canvas.getContext("2d");
         ctx.drawImage(this, 0, 0);
 
-        //console.log('[WB-D][src]:' + imageData.src);
-        //console.log('[WB-D][size]:' + imageData.width + 'x' + imageData.height);
+        console.log('[WB-D][src]:' + imageData.src);
+        console.log('[WB-D][size]:' + imageData.width + 'x' + imageData.height);
     };
+    imageData.width = img.css("width").replace("px", "").trim();
+    imageData.height = img.css("height").replace("px", "").trim();
     imageData.src = img.css("background-image").replace("url", "").replace("(","").replace(")","").replace("\"","").replace("\"","").trim();
 
     // Get the data-URL formatted image
@@ -621,16 +622,16 @@ function getBase64Image(img, id)
 
     var s = imageData.src.split('.').pop();
 
-    console.log('[WB-D][type]:' + s);
+    // console.log('[WB-D][type]:' + s);
 
     if(s.indexOf("png")>-1){
-        var dataURL = canvas.toDataURL("image/png", 1.0);
+        var dataURL = canvas.toDataURL("image/png");
         imageType = "png";
         return dataURL;
     }
 
     if(s.indexOf("jpg")>-1 || s.indexOf("jpeg")>-1){
-        var dataURL = canvas.toDataURL("image/jpeg", 1.0);
+        var dataURL = canvas.toDataURL("image/jpeg");
         imageType = "jpeg";
         return dataURL;
     }

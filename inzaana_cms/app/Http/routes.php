@@ -13,7 +13,7 @@
 
 /*
 | --------------------------
-| Server deployment routing
+| Server deploy ment routing
 | --------------------------
 */
 
