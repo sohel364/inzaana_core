@@ -258,7 +258,7 @@ function loadContents()
  * Sets the initial menu contents to menu array and initialize the global variables
  */
 function onLoadMenus() {
-    // makeTemplateComponetsEditable();
+    makeTemplateComponetsEditable();
     console.log("[DEBUG] onLoadMenus called");
     var isViewer = $('#hidden-div-is-view').text();
     isView = isViewer;
