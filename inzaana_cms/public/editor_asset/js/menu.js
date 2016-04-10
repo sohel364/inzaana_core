@@ -595,11 +595,19 @@ function getBase64Image(img, id)
     // Create an empty canvas element
     var canvas = document.getElementById(id);
 
+    var loaded = false;
     var imageData = new Image();
-    imageData.onload = function(){
+    imageData.onload = function() {
+        
+        if (loaded) {
+            return;
+        }
+        loaded = true;
 
-        canvas.width = img.css("width").replace("px", "").trim();
-        canvas.height = img.css("height").replace("px", "").trim();
+        // canvas.width = img.css("width").replace("px", "").trim();
+        // canvas.height = img.css("height").replace("px", "").trim();
+        canvas.width = imageData.width;
+        canvas.height = imageData.height;
 
         console.log('[WB-D][size]:' + canvas.width + 'x' + canvas.height);
         // console.log('[WB-D][size]:' + img.css("width") + 'x' + img.css("height"));
@@ -611,9 +619,13 @@ function getBase64Image(img, id)
         console.log('[WB-D][src]:' + imageData.src);
         console.log('[WB-D][size]:' + imageData.width + 'x' + imageData.height);
     };
-    imageData.width = img.css("width").replace("px", "").trim();
-    imageData.height = img.css("height").replace("px", "").trim();
+    // imageData.width = img.css("width").replace("px", "").trim();
+    // imageData.height = img.css("height").replace("px", "").trim();
     imageData.src = img.css("background-image").replace("url", "").replace("(","").replace(")","").replace("\"","").replace("\"","").trim();
+    imageData.style.display = 'block';
+    if (imageData.complete) {
+        imageData.onload();
+    }
 
     // Get the data-URL formatted image
     // Firefox supports PNG and JPEG. You could check img.src to
