@@ -1130,6 +1130,8 @@ function initializeAllDialogButton() {
 		onMenuPageModified(curMenu, editable_control.attr("id"), "RESIZE");
 		editable_control.height($("#txt_height_resize_dialog").val());
 		editable_control.width($("#txt_width_resize_dialog").val());
+		editable_control.parent().height($("#txt_height_resize_dialog").val());
+		editable_control.parent().width($("#txt_width_resize_dialog").val());
 	});
 
 	/*
