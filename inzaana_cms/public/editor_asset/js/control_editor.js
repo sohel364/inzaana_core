@@ -47,9 +47,16 @@ function initializeBGEditor(){
 	updateGradientPalletes();
 	
 	$('#file_picker_bg_editor').change(function(event) {
-		var tmp_file_path = URL.createObjectURL(event.target.files[0]);
-		setBackgroundImage(editable_bg_control, tmp_file_path);
-		
+		//var tmp_file_path = URL.createObjectURL(event.target.files[0]);
+			var file    = event.target.files[0];
+			var reader  = new FileReader();
+			reader.addEventListener("load", function () {
+			   setBackgroundImage(editable_bg_control, reader.result); 
+			}, false);
+
+    		if (file) {
+		       reader.readAsDataURL(file);
+	    	}		
 	});
 	
 	$("#btn_select_bg_image").click(function(){

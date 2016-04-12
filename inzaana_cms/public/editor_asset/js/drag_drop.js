@@ -1058,11 +1058,19 @@ function initializeAllDialogButton() {
 	$("#btn_browse_image").click(function() {
 
 		$('#file_picker').change(function(event) {
-			var tmp_file_path = URL.createObjectURL(event.target.files[0]);
+			// var tmp_file_path = URL.createObjectURL(event.target.files[0]);
+			var file    = event.target.files[0];
+			var reader  = new FileReader();
+			reader.addEventListener("load", function () {
+			   setImage(reader.result);   
+			}, false);
+
+    		if (file) {
+		       reader.readAsDataURL(file);
+	    	}
+
 			var file_name = document.getElementById('file_picker').value;
 			$("#dialog_input_image_path").val(file_name);
-			setImage(tmp_file_path);
-
 		});
 
 		$("#file_picker").trigger("click");
