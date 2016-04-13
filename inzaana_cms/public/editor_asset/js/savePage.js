@@ -112,8 +112,12 @@ function traverseImages() {
                         //console.log('[WB][container-parts [child][image:size]: ' + $('#' + element.id).css("width") + 'x' + $('#' + element.id).css("height") + ']');
                         //console.log('[WB][container-parts [child][image:url]: ' + $("#" + element.id).css("background-image").replace("url", "").replace("(", "").replace(")", "").replace("\"", "").replace("\"", "").trim() + ']');
 
-                        var binary = getBase64Image($('#' + element.id), "hidden-canvas");
                         var url = $('#' + element.id).css("background-image").replace("url", "").replace("(","").replace(")","").replace("\"","").replace("\"","").trim();
+                        var binary = url;
+                        if(url.indexOf("data:") == -1)
+                        {
+                            binary = getBase64Image($('#' + element.id), "hidden-canvas");   
+                        }                        
                         // console.log('[WB] image id ' + element.id);
                         var imgType = (url.split('.').pop() == "jpg") ? "jpeg" : url.split('.').pop();
                         //console.log('[WB-D][image-type]: ' + imgType);
@@ -149,8 +153,12 @@ function traverseImages() {
                     }
                     else {
 
-                        var binary = getBase64ImageForImageElement($('#' + element.id), "hidden-canvas");
                         var url = $('#' + element.id).attr("src");
+                        var binary = url;
+                        if(url.indexOf("data:") == -1)
+                        {
+                            binary = getBase64ImageForImageElement($('#' + element.id), "hidden-canvas");
+                        }
                         // console.log('[WB] image id ' + element.id);
                         var imgType = (url.split('.').pop() == "jpg") ? "jpeg" : url.split('.').pop();
                         //console.log('[WB-D][image-type]: ' + imgType);
