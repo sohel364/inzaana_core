@@ -572,8 +572,14 @@ function onSuccessFoundTemplate(data, nextUrl, message) {
  * Shows loading icons while saving operation is ongoing
  */
 function showSavingIcon() {
-    var imageContainerCount = $("body").find("*[id^='container_']").find("img");
-    var totalImageCount = (imageContainerCount !== 'undefined' && imageContainerCount.length > 30) ? 30 : 20;
+    var totalImageCount = 60, imageContainerCount = $("body").find("*[id^='container_']").find("img");
+    if(imageContainerCount !== 'undefined') {
+        totalImageCount = imageContainerCount.length;
+        if(imageContainerCount.length > 60)
+        {
+            totalImageCount =  60;
+        }
+    }
     var sweetAlert = {
         title: "Please wait!",
         text: 'Your template is saving ...',
