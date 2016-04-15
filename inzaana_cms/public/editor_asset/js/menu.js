@@ -561,12 +561,28 @@ function getBase64ImageForImageElement(img, id) {
     //console.log('[WB][width]:' +  imageData.width);
     //console.log('[WB][height]:' +  imageData.height);
 
-    canvas.width = imageData.width;
-    canvas.height = imageData.height;
+    var loaded = false;
+    var imageBuffer = new Image();
+    imageBuffer.onload = function() {
+        
+        if (loaded) {
+            return;
+        }
+        loaded = true;
 
-    // Copy the image contents to the canvas
-    var ctx = canvas.getContext("2d");
-    ctx.drawImage(imageData, 0, 0);
+        canvas.width = imageBuffer.width;
+        canvas.height = imageBuffer.height;
+
+        // Copy the image contents to the canvas
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(imageBuffer, 0, 0);
+    }
+    imageBuffer.src = imageData.src;
+    imageBuffer.style.display = 'block';
+    if (imageBuffer.complete) {
+        imageBuffer.onload();
+    }
+
 
     // Get the data-URL formatted image
     // Firefox supports PNG and JPEG. You could check img.src to
