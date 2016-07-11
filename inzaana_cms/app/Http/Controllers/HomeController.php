@@ -3,7 +3,8 @@
 namespace Inzaana\Http\Controllers;
 
 use Inzaana\Http\Requests;
-use Illuminate\Http\Request;
+use Illuminate\Http\Request as HomeRequest;
+use Redirect as HomeRedirect;
 
 class HomeController extends Controller
 {
@@ -25,5 +26,12 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+
+    public function redirectToStore()
+    {
+        // return redirect()->route('guest::home');
+        // return HomeRedirect::to('http://' . $site . '/');
+        return redirect()->route('user::stores.dashboard');
     }
 }

@@ -59,12 +59,12 @@ class AppMailer
      * @param  User $user
      * @return void
      */
-    public function sendEmailConfirmationTo(User $user)
+    public function sendEmailConfirmationTo(User $user, array $data)
     {
         $this->from = config('mail.from.address');
         $this->to = $user->email;
         $this->view = 'auth.emails.confirm';
-        $this->data = compact('user');
+        $this->data = compact('user', 'data');
         
         $this->deliver();
     }

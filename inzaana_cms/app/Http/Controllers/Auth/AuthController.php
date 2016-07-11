@@ -29,8 +29,7 @@ class AuthController extends Controller
 
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
-    protected $redirectTo = '/dashboard';
-	
+    protected $redirectTo = '/dashboard';	
 
     /**
      * Create a new authentication controller instance.
@@ -71,6 +70,7 @@ class AuthController extends Controller
             'verified' => false,
             'password' => bcrypt($data['password']),
         ]);
+        // USED TO -> UserController@index
         session(compact('user'));
         return $user;
     }
@@ -79,17 +79,52 @@ class AuthController extends Controller
      * Confirm a user's email address.
      *
      * @param  string $token
+     * @param  string $site
+     * @param  string $store
      * @return mixed
      */
-    public function confirmEmail($token)
+    public function confirmEmail($token, $site, $store)
     {
-        User::whereToken($token)->firstOrFail()->confirmEmail();
+        $user = User::whereToken($token)->firstOrFail();
+        $errors = [];
+
+        if(!$user->confirmEmail())
+        {
+            if($user->remove())
+            {
+                $errors['AUTH_CONFIRM'] = 'User authentication is not confirmed. Please signup to create your store again. For assistance contact administrator.';
+            }
+            return redirect()->route('guest::home')->with('errors', collect($errors));
+        }
+        // USED TO -> 'Auth\AuthController@create'
+        session(compact('site', 'store'));
         flash('You are now confirmed. Please login.');
-        return redirect('login');
+        return redirect('/login');
     }
 
-    public function verify(Request $request)
-    {
-        return 'VERIFIED';
+    /**
+     * Navigates to signup form for signup or back to guest home
+     */
+    public function showSignupForm(AuthRequest $request)
+    {        
+        $errors = [];
+        if(!$request->exists('store_name') || !$request->has('store_name'))
+        {
+            $errors['store'] = 'Please give your store a name to signup.';
+        }
+        if(count($errors) > 0)
+            return response()->view('home', [ 'errors' => collect($errors) ]);
+
+        $store = $request->query('store_name');
+        $subdomain = strtolower($request->query('subdomain'));
+        $domain = $request->query('domain');
+        $site = strtolower(str_replace(' ', '', $store)) . '.' . $subdomain . '.' . $domain;
+
+        // USED TO -> UserController@index
+        session(compact('site', 'store'));
+
+        return redirect('/register')->with('storeName', $store)
+                                    ->with('subdomain', $subdomain)
+                                    ->with('domain', $domain);
     }
 }

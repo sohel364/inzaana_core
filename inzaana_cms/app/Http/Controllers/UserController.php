@@ -36,13 +36,29 @@ class UserController extends Controller
         //
         if(!Auth::user()->verified && $request->session()->has('user'))
         {            
+            // USED FROM -> 'Auth\AuthController@showSignupForm'
             $user = session('user');
-            $mailer->sendEmailConfirmationTo($user);
+            // USED FROM -> 'Auth\AuthController@showSignupForm'
+            // session()->keep(['store', 'site']);
+            $data['site'] = session('site');
+            $data['storeName'] = session('store');
+
+            $mailer->sendEmailConfirmationTo($user, $data);
             flash('Please confirm your email address.');
             Auth::logout();
+
             return redirect('/login');
         }
-        return view('admin');
+
+        if(!session()->has('site') || !session()->has('store'))
+        {
+            $errors['SESSION_TIMEOUT'] = 'Your session is timed out. Please login and confirm again.';
+            return response()->view('home', [ 'errors' => collect($errors) ]);
+        }
+        $site = session('site');
+        $store = session('store');
+        return redirect()->route('user::stores.create', compact('store', 'site'));
+        // return view('admin');
     }
 
     /**
@@ -87,7 +103,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $hashed_user_id
      * @return \Illuminate\Http\Response
      */
     public function show($hashed_user_id)

@@ -2,10 +2,15 @@
 
 namespace Inzaana\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Request as StoreRequest;
 
 use Inzaana\Http\Requests;
 use Inzaana\Http\Controllers\Controller;
+
+use Auth;
+use Redirect as StoreRedirect;
+
+use Inzaana\Store;
 
 class StoreController extends Controller
 {
@@ -17,17 +22,44 @@ class StoreController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('auth');
     }
 
-    public function create(Request $request)
+    public function create($name, $site)
     {
-    	if($request->exists('store_name') && $request->has('store_name'))
-    	{
-    		$storeName = $request->query('store_name');
-    		return view('auth.register', compact('storeName'));
-    	}
-    	return redirect()->route('guest::home');
+        $keywords = preg_split("/[.]+/", $site);
+
+        if(count($keywords) < 3)
+        {     
+            $errors['store'] = 'Failed to create store! Please check your shop name again.';
+            return response()->view('home', [ 'errors' => collect($errors) ]);       
+        }
+
+        $storeNameUrl = $keywords[0];
+        $subdomain = $keywords[1];
+        $domain = $keywords[2];
+
+        $store = Store::create([
+            'name' => $name,
+            'user_id' => Auth::user()->id,
+            'name_as_url' => $storeNameUrl,
+            'sub_domain' => $subdomain,
+            'domain' => $domain
+        ]);
+
+        if(!$store)
+        { 
+            $errors['store'] = 'Failed to create store! Please check your shop name again.';
+            return response()->view('home', [ 'errors' => collect($errors) ]);  
+        }
+
+        return StoreRedirect::to('http://' . $site . '/stores');
+    }
+
+    // View to vendor admin dashboard
+    public function redirectToDashboard()
+    {
+        return view('admin')->with('user', Auth::user());
     }
 
 }

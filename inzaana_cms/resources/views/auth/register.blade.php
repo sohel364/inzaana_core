@@ -1,6 +1,6 @@
 @extends('layouts.master_out')
 
-@section('title', 'Sign-Up')
+@section('title', 'Sign Up')
 
 @section('content')
 
@@ -11,7 +11,18 @@
       </div>
       <div class="col-md-6 col-md-offset-3 animatedParent animateOnce">
         <img class="img-responsive" src="{{ URL::asset('images/shop.png') }}">
-        <h3 class="text-center shopname animated bounceInLeft">{{{ $storeName or 'Dummy Store Name' }}}</h3>
+        <h3 class="text-center shopname animated bounceInLeft">
+          @if( session()->has('storeName') && session('storeName') )
+            {{ session('storeName') }}
+          @else
+            @if( old('storeName') )
+              {{ old('storeName') }}
+            @else
+              {{ 'Your Store Name' }}
+            @endif
+
+          @endif
+        </h3>
       </div>
     </div>
 
@@ -370,6 +381,10 @@
                 <span class="button-checkbox animated fadeInLeftShort" data-id="11">
             <button name="is_agreed" type="button" class="btn btn-default" data-color="info"><i class="state-icon glyphicon glyphicon-unchecked"></i>I Agree</button>
                         <input type="checkbox" class="hidden" value="1">
+                        <input name="storeName" type="text" class="hidden" value="{{ session()->has('storeName') && session('storeName') ? session('storeName') : old('storeName') }}">
+                        <input name="subdomain" type="text" class="hidden" value="{{ session()->has('subdomain') && session('subdomain') ? session('subdomain') : old('subdomain') }}">
+                        <input name="domain" type="text" class="hidden" value="{{ session()->has('domain') && session('domain') ? session('domain') : old('domain') }}">
+
           </span>
               </div>
               <div class="col-xs-8 col-sm-9 col-md-9 animated fadeInRightShort" data-id="12">

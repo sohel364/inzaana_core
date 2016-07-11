@@ -13,24 +13,43 @@
 
 /*
 | --------------------------
-| Server deploy ment routing
+| Server deployment routing
 | --------------------------
 */
 
+// Subdomain routing
+Route::group(array('domain' => '{name}.inzaana.{domain}'), function() {
+    
+    Route::get('/', [ 'uses' => 'HomeController@redirectToStore', 'as' => 'stores.redirect' ]); 
+});
+
 Route::group([ 'as' => 'guest::' ], function() {
 
-	Route::get('/', [ 'uses' => 'HomeController@index', 'as' => 'home' ]);     
-});
+    Route::get('/', [ 'uses' => 'HomeController@index', 'as' => 'home' ]);  
+}); 
 
 Route::group(['middleware' => 'web'], function () {
 
-	Route::get('/register/confirm/{token}', 'Auth\AuthController@confirmEmail');
-
-	Route::get('/create-store', [ 'uses' => 'StoreController@create', 'as' => 'stores.create' ]);
-
     Route::auth();
 
+    // Routing grouped by namespace
+    Route::group(['namespace' => 'Auth'], function() {
+
+        Route::group([ 'as' => 'guest::' ], function() {
+
+            Route::get('/register/confirm/{token}/site/{site}/store/{store}', [ 'uses' => 'AuthController@confirmEmail', 'as' => 'register.confirm' ]);
+            Route::get('/signup', [ 'uses' => 'AuthController@showSignupForm', 'as' => 'signup' ]);  
+        }); 
+    });
+
     Route::group([ 'as' => 'user::' ], function() {
+
+        // Store controller
+        Route::group(['prefix' => 'stores'], function () {
+
+            Route::get('/', [ 'uses' => 'StoreController@redirectToDashboard', 'as' => 'stores.dashboard' ]); 
+            Route::get('/create/name/{name}/site/{site}', [ 'uses' => 'StoreController@create', 'as' => 'stores.create' ]);            
+        });  
 
         // User controller
     	Route::get('/dashboard', [ 'uses' => 'UserController@index', 'as' => 'home' ]);

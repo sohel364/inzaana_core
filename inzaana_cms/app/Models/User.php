@@ -54,14 +54,24 @@ class User extends Model implements AuthenticatableContract,
     /**
      * Confirm the user.
      *
-     * @return void
+     * @return bool
      */
     public function confirmEmail()
     {
         $this->verified = true;
         $this->token = null;
 
-        $this->save();
+        return $this->save();
+    }
+
+    /**
+     * Remove the user and confirms.
+     *
+     * @return bool
+     */
+    public function remove()
+    {
+        return $this->delete();
     }
 
     /**

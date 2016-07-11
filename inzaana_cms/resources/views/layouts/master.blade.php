@@ -97,7 +97,7 @@
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
 					  <ul class="nav navbar-nav navbar-right text-center">
-						<li class="active"><a href="index.html">Home</a></li>
+						<li class="active"><a href="/">Home</a></li>
 						<li><a href="#">About us</a></li>
 						<li><a href="template.html">Templates</a></li>
 						<li><a href="#">Explore</a></li>
@@ -116,6 +116,7 @@
 			  </div>
         
         @include('flash')
+        @include('errors')
 
 			  <!--Home-->
 			  <section>
@@ -125,18 +126,18 @@
               <h1 class="heading1 animated growIn delay-500 go" data-id="1">Give a nice name to your online store!</h1>
               <div class="col-md-5 col-md-offset-3 col-xs-8 col-xs-offset-2">
 
-                  <form role="form" method="GET" action="{{ url('/create-store') }}">
+                  <form role="form" method="GET" action="{{ route('guest::signup') }}">
 
                       <div class="input-group input-group-lg">
                           <input name="store_name" type="text" class="form-control animated fadeInLeft go" data-id="2" placeholder="Your Store Name...">
 
                           <span class="input-group-btn input-group-lg ">
-                              <input type="text" class="form-control animated growIn CreateInput go removeBCarve" data-id="2" value="Inzaana" style="width: 106px; left: 0px; top: 0px;">
+                              <input name="subdomain" type="text" class="form-control animated growIn CreateInput go removeBCarve" data-id="2" value="Inzaana" style="width: 106px; left: 0px; top: 0px;">
                               <label class="animated growIn go" data-id="3">
-                                  <select class="form-control" placeholder="Select a country" style="height: 46px; left: 0px; top: 0px; width: 78px;">
-                                      <option value="" class="placehold" selected="">.com</option>
-                                      <option value="">.net</option>
-                                      <option value="">.org</option>
+                                  <select name="domain" class="form-control" placeholder="Select a domain" style="height: 46px; left: 0px; top: 0px; width: 78px;">
+                                      <option value="com" class="placehold" selected="">.com</option>
+                                      <option value="net">.net</option>
+                                      <option value="org">.org</option>
                                   </select>
                               </label>
                               <button class="btn btn-info animated fadeInRight btn-poss go" data-id="4" type="submit">Create Store!</button>
