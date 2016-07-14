@@ -53,7 +53,9 @@ class StoreController extends Controller
             return response()->view('home', [ 'errors' => collect($errors) ]);  
         }
 
-        return StoreRedirect::to('http://' . $site . '/stores');
+        // @NOTE: Example code for site redirection
+        // return StoreRedirect::to('http://' . $site . '/stores');
+        return redirect()->route('user::stores.dashboard');
     }
 
     // View to vendor admin dashboard

@@ -34,12 +34,16 @@ class UserController extends Controller
     public function index(Request $request, AppMailer $mailer)
     {
         //
+        if(Auth::guest())
+        {
+            flash()->error('Your session is timed out. Please login and confirm again.');
+            return Auth::guest('/login');
+        }
         if(!Auth::user()->verified && $request->session()->has('user'))
         {            
             // USED FROM -> 'Auth\AuthController@showSignupForm'
             $user = session('user');
             // USED FROM -> 'Auth\AuthController@showSignupForm'
-            // session()->keep(['store', 'site']);
             $data['site'] = session('site');
             $data['storeName'] = session('store');
 
@@ -49,11 +53,9 @@ class UserController extends Controller
 
             return redirect('/login');
         }
-
         if(!session()->has('site') || !session()->has('store'))
         {
-            $errors['SESSION_TIMEOUT'] = 'Your session is timed out. Please login and confirm again.';
-            return response()->view('home', [ 'errors' => collect($errors) ]);
+            return redirect()->route('user::stores.dashboard'); 
         }
         $site = session('site');
         $store = session('store');

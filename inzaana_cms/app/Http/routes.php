@@ -17,15 +17,15 @@
 | --------------------------
 */
 
-// Subdomain routing
-Route::group(array('domain' => '{name}.inzaana.{domain}'), function() {
-    
-    Route::get('/', [ 'uses' => 'HomeController@redirectToStore', 'as' => 'stores.redirect' ]); 
-});
-
 Route::group([ 'as' => 'guest::' ], function() {
 
     Route::get('/', [ 'uses' => 'HomeController@index', 'as' => 'home' ]);  
+    // Subdomain routing
+    Route::group(array('domain' => '{name}.inzaana.{domain}'), function() {
+        
+        Route::get('/', [ 'uses' => 'HomeController@redirectToStore', 'as' => 'stores' ]); 
+    });
+
 }); 
 
 Route::group(['middleware' => 'web'], function () {
@@ -47,7 +47,7 @@ Route::group(['middleware' => 'web'], function () {
         // Store controller
         Route::group(['prefix' => 'stores'], function () {
 
-            Route::get('/', [ 'uses' => 'StoreController@redirectToDashboard', 'as' => 'stores.dashboard' ]); 
+            Route::get('/dashboard', [ 'uses' => 'StoreController@redirectToDashboard', 'as' => 'stores.dashboard' ]); 
             Route::get('/create/name/{name}/site/{site}', [ 'uses' => 'StoreController@create', 'as' => 'stores.create' ]);            
         });  
 

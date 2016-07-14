@@ -32,6 +32,6 @@ class HomeController extends Controller
     {
         // return redirect()->route('guest::home');
         // return HomeRedirect::to('http://' . $site . '/');
-        return redirect()->route('user::stores.dashboard');
+        return 'THIS IS PUBLIC PAGE FOR VENDOR\'S STORE';
     }
 }

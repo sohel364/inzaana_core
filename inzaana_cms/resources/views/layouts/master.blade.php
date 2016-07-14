@@ -65,7 +65,7 @@
 						  </li>
 						  <li>
                 @if(Auth::check())
-                  <a href="{{ url('/dashboard') }}" class="animated">Dashboard</a>
+                  <a href="{{ route('user::stores.dashboard') }}" class="animated">Dashboard</a>
                 @else
                   <a href="{{ url('/login') }}" class="animated">Login</a>
                 @endif
