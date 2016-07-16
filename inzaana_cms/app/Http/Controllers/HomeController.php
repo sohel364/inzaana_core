@@ -28,10 +28,10 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function redirectToStore()
+    public function redirectToStore($name, $domain)
     {
         // return redirect()->route('guest::home');
         // return HomeRedirect::to('http://' . $site . '/');
-        return 'THIS IS PUBLIC PAGE FOR VENDOR\'S STORE';
+        return 'THIS IS PUBLIC PAGE (' . $name . '.inzaana.' . $domain . '/showcase) FOR VENDOR\'S STORE';
     }
 }
