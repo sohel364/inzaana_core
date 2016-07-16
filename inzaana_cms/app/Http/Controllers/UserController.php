@@ -60,7 +60,6 @@ class UserController extends Controller
         $site = session('site');
         $store = session('store');
         return redirect()->route('user::stores.create', compact('store', 'site'));
-        // return view('admin');
     }
 
     /**

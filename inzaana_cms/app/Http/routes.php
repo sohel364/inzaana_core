@@ -23,7 +23,7 @@ Route::group([ 'as' => 'guest::' ], function() {
     // Subdomain routing
     Route::group(array('domain' => '{name}.inzaana.{domain}'), function() {
         
-        Route::get('/', [ 'uses' => 'HomeController@redirectToStore', 'as' => 'stores' ]); 
+        Route::get('/showcase', [ 'uses' => 'HomeController@redirectToStore', 'as' => 'showcase' ]); 
     });
 
 }); 
