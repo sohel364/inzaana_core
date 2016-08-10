@@ -19,6 +19,7 @@ class CreateStripePlanMigration extends Migration
             $table->string('amount');
             $table->string('currency');
             $table->string('interval');
+            $table->tinyInteger('active');
             $table->string('trial_period_days');
             $table->string('statement_descriptor');
             $table->dateTime('created');

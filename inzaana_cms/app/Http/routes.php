@@ -17,6 +17,20 @@
 | --------------------------
 */
 
+
+Route::group(['middleware' => ['web']], function () {
+    Route::get('super-admin', [ 'uses' => 'SuperAdminController@index', 'as'=> 'dashboard']);
+    Route::get('super-admin/create-plan', [ 'uses' => 'StripeController@planForm', 'as'=> 'planForm']);
+    Route::post('super-admin/create-plan', [ 'uses' => 'StripeController@createPlan', 'as'=> 'create.plan']);
+    Route::get('super-admin/view-plan', [ 'uses' => 'StripeController@viewPlan', 'as'=> 'viewPlan']);
+    Route::post('super-admin/delete-plan', [ 'uses' => 'StripeController@deletePlan', 'as'=> 'deletePlan']);
+    Route::post('super-admin/view-plan/ajax/update', [ 'uses' => 'StripeController@updateStatus', 'as'=> 'updateStatus']);
+    Route::get('super-admin/view-subscriber', [ 'uses' => 'StripeController@viewSubscriber', 'as'=> 'viewSubscriber']);
+});
+
+
+
+
 Route::group([ 'as' => 'guest::' ], function() {
 
     Route::get('/', [ 'uses' => 'HomeController@index', 'as' => 'home' ]);  
