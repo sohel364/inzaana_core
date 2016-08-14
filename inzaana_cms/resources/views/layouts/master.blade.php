@@ -63,14 +63,33 @@
 
 							</ul>
 						  </li>
+
 						  <li>
                 @if(Auth::check())
                   <a href="{{ route('user::stores.dashboard') }}" class="animated">Dashboard</a>
                 @else
                   <a href="{{ url('/login') }}" class="animated">Login</a>
                 @endif
+
               </li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="navLogin">Register</a>
+
+
+                                <form class="dropdown-menu" action="#" method="post" class="form" role="form"  style="padding: 5px">
+                                  <fieldset>
+                                    <input style="margin-bottom: 7px" class="form-control" name="username" placeholder="username" type="text"/>
+                                    <input style="margin-bottom: 7px" class="form-control" name="youremail" placeholder="Your Email" type="email" />
+                                    <input style="margin-bottom: 7px" class="form-control" name="password" placeholder="password" type="password" />
+                                    <input style="margin-bottom: 7px" class="form-control" name="confirm_password" placeholder="confirm password" type="password" />
+                                    <button style="margin-bottom: 2px" class="btn btn-info btn-primary btn-block" type="submit">Register</button>
+                                  </fieldset>
+                                </form>
+
+
+                            </li>
 						</ul>
+
 					  </div>
 					</div>
 				  </div>
