@@ -28,20 +28,19 @@
             <li class="active treeview">
               <a href="#">
                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                <i class="fa fa-angle-left pull-right"></i>
-                <ul class="treeview-menu">
-                  <li><a href="#"><i class="fa fa-gear"></i> Control panel</a></li>
-                  <li>
-                    <a href="#"><i class="fa fa-sitemap"></i> Manage Store <i class="fa fa-angle-left pull-right"></i></a>
-                    <ul class="treeview-menu">
-                      <li><a href="#"><i class="fa fa-plus"></i> Add Store</a></li>
-                      <li><a href="#"><i class="fa fa-list-ol"></i> Show Store list</a></li>
-                    </ul>
-                  </li>
-
-                </ul>
               </a>
-            </li>
+            </li>		
+			
+			<li class="treeview">
+              <a href="#">
+                <i class="fa fa-globe"></i> <span>Store</span> 
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="/products"><i class="fa fa-list"></i> My Stores </a></li>
+                <li><a href="/products"><i class="fa  fa-plus"></i> Add New Store </a></li>
+              </ul>
+			</li>
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-list"></i>
