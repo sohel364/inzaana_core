@@ -72,13 +72,15 @@
                 @endif
 
               </li>
-						<li class="dropdown langs">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Register As <span class="caret"></span></a>
-							<ul class="dropdown-menu" role="menu">
-							  <li><a href="#">Vendor</a></li>
-							  <li><a href="#">Customer</a></li>
-							</ul>
-						 </li>
+  						<li class="dropdown langs">
+  							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Register As <span class="caret"></span></a>
+  							<ul class="dropdown-menu" role="menu">
+  							  <li><a href="{{ route('guest::signup.customer') }}">Customer</a></li>
+                  @if(Inzaana\User::count() == 0)
+                  <li><a href="{{ route('guest::signup.customer') }}">Super Admin</a></li>
+                  @endif
+  							</ul>
+  						</li>
 						</ul>
 
 					  </div>

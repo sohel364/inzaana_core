@@ -127,4 +127,21 @@ class AuthController extends Controller
                                     ->with('subdomain', $subdomain)
                                     ->with('domain', $domain);
     }
+
+    public function redirectToAdminSignup($token, $original)
+    {
+        if($token != bcrypt($original))
+        {
+            $errors['ADMIN_LOGIN_URL_INVALID'] = 'You are not authorized for this login!';
+            return response()->view('home', [ 'errors' => collect($errors) ]); 
+        }
+        return redirect()->guest("/register")->with('role', 'ADMIN');
+    }
+
+    public function mailToAdminForSpecialSignup(AdminMailer $mailer)
+    {
+        $mailer->sendEmailToAdminForSignupUrl();
+        $errors['ADMIN_LOGIN_ATTEMPT'] = 'You are not authorized to signup as super admin!';
+        return response()->view('home', [ 'errors' => collect($errors) ]);  
+    }
 }

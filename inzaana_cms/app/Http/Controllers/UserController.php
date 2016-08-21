@@ -57,6 +57,13 @@ class UserController extends Controller
         {
             return redirect()->route('user::stores.dashboard'); 
         }
+        // TODO: If user role is super admin
+        // TODO: If user role is vendor
+            // TODO: If subscription on trial
+            // TODO: If subscription trial is over
+            // TODO: If subscription is paid
+        // TODO: If user role is customer
+
         $site = session('site');
         $store = session('store');
         return redirect()->route('user::stores.create', compact('store', 'site'));

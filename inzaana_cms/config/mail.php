@@ -58,6 +58,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Global "Super Admin" Address
+    |--------------------------------------------------------------------------
+    |
+    | You may wish for all signup e-mails for secured links sent by your application
+    | to be sent from the same address. 
+    | Here, you may specify a name and address that is
+    | used globally for all signup e-mails that are sent by your application.
+    |
+    */
+
+    'admin' => ['address' => env('MAIL_ADMIN', 'sohel.official@gmail.com'), 'name' => 'Inzaana Super Admin'],
+
+    /*
+    |--------------------------------------------------------------------------
     | E-Mail Encryption Protocol
     |--------------------------------------------------------------------------
     |

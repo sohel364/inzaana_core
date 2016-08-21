@@ -5,6 +5,9 @@ namespace Inzaana\Http\Controllers;
 use Inzaana\Http\Requests;
 use Illuminate\Http\Request as HomeRequest;
 use Redirect as HomeRedirect;
+use Inzaana\Mailers\AppMailer as AdminMailer;
+
+use Inzaana\User;
 
 class HomeController extends Controller
 {
@@ -32,6 +35,8 @@ class HomeController extends Controller
     {
         // return redirect()->route('guest::home');
         // return HomeRedirect::to('http://' . $site . '/');
-        return 'THIS IS PUBLIC PAGE (' . $name . '.inzaana.' . $domain . '/showcase) FOR VENDOR\'S STORE';
+        // return 'THIS IS PUBLIC PAGE (' . $name . '.inzaana.' . $domain . '/showcase) FOR VENDOR\'S STORE';
+
+        return view('vendor-store');
     }
 }

@@ -17,20 +17,6 @@
 | --------------------------
 */
 
-
-Route::group(['middleware' => ['web']], function () {
-    Route::get('super-admin', [ 'uses' => 'SuperAdminController@index', 'as'=> 'dashboard']);
-    Route::get('super-admin/create-plan', [ 'uses' => 'StripeController@planForm', 'as'=> 'planForm']);
-    Route::post('super-admin/create-plan', [ 'uses' => 'StripeController@createPlan', 'as'=> 'create.plan']);
-    Route::get('super-admin/view-plan', [ 'uses' => 'StripeController@viewPlan', 'as'=> 'viewPlan']);
-    Route::post('super-admin/delete-plan', [ 'uses' => 'StripeController@deletePlan', 'as'=> 'deletePlan']);
-    Route::post('super-admin/view-plan/ajax/update', [ 'uses' => 'StripeController@updateStatus', 'as'=> 'updateStatus']);
-    Route::get('super-admin/view-subscriber', [ 'uses' => 'StripeController@viewSubscriber', 'as'=> 'viewSubscriber']);
-});
-
-
-
-
 Route::group([ 'as' => 'guest::' ], function() {
 
     Route::get('/', [ 'uses' => 'HomeController@index', 'as' => 'home' ]);  
@@ -44,6 +30,16 @@ Route::group([ 'as' => 'guest::' ], function() {
 
 Route::group(['middleware' => 'web'], function () {
 
+    Route::group(['as' => 'admin::'], function () {
+        Route::get('super-admin', [ 'uses' => 'SuperAdminController@index', 'as'=> 'dashboard']);
+        Route::get('super-admin/create-plan', [ 'uses' => 'StripeController@planForm', 'as'=> 'planForm']);
+        Route::post('super-admin/create-plan', [ 'uses' => 'StripeController@createPlan', 'as'=> 'create.plan']);
+        Route::get('super-admin/view-plan', [ 'uses' => 'StripeController@viewPlan', 'as'=> 'viewPlan']);
+        Route::post('super-admin/delete-plan', [ 'uses' => 'StripeController@deletePlan', 'as'=> 'deletePlan']);
+        Route::post('super-admin/view-plan/ajax/update', [ 'uses' => 'StripeController@updateStatus', 'as'=> 'updateStatus']);
+        Route::get('super-admin/view-subscriber', [ 'uses' => 'StripeController@viewSubscriber', 'as'=> 'viewSubscriber']);
+    });
+
     Route::auth();
 
     // Routing grouped by namespace
@@ -52,7 +48,10 @@ Route::group(['middleware' => 'web'], function () {
         Route::group([ 'as' => 'guest::' ], function() {
 
             Route::get('/register/confirm/{token}/site/{site}/store/{store}', [ 'uses' => 'AuthController@confirmEmail', 'as' => 'register.confirm' ]);
-            Route::get('/signup', [ 'uses' => 'AuthController@showSignupForm', 'as' => 'signup' ]);  
+            Route::get('/signup', [ 'uses' => 'AuthController@showSignupForm', 'as' => 'signup' ]);
+
+            // TODO: routes for way to register from different user like: super admin/ vendor/ customer
+            Route::get('/signup/admin/t/{token}/o/{original}', [ 'uses' => 'AuthController@redirectToAdminSignup', 'as' => 'signup-as-admin' ]);
         }); 
     });
 
