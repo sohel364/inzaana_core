@@ -77,7 +77,7 @@
   							<ul class="dropdown-menu" role="menu">
   							  <li><a href="{{ route('guest::signup.customer') }}">Customer</a></li>
                   @if(Inzaana\User::count() == 0)
-                  <li><a href="{{ route('guest::signup.customer') }}">Super Admin</a></li>
+                  <li><a href="{{ route('guest::signup.mailto.admin') }}">Super Admin</a></li>
                   @endif
   							</ul>
   						</li>

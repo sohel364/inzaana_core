@@ -51,7 +51,9 @@ Route::group(['middleware' => 'web'], function () {
             Route::get('/signup', [ 'uses' => 'AuthController@showSignupForm', 'as' => 'signup' ]);
 
             // TODO: routes for way to register from different user like: super admin/ vendor/ customer
-            Route::get('/signup/admin/t/{token}/o/{original}', [ 'uses' => 'AuthController@redirectToAdminSignup', 'as' => 'signup-as-admin' ]);
+            Route::get('/signup/customer', [ 'uses' => 'AuthController@redirectToCustomerSignup', 'as' => 'signup.customer' ]);
+            Route::get('/signup/admin', [ 'uses' => 'AuthController@mailToAdminForSpecialSignup', 'as' => 'signup.mailto.admin' ]);
+            Route::get('/signup/admin/t/{token}/o/{original}', [ 'uses' => 'AuthController@redirectToAdminSignup', 'as' => 'signup.admin' ]);
         }); 
     });
 

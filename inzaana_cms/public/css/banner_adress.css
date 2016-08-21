@@ -1,0 +1,101 @@
+.grid1 .col-md-9{
+    position: relative;
+    min-height: 315px;
+    padding: 0%;
+
+}
+.grid1 .col-md-3{
+    position: relative;
+    min-height: 315px;
+    background-color: #bf600d;
+    padding: 0%;
+}
+
+.banner_image {
+
+    width: 100% ;
+    height:315px;
+    left: 0;
+    position: relative;
+    background-size: cover !important;
+
+}
+/* adress css start */
+
+
+.address-wrap {
+
+    display: block;
+    position: absolute;
+    top: 35%;
+    left: 10%;
+    width: 50%;
+    height: 50%;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.address-table-row {
+    display: table-row;
+}
+
+.address-table-icon {
+    width: 35px;
+    text-align: center;
+
+}
+.address-table-cell {
+    display: table-cell;
+    padding-left: 10px;
+}
+.fa {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transform: translate(0, 0);
+}
+.address-wrap a, .address-wrap, .address-wrap i {
+    color: #fff;
+}
+.address-table-cell {
+    display: table-cell;
+    text-align: left;
+}
+
+.center {
+    display: table-cell;
+    float: none;
+    vertical-align: middle;
+}
+
+
+.address-table {
+    display: table;
+    width: 100%;
+}
+* {
+    box-sizing: border-box;
+}
+
+.shop-website a{
+    max-width: 200px;
+    display: block;
+}
+.shop-address div{
+    max-width: 200px;
+    display: block;
+}
+/* adress css end */
+
+.navbar {
+    padding: 0px;
+    border-radius: 0;
+    border-bottom: 1px solid #ddd;
+
+}
+
+
+
