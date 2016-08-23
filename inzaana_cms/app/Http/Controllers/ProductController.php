@@ -35,7 +35,7 @@ class ProductController extends Controller
         $productsCount = 0;
         $products = Auth::user()->products;
         $categories = Category::all();
-        return view('add-product', compact('productsCount', 'products', 'categories'));
+        return view('add-product', compact('productsCount', 'products', 'categories'))->with('user', Auth::user());
     }
     
     /**
@@ -134,7 +134,8 @@ class ProductController extends Controller
         $categories = Category::all();
         $products = Auth::user()->products;
         $productsBySearch = session('productsBySearch');
-        return view('add-product', compact('productsCount', 'products', 'categories', 'productsBySearch'));
+        // return redirect()->route('user::products')->with(compact('productsCount', 'products', 'categories', 'productsBySearch'));
+        return view('add-product', compact('productsCount', 'products', 'categories', 'productsBySearch'))->with('user', Auth::user());
     }
 
     public function edit($product_id)
@@ -144,7 +145,8 @@ class ProductController extends Controller
         $products = Auth::user()->products;
         $product = $products->find($product_id);
         $categories = Category::all();
-        return view('add-product', compact('productsCount', 'products', 'categories'));
+        // return redirect()->route('user::products')->with(compact('productsCount', 'products', 'categories'));
+        return view('add-product', compact('productsCount', 'products', 'categories'))->with('user', Auth::user());
     }
 
     public function delete($product_id)

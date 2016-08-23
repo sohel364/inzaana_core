@@ -64,6 +64,10 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
+        if(!session()->has('store'))
+        {
+            abort(404);
+        }
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],

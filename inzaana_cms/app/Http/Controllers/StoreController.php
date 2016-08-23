@@ -55,7 +55,7 @@ class StoreController extends Controller
 
         // @NOTE: Example code for site redirection
         // return StoreRedirect::to('http://' . $site . '/stores');
-        return redirect()->route('user::stores.dashboard');
+        return redirect()->route('user::vendor.dashboard');
     }
 
     // View to vendor admin dashboard
@@ -63,5 +63,4 @@ class StoreController extends Controller
     {
         return view('admin')->with('user', Auth::user());
     }
-
 }

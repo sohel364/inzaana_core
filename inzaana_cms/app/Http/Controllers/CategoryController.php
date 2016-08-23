@@ -8,6 +8,8 @@ use Inzaana\Http\Requests;
 use Inzaana\Http\Controllers\Controller;
 use Inzaana\Category;
 
+use Auth;
+
 class CategoryController extends Controller
 {
     //
@@ -31,7 +33,7 @@ class CategoryController extends Controller
     {
         //
         $categories = Category::all();
-        return view('add-category', compact('categories'));
+        return view('add-category', compact('categories'))->with('user', Auth::user());
     }
 
     public function create(CategoryRquest $request)
@@ -58,8 +60,29 @@ class CategoryController extends Controller
     public function edit($category_id)
     {
         # code...
+        $categoryEdit = Category::find($category_id);
         $categories = Category::all();
-        return view('add-category', compact('categories'));
+        // return redirect()->route('user::categories')->with(compact('categories', 'categoryEdit'));
+        return view('add-category', compact('categories', 'categoryEdit'))->with('user', Auth::user());
+    }
+
+    public function postEdit(CategoryRquest $request, $category_id)
+    {        
+        $categories = Category::all();
+        $categoryName = $request->input('category-name');
+        $categoryEdit = Category::find($category_id);
+        $categoryEdit->category_name = $categoryName;
+        $categoryEdit->category_slug = str_slug($categoryName);
+        $categoryEdit->description = $request->input('description');
+        if($categoryEdit->update())
+        {
+            flash('Your category (' . $categoryEdit->category_name . ') is submitted for admin approval. Will be updated when approved.');
+        }
+        else
+        {
+            flash('Your category (' . $category->category_name . ') is failed to submit for admin approval.');            
+        }
+        return redirect()->route('user::categories');
     }
 
     public function delete($category_id)

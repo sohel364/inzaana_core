@@ -269,6 +269,7 @@
                       <td class="text-center" id="child">
                         <form id="product-modification-form" class="form-horizontal" method="POST" >
                           {!! csrf_field() !!}
+                          <!-- <button data-toggle="modal" data-target="#addProduct" type="button"><i class="fa fa-lg fa-plus-square"></i>&ensp; Add Product</button> -->
                           <input formaction="{{ route('user::products.edit', [$product->id]) }}" id="product-edit-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Edit"></input>
                           <input formaction="{{ route('user::products.delete', [$product->id]) }}" id="product-delete-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Delete"></input>
                         </form>

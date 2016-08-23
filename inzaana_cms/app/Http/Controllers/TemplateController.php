@@ -28,7 +28,7 @@ class TemplateController extends Controller
     public function index()
     {
         //
-        return view('view_template');
+        return view('view_template')->with('user', Auth::user());
     }
 
     public function showSaved()
@@ -39,7 +39,7 @@ class TemplateController extends Controller
             return $template->htmlviewmenus->count() > 0;
         });
         $templatesCount = collect($savedTemplates)->count();
-        return view('my_template_view', compact('savedTemplates', 'templatesCount', 'message'));
+        return view('my_template_view', compact('savedTemplates', 'templatesCount', 'message'))->with('user', Auth::user());
     }
 
     // template view action for saving a new template
@@ -55,7 +55,7 @@ class TemplateController extends Controller
         $saved_name = str_slug('User Template 1');
         $viewData = 
             compact('category_name', 'template_name', 'isEdit', 'isView', 'template_id', 'viewMenus', 'saved_name');
-        return view('editor.template-editor',  $viewData);
+        return view('editor.template-editor',  $viewData)->with('user', Auth::user());
     }
 
     // template editor view for progressing a template edit action
@@ -87,7 +87,7 @@ class TemplateController extends Controller
         $saved_name = $template->saved_name;
 
         return view('editor.template-editor', 
-            compact('category_name', 'template_name', 'isEdit', 'isView', 'template_id', 'viewMenus', 'saved_name') );
+            compact('category_name', 'template_name', 'isEdit', 'isView', 'template_id', 'viewMenus', 'saved_name') )->with('user', Auth::user());
     }
 
     // template save action
@@ -142,7 +142,7 @@ class TemplateController extends Controller
                         'saved_name' => $template->saved_name ];
 
         // TODO: do something to view
-        return view('editor.template-viewer', $viewData );
+        return view('editor.template-viewer', $viewData )->with('user', Auth::user());
     }
 
     public function categories($category_name)

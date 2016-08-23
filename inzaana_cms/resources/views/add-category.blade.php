@@ -28,14 +28,14 @@
               </div>
 
               <!-- form start -->
-              <form role="form" action="{{ route('user::categories.create') }}" method="POST">
+              <form role="form" action="{{ isset($categoryEdit) ? route('user::categories.update', $categoryEdit->id) : route('user::categories.create') }}" method="POST">
 
                 {!! csrf_field() !!}
 
                 <div class="box-body">
                   <div class="form-group">
                     <label for="category-name">Category</label>
-                    <input type="text" class="form-control" id="category-name" name="category-name" placeholder="Add your category name here...">
+                    <input type="text" class="form-control" value="{{ isset($categoryEdit) ? $categoryEdit->category_name : '' }}" id="category-name" name="category-name" placeholder="Add your category name here...">
                   </div>
                   <div class="form-group">
                     <label for="sub-category-name">Sub Category</label>
@@ -43,12 +43,12 @@
                   </div>
                   <div class="form-group">
                     <label for="description">Category Description</label>
-                    <textarea placeholder="Add category description here..." class="form-control" rows="5" id="description" name="description"></textarea>
+                    <textarea placeholder="Add category description here..." class="form-control" rows="5" id="description" name="description">{{ isset($categoryEdit) ? $categoryEdit->description : '' }}</textarea>
                   </div>
                 </div><!-- /.box-body -->
 
                 <div class="box-footer text-right">
-                  <button type="submit" class="btn btn-info btn-flat">Add Category</button>
+                  <button type="submit" class="btn btn-info btn-flat">{{ isset($categoryEdit) ? 'Update' : 'Add' }} Category</button>
                 </div>
               </form>
               <!--end of form-->
@@ -89,9 +89,11 @@
                       <td class="text-center" id="child"><a href="">{{ $category->description or 'This is a description'}}</a></td>
                       <td class="text-center" id="child"><a href="">subcat-1, subcat-2, subcat-3</a></td>
                       <td class="text-center" id="child">
+                        <form id="category-modification-form" class="form-horizontal" method="GET" >
+                          <input formaction="{{ route('user::categories.edit', [$category->id]) }}" id="category-edit-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Edit"></input>
+                        </form>
                         <form id="category-modification-form" class="form-horizontal" method="POST" >
                           {!! csrf_field() !!}
-                          <input formaction="{{ route('user::categories.edit', [$category->id]) }}" id="category-edit-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Edit"></input>
                           <input formaction="{{ route('user::categories.delete', [$category->id]) }}" id="category-delete-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Delete"></input>
                         </form>
                       </td>

@@ -62,7 +62,7 @@ Route::group(['middleware' => 'web'], function () {
         // Store controller
         Route::group(['prefix' => 'stores'], function () {
 
-            Route::get('/dashboard', [ 'uses' => 'StoreController@redirectToDashboard', 'as' => 'stores.dashboard' ]); 
+            Route::get('/vendor/dashboard', [ 'uses' => 'StoreController@redirectToDashboard', 'as' => 'vendor.dashboard' ]); 
             Route::get('/create/name/{name}/site/{site}', [ 'uses' => 'StoreController@create', 'as' => 'stores.create' ]);            
         });  
 
@@ -103,7 +103,8 @@ Route::group(['middleware' => 'web'], function () {
         // Category controller
         Route::get('/categories', [ 'uses' => 'CategoryController@index', 'as' => 'categories' ]);
         Route::post('/categories/create', [ 'uses' => 'CategoryController@create', 'as' => 'categories.create' ]);
-        Route::post('/categories/edit/{category_id}', [ 'uses' => 'CategoryController@edit', 'as' => 'categories.edit' ]);
+        Route::get('/categories/edit/{category_id}', [ 'uses' => 'CategoryController@edit', 'as' => 'categories.edit' ]);
+        Route::post('/categories/edit/{category_id}', [ 'uses' => 'CategoryController@postEdit', 'as' => 'categories.update' ]);
         Route::post('/categories/delete/{category_id}', [ 'uses' => 'CategoryController@delete', 'as' => 'categories.delete' ]);
 
         // HTML view menu controller

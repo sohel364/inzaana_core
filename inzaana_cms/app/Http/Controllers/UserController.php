@@ -53,17 +53,20 @@ class UserController extends Controller
 
             return redirect('/login');
         }
+        // If signup verified  a usual login
         if(!session()->has('site') || !session()->has('store'))
         {
-            return redirect()->route('user::stores.dashboard'); 
-        }
-        // TODO: If user role is super admin
-        // TODO: If user role is vendor
-            // TODO: If subscription on trial
-            // TODO: If subscription trial is over
-            // TODO: If subscription is paid
-        // TODO: If user role is customer
+            // TODO: If user role is super admin
+                // TODO: If subscription on trial
+                // TODO: If subscription trial is over
+                // TODO: If subscription is paid
+            // TODO: If user role is customer
+            // return view('super-admin.dashboard');
 
+            // TODO: If user role is vendor
+            return redirect()->route('user::vendor.dashboard'); 
+        }
+        // If vendor user is verified after signup
         $site = session('site');
         $store = session('store');
         return redirect()->route('user::stores.create', compact('store', 'site'));
