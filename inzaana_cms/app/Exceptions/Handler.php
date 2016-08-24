@@ -70,6 +70,19 @@ class Handler extends ExceptionHandler
             flash()->error($errorMessage);
             return redirect()->back();
         }
+        if ($e instanceof HttpException) {
+            $status = $e->getStatusCode();
+            $errors[403] = 'You are not authorized to route this action as you are tried. Please follow the routes as we guide you.';
+
+            if (view()->exists("errors.{$status}"))
+            {
+                return response()->view("errors.{$status}", [ 'errors' => collect($errors) ], $status);
+            }
+            else
+            {
+                return (new SymfonyDisplayer(config('app.debug')))->createResponse($e);
+            }
+        }
 
         /*
          * Stripe Exception Handling

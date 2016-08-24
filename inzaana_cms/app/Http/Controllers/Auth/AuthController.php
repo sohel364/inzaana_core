@@ -66,7 +66,7 @@ class AuthController extends Controller
     {
         if(!session()->has('store'))
         {
-            abort(404);
+            abort(403, 'Unauthorized action.');
         }
         $user = User::create([
             'name' => $data['name'],
@@ -139,7 +139,12 @@ class AuthController extends Controller
             $errors['ADMIN_LOGIN_URL_INVALID'] = 'You are not authorized for this login!';
             return response()->view('home', [ 'errors' => collect($errors) ]); 
         }
-        return redirect()->guest("/register")->with('role', 'ADMIN');
+        return redirect()->guest('/register')->with('role', 'ADMIN');
+    }
+
+    public function redirectToCustomerSignup()
+    {
+        return redirect()->guest('/login')->with('role', 'CUSTOMER');
     }
 
     public function mailToAdminForSpecialSignup(AdminMailer $mailer)
