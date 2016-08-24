@@ -144,7 +144,7 @@ class AuthController extends Controller
 
     public function redirectToCustomerSignup()
     {
-        return redirect()->guest('/login')->with('role', 'CUSTOMER');
+        return response()->view('auth.register-customer', [ 'errors' => collect([]) ]);
     }
 
     public function mailToAdminForSpecialSignup(AdminMailer $mailer)
