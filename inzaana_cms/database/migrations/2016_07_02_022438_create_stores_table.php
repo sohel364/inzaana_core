@@ -20,6 +20,7 @@ class CreateStoresTable extends Migration
             $table->string('name_as_url')->unique();
             $table->string('domain');
             $table->string('sub_domain');
+            $table->string('store_type');
             $table->timestamps();
         });
     }
