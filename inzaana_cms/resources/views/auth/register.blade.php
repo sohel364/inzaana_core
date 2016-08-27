@@ -316,6 +316,17 @@
               </div>
             </div>
             <div class="row">
+              <div class="col-xs-6 colsm-6 col-md-6 text-right">
+                <h4 class="formHead animated fadeInLeftShort" data-id="3">My Contact Number:</h4>
+              </div>
+              <div class="col-xs-6 col-sm-6 col-md-6 text-left">
+                <div class="form-group animated fadeInRightShort" data-id="6">
+                  <input type="phonenumber" name="phonenumber" class="form-control input-sm" placeholder="Phone number">
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
               <div class="col-xs-6 col-sm-6 col-md-6 text-right">
                 <div class="form-group animated fadeInLeftShort{{ $errors->has('name') ? ' has-error' : '' }}" data-id="5">
                   <input type="name" name="name" class="form-control input-sm" placeholder="First Name" value="{{ old('name') }}">
@@ -330,9 +341,9 @@
                 <div class="form-group animated fadeInRightShort" data-id="6">
                   <input type="name" name="last_name" class="form-control input-sm" placeholder="Last Name">
                 </div>
-
               </div>
             </div>
+
             <div class="row">
               <div class="col-xs-6 col-sm-6 col-md-6 text-right">
                 <div class="form-group animated fadeInLeftShort{{ $errors->has('email') ? ' has-error' : '' }}" data-id="7">
@@ -376,16 +387,17 @@
                 </div>
               </div>
             </div>
+
             <div class="row">
               <div class="col-xs-4 col-sm-3 col-md-3">
                 <span class="button-checkbox animated fadeInLeftShort" data-id="11">
-            <button name="is_agreed" type="button" class="btn btn-default" data-color="info"><i class="state-icon glyphicon glyphicon-unchecked"></i>I Agree</button>
+                  <button name="is_agreed" type="button" class="btn btn-default" data-color="info"><i class="state-icon glyphicon glyphicon-unchecked"></i>I Agree</button>
                         <input type="checkbox" class="hidden" value="1">
                         <input name="storeName" type="text" class="hidden" value="{{ session()->has('storeName') && session('storeName') ? session('storeName') : old('storeName') }}">
                         <input name="subdomain" type="text" class="hidden" value="{{ session()->has('subdomain') && session('subdomain') ? session('subdomain') : old('subdomain') }}">
                         <input name="domain" type="text" class="hidden" value="{{ session()->has('domain') && session('domain') ? session('domain') : old('domain') }}">
 
-          </span>
+                  </span>
               </div>
               <div class="col-xs-8 col-sm-9 col-md-9 animated fadeInRightShort" data-id="12">
                 By clicking <strong class="label label-info">Start My Store Now</strong>, you agree to the <a href="#" data-toggle="modal" data-target="#t_and_c_m">Terms and Conditions</a> set out by this site, including our Cookie Use.
