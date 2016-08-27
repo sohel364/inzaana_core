@@ -39,37 +39,91 @@ class UserController extends Controller
             flash()->error('Your session is timed out. Please login and confirm again.');
             return Auth::guest('/login');
         }
-        if(!Auth::user()->verified && $request->session()->has('user'))
+        if(!Auth::user()->verified) //&& $request->session()->has('user')
         {            
             // USED FROM -> 'Auth\AuthController@showSignupForm'
-            $user = session('user');
-            // USED FROM -> 'Auth\AuthController@showSignupForm'
-            $data['site'] = session('site');
-            $data['storeName'] = session('store');
+            // $user = session('user');
+            $user = User::find(Auth::user()->id);
 
-            $mailer->sendEmailConfirmationTo($user, $data);
+            // If it's a vendor user verification
+            if(session()->has('site') && session('store'))
+            {
+                // USED FROM -> 'Auth\AuthController@showSignupForm'
+                $data['site'] = session('site');
+                $data['storeName'] = session('store');
+
+                $mailer->sendEmailConfirmationTo($user, $data);  
+            }
+            // If it's a customer or super admin user verification
+            else
+            {
+                $mailer->sendEmailConfirmationToCustomer($user);  
+            } 
+            
             flash('Please confirm your email address.');
+            
             Auth::logout();
 
             return redirect('/login');
         }
-        // If signup verified  a usual login
+        // If signup verified an usual login to proceed
         if(!session()->has('site') || !session()->has('store'))
         {
             // TODO: If user role is super admin
-                // TODO: If subscription on trial
-                // TODO: If subscription trial is over
-                // TODO: If subscription is paid
-            // TODO: If user role is customer
-            // return view('super-admin.dashboard');
+            $user = User::find(Auth::user()->id);
+            if($user)
+            {
+                if($user->email == config('mail.admin.address'))
+                {
+                    return redirect()->route('user::admin.dashboard');
+                }
+                if($user->stores()->count() == 0)
+                {
+                    // TODO: If user role is customer (customer has no store)
 
-            // TODO: If user role is vendor
-            return redirect()->route('user::vendor.dashboard'); 
+                        // TODO: If subscription on trial
+                        // TODO: If subscription trial is over
+                        // TODO: If subscription is paid    
+                    return redirect()->route('user::customer.dashboard');
+                }
+                // TODO: If user role is vendor (vendor has some stores)
+                    // TODO: If subscription on trial
+                    // TODO: If subscription trial is over
+                    // TODO: If subscription is paid
+                return redirect()->route('user::vendor.dashboard'); 
+            }
+            abort(404);
         }
         // If vendor user is verified after signup
         $site = session('site');
         $store = session('store');
-        return redirect()->route('user::stores.create', compact('store', 'site'));
+        return redirect()->route('user::stores.create', compact('store', 'site', 'user_id'));
+    }    
+
+    // View to vendor admin dashboard
+    public function redirectToDashboard()
+    {
+        if(session()->has('site') || session()->has('store'))
+        {
+            session()->forget('site');
+            session()->forget('store');  
+        }
+        return view('admin')->with('user', Auth::user());
+    }    
+
+    // View to super admin dashboard
+    public function redirectToDashboardAdmin()
+    {
+        return view('super-admin.dashboard')->with('user', Auth::user())
+                                            ->with('authenticated', Auth::check());
+    }
+
+    // view to customer dashboard
+    public function redirectToDashboardCustomer()
+    {
+        //
+        return view('user_dashboard')->with('user', Auth::user())
+                                    ->with('authenticated', Auth::check());
     }
 
     /**
@@ -160,12 +214,6 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function userdashboard()
-    {
-        //
-        return view('user_dashboard');
     }
 
     public function usermyorder()

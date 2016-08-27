@@ -77,7 +77,7 @@
 
             <li class="dropdown topbar-user">
               <a data-hover="dropdown" href="#" class="dropdown-toggle">
-                <img src="{{ URL::asset('user_admin_dashboard_asset/images/48.jpg') }}" alt="" class="img-responsive img-circle" />&nbsp;<span class="hidden-xs">Hi, Shrabon Mohsin</span>&nbsp;<span class="caret"></span>
+                <img src="{{ URL::asset('user_admin_dashboard_asset/images/48.jpg') }}" alt="" class="img-responsive img-circle" />&nbsp;<span class="hidden-xs">{{ isset($user) ? 'Hi, ' . $user->name : 'Go away! Unauthorized' }}</span>&nbsp;<span class="caret"></span>
               </a>
               <ul class="dropdown-menu dropdown-user pull-right">
                 <li><a href="#"><i class="fa fa-user"></i>My Profile</a></li>
@@ -85,7 +85,7 @@
                 <li><a href="#"><i class="fa fa-envelope"></i>My Inbox</a></li>
                 <li><a href="#"><i class="fa fa-tasks"></i>My Tasks</a></li>
                 <li class="divider"></li>
-                <li><a href="Login.html"><i class="fa fa-key"></i>Log Out</a></li>
+                <li><a href="{{ url('/logout') }}"><i class="fa fa-key"></i>Log Out</a></li>
               </ul>
             </li>
 

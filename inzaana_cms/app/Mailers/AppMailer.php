@@ -68,7 +68,7 @@ class AppMailer
     }
 
     /**
-     * Deliver the email confirmation.
+     * Deliver the email confirmation to vendor.
      *
      * @param  User $user
      * @param  array $data
@@ -80,6 +80,24 @@ class AppMailer
         $this->to = $user->email;
         $this->view = 'auth.emails.confirm';
         $this->data = compact('user', 'data');
+        $this->subject = 'Inzaana - Email verification!';
+        $this->name = config('mail.from.name');
+
+        $this->deliver();
+    }
+
+    /**
+     * Deliver the email confirmation to customer.
+     *
+     * @param  User $user
+     * @return void
+     */
+    public function sendEmailConfirmationToCustomer(User $user)
+    {
+        $this->from = config('mail.from.address');
+        $this->to = $user->email;
+        $this->view = 'auth.emails.confirm-customer';
+        $this->data = compact('user');
         $this->subject = 'Inzaana - Email verification!';
         $this->name = config('mail.from.name');
 

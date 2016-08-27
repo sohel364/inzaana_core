@@ -97,4 +97,12 @@ class User extends Model implements AuthenticatableContract,
     {        
         return $this->hasMany('Inzaana\Template');
     }
+
+    /**
+     *
+     */
+    public function stores()
+    {        
+        return $this->hasMany('Inzaana\Store');
+    }
 }

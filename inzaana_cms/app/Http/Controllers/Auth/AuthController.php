@@ -64,7 +64,8 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        if(!session()->has('store'))
+        $previousRouteName = app('router')->getRoutes()->match(app('request')->create(session()->previousUrl()))->getName();
+        if($previousRouteName == "guest::signup" && !session()->has('store'))
         {
             abort(403, 'Unauthorized action.');
         }
@@ -75,12 +76,12 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
         ]);
         // USED TO -> UserController@index
-        session(compact('user'));
+        // session(compact('user'));
         return $user;
     }
 
     /**
-     * Confirm a user's email address.
+     * Confirm a vendor user's email address.
      *
      * @param  string $token
      * @param  string $site
@@ -102,6 +103,29 @@ class AuthController extends Controller
         }
         // USED TO -> 'Auth\AuthController@create'
         session(compact('site', 'store'));
+        flash('You are now confirmed. Please login.');
+        return redirect('/login');
+    }
+
+    /**
+     * Confirm a customer's email address.
+     *
+     * @param  string $token
+     * @return mixed
+     */
+    public function confirmEmailCustomer($token)
+    {
+        $user = User::whereToken($token)->firstOrFail();
+        $errors = [];
+
+        if(!$user->confirmEmail())
+        {
+            if($user->remove())
+            {
+                $errors['AUTH_CONFIRM'] = 'User authentication is not confirmed. Please signup to create your account again. For assistance contact administrator.';
+            }
+            return redirect()->route('guest::home')->with('errors', collect($errors));
+        }
         flash('You are now confirmed. Please login.');
         return redirect('/login');
     }

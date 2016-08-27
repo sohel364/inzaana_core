@@ -31,13 +31,12 @@ Route::group([ 'as' => 'guest::' ], function() {
 Route::group(['middleware' => 'web'], function () {
 
     Route::group(['as' => 'admin::'], function () {
-        Route::get('super-admin', [ 'uses' => 'SuperAdminController@index', 'as'=> 'dashboard']);
-        Route::get('super-admin/create-plan', [ 'uses' => 'StripeController@planForm', 'as'=> 'planForm']);
-        Route::post('super-admin/create-plan', [ 'uses' => 'StripeController@createPlan', 'as'=> 'create.plan']);
-        Route::get('super-admin/view-plan', [ 'uses' => 'StripeController@viewPlan', 'as'=> 'viewPlan']);
-        Route::post('super-admin/delete-plan', [ 'uses' => 'StripeController@deletePlan', 'as'=> 'deletePlan']);
-        Route::post('super-admin/view-plan/ajax/update', [ 'uses' => 'StripeController@updateStatus', 'as'=> 'updateStatus']);
-        Route::get('super-admin/view-subscriber', [ 'uses' => 'StripeController@viewSubscriber', 'as'=> 'viewSubscriber']);
+        Route::get('/super-admin/create-plan', [ 'uses' => 'StripeController@planForm', 'as'=> 'planForm']);
+        Route::post('/super-admin/create-plan', [ 'uses' => 'StripeController@createPlan', 'as'=> 'create.plan']);
+        Route::get('/super-admin/view-plan', [ 'uses' => 'StripeController@viewPlan', 'as'=> 'viewPlan']);
+        Route::post('/super-admin/delete-plan', [ 'uses' => 'StripeController@deletePlan', 'as'=> 'deletePlan']);
+        Route::post('/super-admin/view-plan/ajax/update', [ 'uses' => 'StripeController@updateStatus', 'as'=> 'updateStatus']);
+        Route::get('/super-admin/view-subscriber', [ 'uses' => 'StripeController@viewSubscriber', 'as'=> 'viewSubscriber']);
     });
 
     Route::auth();
@@ -47,7 +46,8 @@ Route::group(['middleware' => 'web'], function () {
 
         Route::group([ 'as' => 'guest::' ], function() {
 
-            Route::get('/register/confirm/{token}/site/{site}/store/{store}', [ 'uses' => 'AuthController@confirmEmail', 'as' => 'register.confirm' ]);
+            Route::get('/register/confirm/{token}/site/{site}/store/{store}', [ 'uses' => 'AuthController@confirmEmail', 'as' => 'register.confirm.vendor' ]);
+            Route::get('/register/confirm/{token}', [ 'uses' => 'AuthController@confirmEmailCustomer', 'as' => 'register.confirm.customer' ]);
             Route::get('/signup', [ 'uses' => 'AuthController@showSignupForm', 'as' => 'signup' ]);
 
             // TODO: routes for way to register from different user like: super admin/ vendor/ customer
@@ -62,13 +62,14 @@ Route::group(['middleware' => 'web'], function () {
         // Store controller
         Route::group(['prefix' => 'stores'], function () {
 
-            Route::get('/vendor/dashboard', [ 'uses' => 'StoreController@redirectToDashboard', 'as' => 'vendor.dashboard' ]); 
             Route::get('/create/name/{name}/site/{site}', [ 'uses' => 'StoreController@create', 'as' => 'stores.create' ]);            
         });  
 
         // User controller
     	Route::get('/dashboard', [ 'uses' => 'UserController@index', 'as' => 'home' ]);
-        Route::get('/user_dashboard', [ 'uses' => 'UserController@userdashboard', 'as' => 'customer' ]);
+        Route::get('/dashboard/vendor', [ 'uses' => 'UserController@redirectToDashboard', 'as' => 'vendor.dashboard' ]); 
+        Route::get('/dashboard/admin', [ 'uses' => 'UserController@redirectToDashboardAdmin', 'as' => 'admin.dashboard' ]); 
+        Route::get('/dashboard/customer', [ 'uses' => 'UserController@redirectToDashboardCustomer', 'as' => 'customer.dashboard' ]);
         Route::get('/user_my_order', [ 'uses' => 'UserController@usermyorder', 'as' => 'orders' ]);
         Route::get('/user_product_return', [ 'uses' => 'UserController@userproductreturn', 'as' => 'products.return' ]);
         Route::get('/user_reward_points', [ 'uses' => 'UserController@userrewardpoints', 'as' => 'reward-points' ]);

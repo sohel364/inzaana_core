@@ -11,6 +11,7 @@ use Auth;
 use Redirect as StoreRedirect;
 
 use Inzaana\Store;
+use Inzaana\User;
 
 class StoreController extends Controller
 {
@@ -39,6 +40,8 @@ class StoreController extends Controller
         $subdomain = $keywords[1];
         $domain = $keywords[2];
 
+        // dd(Auth::user()->id);
+
         $store = Store::create([
             'name' => $name,
             'user_id' => Auth::user()->id,
@@ -56,11 +59,5 @@ class StoreController extends Controller
         // @NOTE: Example code for site redirection
         // return StoreRedirect::to('http://' . $site . '/stores');
         return redirect()->route('user::vendor.dashboard');
-    }
-
-    // View to vendor admin dashboard
-    public function redirectToDashboard()
-    {
-        return view('admin')->with('user', Auth::user());
     }
 }
