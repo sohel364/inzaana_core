@@ -73,7 +73,7 @@ class UserController extends Controller
             $user = User::find(Auth::user()->id);
             if($user)
             {
-                if($user->email == config('mail.admin.address'))
+                if($user->email == config('mail.admin.address') && $user->email)
                 {
                     return redirect()->route('user::admin.dashboard');
                 }
@@ -97,7 +97,7 @@ class UserController extends Controller
         // If vendor user is verified after signup
         $site = session('site');
         $store = session('store');
-        return redirect()->route('user::stores.create', compact('store', 'site', 'user_id'));
+        return redirect()->route('user::stores.create', compact('store', 'site'));
     }    
 
     // View to vendor admin dashboard

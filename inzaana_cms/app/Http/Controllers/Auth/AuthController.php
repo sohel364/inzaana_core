@@ -57,6 +57,27 @@ class AuthController extends Controller
     }
 
     /**
+     * Get the route name from the previous url of session array
+     *
+     * @return User
+     */
+    public function getPreviousRouteName()
+    {
+        return $this->getRouteName(session()->previousUrl());
+    }
+
+    /**
+     * Get the route name from the given url of session array
+     *
+     * @param  string  $url
+     * @return string
+     */
+    protected function getRouteName($url)
+    {
+        return app('router')->getRoutes()->match(app('request')->create($url))->getName();
+    }
+
+    /**
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
@@ -64,8 +85,7 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        $previousRouteName = app('router')->getRoutes()->match(app('request')->create(session()->previousUrl()))->getName();
-        if($previousRouteName == "guest::signup" && !session()->has('store'))
+        if($this->getPreviousRouteName() == "guest::signup" && !session()->has('store'))
         {
             abort(403, 'Unauthorized action.');
         }
