@@ -31,6 +31,7 @@ Route::group([ 'as' => 'guest::' ], function() {
 Route::group(['middleware' => 'web'], function () {
 
     Route::group(['as' => 'admin::'], function () {
+        //Stripe Route for Super Admin
         Route::get('/super-admin/create-plan', [ 'uses' => 'StripeController@planForm', 'as'=> 'planForm']);
         Route::post('/super-admin/create-plan', [ 'uses' => 'StripeController@createPlan', 'as'=> 'create.plan']);
         Route::get('/super-admin/view-plan', [ 'uses' => 'StripeController@viewPlan', 'as'=> 'viewPlan']);
@@ -38,11 +39,12 @@ Route::group(['middleware' => 'web'], function () {
         Route::post('/super-admin/view-plan/ajax/update', [ 'uses' => 'StripeController@updateStatus', 'as'=> 'updateStatus']);
         Route::get('/super-admin/view-subscriber', [ 'uses' => 'StripeController@viewSubscriber', 'as'=> 'viewSubscriber']);
     });
-
     Route::auth();
+
 
     // Routing grouped by namespace
     Route::group(['namespace' => 'Auth'], function() {
+        //Route::get('/register','AuthController@getRegister');
 
         Route::group([ 'as' => 'guest::' ], function() {
 
@@ -68,7 +70,17 @@ Route::group(['middleware' => 'web'], function () {
         // User controller
     	Route::get('/dashboard', [ 'uses' => 'UserController@index', 'as' => 'home' ]);
         Route::get('/dashboard/vendor', [ 'uses' => 'UserController@redirectToDashboard', 'as' => 'vendor.dashboard' ]); 
-        Route::get('/dashboard/admin', [ 'uses' => 'UserController@redirectToDashboardAdmin', 'as' => 'admin.dashboard' ]); 
+        /*
+         * Stripe Route Register
+         * */
+
+        Route::get('/dashboard/vendor/plan', [ 'uses' => 'UserController@redirectToVendorPlan', 'as' => 'vendor.plan' ]);
+        Route::get('/dashboard/vendor/view-my-subscription', [ 'uses' => 'StripeController@viewMySubscription', 'as'=> 'viewMySubscription']);
+
+        /*
+         * End of Stripe Route Register
+         * */
+        Route::get('/dashboard/admin', [ 'uses' => 'UserController@redirectToDashboardAdmin', 'as' => 'admin.dashboard' ]);
         Route::get('/dashboard/customer', [ 'uses' => 'UserController@redirectToDashboardCustomer', 'as' => 'customer.dashboard' ]);
         Route::get('/user_my_order', [ 'uses' => 'UserController@usermyorder', 'as' => 'orders' ]);
         Route::get('/user_product_return', [ 'uses' => 'UserController@userproductreturn', 'as' => 'products.return' ]);

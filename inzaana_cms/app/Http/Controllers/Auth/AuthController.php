@@ -3,6 +3,7 @@
 namespace Inzaana\Http\Controllers\Auth;
 
 use Auth;
+use Carbon\Carbon;
 use Inzaana\User;
 use Inzaana\Mailers\AppMailer;
 use Illuminate\Http\Request;
@@ -27,7 +28,11 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+    use ThrottlesLogins;
+    use AuthenticatesAndRegistersUsers {
+        showRegistrationForm as showRegisterFormParent;
+    }
+
 
     protected $redirectTo = '/dashboard';	
 
@@ -83,9 +88,27 @@ class AuthController extends Controller
      * @param  array  $data
      * @return User
      */
+
+    public function showRegistrationForm()
+    {
+        //dd(session());
+        if(!session()->has('store'))
+        {
+            session()->forget('store');
+            return redirect('/');
+        }
+        return $this->showRegisterFormParent();
+    }
+
+
     protected function create(array $data)
     {
+
         if($this->getPreviousRouteName() == "guest::signup" && !session()->has('store'))
+        {
+            abort(403, 'Unauthorized action.');
+        }
+        if(!$this->getPreviousRouteName() && !session()->has('store'))
         {
             abort(403, 'Unauthorized action.');
         }
@@ -94,6 +117,7 @@ class AuthController extends Controller
             'email' => $data['email'],
             'verified' => false,
             'password' => bcrypt($data['password']),
+            'trial_ends_at' => Carbon::now()->addDays(10),
         ]);
         // USED TO -> UserController@index
         // session(compact('user'));
@@ -110,6 +134,7 @@ class AuthController extends Controller
      */
     public function confirmEmail($token, $site, $store)
     {
+
         $user = User::whereToken($token)->firstOrFail();
         $errors = [];
 
@@ -154,7 +179,7 @@ class AuthController extends Controller
      * Navigates to signup form for signup or back to guest home
      */
     public function showSignupForm(AuthRequest $request)
-    {        
+    {
         $errors = [];
         if(!$request->exists('store_name') || !$request->has('store_name'))
         {

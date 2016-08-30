@@ -2,7 +2,9 @@
 
 namespace Inzaana\Http\Controllers;
 
+use Auth;
 use Crypt;
+use DB;
 use Inzaana\User;
 use Inzaana\StripePlan;
 use Illuminate\Http\Request;
@@ -34,8 +36,34 @@ class StripeController extends Controller
      * */
     public function planForm()
     {
-        return view('super-admin.stripe.create-plan');
+        return view('super-admin.stripe.create-plan')->with('user', Auth::user());
     }
+
+    /*
+     * User Subscription using laravel cashier
+     * Stripe take card info like Card number, Expire Date, cvc(Card Verification Value)
+     * Method call from
+     *
+     * http://stackoverflow.com/questions/24220706/laravel-cashier-multiple-subscriptions-for-a-single-user
+     * */
+
+    public function subscriptionPlan(Request $request)
+    {
+        //dd($request->all());
+        $user = User::find(Auth::user()->id);
+        //dd($user);
+        $msg = "";
+        if(!Auth::user()->subscribed($request->_plan_name)){
+            $user->newSubscription($request->_plan_name, $request->_plan_id)
+                ->trialDays(0)
+                ->create($request->stripeToken);
+            $msg = "Successfully Subscribed.";
+        }
+        return redirect()->route('viewMySubscription')->with(['success'=>$msg]);
+
+    }
+
+
 
     /*
      * This method is using for Create Plan
@@ -86,7 +114,7 @@ class StripeController extends Controller
     public function viewPlan()
     {
         $allPlan = StripePlan::all();
-        return view('super-admin.stripe.view-plan',compact('allPlan'));
+        return view('super-admin.stripe.view-plan',compact('allPlan'))->with('user', Auth::user());
     }
     /*
      * Delete Plan Using Plan ID
@@ -116,18 +144,47 @@ class StripeController extends Controller
      * */
     public function updateStatus(Request $data)
     {
-        //dd($data->all());
-        $id = Crypt::decrypt($data->plan_id);
-        $plan = StripePlan::where('plan_id',$id)->update(['active' => $data->status_id]);
-        return Response::json(['id'=> $data->status_id]);
+        //dd(Input ('plan_id'));
+        $all_data = $data->json()->all();
+        $id = $all_data['plan_id'];
+
+        $plan = StripePlan::where('plan_id',$id)->update(['active' => $all_data['status']]);
+
+        return Response::json(['plan_id'=>$id ,'id'=> $all_data['status']]);
     }
     /*
      * View All Subscriber
+     * Using Query Builder for join three tables(users, stripeplans, subscriptions)
+     * Retrieve all subscribers from local database
+     * Method call from Route::get('/super-admin/view-subscriber', [ 'uses' => 'StripeController@viewSubscriber', 'as'=> 'viewSubscriber']);
      * */
     public function viewSubscriber()
     {
-        Stripe::setApiKey(getenv('STRIPE_SECRET'));
-        dd(Subscription::all());
+        $subscribers = DB::table('subscriptions')
+                    ->join('users','users.id','=','subscriptions.user_id')
+                    ->join('stripeplans','stripeplans.plan_id','=','subscriptions.stripe_plan')
+                    ->select('subscriptions.name as plan_name','subscriptions.stripe_id','subscriptions.quantity','users.name as subscriber_name','users.email','stripeplans.amount','stripeplans.interval','stripeplans.trial_period_days as trial')
+                    ->get();
+        return view('super-admin.stripe.view-subscriber',compact('subscribers'))->with('user', Auth::user());
+
+    }
+    /*
+     * View a login user subscription plan
+     * Using Query Builder for join three tables(users, stripeplans, subscriptions)
+     * Retrieve single subscription from local database
+     * Method call from Route::get('/dashboard/vendor/view-my-subscription', [ 'uses' => 'StripeController@viewMySubscription', 'as'=> 'viewMySubscription']);
+     * */
+    public function viewMySubscription()
+    {
+        $user = Auth::user();
+        $subscriber = DB::table('subscriptions')
+                    ->join('users','users.id','=','subscriptions.user_id')
+                    ->join('stripeplans','stripeplans.plan_id','=','subscriptions.stripe_plan')
+                    ->select('subscriptions.name as plan_name','subscriptions.stripe_id','subscriptions.quantity','users.name as subscriber_name','users.email','stripeplans.amount','stripeplans.interval','stripeplans.trial_period_days as trial')
+                    ->where('users.id','=',Auth::user()->id)
+                    ->first();
+        return view('my-subscription',compact('subscriber','user'));
+
     }
     /*
      * Show All Invoice For Specific User

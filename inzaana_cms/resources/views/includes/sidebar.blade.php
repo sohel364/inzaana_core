@@ -41,6 +41,18 @@
                 <li><a href="/products"><i class="fa  fa-plus"></i> Add New Store </a></li>
               </ul>
 			</li>
+
+			<li class="treeview">
+              <a href="#">
+                <i class="fa fa-dollar"></i> <span>Subscription</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="/dashboard/vendor/plan"><i class="fa fa-list"></i> View Plan </a></li>
+                <li><a href="/dashboard/vendor/view-my-subscription"><i class="fa  fa-dashboard"></i> My Subscription </a></li>
+              </ul>
+			</li>
+
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-list"></i>
@@ -312,6 +324,12 @@
             <li class=" treeview">
       			  <a href="{{ route('user::templates.saved') }}">
         				<span>My Templates</span>
+        				<!--<i class="fa fa-angle-left pull-right"></i>-->
+      			  </a>
+            </li>
+            <li class=" treeview">
+      			  <a href="/super-admin">
+        				<span>Super Admin</span>
         				<!--<i class="fa fa-angle-left pull-right"></i>-->
       			  </a>
             </li>

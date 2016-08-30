@@ -88,21 +88,28 @@
             <div class="clearfix"></div>
 
             <li class="active">
-              <a href="index.html">
+              <a href="/super-admin">
                 <i class="fa fa-home fa-fw"></i>
                 <span class="menu-title">Dashboard</span>
               </a>
             </li>
 
             <li>
-              <a href="/create-plan">
+              <a href="/super-admin/create-plan">
                 <i class="fa fa-shopping-cart fa-fw"></i>
                 <span class="menu-title">Create Plan</span>
               </a>
             </li>
 
             <li>
-              <a href="/subscriber-list">
+              <a href="/super-admin/view-plan">
+                <i class="fa fa-shopping-cart fa-fw"></i>
+                <span class="menu-title">View Plan</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="/super-admin/view-subscriber">
                 <i class="fa fa-tags fa-fw"></i>
                 <span class="menu-title">Subscriber List</span>
               </a>
@@ -152,7 +159,7 @@
   <script src="{{ URL::asset('user_admin_dashboard_asset/script/bootstrap-hover-dropdown.js') }}"></script>
   <script src="{{ URL::asset('user_admin_dashboard_asset/css3-animate-it-master/js/css3-animate-it.js') }}"></script>
   <!--CORE JAVASCRIPT-->
-  <script src="{{ URL::asset('user_admin_dashboard_asset/script/main.js') }}"></script>
+{{--  <script src="{{ URL::asset('user_admin_dashboard_asset/script/main.js') }}"></script>--}}
   <script src="{{ URL::asset('super-admin-asset/config.js') }}"></script>
     @yield('footer-script')
 </body>

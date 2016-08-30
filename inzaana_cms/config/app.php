@@ -168,6 +168,11 @@ return [
          */
         Intervention\Image\ImageServiceProvider::class,
 
+        /*
+         * Laravel service provider
+         * */
+        Laravel\Cashier\CashierServiceProvider::class,
+
     ],
 
     /*

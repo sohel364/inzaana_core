@@ -44,36 +44,23 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Plan ID</th>
-                        <th>Plan Name</th>
-                        <th>Price</th>
-                        <th>Trial Period</th>
-                        <th>Status</th>
+                        <th>Subscriber Name</th>
+                        <th>Subscriber E-mail</th>
+                        <th>Plan</th>
+                        <th>Trial</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($allPlan as $plan)
+
+                    @foreach($subscribers as $subscriber)
                         <tr>
-                            <td>{{ $plan->plan_id }}</td>
-                            <td>{{ $plan->name }}</td>
-                            <td>{{ $plan->amount }}/{{ $plan->interval }}</td>
-                            <td>{{ $plan->trial_period_days }}</td>
+                            <td>{{ $subscriber->subscriber_name }}</td>
+                            <td>{{ $subscriber->email }}</td>
+                            <td>{{ $subscriber->plan_name }} ({{ $subscriber->amount }}/{{ $subscriber->interval }})</td>
+                            <td>{{ $subscriber->trial }}</td>
                             <td>
-                                <div id="update_button{{ str_replace(':','_',$plan->plan_id) }}">
-                                    @if($plan->active)
-                                        <input type="submit" class="btn btn-warning btn-xs" data-status="0" id="update_status"  data-id="{{ $plan->plan_id }}" value="Hide">
-                                    @else
-                                        <input type="submit" class="btn btn-success btn-xs" data-status="1" id="update_status" data-id="{{ $plan->plan_id }}" value="Show">
-                                    @endif
-                                </div>
-                            </td>
-                            <td>
-                            <form method="POST" action="{{ action('StripeController@deletePlan') }}">
-                                {{ csrf_field() }}
-                                <input type="hidden" name="plan" value="{{ Crypt::encrypt($plan['plan_id']) }}">
-                                <input type="submit" class="btn btn-danger btn-xs" value="Delete">
-                            </form>
+                                <button class="btn btn-primary" data-id="{{ $subscriber->stripe_id }}" id="user_details">Details</button>
                             </td>
                         </tr>
                     @endforeach
@@ -87,5 +74,5 @@
 @endsection
 
 @section('footer-script')
-    <script src="{{ URL::asset('super-admin-asset/stripe/super-admin-plan-view.js') }}"></script>
+    {{--<script src="{{ URL::asset('super-admin-asset/stripe/super-admin-plan-view.js') }}"></script>--}}
 @endsection

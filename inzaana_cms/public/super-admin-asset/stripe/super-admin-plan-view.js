@@ -1,28 +1,25 @@
-$('#plan-status').submit(function(e) {
-    e.preventDefault();
+$(document).on('click','#update_status',function() {
     if($(this).data("id") != '') {
-        var url = window.location.href.replace('#','');
-        var form = document.forms.namedItem("plan-status"); // high importance!, here you need change "yourformname" with the name of your form
-        var formdata = new FormData(form); // high importance!
+        var plan_id = $(this).data('id')
+        var status = $(this).data('status')
+        var json_data = {plan_id:plan_id, status:status}
         $.ajax({
             async: true,
             type: 'POST',
-            data: formdata,
+            data: JSON.stringify(json_data),
             dataType: "json", // or html if you want...
             contentType: false, // high importance!
-            url: url+'/ajax/update', // you need change it.
+            url: '/super-admin/view-plan/ajax/update', // you need change it.
             processData: false, // high importance!
             success: function (data) {
-                $('#update_button').html('');
-                if(data['id'])
+                $('#update_button'+data['plan_id'].replace(':','_')+'').html('');
+                if(data['id']==1)
                 {
-                    $('#update_button').append('<input type="hidden" name="status_id" value="'+data['id']+'">');
-                    $('#update_button').append('<input type="submit" class="btn btn-warning btn-xs" value="Hide">');
+                    $('#update_button'+data['plan_id'].replace(':','_')+'').append('<input type="submit" class="btn btn-warning btn-xs" data-status="0" id="update_status" data-id="'+data['plan_id']+'" value="Hide">');
                 }
                 else
                 {
-                    $('#update_button').append('<input type="hidden" name="status_id" value="'+data['id']+'">');
-                    $('#update_button').append('<input type="submit" class="btn btn-success btn-xs" value="Show">');
+                    $('#update_button'+data['plan_id'].replace(':','_')+'').append('<input type="submit" class="btn btn-success btn-xs" data-status="1" id="update_status" data-id="'+data['plan_id']+'" value="Show">');
                 }
             },
             error: function(data){

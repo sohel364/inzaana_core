@@ -7,6 +7,7 @@ use Session;
 use Inzaana\User;
 use Inzaana\Mailers\AppMailer;
 use Illuminate\Http\Request;
+use Inzaana\StripePlan;
 
 use Inzaana\Http\Requests;
 use Inzaana\Http\Controllers\Controller;
@@ -111,10 +112,29 @@ class UserController extends Controller
         return view('admin')->with('user', Auth::user());
     }    
 
-    // View to super admin dashboard
+    // View plan for vendor
+    public function redirectToVendorPlan()
+    {
+        /*
+         * View Plan for subscription
+         * Using laravel cashier for plan retrieval
+         * Method call from Route::get('/dashboard/vendor/plan', [ 'uses' => 'UserController@redirectToVendorPlan', 'as' => 'vendor.plan' ]);
+         * */
+        $plan = StripePlan::where('active','=','1')->get();
+        return view('plan',compact('plan'))->with('user', Auth::user())
+                                            ->with('authenticated', Auth::check());
+    }
+
+    // View plan for vendor
     public function redirectToDashboardAdmin()
     {
-        return view('super-admin.dashboard')->with('user', Auth::user())
+        /*
+         * View Plan for subscription
+         * Using laravel cashier for plan retrieval
+         * Method call from Route::get('/dashboard/vendor/plan', [ 'uses' => 'UserController@redirectToVendorPlan', 'as' => 'vendor.plan' ]);
+         * */
+        $plan = StripePlan::where('active','=','1')->get();
+        return view('super-admin.dashboard',compact('plan'))->with('user', Auth::user())
                                             ->with('authenticated', Auth::check());
     }
 

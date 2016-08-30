@@ -3,6 +3,7 @@
 namespace Inzaana\Exceptions;
 
 use Exception;
+use ErrorException;
 use Stripe\Error\Card;
 use Stripe\Error\RateLimit;
 use Stripe\Error\InvalidRequest;
@@ -91,7 +92,7 @@ class Handler extends ExceptionHandler
          * All of this exception handle in this section
          * */
         if($e instanceof Card){
-
+            dd("Card issue");
         }
         if($e instanceof RateLimit){
 
@@ -129,6 +130,14 @@ class Handler extends ExceptionHandler
             $errorMessage = 'DecryptException. Do not change your encryption string.';
             Log::critical('[Inzaana][' . $e->getMessage() . "] Encryption Decryption problem.");
             flash()->error($errorMessage);
+            return redirect()->back();
+        }
+
+        if($e instanceof ErrorException)
+        {
+            $errorMessage = 'Error Occur.';
+            Log::critical('[Inzaana][' . $e->getMessage() . "] .");
+            flash()->error($e->getMessage());
             return redirect()->back();
         }
 

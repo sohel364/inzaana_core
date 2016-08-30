@@ -1,15 +1,6 @@
 @extends('layouts.super-admin-master')
 @section('title', 'Super Admin Dashboard')
-@section('header-style')
-<style>
-.subscribe_box{
-    border: 1px solid #eee;
-    padding: 10px;
-    text-align: center;
 
-}
-</style>
-@endsection
 
 @section('content')
     <!--BEGIN TITLE & BREADCRUMB PAGE-->
@@ -34,12 +25,29 @@
         <div id="tab-general">
             <div class="row">
 
-            <h2 class="text-center">Super Admin Home</h2>
+                {{-- Success & Error Message --}}
+            @if(session('success'))
+                <p class="text-primary">{{ session('success') }}</p>
+            @endif
 
-
-
-
-
+            @if (count($errors) > 0)
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+                {{--End of Success & Error Message--}}
+            {{--{{dd($subscriber)}}--}}
+            <h4>Plan Name: {{ $subscriber->plan_name }}</h4>
+            @if($user->onTrial())
+                  <h4>Trial Left: {{ $user->getTrialTimeString() }}</h4>
+            @endif
+            <h4>Plan Cost: {{ $user->getPlanCost() }}</h4>
+            <h4>Remaining Days: {{ $user->getPlanRemainDays() }}</h4>
+            <h4>Plan End Date: {{ $user->getPlanEndDate() }}</h4>
 
             </div>
         </div>
@@ -48,5 +56,5 @@
 @endsection
 
 @section('footer-script')
-
+    {{--<script src="{{ URL::asset('super-admin-asset/stripe/super-admin-plan-view.js') }}"></script>--}}
 @endsection
