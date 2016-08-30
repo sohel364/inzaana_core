@@ -44,7 +44,6 @@ Route::group(['middleware' => 'web'], function () {
 
     // Routing grouped by namespace
     Route::group(['namespace' => 'Auth'], function() {
-        //Route::get('/register','AuthController@getRegister');
 
         Route::group([ 'as' => 'guest::' ], function() {
 

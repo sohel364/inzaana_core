@@ -83,28 +83,24 @@ class AuthController extends Controller
     }
 
     /**
-     * Create a new user instance after a valid registration.
+     * Shows secured registration form
      *
-     * @param  array  $data
-     * @return User
+     * @return \Illuminate\Http\Response
      */
 
     public function showRegistrationForm()
     {
-        //dd(session());
-        if(!session()->has('store'))
+        if($this->getPreviousRouteName() != 'guest::signup')
         {
-            session()->forget('store');
-            return redirect('/');
+            return redirect()->route('guest::home');
         }
         return $this->showRegisterFormParent();
     }
 
-
     protected function create(array $data)
     {
 
-        if($this->getPreviousRouteName() == "guest::signup" && !session()->has('store'))
+        if($this->getPreviousRouteName() != "guest::signup" && !session()->has('store'))
         {
             abort(403, 'Unauthorized action.');
         }
