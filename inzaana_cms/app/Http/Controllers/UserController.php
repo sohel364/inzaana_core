@@ -70,27 +70,17 @@ class UserController extends Controller
         // If signup verified an usual login to proceed
         if(!session()->has('site') || !session()->has('store'))
         {
-            // TODO: If user role is super admin
             $user = User::find(Auth::user()->id);
             if($user)
             {
-                if($user->email == config('mail.admin.address') && $user->email)
+                if($user->email == config('mail.admin.address'))
                 {
                     return redirect()->route('user::admin.dashboard');
                 }
                 if($user->stores()->count() == 0)
-                {
-                    // TODO: If user role is customer (customer has no store)
-
-                        // TODO: If subscription on trial
-                        // TODO: If subscription trial is over
-                        // TODO: If subscription is paid    
+                { 
                     return redirect()->route('user::customer.dashboard');
                 }
-                // TODO: If user role is vendor (vendor has some stores)
-                    // TODO: If subscription on trial
-                    // TODO: If subscription trial is over
-                    // TODO: If subscription is paid
                 return redirect()->route('user::vendor.dashboard'); 
             }
             abort(404);
@@ -99,7 +89,7 @@ class UserController extends Controller
         $site = session('site');
         $store = session('store');
         return redirect()->route('user::stores.create', compact('store', 'site'));
-    }    
+    }   
 
     // View to vendor admin dashboard
     public function redirectToDashboard()
@@ -108,6 +98,18 @@ class UserController extends Controller
         {
             session()->forget('site');
             session()->forget('store');  
+        }        
+        $user = User::find(Auth::user()->id);
+        if($user)
+        {
+            if($user->email == config('mail.admin.address'))
+            {
+                return redirect()->route('user::admin.dashboard');
+            }
+            if($user->stores()->count() == 0)
+            { 
+                return redirect()->route('user::customer.dashboard');
+            }
         }
         return view('admin')->with('user', Auth::user());
     }    
@@ -128,22 +130,47 @@ class UserController extends Controller
     // View plan for vendor
     public function redirectToDashboardAdmin()
     {
-        /*
-         * View Plan for subscription
-         * Using laravel cashier for plan retrieval
-         * Method call from Route::get('/dashboard/vendor/plan', [ 'uses' => 'UserController@redirectToVendorPlan', 'as' => 'vendor.plan' ]);
-         * */
-        $plan = StripePlan::where('active','=','1')->get();
-        return view('super-admin.dashboard',compact('plan'))->with('user', Auth::user())
-                                            ->with('authenticated', Auth::check());
+        $user = User::find(Auth::user()->id);
+        if($user)
+        {
+            if($user->email == config('mail.admin.address'))
+            {
+                /*
+                 * View Plan for subscription
+                 * Using laravel cashier for plan retrieval
+                 * Method call from Route::get('/dashboard/vendor/plan', [ 'uses' => 'UserController@redirectToVendorPlan', 'as' => 'vendor.plan' ]);
+                 * */
+                $plan = StripePlan::where('active','=','1')->get();
+                return view('super-admin.dashboard',compact('plan'))->with('user', Auth::user())
+                                                    ->with('authenticated', Auth::check());
+            }
+            if($user->stores()->count() == 0)
+            { 
+                return redirect()->route('user::customer.dashboard');
+            }
+            return redirect()->route('user::vendor.dashboard'); 
+        }
+        return redirect('/');
     }
 
     // view to customer dashboard
     public function redirectToDashboardCustomer()
     {
-        //
-        return view('user_dashboard')->with('user', Auth::user())
-                                    ->with('authenticated', Auth::check());
+        $user = User::find(Auth::user()->id);
+        if($user)
+        {
+            if($user->email == config('mail.admin.address'))
+            {
+                return redirect()->route('user::admin.dashboard');
+            }
+            if($user->stores()->count() == 0)
+            {
+                return view('user_dashboard')->with('user', Auth::user())
+                                             ->with('authenticated', Auth::check());
+            }
+            return redirect()->route('user::vendor.dashboard'); 
+        }
+        return redirect('/');
     }
 
     /**
