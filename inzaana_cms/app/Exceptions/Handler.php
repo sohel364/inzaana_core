@@ -15,6 +15,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Foundation\Validation\ValidationException;
 
 use Log;
 use PDOException;
@@ -83,6 +84,12 @@ class Handler extends ExceptionHandler
             {
                 return (new SymfonyDisplayer(config('app.debug')))->createResponse($e);
             }
+        }
+        if ($e instanceof ValidationException) {
+            $errorMessage = 'Please fill up all necessary fields.';
+            Log::critical('[Inzaana][' . $e->getMessage() . "] validation error.");
+            flash()->error($errorMessage);
+            return redirect()->back();
         }
 
         /*

@@ -63,7 +63,7 @@ Route::group(['middleware' => 'web'], function () {
         // Store controller
         Route::group(['prefix' => 'stores'], function () {
 
-            Route::get('/create/name/{name}/site/{site}', [ 'uses' => 'StoreController@create', 'as' => 'stores.create' ]);            
+            Route::get('/create/name/{name}/site/{site}', [ 'uses' => 'StoreController@create', 'as' => 'stores.create' ]);           
         });  
 
         // User controller

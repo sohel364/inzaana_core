@@ -33,7 +33,6 @@ class AuthController extends Controller
         showRegistrationForm as showRegisterFormParent;
     }
 
-
     protected $redirectTo = '/dashboard';	
 
     /**
@@ -82,32 +81,28 @@ class AuthController extends Controller
         return app('router')->getRoutes()->match(app('request')->create($url))->getName();
     }
 
-    /**
-     * Shows secured registration form
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // /**
+    //  * Shows secured registration form
+    //  *
+    //  * @return \Illuminate\Http\Response
+    //  */
 
-    public function showRegistrationForm()
-    {
-        if($this->getPreviousRouteName() != 'guest::signup')
-        {
-            return redirect()->route('guest::home');
-        }
-        return $this->showRegisterFormParent();
-    }
+    // public function showRegistrationForm()
+    // {
+    //     if($this->getPreviousRouteName() != 'guest::signup')
+    //     {
+    //         if(!session('storeName') || !session('store'))
+    //         {
+    //             return redirect()->route('guest::home');                
+    //         }
+    //         session()->forget('site');
+    //         session()->forget('store');
+    //     }
+    //     return $this->showRegisterFormParent();
+    // }
 
     protected function create(array $data)
     {
-
-        if($this->getPreviousRouteName() != "guest::signup" && !session()->has('store'))
-        {
-            abort(403, 'Unauthorized action.');
-        }
-        if(!$this->getPreviousRouteName() && !session()->has('store'))
-        {
-            abort(403, 'Unauthorized action.');
-        }
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -115,8 +110,6 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
             'trial_ends_at' => Carbon::now()->addDays(10),
         ]);
-        // USED TO -> UserController@index
-        // session(compact('user'));
         return $user;
     }
 
@@ -130,22 +123,9 @@ class AuthController extends Controller
      */
     public function confirmEmail($token, $site, $store)
     {
-
-        $user = User::whereToken($token)->firstOrFail();
-        $errors = [];
-
-        if(!$user->confirmEmail())
-        {
-            if($user->remove())
-            {
-                $errors['AUTH_CONFIRM'] = 'User authentication is not confirmed. Please signup to create your store again. For assistance contact administrator.';
-            }
-            return redirect()->route('guest::home')->with('errors', collect($errors));
-        }
         // USED TO -> 'Auth\AuthController@create'
         session(compact('site', 'store'));
-        flash('You are now confirmed. Please login.');
-        return redirect('/login');
+        return $this->confirmEmailCustomer($token);
     }
 
     /**
@@ -165,7 +145,9 @@ class AuthController extends Controller
             {
                 $errors['AUTH_CONFIRM'] = 'User authentication is not confirmed. Please signup to create your account again. For assistance contact administrator.';
             }
-            return redirect()->route('guest::home')->with('errors', collect($errors));
+            session()->forget('site');
+            session()->forget('store');
+            return redirect()->route('guest::home', [ 'errors' => collect($errors) ]);
         }
         flash('You are now confirmed. Please login.');
         return redirect('/login');
@@ -176,19 +158,30 @@ class AuthController extends Controller
      */
     public function showSignupForm(AuthRequest $request)
     {
-        $errors = [];
         if(!$request->exists('store_name') || !$request->has('store_name'))
         {
-            $errors['store'] = 'Please give your store a name to signup.';
+            return redirect()->route('guest::home');
         }
-        if(count($errors) > 0)
-            return response()->view('home', [ 'errors' => collect($errors) ]);
 
         $store = $request->query('store_name');
         $subdomain = strtolower($request->query('subdomain'));
         $domain = $request->query('domain');
         $site = strtolower(str_replace(' ', '', $store)) . '.' . $subdomain . '.' . $domain;
 
+        $inputsWithTableNames = [
+            'name' => $store,
+            'sub_domain' => $subdomain,
+            'domain' => $domain
+        ];
+        $validator = Validator::make($inputsWithTableNames, [
+            'name' => 'required|unique:stores|max:30',
+            'sub_domain' => 'required',
+            'domain' => 'required',
+        ]);
+        if ($validator->fails())
+        {
+            return response()->view('home', [ 'errors' => $validator->errors() ]);
+        }
         // USED TO -> UserController@index
         session(compact('site', 'store'));
 

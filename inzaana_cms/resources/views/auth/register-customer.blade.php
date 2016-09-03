@@ -26,19 +26,13 @@
 
                     <div class="animatedParent animateOnce" data-sequence='500'>
                         <div class="row">
-                        </div>
-                        <div class="row">
-
-
-                        </div>
-                        <div class="row">
                             <div class="col-xs-6 col-sm-6 col-md-6 text-right">
                                 <div class="form-group animated fadeInLeftShort{{ $errors->has('name') ? ' has-error' : '' }}" data-id="5">
                                     <input type="name" name="name" class="form-control input-sm" placeholder="First Name" value="{{ old('name') }}">
                                     @if ($errors->has('name'))
                                         <span class="help-block">
-                          <strong>{{ $errors->first('name') }}</strong>
-                      </span>
+                                            <strong>{{ $errors->first('name') }}</strong>
+                                        </span>
                                     @endif
                                 </div>
                             </div>
@@ -55,8 +49,8 @@
                                     <input name="email" type="email" class="form-control input-sm" placeholder="Enter Email" value="{{ old('email') }}">
                                     @if ($errors->has('email'))
                                         <span class="help-block">
-                          <strong>{{ $errors->first('email') }}</strong>
-                      </span>
+                                            <strong>{{ $errors->first('email') }}</strong>
+                                        </span>
                                     @endif
                                 </div>
                             </div>
@@ -75,8 +69,8 @@
 
                                     @if ($errors->has('password'))
                                         <span class="help-block">
-                          <strong>{{ $errors->first('password') }}</strong>
-                      </span>
+                                              <strong>{{ $errors->first('password') }}</strong>
+                                          </span>
                                     @endif
                                 </div>
                             </div>
@@ -86,17 +80,17 @@
 
                                     @if ($errors->has('password_confirmation'))
                                         <span class="help-block">
-                          <strong>{{ $errors->first('password_confirmation') }}</strong>
-                      </span>
+                                              <strong>{{ $errors->first('password_confirmation') }}</strong>
+                                          </span>
                                     @endif
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-4 col-sm-3 col-md-3">
-                <span class="button-checkbox animated fadeInLeftShort" data-id="11">
-            <button name="is_agreed" type="button" class="btn btn-default" data-color="info"><i class="state-icon glyphicon glyphicon-unchecked"></i>I Agree</button>
-                        <input type="checkbox" class="hidden" value="1"></span>
+                                <span class="button-checkbox animated fadeInLeftShort" data-id="11">
+                            <button name="is_agreed" type="button" class="btn btn-default" data-color="info"><i class="state-icon glyphicon glyphicon-unchecked"></i>I Agree</button>
+                            <input type="checkbox" class="hidden" value="1"></span>
                             </div>
                             <div class="col-xs-8 col-sm-9 col-md-9 animated fadeInRightShort" data-id="12">
                                 By clicking <strong class="label label-info">Registration</strong>, you agree to the <a href="#" data-toggle="modal" data-target="#t_and_c_m">Terms and Conditions</a> set out by this site, including our Cookie Use.
