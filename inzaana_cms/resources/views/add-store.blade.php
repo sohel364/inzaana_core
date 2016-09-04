@@ -39,6 +39,19 @@
                   </div>
 
                   <div class="form-group">
+                    <label for="Store-type">I am going to sell</label>
+                    
+                    <select name="business" class="form-control" placeholder="Select a business area">
+                      <option value="" class="placehold" selected="">I'm not sure yet.</option>
+                      <option value="">Animal &amp; Pet</option>
+                      <option value="">Art &amp; Entertainment</option>
+                      <option value="">Hardware or Home/Garden Improvement</option>
+                      <option value="">Others / something elase...</option>
+                    </select>
+                
+                  </div>
+
+                  <div class="form-group">
                     <label for="description">Store Description</label>
                     <textarea placeholder="Add Store description here..." class="form-control" rows="5" id="description" name="description">{{ isset($StoreEdit) ? $StoreEdit->description : '' }}</textarea>
                   </div>
