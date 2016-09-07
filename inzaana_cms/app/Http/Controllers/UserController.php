@@ -88,7 +88,7 @@ class UserController extends Controller
         // If vendor user is verified after signup
         $site = session('site');
         $store = session('store');
-        return redirect()->route('user::stores.create', compact('store', 'site'));
+        return redirect()->route('user::stores.create-on-signup', compact('store', 'site'));
     }   
 
     // View to vendor admin dashboard

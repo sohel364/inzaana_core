@@ -21,6 +21,7 @@ class CreateStoresTable extends Migration
             $table->string('domain');
             $table->string('sub_domain');
             $table->string('store_type');
+            $table->string('description', 1000);
             $table->timestamps();
         });
     }

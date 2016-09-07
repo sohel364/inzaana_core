@@ -339,7 +339,7 @@
               </div>
               <div class="col-xs-6 col-sm-6 col-md-6 text-left">
                 <div class="form-group animated fadeInRightShort" data-id="6">
-                  <input type="name" name="last_name" class="form-control input-sm" placeholder="Last Name">
+                  <input type="name" name="last_name" class="form-control input-sm" placeholder="Last Name" value="{{ old('last_name') }}">
                 </div>
               </div>
             </div>

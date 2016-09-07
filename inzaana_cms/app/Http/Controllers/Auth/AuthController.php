@@ -104,8 +104,9 @@ class AuthController extends Controller
     protected function create(array $data)
     {
         $user = User::create([
-            'name' => $data['name'],
+            'name' => $data['name'] . ' ' . $data['last_name'],
             'email' => $data['email'],
+            'phone_number' => $data['phone_number'],
             'verified' => false,
             'password' => bcrypt($data['password']),
             'trial_ends_at' => Carbon::now()->addDays(10),

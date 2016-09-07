@@ -63,24 +63,34 @@ Route::group(['middleware' => 'web'], function () {
         // Store controller
         Route::group(['prefix' => 'stores'], function () {
 
-            Route::get('/create/name/{name}/site/{site}', [ 'uses' => 'StoreController@create', 'as' => 'stores.create' ]);           
-        });  
+            Route::get('/', [ 'uses' => 'StoreController@index', 'as' => 'stores' ]);           
+            Route::get('/redirect/site/{site}', [ 'uses' => 'StoreController@redirectUrl', 'as' => 'stores.redirect' ]);           
+            Route::get('/create/name/{name}/site/{site}', [ 'uses' => 'StoreController@createOnSignUp', 'as' => 'stores.create-on-signup' ]);           
+            Route::post('/create', [ 'uses' => 'StoreController@create', 'as' => 'stores.create' ]);           
+            Route::post('/{store}', [ 'uses' => 'StoreController@postUpdate', 'as' => 'stores.update' ]);           
+            Route::get('/{store}/edit/', [ 'uses' => 'StoreController@update', 'as' => 'stores.edit' ]);           
+            Route::post('/{store}/delete/', [ 'uses' => 'StoreController@delete', 'as' => 'stores.delete' ]);           
+        }); 
 
-        // User controller
-    	Route::get('/dashboard', [ 'uses' => 'UserController@index', 'as' => 'home' ]);
-        Route::get('/dashboard/vendor', [ 'uses' => 'UserController@redirectToDashboard', 'as' => 'vendor.dashboard' ]); 
-        /*
-         * Stripe Route Register
-         * */
+        // routes grouped by /dashboard
+        Route::group(['prefix' => 'dashboard'], function () {
 
-        Route::get('/dashboard/vendor/plan', [ 'uses' => 'UserController@redirectToVendorPlan', 'as' => 'vendor.plan' ]);
-        Route::get('/dashboard/vendor/view-my-subscription', [ 'uses' => 'StripeController@viewMySubscription', 'as'=> 'viewMySubscription']);
+            // User controller
+            Route::get('/', [ 'uses' => 'UserController@index', 'as' => 'home' ]);
 
-        /*
-         * End of Stripe Route Register
-         * */
-        Route::get('/dashboard/admin', [ 'uses' => 'UserController@redirectToDashboardAdmin', 'as' => 'admin.dashboard' ]);
-        Route::get('/dashboard/customer', [ 'uses' => 'UserController@redirectToDashboardCustomer', 'as' => 'customer.dashboard' ]);
+            // routes grouped by /vendor
+            Route::group(['prefix' => 'vendor'], function () {
+
+                Route::get('/', [ 'uses' => 'UserController@redirectToDashboard', 'as' => 'vendor.dashboard' ]); 
+                Route::get('/plan', [ 'uses' => 'UserController@redirectToVendorPlan', 'as' => 'vendor.plan' ]);
+                Route::get('/view-my-subscription', [ 'uses' => 'StripeController@viewMySubscription', 'as'=> 'viewMySubscription']);
+
+            });
+            Route::get('/admin', [ 'uses' => 'UserController@redirectToDashboardAdmin', 'as' => 'admin.dashboard' ]);
+            Route::get('/customer', [ 'uses' => 'UserController@redirectToDashboardCustomer', 'as' => 'customer.dashboard' ]);
+
+        });
+
         Route::get('/user_my_order', [ 'uses' => 'UserController@usermyorder', 'as' => 'orders' ]);
         Route::get('/user_product_return', [ 'uses' => 'UserController@userproductreturn', 'as' => 'products.return' ]);
         Route::get('/user_reward_points', [ 'uses' => 'UserController@userrewardpoints', 'as' => 'reward-points' ]);

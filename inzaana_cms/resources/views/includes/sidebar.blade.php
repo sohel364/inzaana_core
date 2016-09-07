@@ -37,8 +37,8 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="/products"><i class="fa fa-list"></i> My Stores </a></li>
-                <li><a href="/products"><i class="fa  fa-plus"></i> Add New Store </a></li>
+                <li><a href="{{ route('user::stores') }}"><i class="fa fa-list"></i> My Stores </a></li>
+                <li><a href="{{ route('user::stores') }}"><i class="fa  fa-plus"></i> Add New Store </a></li>
               </ul>
 			</li>
 

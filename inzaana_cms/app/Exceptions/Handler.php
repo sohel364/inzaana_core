@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Foundation\Validation\ValidationException;
+use Illuminate\Exception\SymfonyDisplayer;
 
 use Log;
 use PDOException;
@@ -61,9 +62,14 @@ class Handler extends ExceptionHandler
             return redirect()->back();
         }
         if ($e instanceof PDOException) {
-            $errorMessage = 'Something went wrong while connecting database. Please contact your server administrator.';
-            Log::critical('[Inzaana][' . $e->getMessage() . "] db connection problem.");
-            flash()->error($errorMessage);
+            $errorMessage['DEFAULT'] = 'Something went wrong while connecting database. Please contact your server administrator.';
+            $errorMessage['42S22'] = 'Your information contains data that has no property in database. Please contact Inzaana for help.';
+            $errorCode = $e->getCode();
+            if(!$errorMessage[$errorCode])
+                $errorCode = 'DEFAULT';
+
+            Log::critical('[Inzaana][' . $e->getMessage() . "] " . $errorMessage[$errorCode] . ".");
+            flash()->error($errorMessage[$errorCode]);
             return redirect()->back();
         }
         if ($e instanceof QueryException) {
