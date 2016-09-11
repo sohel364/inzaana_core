@@ -229,27 +229,61 @@ class UserController extends Controller
         return redirect()->route('guest::home');
     }
 
+
+    /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    private function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'required|confirmed|min:6',
+        ]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return view('edit-profile')->withUser($user);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $inputs = [
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'phone_number' => $request->input('contact-number'),
+            'password' => $request->input('password'),
+        ];
+        $validator = validator($inputs);
+        if($validator->fails())
+        {
+            return redirect()->back()->withErrors($validator->errors())->withInputs();
+        }
+        $user->name = $inputs['name'];
+        $user->email = $inputs['email'];
+        $user->phone_number = $inputs['phone_number'];
+        $user->password = bcrypt($inputs['password']);
+        $user->address = $inputs['address'];
+        if(!$user->save())
+            return redirect()->back()->withErrors(['Failed to update your profile.']);
+        return redirect()->back();
     }
 
     /**

@@ -59,7 +59,7 @@
 
             <li class="dropdown topbar-user">
               <a data-hover="dropdown" href="#" class="dropdown-toggle">
-                <img src="{{ URL::asset('user_admin_dashboard_asset/images/48.jpg') }}" alt="" class="img-responsive img-circle" />&nbsp;<span class="hidden-xs">Hi, {{ $user->name }}</span>&nbsp;<span class="caret"></span>
+                <img src="{{ asset('/dist/img/user2-160x160.jpg') }}" alt="" class="img-responsive img-circle" />&nbsp;<span class="hidden-xs">Hi, {{ $user->name }}</span>&nbsp;<span class="caret"></span>
               </a>
               <ul class="dropdown-menu dropdown-user pull-right">
                 <li><a href="#"><i class="fa fa-user"></i>My Profile</a></li>

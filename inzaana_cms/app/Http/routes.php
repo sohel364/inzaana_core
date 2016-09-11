@@ -88,7 +88,8 @@ Route::group(['middleware' => 'web'], function () {
             });
             Route::get('/admin', [ 'uses' => 'UserController@redirectToDashboardAdmin', 'as' => 'admin.dashboard' ]);
             Route::get('/customer', [ 'uses' => 'UserController@redirectToDashboardCustomer', 'as' => 'customer.dashboard' ]);
-
+            Route::get('/edit/users/{user}', [ 'uses' => 'UserController@edit', 'as' => 'edit' ]);
+            Route::post('/update/users/{user}', [ 'uses' => 'UserController@update', 'as' => 'update' ]);
         });
 
         Route::get('/user_my_order', [ 'uses' => 'UserController@usermyorder', 'as' => 'orders' ]);

@@ -1,14 +1,14 @@
 @extends('layouts.admin-master')
-@section('title', 'Edit Profile')
+@section('title', 'Update Profile')
 
 @section('breadcumb')
 <h1>Edit
-<small>Edit Profile</small>
+<small>Update Profile</small>
 </h1>
 <ol class="breadcrumb">
     <li><a href="#"><i class="fa fa-cubes"></i> Home</a></li>
     <li>Profile</li>
-    <li class="active">Edit profile</li>
+    <li class="active">Update profile</li>
 </ol>
 @endsection
 
@@ -24,38 +24,57 @@
             <div class="box box-noborder">
 
               <div class="box-header with-border">
-                <h3 class="box-title">Edit your profile below</h3>
+                <h3 class="box-title">Update your profile below</h3>
               </div>
 
+              @if(isset($user))
               <!-- form start -->
-              <form role="form" action="#" method="POST">
+              <form role="form" action="{{ route('user::update', [$user]) }}" method="POST">
 
                 {!! csrf_field() !!}
 
                 <div class="box-body">
                   <div class="form-group">
-                    <label for="first-name">First Name</label>
-                    <input type="text" class="form-control" value="{{ isset($ProfileEdit) ? $ProfileEdit->Profile_name : '' }}" id="first-name" name="first-name" placeholder="Your first name..">
-                  </div>
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" value="{{ $user->name or '' }}" id="name" name="name" placeholder="Your name..">
 
-                  <div class="form-group">
-                    <label for="first-name">Last Name</label>
-                    <input type="text" class="form-control" value="{{ isset($ProfileEdit) ? $ProfileEdit->Profile_name : '' }}" id="last-name" name="last-name" placeholder="Your last name..">
+                    @if ($errors->has('name'))
+                        <span class="help-block">
+                              <strong>{{ $errors->first('name') }}</strong>
+                          </span>
+                    @endif
                   </div>
 
                   <div class="form-group">
                     <label for="contact-number">Contact Number</label>
-                    <input type="text" class="form-control" value="{{ isset($ProfileEdit) ? $ProfileEdit->Contact_number : '' }}" id="contact-address" name="contact-number" placeholder="Your contact number..">            
+                    <input type="text" class="form-control" value="{{ $user->phone_number or '' }}" id="contact-number" name="contact-number" placeholder="Your contact number..">            
+
+                    @if ($errors->has('contact-number'))
+                        <span class="help-block">
+                              <strong>{{ $errors->first('contact-number') }}</strong>
+                          </span>
+                    @endif
                   </div>
 
                   <div class="form-group">
-                    <label for="email-address">Email Address</label>
-                    <input type="text" class="form-control" value="{{ isset($ProfileEdit) ? $ProfileEdit->Email_address : '' }}" id="email-address" name="email-name" placeholder="Your email address..">            
-                  </div>
+                    <label for="email">Email Address</label>
+                    <input type="text" class="form-control" value="{{ $user->email or '' }}" id="email" name="email" placeholder="Your email address..">            
 
+                    @if ($errors->has('email'))
+                        <span class="help-block">
+                              <strong>{{ $errors->first('email') }}</strong>
+                          </span>
+                    @endif
+                  </divprofile
                   <div class="form-group">
                     <label for="address">Address</label>
-                    <input type="text" class="form-control" value="{{ isset($ProfileEdit) ? $ProfileEdit->Mailing_address : '' }}" id="mailing-address" name="mailing-address" placeholder="Your mailing address..">            
+                    <input type="text" class="form-control" value="{{ $user->address or '' }}" id="mailing-address" name="mailing-address" placeholder="Your mailing address..">            
+
+                    @if ($errors->has('mailing-address'))
+                        <span class="help-block">
+                              <strong>{{ $errors->first('mailing-address') }}</strong>
+                          </span>
+                    @endif
                   </div>
 
                   <div class="row">
@@ -86,10 +105,15 @@
                 </div><!-- /.box-body -->
 
                 <div class="box-footer text-right">
-                  <button type="submit" class="btn btn-info btn-flat">{{ isset($ProfileEdit) ? 'Update' : 'Update' }} Profile</button>
+                  <button type="submit" class="btn btn-info btn-flat">Update Profile</button>
                 </div>
               </form>
               <!--end of form-->
+              @else
+
+                  <h2>Oops! Looks like you are incognito! Come back again by logging in again.</h2>
+
+              @endif
 
             </div>
           </div>

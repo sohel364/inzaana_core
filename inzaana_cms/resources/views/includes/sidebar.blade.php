@@ -26,32 +26,34 @@
           <ul class="sidebar-menu">
             <!--<li class="header">MAIN NAVIGATION</li>-->
             <li class="active treeview">
-              <a href="#">
+              <a href="{{ route('user::home') }}">
                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
               </a>
             </li>		
-			
-			<li class="treeview">
-              <a href="#">
-                <i class="fa fa-globe"></i> <span>Store <small class="label bg-green">{{ Inzaana\Store::count() }}</small></span> 
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="{{ route('user::stores') }}"><i class="fa fa-list"></i> My Stores </a></li>
-                <li><a href="{{ route('user::stores') }}"><i class="fa  fa-plus"></i> Add New Store </a></li>
-              </ul>
-			</li>
 
-			<li class="treeview">
-              <a href="#">
-                <i class="fa fa-dollar"></i> <span>Subscription</span>
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="/dashboard/vendor/plan"><i class="fa fa-list"></i> View Plan </a></li>
-                <li><a href="/dashboard/vendor/view-my-subscription"><i class="fa  fa-dashboard"></i> My Subscription </a></li>
-              </ul>
-			</li>
+      			<li class="treeview">
+                    <a href="#">
+                      <i class="fa fa-dollar"></i> <span>Subscription</span>
+                      <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                      <li><a href="/dashboard/vendor/plan"><i class="fa fa-list"></i> View Plan </a></li>
+                      <li><a href="/dashboard/vendor/view-my-subscription"><i class="fa  fa-dashboard"></i> My Subscription </a></li>
+                    </ul>
+      			</li>
+
+      @if($user->subscribed('main'))
+            
+            <li class="treeview">
+                    <a href="#">
+                      <i class="fa fa-globe"></i> <span>Store <small class="label bg-green">{{ Inzaana\Store::count() }}</small></span> 
+                      <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                      <li><a href="{{ route('user::stores') }}"><i class="fa fa-list"></i> My Stores </a></li>
+                      <li><a href="{{ route('user::stores') }}"><i class="fa  fa-plus"></i> Add New Store </a></li>
+                    </ul>
+            </li>
 
             <li class="treeview">
               <a href="#">
@@ -64,6 +66,7 @@
                 <li><a href="{{ route('user::categories') }}"><i class="fa fa-list-ol"></i> List All Categories</a></li>
               </ul>
             </li>
+
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-cubes"></i> <span>Products <small class="label bg-green">{{ Auth::user()->products->count() }}</small></span> 
@@ -78,6 +81,7 @@
                 <li><a href="/products"><i class="fa  fa-comments"></i> Reviews <small class="label bg-green">5</small></a></li>
               </ul>
             </li>
+
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-question-circle"></i>
@@ -89,6 +93,7 @@
                 <li><a href="pages/charts/morris.html"><i class="fa fa-list-ol"></i> FAQ Category</a></li>
               </ul>
             </li>
+
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-shopping-cart"></i>
@@ -102,6 +107,7 @@
                 <li><a href="#"><i class="fa fa-exclamation-triangle"></i> Returns <small class="label bg-red">5</small></a></li>
               </ul>
             </li>
+
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-users"></i> 
@@ -333,6 +339,7 @@
         				<!--<i class="fa fa-angle-left pull-right"></i>-->
       			  </a>
             </li>
+            @endif
           </ul>
         </section>
         <!-- /.sidebar -->
