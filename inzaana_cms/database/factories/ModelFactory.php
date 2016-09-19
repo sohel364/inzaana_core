@@ -14,9 +14,21 @@
 $factory->define(Inzaana\User::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
-        'email' => $faker->email,
+        'email' => $faker->unique()->email,
         'password' => bcrypt(str_random(10)),
         'verified' => true,
         'remember_token' => str_random(10),
+    ];
+});
+
+$factory->define(Inzaana\Store::class, function (Faker\Generator $faker) {
+	$storeName = $faker->name;
+    return [
+        'name' => $storeName,
+        'domain' => $faker->tld,
+        'name_as_url' => strtolower(str_replace(' ', '', $storeName)),
+        'sub_domain' => 'inzaana',
+        'store_type' => $faker->word,
+        'description' => $faker->realText($faker->numberBetween(50,100)),
     ];
 });
