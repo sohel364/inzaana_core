@@ -4,6 +4,7 @@ namespace Inzaana\Http\Controllers;
 
 use Auth;
 use Session;
+use Validator;
 use Inzaana\User;
 use Inzaana\Mailers\AppMailer;
 use Illuminate\Http\Request;
@@ -236,13 +237,9 @@ class UserController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    private function validator(array $data)
+    private function validator(array $data, array $rules)
     {
-        return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|confirmed|min:6',
-        ]);
+        return Validator::make($data, $rules);
     }
 
     /**
@@ -265,24 +262,48 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $inputs = [
+        $rules = collect([
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'confirmed|min:6',
+            'phone_number' => 'required|min:11',
+        ]);
+
+        $inputs = collect([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'phone_number' => $request->input('contact-number'),
-            'password' => $request->input('password'),
-        ];
-        $validator = validator($inputs);
+            'address' => $request->input('mailing-address'),
+        ]);
+
+        if($request->input('email') == $user->email)
+        {
+            $inputs = $inputs->forget('email');
+            $rules = $rules->forget('email');
+        }
+
+        if($request->has('password'))
+        {
+            $inputs = $inputs->merge([
+                'password' => $request->input('password'),
+            ]);
+        }
+
+        $validator = $this->validator($inputs->toArray(), $rules->toArray());
         if($validator->fails())
         {
-            return redirect()->back()->withErrors($validator->errors())->withInputs();
+            return redirect()->back()->withErrors($validator->errors());
         }
         $user->name = $inputs['name'];
-        $user->email = $inputs['email'];
-        $user->phone_number = $inputs['phone_number'];
-        $user->password = bcrypt($inputs['password']);
         $user->address = $inputs['address'];
+        if($inputs->has('email'))
+            $user->email = $inputs['email'];
+        $user->phone_number = $inputs['phone_number'];
+        if($inputs->has('password'))
+            $user->password =  bcrypt($inputs['password']);
         if(!$user->save())
             return redirect()->back()->withErrors(['Failed to update your profile.']);
+        flash()->success('You have updated your profile successfully!');
         return redirect()->back();
     }
 

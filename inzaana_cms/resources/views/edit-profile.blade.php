@@ -34,7 +34,7 @@
                 {!! csrf_field() !!}
 
                 <div class="box-body">
-                  <div class="form-group">
+                  <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                     <label for="name">Name</label>
                     <input type="text" class="form-control" value="{{ $user->name or '' }}" id="name" name="name" placeholder="Your name..">
 
@@ -45,18 +45,18 @@
                     @endif
                   </div>
 
-                  <div class="form-group">
+                  <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
                     <label for="contact-number">Contact Number</label>
-                    <input type="text" class="form-control" value="{{ $user->phone_number or '' }}" id="contact-number" name="contact-number" placeholder="Your contact number..">            
+                    <input type="text" class="form-control" value="{{ $user->phone_number or '' }}" id="contact-number" name="contact-number" placeholder="Your contact number...">            
 
-                    @if ($errors->has('contact-number'))
+                    @if ($errors->has('phone_number'))
                         <span class="help-block">
-                              <strong>{{ $errors->first('contact-number') }}</strong>
+                              <strong>{{ $errors->first('phone_number') }}</strong>
                           </span>
                     @endif
                   </div>
 
-                  <div class="form-group">
+                  <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                     <label for="email">Email Address</label>
                     <input type="text" class="form-control" value="{{ $user->email or '' }}" id="email" name="email" placeholder="Your email address..">            
 
@@ -65,14 +65,14 @@
                               <strong>{{ $errors->first('email') }}</strong>
                           </span>
                     @endif
-                  </divprofile
-                  <div class="form-group">
+                  </div>
+                  <div class="form-group ">
                     <label for="address">Address</label>
                     <input type="text" class="form-control" value="{{ $user->address or '' }}" id="mailing-address" name="mailing-address" placeholder="Your mailing address..">            
 
-                    @if ($errors->has('mailing-address'))
+                    @if ($errors->has('address'))
                         <span class="help-block">
-                              <strong>{{ $errors->first('mailing-address') }}</strong>
+                              <strong>{{ $errors->first('address') }}</strong>
                           </span>
                     @endif
                   </div>
