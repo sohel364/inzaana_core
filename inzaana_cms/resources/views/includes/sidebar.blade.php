@@ -41,12 +41,10 @@
                       <li><a href="/dashboard/vendor/view-my-subscription"><i class="fa  fa-dashboard"></i> My Subscription </a></li>
                     </ul>
       			</li>
-
-      @if($user->subscribed('main'))
             
             <li class="treeview">
                     <a href="#">
-                      <i class="fa fa-globe"></i> <span>Store <small class="label bg-green">{{ Inzaana\Store::count() }}</small></span> 
+                      <i class="fa fa-globe"></i> <span>Store <small class="label bg-green">{{ collect(Inzaana\Store::whereUserId(Auth::user()->id)->get())->count() }}</small></span> 
                       <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
@@ -54,6 +52,8 @@
                       <li><a href="{{ route('user::stores') }}"><i class="fa  fa-plus"></i> Add New Store </a></li>
                     </ul>
             </li>
+
+      <!-- $user->subscribed('main') -->
 
             <li class="treeview">
               <a href="#">
@@ -318,7 +318,7 @@
                 </li>
               </ul>
             </li>
-            <li class="treeview">
+            <li id="foo" class="treeview">
       			  <a href="{{ route('user::templates') }}">
         				<span>Browse Templates</span>
         				<i class="fa fa-angle-left pull-right"></i>
@@ -327,19 +327,13 @@
       				  @include('editor.template-list-view')
       			  </ul>
             </li>
-            <li class=" treeview">
+            <li class="treeview">
       			  <a href="{{ route('user::templates.saved') }}">
         				<span>My Templates</span>
         				<!--<i class="fa fa-angle-left pull-right"></i>-->
       			  </a>
             </li>
-            <li class=" treeview">
-      			  <a href="/super-admin">
-        				<span>Super Admin</span>
-        				<!--<i class="fa fa-angle-left pull-right"></i>-->
-      			  </a>
-            </li>
-            @endif
+
           </ul>
         </section>
         <!-- /.sidebar -->

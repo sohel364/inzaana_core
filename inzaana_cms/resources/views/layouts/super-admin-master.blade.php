@@ -62,7 +62,7 @@
                 <img src="{{ asset('/dist/img/user2-160x160.jpg') }}" alt="" class="img-responsive img-circle" />&nbsp;<span class="hidden-xs">Hi, {{ $user->name }}</span>&nbsp;<span class="caret"></span>
               </a>
               <ul class="dropdown-menu dropdown-user pull-right">
-                <li><a href="#"><i class="fa fa-user"></i>My Profile</a></li>
+                <li><a href="{{ route('user::edit', [$user]) }}"><i class="fa fa-user"></i>My Profile</a></li>
                 <li><a href="#"><i class="fa fa-calendar"></i>My Calendar</a></li>
                 <li><a href="#"><i class="fa fa-envelope"></i>My Inbox</a></li>
                 <li><a href="#"><i class="fa fa-tasks"></i>My Tasks</a></li>

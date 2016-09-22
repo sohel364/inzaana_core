@@ -33,18 +33,18 @@
                 {!! csrf_field() !!}
 
                 <div class="box-body">
-                  <div class="form-group">
+                  <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                     <label for="Store-name">Store</label>
                     <input type="text" class="form-control" value="{{ isset($store) ? $store->name : '' }}" id="store-name" name="store_name" placeholder="Add your Store name here...">
-                    @if ($errors->has('store_name'))
+                    @if ($errors->has('name'))
                         <span class="help-block">
-                            <strong>{{ $errors->first('store_name') }}</strong>
+                            <strong>{{ $errors->first('name') }}</strong>
                         </span>
                     @endif
                   </div>
 
                   <div class="form-group">
-                    <label for="Store-type">I am going to sell</label>
+                    <label for="store-type">I am going to sell</label>
 
                     <select name="business" class="form-control" placeholder="Select a business area">
                       <option value="UNKNOWN" class="placehold">I'm not sure yet.</option>
@@ -56,9 +56,9 @@
                 
                   </div>
 
-                  <div class="form-group">
+                  <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
                     <label for="description">Store Description</label>
-                    <textarea placeholder="Add Store description here..." class="form-control" rows="5" id="description" name="description">{{ isset($storeEdit) ? $storeEdit->description : '' }}</textarea>
+                    <textarea placeholder="Add Store description here..." class="form-control" rows="5" id="description" name="description">{{ isset($store) ? $store->description : '' }}</textarea>
                     @if ($errors->has('description'))
                         <span class="help-block">
                             <strong>{{ $errors->first('description') }}</strong>
@@ -108,7 +108,7 @@
                         <!-- <td class="text-center" id="child"><a href="">001</a> </td> -->
                         <td class="text-center" id="child"><a href="">{{ $store->name }}</a></td>
                         <td class="text-center" id="child">
-                          <a href="{{ route('user::stores.redirect', [ 'site' => $store->name_as_url . '.' . $store->sub_domain . '.' . $store->domain ] ) }}">{{ $store->name_as_url . '.' . $store->sub_domain . '.' . str_replace('.', '', $store->domain) }}</a>
+                          <a href="{{ route('user::stores.redirect', [ 'site' => str_replace('.', '', $store->name_as_url) . '.' . $store->sub_domain . '.' . $store->domain ] ) }}">{{ str_replace('.', '', $store->name_as_url) . '.' . $store->sub_domain . '.' . str_replace('.', '', $store->domain) }}</a>
                         </td>
                         <td class="text-center" id="child"><a href="">{{ $store->description or 'This is a store named ' . $store->name }}</a></td>
                         <td class="text-center" id="child">

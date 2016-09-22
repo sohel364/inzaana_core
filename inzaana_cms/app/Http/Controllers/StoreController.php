@@ -18,6 +18,7 @@ class StoreController extends Controller
 {
     
     private $_viewData = [];
+    private $_rules = [];
 
 	/**
      * Create a new authentication controller instance.
@@ -31,13 +32,25 @@ class StoreController extends Controller
             'user' => Auth::user(),
             'stores' => Store::all()
         ];
+
+        $this->_rules = collect([
+            'name' => 'required|unique:stores|max:30',
+            'sub_domain' => 'required',
+            'domain' => 'required',
+            'description' => 'max:1000'
+        ]);
+    }
+
+    private function viewUserStore(array $data)
+    {
+        return view('add-store', $data)->withUser(Auth::user()->id)
+                                ->withStores(collect(Store::whereUserId(Auth::user()->id)->get()))
+                                ->withTypes(collect(Store::types())->first());
     }
 
     public function index()
     {
-        return view('add-store')->withUser(Auth::user())
-                                ->withStores(Store::all())
-                                ->withTypes(collect(Store::types())->first());
+        return $this->viewUserStore([]);
     }
 
     public function redirectUrl($site)
@@ -45,14 +58,9 @@ class StoreController extends Controller
         return StoreRedirect::to('http://' . $site . '/showcase');
     }
 
-    private function validator(array $data)
+    private function validator(array $data, array $rules)
     {
-        return StoreValidator::make($data, [
-            'name' => 'required|unique:stores|max:30',
-            'sub_domain' => 'required',
-            'domain' => 'required',
-            // 'description' => 'max:1000'
-        ]);
+        return StoreValidator::make($data, $rules);
     }
 
     public function delete(Store $store)
@@ -70,30 +78,37 @@ class StoreController extends Controller
 
     public function update(Store $store)
     {
-        return view('add-store', compact('store'))->withUser(Auth::user())
-                                ->withStores(Store::all())
-                                ->withTypes(collect(Store::types())->first());
+        return $this->viewUserStore(compact('store'));
     }
 
     public function postUpdate(StoreRequest $request, Store $store)
     {
         $storeName = $request->input('store_name');
-        $data = [
+        $data = collect([
             'name' => $storeName,
             'sub_domain' => 'inzaana',
             'domain' => str_replace('.', '', '.net'),
-            // 'description' => $request->input('description')
+            'description' => $request->input('description')
 
-        ];
-        $validator = $this->validator($data);
+        ]);
+        $rules = $this->_rules;
+        if($storeName == $store->name)
+        {
+            $data = $data->forget('name');
+            $rules = $rules->forget('name');
+        }
+        $validator = $this->validator($data->toArray(), $rules->toArray());
         if ($validator->fails())
         {            
-            return redirect()->back()->withErrors($validator->errors())->withInputs();
+            return redirect()->back()->withErrors($validator->errors());
         }
-
-        $store->name = $data['name'];
-        $store->name_as_url = strtolower(str_replace(' ', '', $data['name']));
-        // $store->description = $data['description'];
+        if($data->has('name'))
+        {
+            $store->name = $data['name'];
+            $store->name_as_url = strtolower(str_replace(' ', '', $data['name'])); // trims out the spaces
+            $store->name_as_url = str_replace('.', '', $store->name_as_url); // removes '.' character
+        }
+        $store->description = $data['description'];
 
         $errors['update_failed'] = 'The store (' . $store->name . ') update is failed!';
         if(!$store->save())
@@ -112,10 +127,10 @@ class StoreController extends Controller
             'description' => $request->input('description')
 
         ];
-        $validator = $this->validator($data);
+        $validator = $this->validator($data, $this->_rules->toArray());
         if ($validator->fails())
         {            
-            return redirect()->back()->withErrors($validator->errors())->withInputs();
+            return redirect()->back()->withErrors($validator->errors())->withInput();
         }        
         $store = Store::create([
             'name' => $store,
@@ -123,8 +138,9 @@ class StoreController extends Controller
             'name_as_url' => strtolower(str_replace(' ', '', $store)),
             'sub_domain' => $data['sub_domain'],
             'domain' => $data['domain'],
-            // 'description' => $data['description']
-        ]);
+            'description' => $data['description']
+        ]);        
+        $store->name_as_url = str_replace('.', '', $store->name_as_url); // removes '.' character
         if(!$store)
         {
             $message = 'Failed to create store named (' . $store->name . ')';
@@ -148,8 +164,6 @@ class StoreController extends Controller
         $subdomain = $keywords[1];
         $domain = $keywords[2];
 
-        // dd(Auth::user()->id);
-
         $store = Store::create([
             'name' => $name,
             'user_id' => Auth::user()->id,
@@ -157,15 +171,12 @@ class StoreController extends Controller
             'sub_domain' => $subdomain,
             'domain' => $domain
         ]);
-
+        $store->name_as_url = str_replace('.', '', $store->name_as_url); // removes '.' character
         if(!$store)
         { 
             $errors['store'] = 'Failed to create store! Please check your shop name again.';
             return response()->view('home', [ 'errors' => collect($errors) ]);  
         }
-
-        // @NOTE: Example code for site redirection
-        // return StoreRedirect::to('http://' . $site . '/stores');
         return redirect()->route('user::vendor.dashboard');
     }
 }
