@@ -142,8 +142,14 @@ class UserController extends Controller
                  * Method call from Route::get('/dashboard/vendor/plan', [ 'uses' => 'UserController@redirectToVendorPlan', 'as' => 'vendor.plan' ]);
                  * */
                 $plan = StripePlan::where('active','=','1')->get();
-                return view('super-admin.dashboard',compact('plan'))->with('user', Auth::user())
+                $response = view('super-admin.dashboard',compact('plan'))->with('user', Auth::user())
                                                     ->with('authenticated', Auth::check());
+                if(session()->has('approvals'))
+                {
+                    $approvals = session('approvals');
+                    return $response->withApprovals($approvals)->withTotalApprovals($this->totalApprovals($approvals));
+                }
+                return $response;
             }
             if($user->stores()->count() == 0)
             { 
@@ -305,6 +311,36 @@ class UserController extends Controller
             return redirect()->back()->withErrors(['Failed to update your profile.']);
         flash()->success('You have updated your profile successfully!');
         return redirect()->back();
+    }
+
+    public function approvals()
+    {
+        return redirect()->route('user::categories.approvals');
+    }
+
+    public function manageApprovals()
+    {
+        $response = view('manage-approvals')->withUser(Auth::user());
+        if(session()->has('approvals'))
+        {
+            $approvals = session('approvals');
+            return $response->withApprovals($approvals)->withTotalApprovals($this->totalApprovals($approvals));          
+        }
+        return $response;
+    }
+
+    private static function totalApprovals(array $approvals)
+    {
+        $total = 0;
+        if(array_has($approvals, 'categories'))
+        {
+            $total += $approvals['categories']['data']->count();   
+        }
+        if(array_has($approvals, 'products'))
+        {
+            $total += $approvals['products']['data']->count();   
+        }
+        return $total;
     }
 
     /**

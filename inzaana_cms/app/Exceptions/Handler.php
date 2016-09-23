@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Foundation\Validation\ValidationException;
-use Illuminate\Exception\SymfonyDisplayer;
+// use Illuminate\Exception\SymfonyDisplayer;
 
 use Log;
 use PDOException;
@@ -78,19 +78,19 @@ class Handler extends ExceptionHandler
             flash()->error($errorMessage);
             return redirect()->back();
         }
-        if ($e instanceof HttpException) {
-            $status = $e->getStatusCode();
-            $errors[403] = 'You are not authorized to route this action as you are tried. Please follow the routes as we guide you.';
+        // if ($e instanceof HttpException) {
+        //     $status = $e->getStatusCode();
+        //     $errors[403] = 'You are not authorized to route this action as you are tried. Please follow the routes as we guide you.';
 
-            if (view()->exists("errors.{$status}"))
-            {
-                return response()->view("errors.{$status}", [ 'errors' => collect($errors) ], $status);
-            }
-            else
-            {
-                return (new SymfonyDisplayer(config('app.debug')))->createResponse($e);
-            }
-        }
+        //     if (view()->exists("errors.{$status}"))
+        //     {
+        //         return response()->view("errors.{$status}", [ 'errors' => collect($errors) ], $status);
+        //     }
+        //     else
+        //     {
+        //         return (new SymfonyDisplayer(config('app.debug')))->createResponse($e);
+        //     }
+        // }
         if ($e instanceof ValidationException) {
             $errorMessage = 'Please fill up all necessary fields.';
             Log::critical('[Inzaana][' . $e->getMessage() . "] validation error.");

@@ -24,11 +24,12 @@ class Store extends Model
 
     public static function types()
     {
-        return [
-            'id' => [ 0, 1, 2, 3, 4 ],
-            'title' => [ 
-                'I\'m not sure yet.', 'Animal &amp; Pet', 'Art &amp; Entertainment', 'Hardware or Home/Garden Improvement', 'Others / something else...'
-            ]
-        ]; 
+        return collect([
+            ['id' => 'NOT_SURE', 'title' => 'I\'m not sure yet.'],
+            ['id' => 'ANIMAL_PET', 'title' => 'Animal &amp; Pet'],
+            ['id' => 'ART_ENTERTAINMENT', 'title' => 'Art &amp; Entertainment'],
+            ['id' => 'HARDWARE_HOME_DEVELOPMENT', 'title' => 'Hardware or Home/Garden Improvement'],
+            ['id' => 'OTHERS', 'title' => 'Others / something else...'],
+        ]);
     }
 }

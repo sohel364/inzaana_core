@@ -38,6 +38,8 @@ Route::group(['middleware' => 'web'], function () {
         Route::post('/super-admin/delete-plan', [ 'uses' => 'StripeController@deletePlan', 'as'=> 'deletePlan']);
         Route::post('/super-admin/view-plan/ajax/update', [ 'uses' => 'StripeController@updateStatus', 'as'=> 'updateStatus']);
         Route::get('/super-admin/view-subscriber', [ 'uses' => 'StripeController@viewSubscriber', 'as'=> 'viewSubscriber']);
+        Route::get('/super-admin/approvals', [ 'uses' => 'UserController@approvals', 'as'=> 'approvals']);
+        Route::get('/super-admin/approvals/manage', [ 'uses' => 'UserController@manageApprovals', 'as'=> 'approvals.manage']);
     });
     Route::auth();
 
@@ -122,6 +124,7 @@ Route::group(['middleware' => 'web'], function () {
         Route::post('/products/sell-yours/{id}', [ 'uses' => 'ProductController@copy', 'as' => 'products.sell-yours' ]);
         Route::post('/products/edit/{product_id}', [ 'uses' => 'ProductController@edit', 'as' => 'products.edit' ]);
         Route::post('/products/delete/{product_id}', [ 'uses' => 'ProductController@delete', 'as' => 'products.delete' ]);
+        Route::get('/products/approvals', [ 'uses' => 'ProductController@approvals', 'as' => 'products.approvals' ]);
 
         // Category controller
         Route::get('/categories', [ 'uses' => 'CategoryController@index', 'as' => 'categories' ]);
@@ -129,6 +132,7 @@ Route::group(['middleware' => 'web'], function () {
         Route::get('/categories/edit/{category_id}', [ 'uses' => 'CategoryController@edit', 'as' => 'categories.edit' ]);
         Route::post('/categories/edit/{category_id}', [ 'uses' => 'CategoryController@postEdit', 'as' => 'categories.update' ]);
         Route::post('/categories/delete/{category_id}', [ 'uses' => 'CategoryController@delete', 'as' => 'categories.delete' ]);
+        Route::get('/categories/approvals', [ 'uses' => 'CategoryController@approvals', 'as' => 'categories.approvals' ]);
 
         // HTML view menu controller
         Route::post('/html-view-menus/{template_id}', [ 'uses' => 'HtmlViewMenuController@contents', 'as' => 'menus.contents' ]);

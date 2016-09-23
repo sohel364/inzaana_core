@@ -1,4 +1,4 @@
-@extends('layouts.admin-master')
+@extends('layouts.super-admin-master')
 @section('title', 'Manage Approvals')
 
 @section('breadcumb')
@@ -32,28 +32,40 @@
                   <table id="parent" class="table table-hover">
                     <tr>
                       <!-- <th class="text-center hidden">ID</th> -->
-                      <th class="text-center">SL</th>
                       <th class="text-center">Approval Type</th>
                       <th class="text-center">Approval Title</th>
                       <th class="text-center">Submitted by</th>
                       <th class="text-center">Status</th>
                       <th class="text-center">Action</th>
                     </tr>
-                    <tr>
-                      <!-- <th class="text-center hidden">ID</th> -->
-                      <th class="text-center">1</th>
-                      <th class="text-center">Sample</th>
-                      <th class="text-center">Sample</th>
-                      <th class="text-center">Sample</th>
-                      <th class="text-center">
-                        <span class="label label-success">Approved</span>
-                        <span class="label label-warning">Pending</span>
-                      </th>
-                      <th class="text-center">
-                          <button type="button" class="btn btn-success">Approve</button>
-                          <button type="button" class="btn btn-danger">Reject</button>
-                      </th>
-                    </tr>
+                    @if(array_has($approvals, 'categories'))
+                      
+                      @forelse($approvals['categories']['data'] as $title => $id)
+                      <tr>
+                        <!-- <th class="text-center hidden">ID</th> -->
+                        <td class="text-center">{{ $approvals['categories']['type'] }}</td>
+                        <td class="text-center">{{ $title }}</td>
+                        <td class="text-center">{{ 'Unknown' }}</td>
+                        <td class="text-center">
+                          @if( Inzaana\Category::find($id)->status == 'APPROVED' )
+                          <span class="label label-success">Approved</span>
+                          @elseif( Inzaana\Category::find($id)->status == 'REJECTED' )
+                          <span class="label label-danger">Rejected</span>
+                          @else
+                          <span class="label label-warning">Pending</span>
+                          @endif
+                        </th>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-success">Approve</button>
+                            <button type="button" class="btn btn-danger">Reject</button>
+                        </td>
+                      </tr>
+                      @empty
+                      <tr>
+                        <td class="text-center" colspan="5"> No Approvals </td>
+                      </tr>
+                      @endforelse
+                    @endif
                   </table>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->

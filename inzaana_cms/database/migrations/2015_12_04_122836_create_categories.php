@@ -13,13 +13,15 @@ class CreateCategories extends Migration
     public function up()
     {
         Schema::create('categories', function (Blueprint $table) {
-        $table->bigIncrements('id');
-        $table->bigInteger('sup_category_id');
-        $table->string('category_name', 50);
-        $table->string('category_slug',100);
-        $table->string('description', 255);
-        $table->string('status');
-        $table->timestamps();        
+            $table->bigIncrements('id');
+            $table->bigInteger('sup_category_id');
+            $table->string('category_name', 50);
+            $table->string('category_slug',100);
+            $table->string('description', 255);
+            $table->enum('status', [
+                'REMOVED', 'ON_APPROVAL', 'APPROVED', 'REJECTED'
+            ]);
+            $table->timestamps();        
         });  //
     }
 
@@ -30,6 +32,6 @@ class CreateCategories extends Migration
      */
     public function down()
     {
-        Schema::drop('categories');//
+        Schema::drop('categories');
     }
 }

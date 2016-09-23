@@ -88,9 +88,16 @@
             <div class="clearfix"></div>
 
             <li class="active">
-              <a href="/super-admin">
+              <a href="{{ route('user::home') }}">
                 <i class="fa fa-home fa-fw"></i>
                 <span class="menu-title">Dashboard</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="{{ route('admin::approvals') }}">
+                <i class="fa fa-thumbs-up fa-fw"></i>
+                <span class="menu-title">Approvals {{ isset($total_approvals) ? '(' . $total_approvals . ')' : '' }}</span>
               </a>
             </li>
 

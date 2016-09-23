@@ -28,7 +28,9 @@ class CreateProducts extends Migration
         $table->string('photo_name');// will be considered as photo_url
         // $table->string('photo_size');
         // $table->string('photo_type');
-        $table->enum('status', ['OUT_OF_STOCK', 'AVAILABLE', 'NOT_AVAILABLE', 'ON_SHIPPING', 'REMOVED', 'COMING_SOON', 'SOLD', 'ORDERED']);
+        $table->enum('status', [
+            'OUT_OF_STOCK', 'AVAILABLE', 'NOT_AVAILABLE', 'ON_SHIPPING', 'REMOVED', 'COMING_SOON', 'SOLD', 'ORDERED', 'ON_APPROVAL', 'APPROVED', 'REJECTED'
+        ]);
         $table->timestamps();        
         });  //
     }

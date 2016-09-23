@@ -96,7 +96,7 @@ class ProductController extends Controller
             'product_discount' => $discount,
             'selling_price' => $this->getSellingPrice($mrp, $discount),
             'photo_name' => 'http://lorempixel.com/300/300/food',
-            'status' => 'OUT_OF_STOCK',
+            'status' => 'ON_APPROVAL',
         ]);
         if($product)
         {
@@ -119,8 +119,6 @@ class ProductController extends Controller
             $search_terms_slugged = str_slug($search_terms);
 
             $productsBySearch = Product::all()->where('product_title', $search_terms);
-            // return $productsBySearch;
-                                        // ->where('user_id', '!=', Auth::user()->id);
             $productsCount = $productsBySearch->count();
             return redirect()->route('user::products.search-terms', [$search_terms_slugged])
                                 ->with(compact('productsBySearch', 'productsCount'));
@@ -146,7 +144,7 @@ class ProductController extends Controller
         $product = $products->find($product_id);
         $categories = Category::all();
         // return redirect()->route('user::products')->with(compact('productsCount', 'products', 'categories'));
-        return view('add-product', compact('productsCount', 'products', 'categories'))->with('user', Auth::user());
+        return view('add-product', compact('productsCount', 'products', 'categories'))->withUser(Auth::user());
     }
 
     public function delete($product_id)
@@ -190,6 +188,7 @@ class ProductController extends Controller
                     'product_mrp' => $product->product_mrp,
                     'selling_price' => $product->product_mrp,
                     'photo_name' => $product->photo_name,
+                    'status' => 'ON_APPROVAL',
                 ]);
                 flash('Your selected product (' . $productCopied->product_title . ') is copied to your product list.');
             }
@@ -199,5 +198,22 @@ class ProductController extends Controller
             flash('Your selected product is invalid. Please conatct your administrator.');
         }
         return redirect()->route('user::products');
+    }
+
+    public function approvals()
+    {
+        $products = collect(Product::whereStatus('ON_APPROVAL')->get())->pluck( 'id', 'product_title' );
+        $approvals = [
+            'products' => [
+                'type' => Product::class,
+                'data' => $products
+            ]
+        ];
+        $response = redirect()->route('admin::approvals.manage');
+        if(session()->has('approvals'))
+        {
+            $approvals = collect(session('approvals'))->merge($approvals)->toArray();
+        }
+        return $response->withApprovals($approvals);
     }
 }

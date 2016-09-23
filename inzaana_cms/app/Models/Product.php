@@ -32,9 +32,12 @@ class Product extends Model
 
     public function getStatus()
     {
-        if($this->status == 'OUT_OF_STOCK')
+        switch($this->status)
         {
-            return 'Out of stock';
+            case 'OUT_OF_STOCK':    return 'Out of stock';
+            case 'ON_APPROVAL':     return 'On Apprval';
+            case 'APPROVED':        return 'Approved';
+            case 'REJECTED':        return 'Rejected';
         }
         return 'Unknown';
     }

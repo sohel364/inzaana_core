@@ -32,19 +32,20 @@ class CategoryController extends Controller
     public function index()
     {
         //
-        $categories = Category::all();
-        return view('add-category', compact('categories'))->with('user', Auth::user());
+        // $categories = Category::all(); , compact('categories')
+        return view('add-category')->withUser(Auth::user())
+                                   ->withCategories(Category::all());
     }
 
     public function create(CategoryRquest $request)
-    {    	
-        $categories = Category::all();
+    {
         $categoryName = $request->input('category-name');
         $category = Category::create([
         	'sup_category_id' => 0,
         	'category_name' => $request->input('category-name'),
         	'category_slug' => str_slug($categoryName),
         	'description' => $request->input('description'),
+            'status' => 'ON_APPROVAL',
         ]);
         if($category)
         {
@@ -54,7 +55,7 @@ class CategoryController extends Controller
         {
             flash('Your category (' . $category->category_name . ') is failed to submit for admin approval.');            
         }
-        return redirect()->route('user::categories')->with(compact('categories'));
+        return redirect()->route('user::categories'); //->withCategories(Category::all());
     }
 
     public function edit($category_id)
@@ -62,8 +63,7 @@ class CategoryController extends Controller
         # code...
         $categoryEdit = Category::find($category_id);
         $categories = Category::all();
-        // return redirect()->route('user::categories')->with(compact('categories', 'categoryEdit'));
-        return view('add-category', compact('categories', 'categoryEdit'))->with('user', Auth::user());
+        return view('add-category', compact('categories', 'categoryEdit'))->withUser(Auth::user());
     }
 
     public function postEdit(CategoryRquest $request, $category_id)
@@ -100,5 +100,17 @@ class CategoryController extends Controller
             flash('Your category (' . $category->category_name . ') is already removed or not in your list. Please contact your administrator to know category removal policy');
         }
         return redirect()->route('user::categories');
+    }
+
+    public function approvals()
+    {
+        $categories = collect(Category::whereStatus('ON_APPROVAL')->orWhere('status', 'REJECTED')->orWhere('status', 'APPOVED')->get())->pluck( 'id', 'category_name' );
+        $approvals = [
+            'categories' => [
+                'type' => Category::class,
+                'data' => $categories
+            ]
+        ];
+        return redirect()->route('user::products.approvals')->withApprovals($approvals);
     }
 }

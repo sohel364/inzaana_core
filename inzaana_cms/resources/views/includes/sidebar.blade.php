@@ -53,6 +53,27 @@
                     </ul>
             </li>
 
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-list"></i>
+                <span>Categories <small class="label bg-green">{{ Inzaana\Category::count() }}</small></span> 
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="{{ route('user::categories') }}"><i class="fa fa-plus"></i> Add New Category</a></li>
+              </ul>
+            </li>
+
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-cubes"></i> <span>Products <small class="label bg-green">{{ Auth::user()->products->count() }}</small></span> 
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+                <ul class="treeview-menu">
+                <li><a href="{{ route('user::products') }}"><i class="fa  fa-plus"></i> Add New Product</a></li>
+              </ul>
+            </li>
+
       <!-- $user->subscribed('main') -->
 
             <li class="treeview">
@@ -318,7 +339,7 @@
                 </li>
               </ul>
             </li>
-            <li id="foo" class="treeview">
+            <li class="treeview">
       			  <a href="{{ Auth::user()->subscribed('main') ? route('user::templates') : '#' }}">
         				<span>Browse Templates</span>
         				<i class="fa fa-angle-left pull-right"></i>
