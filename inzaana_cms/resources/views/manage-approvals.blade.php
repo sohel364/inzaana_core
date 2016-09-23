@@ -38,12 +38,11 @@
                       <th class="text-center">Status</th>
                       <th class="text-center">Action</th>
                     </tr>
-                    @if(array_has($approvals, 'categories'))
-                      
-                      @forelse($approvals['categories']['data'] as $title => $id)
+                    @foreach(collect($approvals) as $type => $approval)
+                      @forelse($approval['data'] as $title => $id)
                       <tr>
                         <!-- <th class="text-center hidden">ID</th> -->
-                        <td class="text-center">{{ $approvals['categories']['type'] }}</td>
+                        <td class="text-center">{{ $approval['type'] }}</td>
                         <td class="text-center">{{ $title }}</td>
                         <td class="text-center">{{ 'Unknown' }}</td>
                         <td class="text-center">
@@ -56,22 +55,36 @@
                           @endif
                         </th>
                         <td class="text-center">
-                          @if( Inzaana\Category::find($id)->status == 'APPROVED' )
-                            <button type="button" class="btn btn-danger">Reject</button>
-                          @elseif( Inzaana\Category::find($id)->status == 'REJECTED' )
-                            <button type="button" class="btn btn-success">Approve</button>
-                          @else
-                            <button type="button" class="btn btn-success">Approve</button>
-                            <button type="button" class="btn btn-danger">Reject</button>
+                          @if($approval['type'] == Inzaana\Category::class)
+                            @if( Inzaana\Category::find($id)->status == 'APPROVED' )
+                              <button type="button" class="btn btn-danger">Reject</button>
+                            @elseif( Inzaana\Category::find($id)->status == 'REJECTED' )
+                              <button type="button" class="btn btn-success">Approve</button>
+                            @else
+                              <button type="button" class="btn btn-success">Approve</button>
+                              <button type="button" class="btn btn-danger">Reject</button>
+                            @endif
+
+                          @elseif($approval['type'] == Inzaana\Product::class)
+
+                            @if( Inzaana\Category::find($id)->status == 'APPROVED' )
+                              <button type="button" class="btn btn-danger">Reject</button>
+                            @elseif( Inzaana\Category::find($id)->status == 'REJECTED' )
+                              <button type="button" class="btn btn-success">Approve</button>
+                            @else
+                              <button type="button" class="btn btn-success">Approve</button>
+                              <button type="button" class="btn btn-danger">Reject</button>
+                            @endif
+
                           @endif
                         </td>
                       </tr>
                       @empty
                       <tr>
-                        <td class="text-center" colspan="5"> No Approvals </td>
+                        <td class="text-center" colspan="5"> <span class="label label-success"> No Approvals for {{ $type }} </span></td>
                       </tr>
                       @endforelse
-                    @endif
+                    @endforeach
                   </table>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
