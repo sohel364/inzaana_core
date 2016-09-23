@@ -46,36 +46,17 @@
                         <td class="text-center">{{ $title }}</td>
                         <td class="text-center">{{ 'Unknown' }}</td>
                         <td class="text-center">
-                          @if( Inzaana\Category::find($id)->status == 'APPROVED' )
-                          <span class="label label-success">Approved</span>
-                          @elseif( Inzaana\Category::find($id)->status == 'REJECTED' )
-                          <span class="label label-danger">Rejected</span>
-                          @else
-                          <span class="label label-warning">Pending</span>
+                          @if($approval['type'] == Inzaana\Category::class)
+                            @include('includes.approval-label', [ 'status' => Inzaana\Category::find($id)->status ])
+                          @elseif($approval['type'] == Inzaana\Product::class)
+                            @include('includes.approval-label', [ 'status' => Inzaana\Product::find($id)->status ])
                           @endif
                         </th>
                         <td class="text-center">
                           @if($approval['type'] == Inzaana\Category::class)
-                            @if( Inzaana\Category::find($id)->status == 'APPROVED' )
-                              <button type="button" class="btn btn-danger">Reject</button>
-                            @elseif( Inzaana\Category::find($id)->status == 'REJECTED' )
-                              <button type="button" class="btn btn-success">Approve</button>
-                            @else
-                              <button type="button" class="btn btn-success">Approve</button>
-                              <button type="button" class="btn btn-danger">Reject</button>
-                            @endif
-
+                            @include('includes.approval-buttons', [ 'status' => Inzaana\Category::find($id)->status ])
                           @elseif($approval['type'] == Inzaana\Product::class)
-
-                            @if( Inzaana\Category::find($id)->status == 'APPROVED' )
-                              <button type="button" class="btn btn-danger">Reject</button>
-                            @elseif( Inzaana\Category::find($id)->status == 'REJECTED' )
-                              <button type="button" class="btn btn-success">Approve</button>
-                            @else
-                              <button type="button" class="btn btn-success">Approve</button>
-                              <button type="button" class="btn btn-danger">Reject</button>
-                            @endif
-
+                            @include('includes.approval-buttons', [ 'status' => Inzaana\Product::find($id)->status ])
                           @endif
                         </td>
                       </tr>
