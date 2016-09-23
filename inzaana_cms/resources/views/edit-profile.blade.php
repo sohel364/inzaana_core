@@ -1,4 +1,5 @@
-@extends('layouts.admin-master')
+@extends('layouts.' . ( $user->email == config('mail.admin.address') ? 'super-' : ( ($user->stores()->count() == 0) ? 'user-' : ''  )) . 'admin-master')
+
 @section('title', 'Update Profile')
 
 @section('breadcumb')
