@@ -56,8 +56,14 @@
                           @endif
                         </th>
                         <td class="text-center">
+                          @if( Inzaana\Category::find($id)->status == 'APPROVED' )
+                            <button type="button" class="btn btn-danger">Reject</button>
+                          @elseif( Inzaana\Category::find($id)->status == 'REJECTED' )
+                            <button type="button" class="btn btn-success">Approve</button>
+                          @else
                             <button type="button" class="btn btn-success">Approve</button>
                             <button type="button" class="btn btn-danger">Reject</button>
+                          @endif
                         </td>
                       </tr>
                       @empty

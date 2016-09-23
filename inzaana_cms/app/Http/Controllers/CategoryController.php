@@ -31,8 +31,6 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
-        // $categories = Category::all(); , compact('categories')
         return view('add-category')->withUser(Auth::user())
                                    ->withCategories(Category::all());
     }
@@ -55,7 +53,7 @@ class CategoryController extends Controller
         {
             flash('Your category (' . $category->category_name . ') is failed to submit for admin approval.');            
         }
-        return redirect()->route('user::categories'); //->withCategories(Category::all());
+        return redirect()->route('user::categories');
     }
 
     public function edit($category_id)
