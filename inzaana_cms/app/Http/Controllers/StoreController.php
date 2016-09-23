@@ -44,7 +44,7 @@ class StoreController extends Controller
     private function viewUserStore(array $data)
     {
         return view('add-store', $data)->withUser(Auth::user()->id)
-                                ->withStores(collect(Store::whereUserId(Auth::user()->id)->get()))
+                                ->withStores(Auth::user()->stores)
                                 ->withTypes(collect(Store::types())->first());
     }
 

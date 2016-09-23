@@ -5,7 +5,7 @@
           <!-- Sidebar user panel -->
           <div class="user-panel">
             <div class="pull-left image">
-              <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
+              <img src="{{ asset('/dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
               <p>{{ Auth::user()->name }}</p>
@@ -44,12 +44,12 @@
             
             <li class="treeview">
                     <a href="#">
-                      <i class="fa fa-globe"></i> <span>Store <small class="label bg-green">{{ collect(Inzaana\Store::whereUserId(Auth::user()->id)->get())->count() }}</small></span> 
+                      <i class="fa fa-globe"></i> <span>Store <small class="label bg-green">{{ Auth::user()->stores()->count() }}</small></span> 
                       <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
                       <li><a href="{{ route('user::stores') }}"><i class="fa fa-list"></i> My Stores </a></li>
-                      <li><a href="{{ route('user::stores') }}"><i class="fa  fa-plus"></i> Add New Store </a></li>
+                      <li><a href="{{ route('user::stores') }}"><i class="fa fa-plus"></i> Add New Store </a></li>
                     </ul>
             </li>
 
@@ -62,8 +62,8 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{{ route('user::categories') }}"><i class="fa fa-plus"></i> Add New Category</a></li>
-                <li><a href="{{ route('user::categories') }}"><i class="fa fa-list-ol"></i> List All Categories</a></li>
+                <li><a href="{{ Auth::user()->subscribed('main') ? route('user::categories') : '#' }}"><i class="fa fa-plus"></i> Add New Category</a></li>
+                <li><a href="{{ Auth::user()->subscribed('main') ? route('user::categories') : '#' }}"><i class="fa fa-list-ol"></i> List All Categories</a></li>
               </ul>
             </li>
 
@@ -73,12 +73,12 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
                 <ul class="treeview-menu">
-                <li><a href="/products"><i class="fa fa-plus"></i> Add New Product</a></li>
-                <li><a href="/products"><i class="fa  fa-filter"></i> Filter Tags</a></li>
-                <li><a href="/products"><i class="fa  fa-list-ol"></i> List All Products</a></li>
-                <li><a href="/products"><i class="fa  fa-angle-double-down"></i> Low Stock Products</a></li>
-                <li><a href="/products"><i class="fa  fa-diamond"></i> Brands <small class="label bg-green">300</small></a></li>
-                <li><a href="/products"><i class="fa  fa-comments"></i> Reviews <small class="label bg-green">5</small></a></li>
+                <li><a href="{{ Auth::user()->subscribed('main') ? route('user::products') : '#' }}"><i class="fa  fa-plus"></i> Add New Product</a></li>
+                <li><a href="{{ Auth::user()->subscribed('main') ? route('user::products') : '#' }}"><i class="fa  fa-filter"></i> Filter Tags</a></li>
+                <li><a href="{{ Auth::user()->subscribed('main') ? route('user::products') : '#' }}"><i class="fa  fa-list-ol"></i> List All Products</a></li>
+                <li><a href="{{ Auth::user()->subscribed('main') ? route('user::products') : '#' }}"><i class="fa  fa-angle-double-down"></i> Low Stock Products</a></li>
+                <li><a href="{{ Auth::user()->subscribed('main') ? route('user::products') : '#' }}"><i class="fa  fa-diamond"></i> Brands <small class="label bg-green">300</small></a></li>
+                <li><a href="{{ Auth::user()->subscribed('main') ? route('user::products') : '#' }}"><i class="fa  fa-comments"></i> Reviews <small class="label bg-green">5</small></a></li>
               </ul>
             </li>
 
@@ -89,8 +89,8 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="pages/charts/chartjs.html"><i class="fa fa-question"></i> FAQ</a></li>
-                <li><a href="pages/charts/morris.html"><i class="fa fa-list-ol"></i> FAQ Category</a></li>
+                <li><a href="{{ Auth::user()->subscribed('main') ? route('user::products') : '#' }}"><i class="fa fa-question"></i> FAQ</a></li>
+                <li><a href="{{ Auth::user()->subscribed('main') ? route('user::products') : '#' }}"><i class="fa fa-list-ol"></i> FAQ Category</a></li>
               </ul>
             </li>
 
@@ -319,7 +319,7 @@
               </ul>
             </li>
             <li id="foo" class="treeview">
-      			  <a href="{{ route('user::templates') }}">
+      			  <a href="{{ Auth::user()->subscribed('main') ? route('user::templates') : '#' }}">
         				<span>Browse Templates</span>
         				<i class="fa fa-angle-left pull-right"></i>
       			  </a>
@@ -328,7 +328,7 @@
       			  </ul>
             </li>
             <li class="treeview">
-      			  <a href="{{ route('user::templates.saved') }}">
+      			  <a href="{{ Auth::user()->subscribed('main') ? route('user::templates.saved') : '#' }}">
         				<span>My Templates</span>
         				<!--<i class="fa fa-angle-left pull-right"></i>-->
       			  </a>
