@@ -37,7 +37,7 @@
             <span class="icon-bar"></span>
           </button>
 
-          <a id="logo" href="/user_dashboard" class="navbar-brand">
+          <a id="logo" href="{{ route('user::home') }}" class="navbar-brand">
             <span class="fa fa-rocket"></span>
             <span class="logo-text">Inzaana</span>
             <span style="display: none" class="logo-text-icon">µ</span>
@@ -106,7 +106,7 @@
             <div class="clearfix"></div>
 
             <li class="active">
-              <a href="index.html">
+              <a href="{{ route('user::edit', [$user]) }}">
                 <i class="fa fa-home fa-fw"></i>
                 <span class="menu-title">My Profile</span>
               </a>

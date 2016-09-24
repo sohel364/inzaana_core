@@ -102,7 +102,7 @@ class CategoryController extends Controller
 
     public function approvals()
     {
-        $categories = collect(Category::whereStatus('ON_APPROVAL')->orWhere('status', 'REJECTED')->orWhere('status', 'APPOVED')->get())->pluck( 'id', 'category_name' );
+        $categories = collect(Category::whereStatus('ON_APPROVAL')->orWhere('status', 'REJECTED')->orWhere('status', 'APPROVED')->get())->pluck( 'id', 'category_name' );
         $approvals = [
             'categories' => [
                 'type' => Category::class,

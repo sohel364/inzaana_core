@@ -202,7 +202,7 @@ class ProductController extends Controller
 
     public function approvals()
     {
-        $products = collect(Product::whereStatus('ON_APPROVAL')->get())->pluck( 'id', 'product_title' );
+        $products = collect(Product::whereStatus('ON_APPROVAL')->orWhere('status', 'REJECTED')->orWhere('status', 'APPROVED')->get())->pluck( 'id', 'product_title' );
         $approvals = [
             'products' => [
                 'type' => Product::class,
