@@ -40,6 +40,8 @@ Route::group(['middleware' => 'web'], function () {
         Route::get('/super-admin/view-subscriber', [ 'uses' => 'StripeController@viewSubscriber', 'as'=> 'viewSubscriber']);
         Route::get('/super-admin/approvals', [ 'uses' => 'UserController@approvals', 'as'=> 'approvals']);
         Route::get('/super-admin/approvals/manage', [ 'uses' => 'UserController@manageApprovals', 'as'=> 'approvals.manage']);
+        Route::get('/super-admin/faqs', [ 'uses' => 'UserController@faqs', 'as'=> 'faqs']);
+        Route::post('/super-admin/faqs/create', [ 'uses' => 'UserController@createFaqs', 'as'=> 'faqs.create']);
     });
     Route::auth();
 

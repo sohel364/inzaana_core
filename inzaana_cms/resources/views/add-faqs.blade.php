@@ -1,4 +1,4 @@
-@extends('layouts.admin-master')
+@extends('layouts.super-admin-master')
 @section('title', 'Add FAQ')
 
 @section('breadcumb')
@@ -28,23 +28,33 @@
               </div>
 
               <!-- form start -->
-              <form role="form" action="#" method="POST">
+              <form role="form" action="{{ route('admin::faqs.create') }}" method="POST">
 
                 {!! csrf_field() !!}
 
                 <div class="box-body">
-                  <div class="form-group">
-                    <label for="faq-name">FAQ</label>
-                    <input type="text" class="form-control" value="" id="faq-name" name="faq-name" placeholder="Add Question title here...">
+                  <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
+                    <label for="title">FAQ</label>
+                    <input type="text" class="form-control" value="" id="title" name="title" placeholder="Add Question title here..." value="{{ old('title') }}">
+                    @if ($errors->has('title'))
+                          <span class="help-block">
+                              <strong>{{ $errors->first('title') }}</strong>
+                          </span>
+                    @endif
                   </div>
-                  <div class="form-group">
+                  <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
                     <label for="description">Question Details</label>
-                    <textarea placeholder="Add Question details..." class="form-control" rows="5" id="description" name="description"></textarea>
+                    <textarea placeholder="Add Question details..." class="form-control" rows="5" id="description" name="description">{{ old('description') }}</textarea>
+                    @if ($errors->has('description'))
+                          <span class="help-block">
+                              <strong>{{ $errors->first('description') }}</strong>
+                          </span>
+                    @endif
                   </div>
                 </div><!-- /.box-body -->
 
                 <div class="box-footer text-right">
-                  <button type="submit" class="btn btn-info btn-flat">{{ isset($categoryEdit) ? 'Update' : 'Add' }} FAQ</button>
+                  <button type="submit" class="btn btn-info btn-flat">{{ isset($faq) ? 'Update' : 'Add' }} FAQ</button>
                 </div>
               </form>
               <!--end of form-->
@@ -76,6 +86,18 @@
                       <th class="text-center">Question title</th>
                       <th class="text-center">Details</th>
                     </tr>
+                    @forelse($faqs as $description => $title)
+                    <tr>
+                      <!-- <th class="text-center hidden">ID</th> -->
+                      <td class="text-center">{{ $title  }}</td>
+                      <td class="text-center">{{ $description }}</td>
+                    </tr>
+                    @empty
+                    <tr>
+                      <!-- <th class="text-center hidden">ID</th> -->
+                      <td class="text-center">No FAQs added yet!</td>
+                    </tr>                      
+                    @endforelse
                   </table>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->

@@ -9,6 +9,7 @@ use Inzaana\User;
 use Inzaana\Mailers\AppMailer;
 use Illuminate\Http\Request;
 use Inzaana\StripePlan;
+use Inzaana\Faq;
 
 use Inzaana\Http\Requests;
 use Inzaana\Http\Controllers\Controller;
@@ -320,13 +321,12 @@ class UserController extends Controller
 
     public function manageApprovals()
     {
-        $response = view('manage-approvals')->withUser(Auth::user());
         if(session()->has('approvals'))
         {
             $approvals = session('approvals');
-            return $response->withApprovals($approvals)->withTotalApprovals($this->totalApprovals($approvals));          
+            return view('manage-approvals')->withUser(Auth::user())->withApprovals($approvals)->withTotalApprovals($this->totalApprovals($approvals));          
         }
-        return $response;
+        return $this->approvals();
     }
 
     private static function totalApprovals(array $approvals)
@@ -341,6 +341,35 @@ class UserController extends Controller
             $total += $approvals['products']['data']->count();   
         }
         return $total;
+    }
+
+    /**
+     * views response for frequently asks & questions
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */    
+    public function faqs()
+    {
+        return view('add-faqs')->withUser(Auth::user())->withFaqs(Faq::all()->pluck('title', 'description'));
+    }
+
+    public function createFaqs(Request $request)
+    {
+        $this->validate($request, [            
+            'title' => 'required|unique:faqs|max:255',
+            'description' => 'required|max:1000',
+        ]);
+        $faq = Faq::Create([
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+        ]);
+        if(!$faq)
+        {
+            flash()->error('Your FAQ is not published! Please contact your technical person for solution.');
+        }
+        flash()->success('Your FAQ is published!');
+        return redirect()->back();
     }
 
     /**

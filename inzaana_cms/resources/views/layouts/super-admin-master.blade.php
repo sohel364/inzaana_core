@@ -122,6 +122,13 @@
               </a>
             </li>
 
+            <li>
+              <a href="{{ route('admin::faqs') }}">
+                <i class="fa fa-tags fa-fw"></i>
+                <span class="menu-title">FAQs ( {{ Inzaana\Faq::count() }} )</span>
+              </a>
+            </li>
+
             {{--<li>
               <a href="/user_reward_points">
                 <i class="fa fa-users fa-fw"></i>
