@@ -111,7 +111,7 @@ class Handler extends ExceptionHandler
 
         }
         if($e instanceof InvalidRequest){
-            $errorMessage = 'Your requested plan is not exists in Stripe Database.';
+            $errorMessage = 'Stripe Problem.';
             Log::critical('[Stripe][' . $e->getMessage() . "] Stripe plan not found problem.");
             flash()->error($errorMessage);
             return redirect()->back();

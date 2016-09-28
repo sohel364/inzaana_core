@@ -13,7 +13,7 @@ class CreateStripePlanMigration extends Migration
      */
     public function up()
     {
-        Schema::create('stripePlans', function (Blueprint $table) {
+        Schema::create('stripe_plans', function (Blueprint $table) {
             $table->increments('plan_id');
             $table->string('name')->unique();
             $table->string('amount');
@@ -33,6 +33,6 @@ class CreateStripePlanMigration extends Migration
      */
     public function down()
     {
-        Schema::drop('stripePlans');
+        Schema::drop('stripe_plans');
     }
 }

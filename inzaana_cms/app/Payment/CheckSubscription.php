@@ -132,7 +132,7 @@ trait CheckSubscription {
     public function getPlanCost()
     {
         $query = DB::table('subscriptions')
-                ->join('stripeplans','subscriptions.stripe_plan','=','stripeplans.plan_id')
+                ->join('stripe_plans','subscriptions.stripe_plan','=','stripe_plans.plan_id')
                 ->select('amount','currency')
                 ->where('user_id','=',Auth::user()->id)
                 ->first();

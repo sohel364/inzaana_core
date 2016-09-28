@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class StripePlan extends Model
 {
-    protected $table = 'stripeplans';
+    protected $table = 'stripe_plans';
     protected $fillable = [
         'plan_id','name', 'amount', 'currency','interval','active','trial_period_days','statement_descriptor','created',
     ];

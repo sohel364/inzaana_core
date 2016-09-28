@@ -81,7 +81,7 @@ class StripeController extends Controller
         $amount = (INT)($amount * 100);
         Stripe::setApiKey(getenv('STRIPE_SECRET'));
         $plan = Plan::create(array(
-            "id" => $this->getNextId('stripeplans'),
+            "id" => $this->getNextId('stripe_plans'),
             "name" => $request->plan_name,
             "currency" => $request->plan_currency,
             "amount" => $amount,
@@ -155,7 +155,7 @@ class StripeController extends Controller
     }
     /*
      * View All Subscriber
-     * Using Query Builder for join three tables(users, stripeplans, subscriptions)
+     * Using Query Builder for join three tables(users, stripe_plans, subscriptions)
      * Retrieve all subscribers from local database
      * Method call from Route::get('/super-admin/view-subscriber', [ 'uses' => 'StripeController@viewSubscriber', 'as'=> 'viewSubscriber']);
      * */
@@ -163,15 +163,15 @@ class StripeController extends Controller
     {
         $subscribers = DB::table('subscriptions')
                     ->join('users','users.id','=','subscriptions.user_id')
-                    ->join('stripeplans','stripeplans.plan_id','=','subscriptions.stripe_plan')
-                    ->select('subscriptions.name as plan_name','subscriptions.stripe_id','subscriptions.quantity','users.name as subscriber_name','users.email','stripeplans.amount','stripeplans.interval','stripeplans.trial_period_days as trial')
+                    ->join('stripe_plans','stripe_plans.plan_id','=','subscriptions.stripe_plan')
+                    ->select('subscriptions.name as plan_name','subscriptions.stripe_id','subscriptions.quantity','users.name as subscriber_name','users.email','stripe_plans.amount','stripe_plans.interval','stripe_plans.trial_period_days as trial')
                     ->get();
         return view('super-admin.stripe.view-subscriber',compact('subscribers'))->with('user', Auth::user());
 
     }
     /*
      * View a login user subscription plan
-     * Using Query Builder for join three tables(users, stripeplans, subscriptions)
+     * Using Query Builder for join three tables(users, stripe_plans, subscriptions)
      * Retrieve single subscription from local database
      * Method call from Route::get('/dashboard/vendor/view-my-subscription', [ 'uses' => 'StripeController@viewMySubscription', 'as'=> 'viewMySubscription']);
      * */
@@ -180,8 +180,8 @@ class StripeController extends Controller
         $user = Auth::user();
         $subscriber = DB::table('subscriptions')
                     ->join('users','users.id','=','subscriptions.user_id')
-                    ->join('stripeplans','stripeplans.plan_id','=','subscriptions.stripe_plan')
-                    ->select('subscriptions.name as plan_name','subscriptions.stripe_id','subscriptions.quantity','users.name as subscriber_name','users.email','stripeplans.amount','stripeplans.interval','stripeplans.trial_period_days as trial')
+                    ->join('stripe_plans','stripe_plans.plan_id','=','subscriptions.stripe_plan')
+                    ->select('subscriptions.name as plan_name','subscriptions.stripe_id','subscriptions.quantity','users.name as subscriber_name','users.email','stripe_plans.amount','stripe_plans.interval','stripe_plans.trial_period_days as trial')
                     ->where('users.id','=',Auth::user()->id)
                     ->first();
         return view('my-subscription',compact('subscriber','user'));
