@@ -108,7 +108,7 @@
                         <!-- <td class="text-center" id="child"><a href="">001</a> </td> -->
                         <td class="text-center" id="child"><a href="">{{ $store->name }}</a></td>
                         <td class="text-center" id="child">
-                          <a href="{{ route('user::stores.redirect', [ 'site' => str_replace('.', '', $store->name_as_url) . '.' . $store->sub_domain . '.' . $store->domain ] ) }}">{{ str_replace('.', '', $store->name_as_url) . '.' . $store->sub_domain . '.' . str_replace('.', '', $store->domain) }}</a>
+                          <a target="_blank" href="{{ route('user::stores.redirect', [ 'site' => str_replace('.', '', $store->name_as_url) . '.' . $store->sub_domain . '.' . $store->domain ] ) }}">{{ str_replace('.', '', $store->name_as_url) . '.' . $store->sub_domain . '.' . str_replace('.', '', $store->domain) }}</a>
                         </td>
                         <td class="text-center" id="child"><a href="">{{ $store->description or 'This is a store named ' . $store->name }}</a></td>
                         <td class="text-center" id="child">

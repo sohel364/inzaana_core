@@ -8,6 +8,8 @@ use Redirect as HomeRedirect;
 use Inzaana\Mailers\AppMailer as AdminMailer;
 
 use Inzaana\User;
+use Inzaana\Store;
+use Inzaana\Product;
 
 class HomeController extends Controller
 {
@@ -37,6 +39,10 @@ class HomeController extends Controller
         // return HomeRedirect::to('http://' . $site . '/');
         // return 'THIS IS PUBLIC PAGE (' . $name . '.inzaana.' . $domain . '/showcase) FOR VENDOR\'S STORE';
 
-        return view('vendor-store');
+        $products = Store::whereNameAsUrl($name)->first()->user->products;
+
+        // dd($products->first()->product_title);
+
+        return view('vendor-store')->withProducts($products);
     }
 }
