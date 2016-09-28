@@ -321,7 +321,7 @@
               </div>
               <div class="col-xs-6 col-sm-6 col-md-6 text-left">
                 <div class="form-group animated fadeInRightShort" data-id="6">
-                  <input type="phonenumber" name="phonenumber" class="form-control input-sm" placeholder="Phone number">
+                  <input type="phonenumber" name="phone_number" class="form-control input-sm" placeholder="Phone number">
                 </div>
               </div>
             </div>

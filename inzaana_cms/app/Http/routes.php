@@ -87,6 +87,7 @@ Route::group(['middleware' => 'web'], function () {
 
                 Route::get('/', [ 'uses' => 'UserController@redirectToDashboard', 'as' => 'vendor.dashboard' ]); 
                 Route::get('/plan', [ 'uses' => 'UserController@redirectToVendorPlan', 'as' => 'vendor.plan' ]);
+                Route::post('/plan', [ 'uses' => 'StripeController@subscriptionPlan', 'as' => 'vendor.subscriptionPlan' ]);
                 Route::get('/view-my-subscription', [ 'uses' => 'StripeController@viewMySubscription', 'as'=> 'viewMySubscription']);
 
             });

@@ -150,7 +150,7 @@ class Handler extends ExceptionHandler
         {
             $errorMessage = 'Error Occurred.';
             Log::critical('[Inzaana][' . $e->getMessage() . "] " . $errorMessage . ".");
-            flash()->error($e->getMessage());
+            flash()->error('problem occure '.$e->getMessage());
             return redirect()->back();
         }
 

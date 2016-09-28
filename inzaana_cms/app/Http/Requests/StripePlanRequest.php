@@ -24,9 +24,8 @@ class StripePlanRequest extends Request
     public function rules()
     {
         return [
-            'plan_id'=> 'required|unique:stripeplans,plan_id',
-            'plan_name'=> 'required',
-            'plan_amount'=> 'required',
+            'plan_name'=> 'required|regex:/^[(a-zA-Z\s)]+$/u|unique:stripeplans,name',
+            'plan_amount'=> 'required|numeric',
             'plan_des'=> 'max:22'
         ];
     }

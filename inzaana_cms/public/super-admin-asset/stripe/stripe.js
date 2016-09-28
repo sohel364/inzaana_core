@@ -38,3 +38,4 @@ function stripeResponseHandler(status, response) {
     }
 };
 
+

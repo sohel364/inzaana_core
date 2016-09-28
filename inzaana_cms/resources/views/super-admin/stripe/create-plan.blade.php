@@ -29,30 +29,24 @@
                     @if(session('success'))
                         <p class="text-success">{{ session('success') }}</p>
                     @endif
-                    <form class="form-horizontal" method="POST">
+                    <form class="form-horizontal" {{--action="{{ route('admin::create.plan') }}"--}} method="POST">
                         {{ csrf_field() }}
                         <div class="form-group">
-                            <label for="">ID:</label>
-                            <input type="text" class="form-control" value="{{old('plan_id')}}" name="plan_id" id="">
-                            @if($errors->first('plan_id')) <p class="text-danger text-sm danger_text">{{ $errors->first('plan_id') }}</p> @endif
-                        </div>
-                        <div class="form-group">
-                            <label for="">Name:</label>
-                            <input type="text" class="form-control" value="{{old('plan_name')}}" name="plan_name" id="">
+                            <label for="">Plan Name:</label>
+                            <input type="text" class="form-control" value="{{old('plan_name')}}" name="plan_name" id="" placeholder="Enter Plan Name...">
                             @if($errors->first('plan_name')) <p class="text-danger text-sm danger_text">{{ $errors->first('plan_name') }}</p> @endif
                         </div>
                         <div class="form-group">
                             <label for="">Currency:</label>
                             <select name="plan_currency" id="currency">
+                                <option value="INR">Indian Rupee</option>
                                 <option value="USD">USD</option>
                                 <option value="BDT">Bangladesh</option>
-                                <option value="AED">Arab Emirat</option>
-                                <option value="BBD">Baharain</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="">Amount:</label>
-                            <input type="text" class="form-control" value="{{old('plan_amount')}}" name="plan_amount" id="">
+                            <label for="">Amount:</label><span id="symbol">&#8377;</span>
+                            <input type="text" class="form-control" value="{{old('plan_amount')}}" name="plan_amount" id="plan_amount" placeholder="5.25">
                             @if($errors->first('plan_amount')) <p class="text-danger text-sm danger_text">{{ $errors->first('plan_amount') }}</p> @endif
                         </div>
                         <div class="form-group">
@@ -85,4 +79,7 @@
         </div>
     </div>
     <!--END CONTENT-->
+@endsection
+@section('footer-script')
+    <script src="{{ URL::asset('super-admin-asset/stripe/plan-create.js') }}"></script>
 @endsection

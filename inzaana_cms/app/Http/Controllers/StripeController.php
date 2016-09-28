@@ -51,15 +51,16 @@ class StripeController extends Controller
     {
         //dd($request->all());
         $user = User::find(Auth::user()->id);
-        //dd($user);
-        $msg = "";
+        //dd($user->newSubscription($request->_plan_name, $request->_plan_id));
+        $msg = "You have already subscribed.";
         if(!Auth::user()->subscribed($request->_plan_name)){
             $user->newSubscription($request->_plan_name, $request->_plan_id)
-                ->trialDays(0)
                 ->create($request->stripeToken);
             $msg = "Successfully Subscribed.";
         }
-        return redirect()->route('viewMySubscription')->with(['success'=>$msg]);
+
+        //dd($msg);
+        return redirect()->route('user::viewMySubscription')->with(['success'=>$msg]);
 
     }
 
@@ -76,13 +77,14 @@ class StripeController extends Controller
          * This ApiKey get from environment variable
          * Using Stripe lib for creating plan
          * */
-
+        $amount = number_format($request->plan_amount,2);
+        $amount = (INT)($amount * 100);
         Stripe::setApiKey(getenv('STRIPE_SECRET'));
         $plan = Plan::create(array(
-            "id" => $request->plan_id,
+            "id" => $this->getNextId('stripeplans'),
             "name" => $request->plan_name,
             "currency" => $request->plan_currency,
-            "amount" => $request->plan_amount,
+            "amount" => $amount,
             "interval" => $request->plan_interval,
             "trial_period_days" => $request->plan_trial,
             "statement_descriptor" => $request->plan_des
@@ -93,7 +95,6 @@ class StripeController extends Controller
          * Using Local Database for faster loading
          * */
         $stripePlan = StripePlan::create([
-            "plan_id" => $request->plan_id,
             "name" => $request->plan_name,
             "amount" => $request->plan_amount,
             "currency" => $request->plan_currency,
@@ -103,7 +104,7 @@ class StripeController extends Controller
             "created"=> date('Y-m-d H:i:s')
         ]);
 
-        return redirect()->route('planForm')->with(['success'=>'Successfully Created Plan.']);
+        return redirect()->back()->with(['success'=>'Successfully Created Plan.']);
 
     }
     /*
@@ -134,7 +135,7 @@ class StripeController extends Controller
 
         StripePlan::where('plan_id','=',$plan_id)->delete(); // Delete From local database
 
-        return redirect()->route('viewPlan')->with(['success'=>'Successfully Deleted.']);
+        return redirect()->route('admin::viewPlan')->with(['success'=>'Successfully Deleted.']);
     }
     /*
      * Plan view update
@@ -210,5 +211,10 @@ class StripeController extends Controller
             'product' => 'INZAANA Hosting',
         ]);
 
+    }
+    /*--- Next auto increment id---*/
+    public function getNextId($table){
+        $id = DB::select('SHOW TABLE STATUS LIKE \''.$table.'\'');
+        return $id[0]->Auto_increment;
     }
 }

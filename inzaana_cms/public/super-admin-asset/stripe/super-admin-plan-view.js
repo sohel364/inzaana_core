@@ -12,14 +12,14 @@ $(document).on('click','#update_status',function() {
             url: '/super-admin/view-plan/ajax/update', // you need change it.
             processData: false, // high importance!
             success: function (data) {
-                $('#update_button'+data['plan_id'].replace(':','_')+'').html('');
+                $('#update_button'+data['plan_id']+'').html('');
                 if(data['id']==1)
                 {
-                    $('#update_button'+data['plan_id'].replace(':','_')+'').append('<input type="submit" class="btn btn-warning btn-xs" data-status="0" id="update_status" data-id="'+data['plan_id']+'" value="Hide">');
+                    $('#update_button'+data['plan_id']+'').append('<input type="submit" class="btn btn-warning btn-xs" data-status="0" id="update_status" data-id="'+data['plan_id']+'" value="Hide">');
                 }
                 else
                 {
-                    $('#update_button'+data['plan_id'].replace(':','_')+'').append('<input type="submit" class="btn btn-success btn-xs" data-status="1" id="update_status" data-id="'+data['plan_id']+'" value="Show">');
+                    $('#update_button'+data['plan_id']+'').append('<input type="submit" class="btn btn-success btn-xs" data-status="1" id="update_status" data-id="'+data['plan_id']+'" value="Show">');
                 }
             },
             error: function(data){
