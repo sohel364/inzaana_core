@@ -43,6 +43,6 @@ class HomeController extends Controller
 
         // dd($products->first()->product_title);
 
-        return view('vendor-store')->withProducts($products);
+        return view('vendor-store')->withProducts($products)->withSubDomain($name . '.inzaana.' . $domain)->withStoreNameUrl($name);
     }
 }

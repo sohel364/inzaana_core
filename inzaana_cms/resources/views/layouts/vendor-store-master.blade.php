@@ -10,8 +10,8 @@
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
-        <link href="{{asset('css/banner_adress.css')}}" rel="stylesheet">
-        <link href="{{asset('css/gallery.css')}}" rel="stylesheet">
+        <link href="{{ asset('http://inzaana.com/css/banner_adress.css') }}" rel="stylesheet">
+        <link href="{{ asset('http://inzaana.com/css/gallery.css') }}" rel="stylesheet">
 
         <title>@yield('title')</title>
     </head>
@@ -30,8 +30,7 @@
             <div class="row grid1" class="container-fluid">
 
                 <div class="col-md-9">
-
-                        <img src="images/home/dsa.jpg" class="banner_image"  class="img-responsive" alt="" />
+                    <img src="http://{{ isset($sub_domain) ? $sub_domain : 'inzaana.com' }}/images/shop.png" class="banner_image"  class="img-responsive" alt="" />
                 </div>
                 <!-- adress div start-->
                 <div class="col-md-3">
@@ -44,7 +43,7 @@
                                         <i class="fa fa-envelope-o"></i>
                                     </div>
                                     <div class="address-table-cell shop-website">
-                                        <a href="#">example@domain.com</a>
+                                        <a href="http://{{ isset($sub_domain) ? $sub_domain : 'inzaana.com' }}/showcase">example@domain.com</a>
                                     </div>
 
                                 </div>
@@ -54,7 +53,7 @@
                                         <i class="fa fa-external-link"></i>
                                     </div>
                                     <div class="address-table-cell shop-website">
-                                        <a href="#" target="_blank"> https://example.domain.com</a>
+                                        <a href="http://{{ isset($sub_domain) ? $sub_domain : 'inzaana.com' }}/showcase" target="_blank">{{ isset($sub_domain) ? $sub_domain : 'inzaana.com' }}</a>
                                     </div>
                                 </div>
 
@@ -72,7 +71,7 @@
                                         <i class="fa fa-mobile"></i>
                                     </div>
                                     <div class="address-table-cell shop-website">
-                                        <a href="tel:01911497595">01911497595</a>
+                                        <a href="{{ isset($store_name_url) ? 'tel:' . Inzaana\Store::whereNameAsUrl($store_name_url)->first()->user->phone_number : '#' }}">{{ isset($store_name_url) ? Inzaana\Store::whereNameAsUrl($store_name_url)->first()->user->phone_number : 'Not available' }}</a>
                                     </div>
                                 </div>
 
