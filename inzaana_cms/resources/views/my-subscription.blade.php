@@ -31,6 +31,9 @@
          <h4>Plan Cost: {{ $user->getPlanCost() }}</h4>
          <h4>Remaining Days: {{ $user->getPlanRemainDays() }}</h4>
          <h4>Plan End Date: {{ $user->getPlanEndDate() }}</h4>
+       @else
+            <p class="text-center text-warning" style="font-size:22px;">You are not subscribed any plan.</p>
+            <p class="text-center text-black" style="font-size:18px;">For Subscription <a href="plan">click</a> here.</p>
        @endif
 
       </div>

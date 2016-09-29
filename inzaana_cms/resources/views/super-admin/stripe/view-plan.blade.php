@@ -44,10 +44,10 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Plan ID</th>
                         <th>Plan Name</th>
                         <th>Price</th>
                         <th>Trial Period</th>
+                        <th>Description</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -55,10 +55,10 @@
                 <tbody>
                     @foreach($allPlan as $plan)
                         <tr>
-                            <td>{{ $plan->plan_id }}</td>
                             <td>{{ $plan->name }}</td>
                             <td>{{ $plan->amount }}/{{ $plan->interval }}</td>
                             <td>{{ $plan->trial_period_days }}</td>
+                            <td>{{ $plan->statement_descriptor }}</td>
                             <td>
                                 <div id="update_button{{ str_replace(':','_',$plan->plan_id) }}">
                                     @if($plan->active)

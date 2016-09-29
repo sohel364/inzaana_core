@@ -14,21 +14,24 @@
 @section('content')
 <div class="box box-info">
     <div class="box-header with-border">
-        <h3 class="box-title">All Plan</h3>
+        <h3 class="box-title">Choose Your Plan</h3>
     </div>
 
     <div class="box-body">
       <div class="row padTB">
-
-        @foreach($plan as $single_plan)
-            <div class="col-md-4">
-                <div class="subscribe_box">
-                    <h2>{{ $single_plan['name'] }}</h2>
-                    <p><strong>Price: {{ $single_plan['amount']  }}</strong></p>
-                    <button class="btn btn-primary" data-toggle="modal" data-name="{{ $single_plan['name'] }}" data-id="{{ $single_plan['plan_id'] }}" data-target="#myModal">Subscribe</button>
+        @if(!$plan->isEmpty())
+            @foreach($plan as $single_plan)
+                <div class="col-md-4">
+                    <div class="subscribe_box">
+                        <h2>{{ $single_plan['name'] }}</h2>
+                        <p><strong>Price: {{ $single_plan['amount']  }}</strong></p>
+                        <button class="btn btn-primary" data-toggle="modal" data-name="{{ $single_plan['name'] }}" data-id="{{ $single_plan['plan_id'] }}" data-target="#myModal">Subscribe</button>
+                    </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+        @else
+            <p class="text-center text-red" style="font-size:22px;">Ooops! There is no plan available here.</p>
+         @endif
 
 
     {{--Plan Modal--}}

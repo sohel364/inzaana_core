@@ -14,7 +14,8 @@ class CreateStripePlanMigration extends Migration
     public function up()
     {
         Schema::create('stripe_plans', function (Blueprint $table) {
-            $table->increments('plan_id');
+            $table->increments('id');
+            $table->string('plan_id',32)->unique();
             $table->string('name')->unique();
             $table->string('amount');
             $table->string('currency');

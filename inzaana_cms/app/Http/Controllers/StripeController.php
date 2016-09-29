@@ -36,7 +36,7 @@ class StripeController extends Controller
      * */
     public function planForm()
     {
-        return view('super-admin.stripe.create-plan')->with('user', Auth::user());
+        return view('super-admin.stripe.create-plan')->with(['user'=> Auth::user()]);
     }
 
     /*
@@ -77,16 +77,17 @@ class StripeController extends Controller
          * This ApiKey get from environment variable
          * Using Stripe lib for creating plan
          * */
+
         $amount = number_format($request->plan_amount,2);
         $amount = (INT)($amount * 100);
         Stripe::setApiKey(getenv('STRIPE_SECRET'));
         $plan = Plan::create(array(
-            "id" => $this->getNextId('stripe_plans'),
+            "id" => $request->plan_id,
             "name" => $request->plan_name,
             "currency" => $request->plan_currency,
             "amount" => $amount,
             "interval" => $request->plan_interval,
-            "trial_period_days" => $request->plan_trial,
+            "trial_period_days" => (INT)$request->plan_trial,
             "statement_descriptor" => $request->plan_des
         ));
 
@@ -95,11 +96,12 @@ class StripeController extends Controller
          * Using Local Database for faster loading
          * */
         $stripePlan = StripePlan::create([
+            "plan_id" => $request->plan_id,
             "name" => $request->plan_name,
             "amount" => $request->plan_amount,
             "currency" => $request->plan_currency,
             "interval" => $request->plan_interval,
-            "trial_period_days" => $request->plan_trial,
+            "trial_period_days" => (INT)$request->plan_trial,
             "statement_descriptor" => $request->plan_des,
             "created"=> date('Y-m-d H:i:s')
         ]);

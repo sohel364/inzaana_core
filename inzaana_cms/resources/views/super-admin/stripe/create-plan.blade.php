@@ -31,6 +31,8 @@
                     @endif
                     <form class="form-horizontal" {{--action="{{ route('admin::create.plan') }}"--}} method="POST">
                         {{ csrf_field() }}
+                        <input type="hidden" class="form-control" value="{{ str_random(12) }}" name="plan_id">
+                        @if($errors->first('plan_id')) <p class="text-danger text-sm danger_text">Please refresh this page and try again.</p> @endif
                         <div class="form-group">
                             <label for="">Plan Name:</label>
                             <input type="text" class="form-control" value="{{old('plan_name')}}" name="plan_name" id="" placeholder="Enter Plan Name...">
@@ -67,7 +69,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Statement desc:</label>
-                            <input type="text" class="form-control" value="{{old('plan_des')}}" name="plan_des" id="">
+                            <input type="text" class="form-control" value="{{old('plan_des')}}" name="plan_des" id="" maxlength="22">
                             @if($errors->first('plan_des')) <p class="text-danger text-sm danger_text">{{ $errors->first('plan_des') }}</p> @endif
                         </div>
                         <input type="submit" class="btn btn-primary btn-sm" value="Create Plan">
