@@ -1,4 +1,6 @@
 <!-- Left side column. contains the logo and sidebar -->
+  {{ $user = Auth::user() }}
+  {{ $plan_name = \Laravel\Cashier\Subscription::find($user->id)->name }}
       <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
@@ -29,7 +31,7 @@
               <a href="{{ route('user::home') }}">
                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
               </a>
-            </li>		
+            </li>
 
       			<li class="treeview">
                     <a href="#">
@@ -41,7 +43,7 @@
                       <li><a href="/dashboard/vendor/view-my-subscription"><i class="fa  fa-dashboard"></i> My Subscription </a></li>
                     </ul>
       			</li>
-            
+
             <li class="treeview">
                     <a href="#">
                       <i class="fa fa-globe"></i> <span>Store <small class="label bg-green">{{ Auth::user()->stores()->count() }}</small></span> 

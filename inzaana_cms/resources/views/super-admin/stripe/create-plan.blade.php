@@ -66,7 +66,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Trial period days: <span class="text-red text-md" id="required_field"></span></label>
-                            <input type="text" class="form-control" value="{{old('plan_trial')}}" name="plan_trial" id="required_input" >
+                            <input type="text" class="form-control" value="{{old('plan_trial')}}" name="plan_trial" id="required_input" disabled>
                         </div>
                         <div class="form-group">
                             <label for="">Statement desc:</label>

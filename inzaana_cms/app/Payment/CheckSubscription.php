@@ -19,6 +19,17 @@ trait CheckSubscription {
      * Check if the use has access permission
      * @return boolean
      * */
+    public $feature = [
+        'free' => [
+            'Dashboard','Subscription','FAQ'
+        ],
+        'gold' => [
+            'Dashboard','Subscription','FAQ','Store','Categories','Products'
+        ],
+        'platinum' => [
+            'Dashboard','Subscription','FAQ','Store','Categories','Products','Customers','Coupons','Taxes'
+        ]
+    ];
     public function isAccess()
     {
         return false;
@@ -137,6 +148,10 @@ trait CheckSubscription {
                 ->where('user_id','=',Auth::user()->id)
                 ->first();
         return $query->amount."/".$query->currency;
+    }
+
+    public function getFeature($plan_name, $feature_name){
+        return in_array($feature_name, $this->feature[strtolower($plan_name)]);
     }
 
     protected function getFromDatabase($select_column)

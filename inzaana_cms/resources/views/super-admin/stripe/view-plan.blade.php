@@ -53,30 +53,34 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($allPlan as $plan)
-                        <tr>
-                            <td>{{ $plan->name }}</td>
-                            <td>{{ $plan->amount }}/{{ $plan->interval }}</td>
-                            <td>{{ $plan->trial_period_days }}</td>
-                            <td>{{ $plan->statement_descriptor }}</td>
-                            <td>
-                                <div id="update_button{{ str_replace(':','_',$plan->plan_id) }}">
-                                    @if($plan->active)
-                                        <input type="submit" class="btn btn-warning btn-xs" data-status="0" id="update_status"  data-id="{{ $plan->plan_id }}" value="Hide">
-                                    @else
-                                        <input type="submit" class="btn btn-success btn-xs" data-status="1" id="update_status" data-id="{{ $plan->plan_id }}" value="Show">
-                                    @endif
-                                </div>
-                            </td>
-                            <td>
-                            <form method="POST" action="{{ action('StripeController@deletePlan') }}">
-                                {{ csrf_field() }}
-                                <input type="hidden" name="plan" value="{{ Crypt::encrypt($plan['plan_id']) }}">
-                                <input type="submit" class="btn btn-danger btn-xs" value="Delete">
-                            </form>
-                            </td>
-                        </tr>
-                    @endforeach
+                    @if($allPlan->isEmpty())
+                        <p class="text-center text-red">Ooops! There's no plan.</p>
+                    @else
+                        @foreach($allPlan as $plan)
+                            <tr>
+                                <td>{{ $plan->name }}</td>
+                                <td>{{ $plan->amount }}/{{ $plan->interval }}</td>
+                                <td>{{ $plan->trial_period_days }}</td>
+                                <td>{{ $plan->statement_descriptor }}</td>
+                                <td>
+                                    <div id="update_button{{ str_replace(':','_',$plan->plan_id) }}">
+                                        @if($plan->active)
+                                            <input type="submit" class="btn btn-warning btn-xs" data-status="0" id="update_status"  data-id="{{ $plan->plan_id }}" value="Hide">
+                                        @else
+                                            <input type="submit" class="btn btn-success btn-xs" data-status="1" id="update_status" data-id="{{ $plan->plan_id }}" value="Show">
+                                        @endif
+                                    </div>
+                                </td>
+                                <td>
+                                <form method="POST" action="{{ action('StripeController@deletePlan') }}">
+                                    {{ csrf_field() }}
+                                    <input type="hidden" name="plan" value="{{ Crypt::encrypt($plan['plan_id']) }}">
+                                    <input type="submit" class="btn btn-danger btn-xs" value="Delete">
+                                </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
                 </tbody>
             </table>
 

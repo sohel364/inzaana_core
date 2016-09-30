@@ -24,7 +24,6 @@
     <div class="page-content" style="background-color:#fff;">
         <div id="tab-general">
             <div class="row">
-
                 {{-- Success & Error Message --}}
             @if(session('success'))
                 <p class="text-primary">{{ session('success') }}</p>

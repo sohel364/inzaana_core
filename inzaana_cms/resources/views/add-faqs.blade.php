@@ -35,7 +35,7 @@
                 <div class="box-body">
                   <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
                     <label for="title">FAQ</label>
-                    <input type="text" class="form-control" value="" id="title" name="title" placeholder="Add Question title here..." value="{{ old('title') }}">
+                    <input type="text" class="form-control" value="" id="title" name="title" maxlength="255" placeholder="Add Question title here..." value="{{ old('title') }}">
                     @if ($errors->has('title'))
                           <span class="help-block">
                               <strong>{{ $errors->first('title') }}</strong>
@@ -44,12 +44,13 @@
                   </div>
                   <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
                     <label for="description">Question Details</label>
-                    <textarea placeholder="Add Question details..." class="form-control" rows="5" id="description" name="description">{{ old('description') }}</textarea>
+                    <textarea placeholder="Add Question details..." class="form-control" rows="5" id="description" maxlength="1000" name="description">{{ old('description') }}</textarea>
                     @if ($errors->has('description'))
                           <span class="help-block">
                               <strong>{{ $errors->first('description') }}</strong>
                           </span>
                     @endif
+                      <div id="charNum"></div>
                   </div>
                 </div><!-- /.box-body -->
 
@@ -105,4 +106,8 @@
           </div>
     <!--end of recently added faq-->
 
+@endsection
+
+@section('footer-script')
+        <script src="{{ URL::asset('super-admin-asset/faqs.js') }}"></script>
 @endsection
