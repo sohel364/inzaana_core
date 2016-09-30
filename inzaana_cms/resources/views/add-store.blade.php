@@ -43,6 +43,16 @@
                     @endif
                   </div>
 
+                   <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
+                    <label for="Store-address">Address</label>
+                    <input type="text" class="form-control" value="" id="store-name" name="store_name" placeholder="Add your Store addres here...">
+                    @if ($errors->has('address'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('address') }}</strong>
+                        </span>
+                    @endif
+                  </div>
+
                   <div class="form-group">
                     <label for="store-type">I am going to sell</label>
 
