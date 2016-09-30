@@ -29,12 +29,13 @@
                     @if(session('success'))
                         <p class="text-success">{{ session('success') }}</p>
                     @endif
+                        <p class="text-success text-right"><span class="text-red">*</span> Denotes Required field.</p>
                     <form class="form-horizontal" {{--action="{{ route('admin::create.plan') }}"--}} method="POST">
                         {{ csrf_field() }}
                         <input type="hidden" class="form-control" value="{{ str_random(12) }}" name="plan_id">
                         @if($errors->first('plan_id')) <p class="text-danger text-sm danger_text">Please refresh this page and try again.</p> @endif
                         <div class="form-group">
-                            <label for="">Plan Name:</label>
+                            <label for="">Plan Name: <span class="text-red text-md">*</span></label>
                             <input type="text" class="form-control" value="{{old('plan_name')}}" name="plan_name" id="" placeholder="Enter Plan Name...">
                             @if($errors->first('plan_name')) <p class="text-danger text-sm danger_text">{{ $errors->first('plan_name') }}</p> @endif
                         </div>
@@ -47,7 +48,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="">Amount:</label><span id="symbol">&#8377;</span>
+                            <label for="">Amount: <span class="text-red text-md">*</span></label><span id="symbol"> &#8377;</span>
                             <input type="text" class="form-control" value="{{old('plan_amount')}}" name="plan_amount" id="plan_amount" placeholder="5.25">
                             @if($errors->first('plan_amount')) <p class="text-danger text-sm danger_text">{{ $errors->first('plan_amount') }}</p> @endif
                         </div>
@@ -64,17 +65,19 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="">Trial period days:</label>
-                            <input type="text" class="form-control" value="{{old('plan_trial')}}" name="plan_trial" id="">
+                            <label for="">Trial period days: <span class="text-red text-md" id="required_field"></span></label>
+                            <input type="text" class="form-control" value="{{old('plan_trial')}}" name="plan_trial" id="required_input" >
                         </div>
                         <div class="form-group">
                             <label for="">Statement desc:</label>
-                            <input type="text" class="form-control" value="{{old('plan_des')}}" name="plan_des" id="" maxlength="22">
+                            <input type="text" class="form-control" value="{{old('plan_des')}}" name="plan_des" id="field" maxlength="22">
+                            <div id="charNum"></div>
                             @if($errors->first('plan_des')) <p class="text-danger text-sm danger_text">{{ $errors->first('plan_des') }}</p> @endif
                         </div>
                         <input type="submit" class="btn btn-primary btn-sm" value="Create Plan">
 
                     </form>
+
                 </div>
 
             </div>
