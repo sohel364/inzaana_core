@@ -60,7 +60,7 @@
                             <td>{{ $subscriber->plan_name }} ({{ $subscriber->amount }}/{{ $subscriber->interval }})</td>
                             <td>{{ $subscriber->trial }}</td>
                             <td>
-                                <button class="btn btn-primary" data-id="{{ $subscriber->stripe_id }}" id="user_details">Details</button>
+                                <button class="btn btn-primary btn-xs" data-id="{{ $subscriber->stripe_id }}" id="user_details">Details</button>
                             </td>
                         </tr>
                     @endforeach

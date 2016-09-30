@@ -11,11 +11,17 @@ class UsersTableSeeder extends Seeder
      *
      * @return void
      */
+
     public function run()
     {
         //
         $faker = UserFaker::create('en_US');
         // factory(Inzaana\User::class, 50)->create();
+
+        /*
+         * Seed Super Admin
+         *
+         * */
         $user = factory(Inzaana\User::class)->create([
             'name' => 'admin',
             'email' => config('mail.admin.address'),
@@ -26,12 +32,25 @@ class UsersTableSeeder extends Seeder
         else
             Log::error('[Inzaana][No admin user created] -> [Seeding failed]');
 
+        /*
+         * Seed Vendor
+         * Create only 5 Vendor
+         * */
+        \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET'));
         $users = factory(Inzaana\User::class, 5)->create([
             'name' => $faker->unique()->firstName . ' ' .  $faker->unique()->lastName,
         ])->each(function($user){
             $vendorPassword = '#vendor?' . str_random(5) . '$';
             $user->password = bcrypt($vendorPassword);
             $user->stores()->save(factory(Inzaana\Store::class)->make());
+            $user->newSubscription('Free', 'VuvmBePBCq3L')->create(\Stripe\Token::create(array(
+                "card" => array(
+                    "number" => "5555555555554444",
+                    "exp_month" => 9,
+                    "exp_year" => 2018,
+                    "cvc" => "400"
+                )
+            ))->id);
             $user->save();
             Log::debug('[Inzaana][User of email -> ' . $user->email . ', password -> ' . $vendorPassword . ' is created, has ' . $user->stores()->count() . ' stores for testing]');
         });
@@ -40,6 +59,25 @@ class UsersTableSeeder extends Seeder
         else
             Log::error('[Inzaana][No vendor user created] -> [Seeding failed]');
 
+        /*
+         * Add plan in local database
+         * */
+        Inzaana\StripePlan::create([
+            "plan_id"               => 'VuvmBePBCq3L',
+            "name"                  => 'Free',
+            "amount"                => '0.00',
+            "currency"              => 'INR',
+            "interval"              => 'month',
+            "active"                => '1',
+            "trial_period_days"     => '12',
+            "statement_descriptor"  => 'Free Trial Package.',
+            "created"               => date('Y-m-d H:i:s')
+        ]);
+
+        /*
+         * Seed Customer
+         * Create only 5 Customer
+         * */
         $users = factory(Inzaana\User::class, 5)->create([
             'name' => $faker->unique()->firstName . ' ' .  $faker->unique()->lastName, 
         ])->each(function($user){
