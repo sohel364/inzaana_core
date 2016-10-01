@@ -30,7 +30,7 @@
             <div class="row grid1" class="container-fluid">
 
                 <div class="col-md-9">
-                    <img src="http://{{ isset($sub_domain) ? $sub_domain : 'inzaana.com' }}/images/shop.png" class="banner_image"  class="img-responsive" alt="" />
+                    <img src="http://inzaana.com/images/shop.png" class="banner_image"  class="img-responsive" alt="" />
                 </div>
                 <!-- adress div start-->
                 <div class="col-md-3">
@@ -43,7 +43,7 @@
                                         <i class="fa fa-envelope-o"></i>
                                     </div>
                                     <div class="address-table-cell shop-website">
-                                        <a href="http://{{ isset($sub_domain) ? $sub_domain : 'inzaana.com' }}/showcase">example@domain.com</a>
+                                        <a href="http://inzaana.com/showcase">example@domain.com</a>
                                     </div>
 
                                 </div>

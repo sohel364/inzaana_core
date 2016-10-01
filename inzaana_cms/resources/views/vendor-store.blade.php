@@ -26,7 +26,7 @@
                     <div class="carousel-inner" role="listbox">
 
                         <div class="item active">
-                            <img src="http://{{ $sub_domain }}/images/kitkat-300x300.jpg" alt="{{ $product->product_title }}" width=auto height="345">
+                            <img src="http://inzaana.com/images/kitkat-300x300.jpg" alt="{{ $product->product_title }}" width=auto height="345">
                             <div class="carousel-caption">
                                 <h3>{{ $product->product_title }}</h3>
                                 <p>The atmosphere in Chania has a touch of Florence and Venice.</p>
@@ -34,7 +34,7 @@
                         </div>
 
                         <div class="item">
-                            <img src="http://{{ $sub_domain }}/images/kitkat-300x300.jpg" alt="{{ $product->product_title }}" width="460" height="345">
+                            <img src="http://inzaana.com/images/kitkat-300x300.jpg" alt="{{ $product->product_title }}" width="460" height="345">
                             <div class="carousel-caption">
                                 <h3>{{ $product->product_title }}</h3>
                                 <p>The atmosphere in Chania has a touch of Florence and Venice.</p>
