@@ -123,7 +123,7 @@
             </div>
         @endif
 
-        <div class="modal-body">
+        <div class="modal-body";>
             <div class="form-group">
               <label  class="col-sm-3 control-label">Product Category:</label>
               <div class="col-sm-7">
@@ -139,6 +139,22 @@
               <div class="col-sm-2">
                   <button formmethod="GET" formaction="{{ route('user::categories') }}" class="btn btn-info btn-flat"><i class="fa fa-plus"></i> </button>
               </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-3 control-label">Product Sub Category:</label>
+                <div class="col-sm-7">
+                    <select name="subcategory" class="form-control select2" multiple="multiple" data-placeholder="Select a sub Category" style="width: 100%;">
+
+                        {{--@if(isset($categories))--}}
+                            {{--@foreach( $categories as $category )--}}
+                                {{--<option>{{ $category->category_name or 'Uncategorized' }}</option>--}}
+                            {{--@endforeach--}}
+                        {{--@endif--}}
+                    </select>
+                </div>
+                {{--<div class="col-sm-2">--}}
+                    {{--<button formmethod="GET" formaction="{{ route('user::categories') }}" class="btn btn-info btn-flat"><i class="fa fa-plus"></i> </button>--}}
+                {{--</div>--}}
             </div>
             <div class="form-group{{ $errors->has('product_title') ? ' has-error' : '' }}">
               <label for="product-title" class="col-sm-3 control-label">Product Title:</label>
@@ -165,14 +181,14 @@
             <div class="form-group{{ $errors->has('mrp') ? ' has-error' : '' }}">
               <label for="mrp" class="col-sm-3 control-label">MRP:</label>
               <div class="col-sm-2">
-                <input type="text" class="form-control" id="mrp" name="mrp" placeholder="ex: 3$">
+                <input type="text" class="form-control" id="mrp" name="mrp" placeholder="ex: 3₹">
                 @if ($errors->has('mrp'))
                       <span class="help-block">
                           <strong>{{ $errors->first('mrp') }}</strong>
                       </span>
                 @endif
               </div>
-                <div class="col-sm-7 padT5"><b>$</b></div>
+                {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
             </div>
             <div class="form-group{{ $errors->has('discount') ? ' has-error' : '' }}">
               <label for="discount" class="col-sm-3 control-label">Discount:</label>
@@ -184,19 +200,19 @@
                       </span>
                 @endif
               </div>
-                <div class="col-sm-7 padT5"><b>%</b></div>
+                {{--<div class="col-sm-7 padT5"><b>%</b></div>--}}
             </div>
             <div class="form-group{{ $errors->has('selling-price') ? ' has-error' : '' }}">
               <label for="selling-price" class="col-sm-3 control-label">Selling Price:</label>
               <div class="col-sm-2">
-                <input type="text" class="form-control" id="selling-price" name="selling-price" placeholder="ex: 3$">
+                <input type="text" class="form-control" id="selling-price" name="selling-price" placeholder="ex: 3₹">
                 @if ($errors->has('selling-price'))
                       <span class="help-block">
                           <strong>{{ $errors->first('selling-price') }}</strong>
                       </span>
                 @endif
               </div>
-                <div class="col-sm-7 padT5"><b>$</b></div>
+                {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
             </div>
             <div class="form-group{{ $errors->has('upload-image') ? ' has-error' : '' }}">
               <label for="upload-image" class="col-sm-3 control-label">Upload Image:</label>
@@ -208,6 +224,32 @@
                       </span>
                 @endif
               </div>
+            </div>
+
+            <div class="form-group{{ $errors->has('selling-price') ? ' has-error' : '' }}">
+                <label for="selling-price" class="col-sm-3 control-label">Available Quantity</label>
+                <div class="col-sm-2">
+                    <input type="text" class="form-control" id="" name="" placeholder=1>
+                    {{--@if ($errors->has('selling-price'))--}}
+                        {{--<span class="help-block">--}}
+                          {{--<strong>{{ $errors->first('selling-price') }}</strong>--}}
+                      {{--</span>--}}
+                    {{--@endif--}}
+                </div>
+                {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
+            </div>
+
+            <div class="form-group{{ $errors->has('selling-price') ? ' has-error' : '' }}">
+                <label for="selling-price" class="col-sm-3 control-label">Time limit For Return</label>
+                <div class="col-sm-2">
+                    <input type="text" class="form-control" id="" name="" placeholder="2 days">
+                    {{--@if ($errors->has('selling-price'))--}}
+                    {{--<span class="help-block">--}}
+                    {{--<strong>{{ $errors->first('selling-price') }}</strong>--}}
+                    {{--</span>--}}
+                    {{--@endif--}}
+                </div>
+                {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
             </div>
 
         </div>
@@ -247,10 +289,13 @@
                       <!-- <th>ID</th> -->
                       <th>Product Name</th>
                       <th>Category</th>
+                      <th>Sub Category</th>
                       <th>MRP</th>
                       <th>Discount</th>
                       <th>Price</th>
                       <th>Image</th>
+                      <th>Available Quantity</th>
+                      <th>Time Limit For Return</th>
                       <th>Status</th>
                       <th>Action</th>
                     </tr>
@@ -261,10 +306,13 @@
                       <!-- <td id="child"><a href="">001</a> </td> -->
                       <td id="child"><a href="">{{ $product->product_title }}</a></td>
                       <td id="child"><a href="">{{ $product->category ? $product->category->category_name : 'Uncategorized' }}</a></td>
+                      <td id="child"><a href=""></a></td> <!-- sub category-->
                       <td id="child"><a href="">{{ $product->product_mrp }}</a></td>
                       <td id="child"><a href="">{{ $product->product_discount }} %</a></td>
                       <td id="child"><a href="">$ {{ $product->selling_price }}</a></td>
                       <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ $product->photo_name }}" height="60px" width="90px"/></a></td>
+                      <td id="child"><a href=""></a></td> <!-- Available quantity-->
+                      <td id="child"><a href=""></a></td> <!-- Time limit for return-->
                       <td id="child"><a href=""><span class="label label-success">{{ $product->getStatus() }}</span></a></td>
                       <td class="text-center" id="child">
                         <form id="product-modification-form" class="form-horizontal" method="POST" >

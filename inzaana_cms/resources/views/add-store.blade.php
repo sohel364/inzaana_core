@@ -108,8 +108,12 @@
                     <tr>
                       <!-- <th class="text-center hidden">ID</th> -->
                       <th class="text-center">Store Name</th>
+
+                      <th class="text-center">Address</th>
                       <th class="text-center">Store URL</th>
+                      <th class="text-center">I am going to sell</th>
                       <th class="text-center">Store Description</th>
+                      <th class="text-center">Status</th>
                       <th class="text-center">Action</th>
                     </tr>
                     @if(isset($stores))
@@ -117,10 +121,19 @@
                       <tr>
                         <!-- <td class="text-center" id="child"><a href="">001</a> </td> -->
                         <td class="text-center" id="child"><a href="">{{ $store->name }}</a></td>
+
+                        <td class="text-center" id="child"><a href="">{{ $store->adress }}</a></td>
+
                         <td class="text-center" id="child">
                           <a target="_blank" href="{{ route('user::stores.redirect', [ 'site' => str_replace('.', '', $store->name_as_url) . '.' . $store->sub_domain . '.' . $store->domain ] ) }}">{{ str_replace('.', '', $store->name_as_url) . '.' . $store->sub_domain . '.' . str_replace('.', '', $store->domain) }}</a>
                         </td>
+
+                        <td class="text-center" id="child"><a href="">{{ $store->sell }}</a></td>
+
                         <td class="text-center" id="child"><a href="">{{ $store->description or 'This is a store named ' . $store->name }}</a></td>
+
+                        <td class="text-center" id="child"><a href="">{{ $store->status }}</a></td>
+
                         <td class="text-center" id="child">
                           <form id="store-modification-form" class="form-horizontal" method="GET" >
                             <input formaction="{{ route('user::stores.edit', [$store]) }}" id="store-edit-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Edit"></input>
@@ -130,6 +143,7 @@
                             <input formaction="{{ route('user::stores.delete', [$store]) }}" id="store-delete-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Delete"></input>
                           </form>
                         </td>
+
                       </tr>
                       @endforeach
                     @endif

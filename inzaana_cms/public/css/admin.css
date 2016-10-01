@@ -67,3 +67,14 @@
     border-top-color: rgba(60, 141, 188, 0);
 
 }
+
+
+@media screen and (min-width: 750px) {
+  
+.modal-dialog  {width:60%;}
+
+}
+
+
+
+
