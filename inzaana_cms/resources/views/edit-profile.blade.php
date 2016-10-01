@@ -81,24 +81,26 @@
                   <div class="row">
                         <div class="col-xs-12 col-sm-6 col-md-6">
                             <div class="form-group animated fadeInLeftShort{{ $errors->has('password') ? ' has-error' : '' }}" data-id="9">
-                                <input type="password" name="password" id="password" class="form-control input-sm" placeholder="Password" tabindex="5">
+                              <label for="password">Reset password</label>
+                              <input type="password" name="password" id="password" class="form-control input-sm" placeholder="Reset Password" tabindex="5">
 
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                          <strong>{{ $errors->first('password') }}</strong>
-                                      </span>
-                                @endif
+                              @if ($errors->has('password'))
+                                  <span class="help-block">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                              @endif
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-6">
                             <div class="form-group animated fadeInRightShort{{ $errors->has('password_confirmation') ? ' has-error' : '' }}" data-id="10">
-                                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-sm" placeholder="Confirm Password" tabindex="6">
+                              <label for="Confirm password">Confirm password</label>
+                              <input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-sm" placeholder="Confirm Password" tabindex="6">
 
-                                @if ($errors->has('password_confirmation'))
-                                    <span class="help-block">
-                                          <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                      </span>
-                                @endif
+                              @if ($errors->has('password_confirmation'))
+                                  <span class="help-block">
+                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
+                                    </span>
+                              @endif
                             </div>
                         </div>
                   </div>

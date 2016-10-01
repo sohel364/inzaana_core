@@ -30,7 +30,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $user = User::whereEmail(config('mail.admin.address'))->first();
+        return view('home')->withAdminUser($user);
     }
 
     public function redirectToStore($name, $domain)

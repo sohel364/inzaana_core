@@ -118,7 +118,7 @@ class ProductController extends Controller
             $search_terms = $request->query('search-box');
             $search_terms_slugged = str_slug($search_terms);
 
-            $productsBySearch = Product::all()->where('product_title', $search_terms);
+            $productsBySearch = Product::where('product_title', $search_terms)->orWhere('product_title', 'like', '%' . $search_terms . '%')->get();;
             $productsCount = $productsBySearch->count();
             return redirect()->route('user::products.search-terms', [$search_terms_slugged])
                                 ->with(compact('productsBySearch', 'productsCount'));

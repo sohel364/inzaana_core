@@ -45,8 +45,8 @@
 					<div class="row">
 					  <div class="col-md-6">
 						<ul class="nav nav-pills nav-top">
-						  <li><a href="#"><i class="fa fa-envelope-o"></i>7042247526</a></li>
-						  <li><a href="#"><i class="fa fa-phone"></i>admin@inzaana.com</a></li>
+						  <li><a href="#"><i class="fa fa-envelope-o"></i>{{ isset($admin_user) ? $admin_user->phone_number : '7042247526' }}</a></li>
+						  <li><a href="#"><i class="fa fa-phone"></i>{{ isset($admin_user) ? $admin_user->email : 'admin@inzaana.com' }}</a></li>
 						</ul>
 					  </div>
 					  <div class="col-md-6">

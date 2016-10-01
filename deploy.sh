@@ -6,5 +6,6 @@ git pull
 composer self-update
 composer update
 cd ~/public_html/
-cp ../bdrepo/inzaana_core/inzaana_cms/inzaana_cms/
+cp -R ../bdrepo/inzaana_core/inzaana_cms/ inzaana_cms/
+php artisan migrate --seed
 

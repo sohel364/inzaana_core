@@ -364,6 +364,16 @@ class UserController extends Controller
             'title' => $request->input('title'),
             'description' => $request->input('description'),
         ]);
+        if(empty($faq->title))
+        {
+            $errors['title'] = "FAQ title is empty.";
+            return redirect()->route('admin::faqs')->withErrors($errors);
+        }
+        if(empty($faq->title))
+        {
+            $errors['description'] = "FAQ description is empty.";
+            return redirect()->route('admin::faqs')->withErrors($errors);
+        }
         if(!$faq)
         {
             flash()->error('Your FAQ is not published! Please contact your technical person for solution.');

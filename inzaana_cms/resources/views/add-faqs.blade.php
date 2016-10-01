@@ -44,7 +44,7 @@
                   </div>
                   <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
                     <label for="description">Question Details</label>
-                    <textarea placeholder="Add Question details..." class="form-control" rows="5" id="description" maxlength="1000" name="description">{{ old('description') }}</textarea>
+                    <textarea placeholder="Add Question details..." class="form-control" rows="5" id="description" maxlength="1000" name="description"></textarea>
                     @if ($errors->has('description'))
                           <span class="help-block">
                               <strong>{{ $errors->first('description') }}</strong>
