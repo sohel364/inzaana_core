@@ -128,6 +128,7 @@ Route::group(['middleware' => 'web'], function () {
         Route::post('/products/edit/{product_id}', [ 'uses' => 'ProductController@edit', 'as' => 'products.edit' ]);
         Route::post('/products/delete/{product_id}', [ 'uses' => 'ProductController@delete', 'as' => 'products.delete' ]);
         Route::get('/products/approvals', [ 'uses' => 'ProductController@approvals', 'as' => 'products.approvals' ]);
+        Route::post('/products/approvals/confirm/{id}', [ 'uses' => 'ProductController@confirmApproval', 'as' => 'products.approvals.confirm' ]);
 
         // Category controller
         Route::get('/categories', [ 'uses' => 'CategoryController@index', 'as' => 'categories' ]);
@@ -136,6 +137,7 @@ Route::group(['middleware' => 'web'], function () {
         Route::post('/categories/edit/{category_id}', [ 'uses' => 'CategoryController@postEdit', 'as' => 'categories.update' ]);
         Route::post('/categories/delete/{category_id}', [ 'uses' => 'CategoryController@delete', 'as' => 'categories.delete' ]);
         Route::get('/categories/approvals', [ 'uses' => 'CategoryController@approvals', 'as' => 'categories.approvals' ]);
+        Route::post('/categories/approvals/confirm/{id}', [ 'uses' => 'CategoryController@confirmApproval', 'as' => 'categories.approvals.confirm' ]);
 
         // HTML view menu controller
         Route::post('/html-view-menus/{template_id}', [ 'uses' => 'HtmlViewMenuController@contents', 'as' => 'menus.contents' ]);

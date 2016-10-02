@@ -156,7 +156,8 @@
 
       <div id="page-wrapper">
         @include('flash')
-           @yield('content')
+        @include('errors')
+        @yield('content')
       </div><!--END PAGE WRAPPER-->
     </div>
     

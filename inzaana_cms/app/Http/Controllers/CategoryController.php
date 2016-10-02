@@ -2,7 +2,7 @@
 
 namespace Inzaana\Http\Controllers;
 
-use Illuminate\Http\Request as CategoryRquest;
+use Illuminate\Http\Request as CategoryRequest;
 
 use Inzaana\Http\Requests;
 use Inzaana\Http\Controllers\Controller;
@@ -35,7 +35,7 @@ class CategoryController extends Controller
                                    ->withCategories(Category::all());
     }
 
-    public function create(CategoryRquest $request)
+    public function create(CategoryRequest $request)
     {
         $categoryName = $request->input('category-name');
         $category = Category::create([
@@ -64,7 +64,7 @@ class CategoryController extends Controller
         return view('add-category', compact('categories', 'categoryEdit'))->withUser(Auth::user());
     }
 
-    public function postEdit(CategoryRquest $request, $category_id)
+    public function postEdit(CategoryRequest $request, $category_id)
     {        
         $categories = Category::all();
         $categoryName = $request->input('category-name');
@@ -110,5 +110,23 @@ class CategoryController extends Controller
             ]
         ];
         return redirect()->route('user::products.approvals')->withApprovals($approvals);
+    }
+
+    public function confirmApproval(CategoryRequest $request, $id)
+    {
+        $category = Category::find($id);
+        if(!$category)
+            redirect()->back()->withErrors(['Product not found to approve!']);
+        if($request->has('confirmation-select'))
+        {
+            if($request->input('confirmation-select') == 'approve')
+                $category->status = 'APPROVED';
+            if($request->input('confirmation-select') == 'reject')
+                $category->status = 'REJECTED';
+            if(!$category->save())
+                redirect()->back()->withErrors(['Failed to confirm category approval!']);
+            flash()->success('Your have ' . strtolower($category->getStatus()) . ' category (' . $category->category_name . ').');
+        }
+        return redirect()->back();
     }
 }

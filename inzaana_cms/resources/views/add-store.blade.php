@@ -135,10 +135,10 @@
                         <td class="text-center" id="child"><a href="">{{ $store->status }}</a></td>
 
                         <td class="text-center" id="child">
-                          <form id="store-modification-form" class="form-horizontal" method="GET" >
+                          <form id="store-modification-form-edit" class="form-horizontal" method="GET" >
                             <input formaction="{{ route('user::stores.edit', [$store]) }}" id="store-edit-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Edit"></input>
                           </form>
-                          <form id="store-modification-form" class="form-horizontal" method="POST" >
+                          <form id="store-modification-form-delete" class="form-horizontal" method="POST" >
                             {!! csrf_field() !!}
                             <input formaction="{{ route('user::stores.delete', [$store]) }}" id="store-delete-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Delete"></input>
                           </form>

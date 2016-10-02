@@ -216,4 +216,22 @@ class ProductController extends Controller
         }
         return $response->withApprovals($approvals);
     }
+
+    public function confirmApproval(ProductRequest $request, $id)
+    {
+        $product = Product::find($id);
+        if(!$product)
+            redirect()->back()->withErrors(['Product not found to approve!']);
+        if($request->has('confirmation-select'))
+        {
+            if($request->input('confirmation-select') == 'approve')
+                $product->status = 'APPROVED';
+            if($request->input('confirmation-select') == 'reject')
+                $product->status = 'REJECTED';
+            if(!$product->save())
+                redirect()->back()->withErrors(['Failed to confirm product approval!']);
+            flash()->success('Your have ' . strtolower($product->getStatus()) . ' product (' . $product->product_title . ').');
+        }
+        return redirect()->back();
+    }
 }
