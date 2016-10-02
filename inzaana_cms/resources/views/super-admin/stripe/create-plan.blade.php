@@ -74,8 +74,24 @@
                             <div id="charNum"></div>
                             @if($errors->first('plan_des')) <p class="text-danger text-sm danger_text">{{ $errors->first('plan_des') }}</p> @endif
                         </div>
+						
+						<div class="form-group">
+						
+							<label for="Features">Select features for the plan : </label>
+							<div class="checkbox">
+							<label><input type="checkbox" value="">Feature 1</label>
+							</div>
+							<div class="checkbox">
+							  <label><input type="checkbox" value="">Feature 2</label>
+							</div>
+							<div class="checkbox">
+							  <label><input type="checkbox" value="">Feature 3</label>
+							</div>
+						</div>	
+						
+						
                         <input type="submit" class="btn btn-primary btn-sm" value="Create Plan">
-
+					
                     </form>
 
                 </div>
