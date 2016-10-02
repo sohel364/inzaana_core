@@ -25,7 +25,7 @@
             <div class="box box-noborder">
 
               <div class="box-header with-border">
-                <h3 class="box-title">Update your profile below</h3>
+                <h3 class="box-title">Profile Image</h3>
               </div>
 
               @if(isset($user))
@@ -35,10 +35,10 @@
                 {!! csrf_field() !!}
 
                 <div class="box-body">							
-				  <div class="form-group{{ $errors->has('profile_image') ? ' has-error' : '' }}">
-						<img src="{{ asset('/dist/img/user2-160x160.jpg') }}" class="img-rounded" alt="Cinque Terre" width="304" height="236">										
-						<input id="file-input" type="file"/>
-				 </div>
+        				  <div class="form-group{{ $errors->has('profile_image') ? ' has-error' : '' }}">
+        						<img src="{{ asset('/dist/img/user2-160x160.jpg') }}" class="img-rounded" alt="Cinque Terre" width="304" height="236">										
+        						<input id="file-input" type="file"/>
+        				 </div>
 				 
                   <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                     <label for="name">Name</label>
@@ -74,13 +74,13 @@
                   </div>
 				  
 				  
-				  <div class="form-group{{ $errors->has('alternatemail') ? ' has-error' : '' }}">
-                    <label for="alternatemail">Inzaana web-mail</label>
-                    <input type="text" class="form-control" value="" id="email" name="email" placeholder="Your inzaana web-email..">            
+				          <div class="form-group{{ $errors->has('email_alter') ? ' has-error' : '' }}">
+                    <label for="email_alter">Inzaana web-mail</label>
+                    <input type="text" class="form-control" value="{{ $user->email_alter or '' }}" id="email_alter" name="email_alter" placeholder="Your inzaana web-email..">            
 
-                    @if ($errors->has('alternatemail'))
+                    @if ($errors->has('email_alter'))
                         <span class="help-block">
-                              <strong>{{ $errors->first('alternatemail') }}</strong>
+                              <strong>{{ $errors->first('email_alter') }}</strong>
                           </span>
                     @endif
                   </div>
@@ -96,41 +96,40 @@
                     @endif
                   </div>
 				  
-				  <div class="form-group">
-				  	 <label for="password">Reset password</label>
-					  <input type="password" name="oldpassword" id="oldpassword" class="form-control input-sm" placeholder="Old Password" tabindex="5">
+        				  <div class="form-group{{ $errors->has('oldpass') ? ' has-error' : '' }}">
+        				  	<label for="oldpass">Reset password</label>
+                    <input type="password" name="oldpass" id="oldpass" class="form-control input-sm" placeholder="Old Password" tabindex="5">
 
-					  @if ($errors->has('password'))
-						  <span class="help-block">
-								<strong>{{ $errors->first('password') }}</strong>
-							</span>
-					  @endif
-				  </div>
-				  
-				  
-				<div class="form-group">
-						<input type="password" name="password" id="password" class="form-control input-sm" placeholder="Password" tabindex="5">
+        					  @if ($errors->has('oldpass'))
+        						  <span class="help-block">
+        								<strong>{{ $errors->first('oldpass') }}</strong>
+        							</span>
+        					  @endif
+        				  </div>        				  
+        				  
+          				<div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+          						<input type="password" name="password" id="password" class="form-control input-sm" placeholder="New Password" tabindex="6">
 
-						@if ($errors->has('password'))
-							<span class="help-block">
-								  <strong>{{ $errors->first('password') }}</strong>
-							  </span>
-						@endif
-				</div>
+          						@if ($errors->has('password'))
+          							<span class="help-block">
+          								  <strong>{{ $errors->first('password') }}</strong>
+          							  </span>
+          						@endif
+          				</div>
 
-				<div class="form-group">
-						<input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-sm" placeholder="Confirm Password" tabindex="6">
+          				<div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
+          						<input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-sm" placeholder="Confirm Password" tabindex="7">
 
-						@if ($errors->has('password_confirmation'))
-							<span class="help-block">
-								  <strong>{{ $errors->first('password_confirmation') }}</strong>
-							  </span>
-						@endif
-				</div>	
+          						@if ($errors->has('password_confirmation'))
+          							<span class="help-block">
+          								  <strong>{{ $errors->first('password_confirmation') }}</strong>
+          							  </span>
+          						@endif
+          				</div>	
 
-                <div class="box-footer text-right">
-                  <button type="submit" class="btn btn-info btn-flat">Update Profile</button>
-                </div>
+                  <div class="box-footer text-right">
+                    <button type="submit" class="btn btn-info btn-flat">Update Profile</button>
+                  </div>
               </form>
               <!--end of form-->
               @else

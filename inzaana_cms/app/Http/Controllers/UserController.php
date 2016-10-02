@@ -272,8 +272,8 @@ class UserController extends Controller
         $rules = collect([
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
-            'password' => 'confirmed|min:6',
             'phone_number' => 'required|min:11',
+            'email_alter' => 'email',
         ]);
 
         $inputs = collect([
@@ -291,9 +291,19 @@ class UserController extends Controller
 
         if($request->has('password'))
         {
-            $inputs = $inputs->merge([
-                'password' => $request->input('password'),
-            ]);
+            if(!Auth::attempt(['email' => $request->get('email'), 'password' => $request->get('oldpass')]))
+            {
+                return redirect()->back()->withErrors([ 'oldpass' => 'Password did not match with existing.' ]);
+            }
+            if($request->input('password') != $request->input('password_confirmation'))
+            {
+                return redirect()->back()->withErrors([ 'password_confirmation' => 'Password did not match with new one.' ]);
+            }
+            if(count($request->input('password')) < 6)
+            {
+                return redirect()->back()->withErrors([ 'password' => 'Password must have minimum 6 characters' ]);
+            }
+            $user->password = bcrypt($request->input('password'));
         }
 
         $validator = $this->validator($inputs->toArray(), $rules->toArray());
@@ -306,8 +316,6 @@ class UserController extends Controller
         if($inputs->has('email'))
             $user->email = $inputs['email'];
         $user->phone_number = $inputs['phone_number'];
-        if($inputs->has('password'))
-            $user->password =  bcrypt($inputs['password']);
         if(!$user->save())
             return redirect()->back()->withErrors(['Failed to update your profile.']);
         flash()->success('You have updated your profile successfully!');
