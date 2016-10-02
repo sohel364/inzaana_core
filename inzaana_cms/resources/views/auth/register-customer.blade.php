@@ -42,6 +42,8 @@
                                 </div>
 
                             </div>
+							
+							
                         </div>
                         <div class="row">
                             <div class="col-xs-6 col-sm-6 col-md-6 text-right">
@@ -83,6 +85,19 @@
                                               <strong>{{ $errors->first('password_confirmation') }}</strong>
                                           </span>
                                     @endif
+                                </div>
+                            </div>
+							
+							<div class="col-xs-6 col-sm-6 col-md-6 text-left">
+                                <div class="form-group animated fadeInRightShort" data-id="6">
+                                    <input type="phonenumber" name="phonenumber" class="form-control input-sm" placeholder="Phone number" value="">
+                                </div>
+                            </div>
+							
+
+							<div class="col-xs-6 col-sm-6 col-md-6 text-left">
+                                <div class="form-group animated fadeInRightShort" data-id="6">
+                                    <textarea type="address" name="address" class="form-control input-sm" placeholder="Address" value=""></textarea>
                                 </div>
                             </div>
                         </div>

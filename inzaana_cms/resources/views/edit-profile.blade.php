@@ -34,7 +34,12 @@
 
                 {!! csrf_field() !!}
 
-                <div class="box-body">
+                <div class="box-body">							
+				  <div class="form-group{{ $errors->has('profile_image') ? ' has-error' : '' }}">
+						<img src="{{ asset('/dist/img/user2-160x160.jpg') }}" class="img-rounded" alt="Cinque Terre" width="304" height="236">										
+						<input id="file-input" type="file"/>
+				 </div>
+				 
                   <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                     <label for="name">Name</label>
                     <input type="text" class="form-control" value="{{ $user->name or '' }}" id="name" name="name" placeholder="Your name..">
@@ -67,7 +72,20 @@
                           </span>
                     @endif
                   </div>
-                  <div class="form-group ">
+				  
+				  
+				  <div class="form-group{{ $errors->has('alternatemail') ? ' has-error' : '' }}">
+                    <label for="alternatemail">Inzaana web-mail</label>
+                    <input type="text" class="form-control" value="" id="email" name="email" placeholder="Your inzaana web-email..">            
+
+                    @if ($errors->has('alternatemail'))
+                        <span class="help-block">
+                              <strong>{{ $errors->first('alternatemail') }}</strong>
+                          </span>
+                    @endif
+                  </div>
+				  
+                  <div class="form-group">
                     <label for="address">Address</label>
                     <input type="text" class="form-control" value="{{ $user->address or '' }}" id="mailing-address" name="mailing-address" placeholder="Your mailing address..">            
 
@@ -77,35 +95,38 @@
                           </span>
                     @endif
                   </div>
+				  
+				  <div class="form-group">
+				  	 <label for="password">Reset password</label>
+					  <input type="password" name="oldpassword" id="oldpassword" class="form-control input-sm" placeholder="Old Password" tabindex="5">
 
-                  <div class="row">
-                        <div class="col-xs-12 col-sm-6 col-md-6">
-                            <div class="form-group animated fadeInLeftShort{{ $errors->has('password') ? ' has-error' : '' }}" data-id="9">
-                              <label for="password">Reset password</label>
-                              <input type="password" name="password" id="password" class="form-control input-sm" placeholder="Reset Password" tabindex="5">
+					  @if ($errors->has('password'))
+						  <span class="help-block">
+								<strong>{{ $errors->first('password') }}</strong>
+							</span>
+					  @endif
+				  </div>
+				  
+				  
+				<div class="form-group">
+						<input type="password" name="password" id="password" class="form-control input-sm" placeholder="Password" tabindex="5">
 
-                              @if ($errors->has('password'))
-                                  <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                              @endif
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-6 col-md-6">
-                            <div class="form-group animated fadeInRightShort{{ $errors->has('password_confirmation') ? ' has-error' : '' }}" data-id="10">
-                              <label for="Confirm password">Confirm password</label>
-                              <input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-sm" placeholder="Confirm Password" tabindex="6">
+						@if ($errors->has('password'))
+							<span class="help-block">
+								  <strong>{{ $errors->first('password') }}</strong>
+							  </span>
+						@endif
+				</div>
 
-                              @if ($errors->has('password_confirmation'))
-                                  <span class="help-block">
-                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                    </span>
-                              @endif
-                            </div>
-                        </div>
-                  </div>
-                  
-                </div><!-- /.box-body -->
+				<div class="form-group">
+						<input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-sm" placeholder="Confirm Password" tabindex="6">
+
+						@if ($errors->has('password_confirmation'))
+							<span class="help-block">
+								  <strong>{{ $errors->first('password_confirmation') }}</strong>
+							  </span>
+						@endif
+				</div>	
 
                 <div class="box-footer text-right">
                   <button type="submit" class="btn btn-info btn-flat">Update Profile</button>
