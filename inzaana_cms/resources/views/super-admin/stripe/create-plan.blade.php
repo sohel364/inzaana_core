@@ -29,7 +29,7 @@
                     @if(session('success'))
                         <p class="text-success">{{ session('success') }}</p>
                     @endif
-                        <p class="text-success text-right"><span class="text-red">*</span> Denotes Required field.</p>
+                        <p class="text-success text-right"><span class="text-red">*</span> Mandatory field.</p>
                     <form class="form-horizontal" {{--action="{{ route('admin::create.plan') }}"--}} method="POST">
                         {{ csrf_field() }}
                         <input type="hidden" class="form-control" value="{{ str_random(12) }}" name="plan_id">
@@ -76,7 +76,12 @@
                         </div>
 						
 						<div class="form-group">
-						
+						<label for="autorenew">Enable Auto-renewal: </label>
+							<div class="checkbox">
+								<label><input type="checkbox" value="" checked>Auto Renew</label>
+							</div>
+						</div>
+						<div class="form-group">						
 							<label for="Features">Select features for the plan : </label>
 							<div class="checkbox">
 							<label><input type="checkbox" value="">Feature 1</label>
@@ -87,11 +92,10 @@
 							<div class="checkbox">
 							  <label><input type="checkbox" value="">Feature 3</label>
 							</div>
-						</div>	
-						
-						
-                        <input type="submit" class="btn btn-primary btn-sm" value="Create Plan">
-					
+						</div>																
+						<div class="form-group">
+							<input type="submit" class="btn btn-primary btn-sm" value="Create Plan">
+						</div>
                     </form>
 
                 </div>

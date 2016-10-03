@@ -28,7 +28,7 @@
               </div>
 
               <!-- form start -->
-              <form role="form" action="{{ isset($store) ? route('user::stores.update', $store) : route('user::stores.create') }}" method="POST">
+              <form role="form" action="{{ isset($store) ? route('user::stores.update', [$store]) : route('user::stores.create') }}" method="POST">
 
                 {!! csrf_field() !!}
 
@@ -45,7 +45,7 @@
 
                    <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
                     <label for="Store-address">Address</label>
-                    <input type="text" class="form-control" value="" id="store-name" name="store_name" placeholder="Add your Store addres here...">
+                    <input type="text" class="form-control" value="" id="address" name="address" placeholder="Add your Store addres here...">
                     @if ($errors->has('address'))
                         <span class="help-block">
                             <strong>{{ $errors->first('address') }}</strong>
