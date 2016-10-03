@@ -46,7 +46,10 @@
                     <tr>
                         <th>Subscriber Name</th>
                         <th>Subscriber E-mail</th>
+						<th>Contact Number</th>
+						<th>Address</th>
                         <th>Plan</th>
+						<th>Status</th>
                         <th>Trial</th>
                         <th>Action</th>
                     </tr>
@@ -57,10 +60,16 @@
                         <tr>
                             <td>{{ $subscriber->subscriber_name }}</td>
                             <td>{{ $subscriber->email }}</td>
+							<td>0173043343</td>
+							<td>33/A eskaton garden</td>
                             <td>{{ $subscriber->plan_name }} ({{ $subscriber->amount }}/{{ $subscriber->interval }})</td>
+							<td><a href=""><span class="label label-success">Active</span></a></td>
                             <td>{{ $subscriber->trial }}</td>
                             <td>
-                                <button class="btn btn-primary btn-xs" data-id="{{ $subscriber->stripe_id }}" id="user_details">Details</button>
+                                <!--<button class="btn btn-primary btn-xs" data-id="{{ $subscriber->stripe_id }}" id="user_details">Details</button>-->
+
+								@include('includes.approval-buttons', [ 'status' => 'ACTIVE', 'route' => 'subscribers', 'id' => '0'])
+                          
                             </td>
                         </tr>
                     @endforeach

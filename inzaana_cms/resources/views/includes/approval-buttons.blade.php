@@ -1,4 +1,3 @@
-
 <form id="approval-confirmation-form" class="form-horizontal" method="POST" action="{{ route( 'user::' . $route . '.approvals.confirm', compact('id')) }}">
 	
 	{!! csrf_field() !!}
