@@ -38,6 +38,7 @@ Route::group(['middleware' => 'web'], function () {
         Route::post('/super-admin/delete-plan', [ 'uses' => 'StripeController@deletePlan', 'as'=> 'deletePlan']);
         Route::post('/super-admin/view-plan/ajax/update', [ 'uses' => 'StripeController@updateStatus', 'as'=> 'updateStatus']);
         Route::get('/super-admin/view-subscriber', [ 'uses' => 'StripeController@viewSubscriber', 'as'=> 'viewSubscriber']);
+        Route::get('/super-admin/view-subscriber/approvals/confirm/{id}', [ 'uses' => 'StripeController@confirmApproval', 'as'=> 'subscribers.approvals.confirm']);
         Route::get('/super-admin/approvals', [ 'uses' => 'UserController@approvals', 'as'=> 'approvals']);
         Route::get('/super-admin/approvals/manage', [ 'uses' => 'UserController@manageApprovals', 'as'=> 'approvals.manage']);
         Route::get('/super-admin/faqs', [ 'uses' => 'UserController@faqs', 'as'=> 'faqs']);

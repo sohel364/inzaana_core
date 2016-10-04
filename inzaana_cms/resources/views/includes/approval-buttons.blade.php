@@ -1,4 +1,4 @@
-<form id="approval-confirmation-form" class="form-horizontal" method="POST" action="{{ route( 'user::' . $route . '.approvals.confirm', compact('id')) }}">
+<form id="approval-confirmation-form" class="form-horizontal" method="POST" action="{{ route( $route['namespace'] . $route['type'] . '.approvals.confirm', compact('id')) }}">
 	
 	{!! csrf_field() !!}
 
@@ -7,7 +7,7 @@
 		<option value="reject" selected>Reject</option>
 	@elseif( $status == 'REJECTED' )
 		<option value="approve" selected>Approve</option>
-	@else
+	@elseif( $status == 'ON_APPROVAL' )
 		<option value="approve">Approve</option>
 		<option value="reject" selected>Reject</option>
 	@endif

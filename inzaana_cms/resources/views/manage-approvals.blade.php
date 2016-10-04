@@ -54,9 +54,9 @@
                         </th>
                         <td class="text-center">
                           @if($approval['type'] == Inzaana\Category::class)
-                            @include('includes.approval-buttons', [ 'status' => Inzaana\Category::find($id)->status, 'route' => $type, 'id' => $id ])
+                            @include('includes.approval-buttons', [ 'status' => Inzaana\Category::find($id)->status, 'route' => [ 'namespace' => 'user::', 'type' => $type ], 'id' => $id ])
                           @elseif($approval['type'] == Inzaana\Product::class)
-                            @include('includes.approval-buttons', [ 'status' => Inzaana\Product::find($id)->status, 'route' => $type, 'id' => $id ])
+                            @include('includes.approval-buttons', [ 'status' => Inzaana\Product::find($id)->status, 'route' => [ 'namespace' => 'user::', 'type' => $type ], 'id' => $id ])
                           @endif
                         </td>
                       </tr>

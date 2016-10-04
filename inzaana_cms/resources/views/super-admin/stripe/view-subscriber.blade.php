@@ -68,7 +68,7 @@
                             <td>
                                 <!--<button class="btn btn-primary btn-xs" data-id="{{ $subscriber->stripe_id }}" id="user_details">Details</button>-->
 
-								@include('includes.approval-buttons', [ 'status' => 'ACTIVE', 'route' => 'subscribers', 'id' => '0'])
+								@include('includes.approval-buttons', [ 'status' => 'ON_APPROVAL', 'route' => [ 'namespace' => 'admin::', 'type' => 'subscribers' ], 'id' => '0'])
                           
                             </td>
                         </tr>
