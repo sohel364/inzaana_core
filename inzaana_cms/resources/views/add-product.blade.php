@@ -226,28 +226,28 @@
               </div>
             </div>
 
-            <div class="form-group{{ $errors->has('selling-price') ? ' has-error' : '' }}">
-                <label for="selling-price" class="col-sm-3 control-label">Available Quantity</label>
+            <div class="form-group{{ $errors->has('available_quantity') ? ' has-error' : '' }}">
+                <label for="available_quantity" class="col-sm-3 control-label">Available Quantity</label>
                 <div class="col-sm-2">
-                    <input type="text" class="form-control" id="" name="" placeholder=1>
-                    {{--@if ($errors->has('selling-price'))--}}
-                        {{--<span class="help-block">--}}
-                          {{--<strong>{{ $errors->first('selling-price') }}</strong>--}}
-                      {{--</span>--}}
-                    {{--@endif--}}
+                    <input type="text" class="form-control" id="available_quantity" name="available_quantity" placeholder="1">
+                    @if ($errors->has('available_quantity'))
+                      <span class="help-block">
+                        <strong>{{ $errors->first('available_quantity') }}</strong>
+                      </span>
+                    @endif
                 </div>
                 {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
             </div>
 
-            <div class="form-group{{ $errors->has('selling-price') ? ' has-error' : '' }}">
-                <label for="selling-price" class="col-sm-3 control-label">Time limit For Return</label>
+            <div class="form-group{{ $errors->has('return_time_limit') ? ' has-error' : '' }}">
+                <label for="return_time_limit" class="col-sm-3 control-label">Time limit For Return (in days)</label>
                 <div class="col-sm-2">
-                    <input type="text" class="form-control" id="" name="" placeholder="2 days">
-                    {{--@if ($errors->has('selling-price'))--}}
-                    {{--<span class="help-block">--}}
-                    {{--<strong>{{ $errors->first('selling-price') }}</strong>--}}
-                    {{--</span>--}}
-                    {{--@endif--}}
+                    <input type="text" class="form-control" id="return_time_limit" name="return_time_limit" placeholder="2 days">
+                    @if ($errors->has('return_time_limit'))
+                      <span class="help-block">
+                        <strong>{{ $errors->first('return_time_limit') }}</strong>
+                      </span>
+                    @endif
                 </div>
                 {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
             </div>
@@ -295,7 +295,7 @@
                       <th>Price</th>
                       <th>Image</th>
                       <th>Available Quantity</th>
-                      <th>Time Limit For Return</th>
+                      <th>Time Limit For Return (in days)</th>
                       <th>Status</th>
                       <th>Action</th>
                     </tr>
@@ -311,14 +311,14 @@
                       <td id="child"><a href="">{{ $product->product_discount }} %</a></td>
                       <td id="child"><a href="">$ {{ $product->selling_price }}</a></td>
                       <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ $product->photo_name }}" height="60px" width="90px"/></a></td>
-                      <td id="child"><a href=""></a></td> <!-- Available quantity-->
-                      <td id="child"><a href=""></a></td> <!-- Time limit for return-->
+                      <td id="child"><a href="">{{ $product->available_quantity }}</a></td> <!-- Available quantity-->
+                      <td id="child"><a href="">{{ $product->return_time_limit }}</a></td> <!-- Time limit for return-->
                       <td id="child"><a href=""> @include('includes.approval-label', [ 'status' => $product->status, 'labelText' => $product->getStatus() ]) </a></td>
                       <td class="text-center" id="child">
                         <form id="product-modification-form" class="form-horizontal" method="POST" >
                           {!! csrf_field() !!}
                           <!-- <button data-toggle="modal" data-target="#addProduct" type="button"><i class="fa fa-lg fa-plus-square"></i>&ensp; Add Product</button> -->
-                          <input formaction="{{ route('user::products.edit', [$product->id]) }}" id="product-edit-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Edit"></input>
+                          <!-- <input formaction="{{ route('user::products.edit', [$product->id]) }}" id="product-edit-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Edit"></input> -->
                           <input formaction="{{ route('user::products.delete', [$product->id]) }}" id="product-delete-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Delete"></input>
                         </form>
                       </td>

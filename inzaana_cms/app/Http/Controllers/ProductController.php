@@ -96,6 +96,8 @@ class ProductController extends Controller
             'product_discount' => $discount,
             'selling_price' => $this->getSellingPrice($mrp, $discount),
             'photo_name' => 'http://lorempixel.com/300/300/food',
+            'available_quantity' => $request->input('available_quantity'),
+            'return_time_limit' => $request->input('return_time_limit'),
             'status' => 'ON_APPROVAL',
         ]);
         if($product)

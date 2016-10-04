@@ -26,6 +26,8 @@ class CreateProducts extends Migration
         $table->float('selling_price');
         $table->float('product_discount');
         $table->string('photo_name');// will be considered as photo_url
+        $table->bigInteger('available_quantity');
+        $table->integer('return_time_limit');
         // $table->string('photo_size');
         // $table->string('photo_type');
         $table->enum('status', [
