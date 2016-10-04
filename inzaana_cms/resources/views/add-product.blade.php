@@ -25,7 +25,7 @@
     <div class="box-body">
         <div class="row padTB"> 
             <!--form-->
-            <form action="/products/search" method="GET">
+            <form action="{{ route('user::products.search') }}" method="GET">
                 <div class="col-lg-6 col-lg-offset-3">
                 <div class="box box-widget">
                     <div class="box-header with-border">
@@ -313,7 +313,7 @@
                       <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ $product->photo_name }}" height="60px" width="90px"/></a></td>
                       <td id="child"><a href=""></a></td> <!-- Available quantity-->
                       <td id="child"><a href=""></a></td> <!-- Time limit for return-->
-                      <td id="child"><a href=""><span class="label label-success">{{ $product->getStatus() }}</span></a></td>
+                      <td id="child"><a href=""> @include('includes.approval-label', [ 'status' => $product->status, 'labelText' => $product->getStatus() ]) </a></td>
                       <td class="text-center" id="child">
                         <form id="product-modification-form" class="form-horizontal" method="POST" >
                           {!! csrf_field() !!}

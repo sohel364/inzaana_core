@@ -18,6 +18,7 @@ class CreateStoresTable extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->string('name', 30);
             $table->string('name_as_url')->unique();
+            $table->string('address', 500);
             $table->string('domain');
             $table->string('sub_domain');
             $table->string('store_type');

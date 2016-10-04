@@ -89,8 +89,14 @@
                             </div>
 							
 							<div class="col-xs-6 col-sm-6 col-md-6 text-left">
-                                <div class="form-group animated fadeInRightShort" data-id="6">
-                                    <input type="phonenumber" name="phonenumber" class="form-control input-sm" placeholder="Phone number" value="">
+                                <div class="form-group animated fadeInRightShort{{ $errors->has('phone_number') ? ' has-error' : '' }}" data-id="6">
+                                    <input type="phonenumber" id="phone_number" name="phone_number" class="form-control input-sm" placeholder="Phone number" value="">
+                                    
+                                    @if ($errors->has('phone_number'))
+                                        <span class="help-block">
+                                              <strong>{{ $errors->first('phone_number') }}</strong>
+                                          </span>
+                                    @endif
                                 </div>
                             </div>
 							

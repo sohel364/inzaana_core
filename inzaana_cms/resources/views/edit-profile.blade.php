@@ -53,7 +53,7 @@
 
                   <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
                     <label for="contact-number">Contact Number</label>
-                    <input type="text" class="form-control" value="{{ $user->phone_number or '' }}" id="contact-number" name="contact-number" placeholder="Your contact number...">            
+                    <input type="text" class="form-control" value="{{ $user->phone_number or '' }}" id="phone_number" name="phone_number" placeholder="Your contact number...">            
 
                     @if ($errors->has('phone_number'))
                         <span class="help-block">
@@ -73,10 +73,10 @@
                     @endif
                   </div>
 				  
-				  
+				          @if($user->email_alter)
 				          <div class="form-group{{ $errors->has('email_alter') ? ' has-error' : '' }}">
                     <label for="email_alter">Inzaana web-mail</label>
-                    <input type="text" class="form-control" value="{{ $user->email_alter or '' }}" id="email_alter" name="email_alter" placeholder="Your inzaana web-email..">            
+                    <input type="text" class="form-control" value="{{ $user->email_alter }}" id="email_alter" name="email_alter" placeholder="Your inzaana web-email..">            
 
                     @if ($errors->has('email_alter'))
                         <span class="help-block">
@@ -84,6 +84,7 @@
                           </span>
                     @endif
                   </div>
+                  @endif
 				  
                   <div class="form-group">
                     <label for="address">Address</label>

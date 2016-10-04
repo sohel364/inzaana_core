@@ -152,7 +152,9 @@
       </nav>
 
       <div id="page-wrapper">
-           @yield('content')
+        @include('flash')
+        @include('errors')
+        @yield('content')
       </div><!--END PAGE WRAPPER-->
     </div>
     

@@ -47,9 +47,9 @@
                         <td class="text-center">{{ 'Unknown' }}</td>
                         <td class="text-center">
                           @if($approval['type'] == Inzaana\Category::class)
-                            @include('includes.approval-label', [ 'status' => Inzaana\Category::find($id)->status ])
+                            @include('includes.approval-label', [ 'status' => Inzaana\Category::find($id)->status, 'labelText' => Inzaana\Category::find($id)->getStatus() ])
                           @elseif($approval['type'] == Inzaana\Product::class)
-                            @include('includes.approval-label', [ 'status' => Inzaana\Product::find($id)->status ])
+                            @include('includes.approval-label', [ 'status' => Inzaana\Product::find($id)->status, 'labelText' => Inzaana\Product::find($id)->getStatus() ])
                           @endif
                         </th>
                         <td class="text-center">

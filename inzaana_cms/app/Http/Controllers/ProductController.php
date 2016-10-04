@@ -169,33 +169,32 @@ class ProductController extends Controller
 
     public function copy($id)
     {
-        $products = Auth::user()->products;
-        $product = Product::find($id); 
+        // $products = Auth::user()->products;
+        $product = Auth::user()->products()->find($id);
+        // $product = Product::find($id); 
         if($product)
         {
-            if($product->user_id == Auth::user()->id)
-            {
-                flash('Your selected product (' . $product->product_title . ') is from YOUR product list.');
-            }
-            else
-            {
-                $productCopied = Product::create([
-                    'user_id' => Auth::user()->id,
-                    'has_sub_category_id' => false,
-                    'category_subcategory_id' => $product->category_subcategory_id,
-                    'product_title' => $product->product_title,
-                    'manufacture_name' => $product->manufacture_name,
-                    'product_mrp' => $product->product_mrp,
-                    'selling_price' => $product->product_mrp,
-                    'photo_name' => $product->photo_name,
-                    'status' => 'ON_APPROVAL',
-                ]);
-                flash('Your selected product (' . $productCopied->product_title . ') is copied to your product list.');
-            }
+            flash()->warning('Your selected product (' . $product->product_title . ') is from YOUR product list.');
         }
         else
         {
-            flash('Your selected product is invalid. Please conatct your administrator.');
+            $product = Product::find($id);
+            if(!$product)
+            {
+                return redirect()->back()->withErrors(['Your selected product is invalid. Please conatct your administrator.']);
+            }
+            $product->user_id = Auth::user()->id;
+            $product->status != 'APPROVED' ? $product->status : 'APPROVED';
+            $productSerialized = collect($product->toArray());
+            $productSerialized->forget('id');
+            $productSerialized->forget('created_at');
+            $productSerialized->forget('updated_at');
+            $productCopied = Product::create($productSerialized->toArray());
+            if(!$productCopied)
+            {
+                return redirect()->back()->withErrors(['Something went wrong during creating your product (' . $product->product_title . '). Please try again or contact your administrator.']);
+            }
+            flash()->success('Your selected product (' . $productCopied->product_title . ') is copied to your product list.');
         }
         return redirect()->route('user::products');
     }

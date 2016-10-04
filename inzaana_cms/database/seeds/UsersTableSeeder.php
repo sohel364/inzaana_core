@@ -26,8 +26,6 @@ class UsersTableSeeder extends Seeder
             'name' => 'admin',
             'email' => config('mail.admin.address'),
             'password' => bcrypt('#admin?inzaana$'),
-            'phone_number' => $faker->phoneNumber,
-            'address' => $faker->address,
         ]);
         if($user)
             Log::info('[Inzaana][Single admin user created for testing]');
@@ -41,12 +39,10 @@ class UsersTableSeeder extends Seeder
         \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET'));
         $users = factory(Inzaana\User::class, 5)->create([
             'name' => $faker->unique()->firstName . ' ' .  $faker->unique()->lastName,
-            'phone_number' => $faker->phoneNumber,
-            'address' => $faker->address,
         ])->each(function($user){
             $vendorPassword = '#vendor?' . str_random(5) . '$';
             $user->password = bcrypt($vendorPassword);
-            $user->email_alter = strtolower(str_replace(' ', '', $user->name)) . '@inzaana.com';
+            $user->email_alter = preg_replace("/(\w+)@(\w+.)+/", "$1@inzaana.com", $user->email);
             $user->stores()->save(factory(Inzaana\Store::class)->make());
             $user->newSubscription('Free', 'VuvmBePBCq3L')->create(\Stripe\Token::create(array(
                 "card" => array(
@@ -84,9 +80,7 @@ class UsersTableSeeder extends Seeder
          * Create only 5 Customer
          * */
         $users = factory(Inzaana\User::class, 5)->create([
-            'name' => $faker->unique()->firstName . ' ' .  $faker->unique()->lastName, 
-            'phone_number' => $faker->phoneNumber,
-            'address' => $faker->address,
+            'name' => $faker->unique()->firstName . ' ' .  $faker->unique()->lastName,
         ])->each(function($user){
             $customerPassword = '#customer?' . str_random(5) . '$';
             $user->password = bcrypt($customerPassword);

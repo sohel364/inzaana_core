@@ -106,7 +106,9 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $data['name'] . ' ' . $data['last_name'],
             'email' => $data['email'],
+            'email_alter' => preg_replace("/(\w+)+@(\w+))/", "$1@inzaana.com", $data['email']),
             'phone_number' => $data['phone_number'],
+            'address' => $data['mailing-address'],
             'verified' => false,
             'password' => bcrypt($data['password']),
             'trial_ends_at' => Carbon::now()->addDays(10),
