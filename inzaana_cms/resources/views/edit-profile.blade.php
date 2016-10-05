@@ -76,7 +76,7 @@
 				          @if($user->email_alter)
 				          <div class="form-group{{ $errors->has('email_alter') ? ' has-error' : '' }}">
                     <label for="email_alter">Inzaana web-mail</label>
-                    <input type="text" class="form-control" value="{{ $user->email_alter }}" id="email_alter" name="email_alter" placeholder="Your inzaana web-email..">            
+                    <input type="text" class="form-control" value="{{ $user->email_alter }}" id="email_alter" name="email_alter" placeholder="Your inzaana web-email.." readonly>            
 
                     @if ($errors->has('email_alter'))
                         <span class="help-block">
