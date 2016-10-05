@@ -111,7 +111,7 @@
 
                       <th class="text-center">Address</th>
                       <th class="text-center">Store URL</th>
-                      <th class="text-center">I am going to sell</th>
+                      <!-- <th class="text-center">I am going to sell</th> -->
                       <th class="text-center">Store Description</th>
                       <th class="text-center">Status</th>
                       <th class="text-center">Action</th>
@@ -120,19 +120,19 @@
                       @foreach($stores as $store)
                       <tr>
                         <!-- <td class="text-center" id="child"><a href="">001</a> </td> -->
-                        <td class="text-center" id="child"><a href="">{{ $store->name }}</a></td>
+                        <td class="text-center" id="child"><a href="#">{{ $store->name }}</a></td>
 
-                        <td class="text-center" id="child"><a href="">{{ $store->adress }}</a></td>
+                        <td class="text-center" id="child">{{ $store->address }}</td>
 
                         <td class="text-center" id="child">
                           <a target="_blank" href="{{ route('user::stores.redirect', [ 'site' => str_replace('.', '', $store->name_as_url) . '.' . $store->sub_domain . '.' . $store->domain ] ) }}">{{ str_replace('.', '', $store->name_as_url) . '.' . $store->sub_domain . '.' . str_replace('.', '', $store->domain) }}</a>
                         </td>
 
-                        <td class="text-center" id="child"><a href="">{{ $store->sell }}</a></td>
+                        <!-- <td class="text-center" id="child"><a href="">{{ $store->sell }}</a></td> -->
 
-                        <td class="text-center" id="child"><a href="">{{ $store->description or 'This is a store named ' . $store->name }}</a></td>
+                        <td class="text-center" id="child">{{ $store->description or 'This is a store named ' . $store->name }}</td>
 
-                        <td class="text-center" id="child"><a href="">{{ $store->status }}</a></td>
+                        <td class="text-center" id="child">@include('includes.approval-label', [ 'status' => $store->status, 'labelText' => $store->getStatus() ])</td>
 
                         <td class="text-center" id="child">
                           <form id="store-modification-form-edit" class="form-horizontal" method="GET" >

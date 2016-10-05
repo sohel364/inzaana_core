@@ -116,17 +116,16 @@ class CategoryController extends Controller
     {
         $category = Category::find($id);
         if(!$category)
-            redirect()->back()->withErrors(['Product not found to approve!']);
-        if($request->has('confirmation-select'))
-        {
-            if($request->input('confirmation-select') == 'approve')
-                $category->status = 'APPROVED';
-            if($request->input('confirmation-select') == 'reject')
-                $category->status = 'REJECTED';
-            if(!$category->save())
-                redirect()->back()->withErrors(['Failed to confirm category approval!']);
-            flash()->success('Your have ' . strtolower($category->getStatus()) . ' category (' . $category->category_name . ').');
-        }
+            redirect()->back()->withErrors(['Category not found to approve!']);
+        if(!$request->has('confirmation-select'))
+            return redirect()->back()->withErrors(['Invalid request of approval confirmation!']);
+        if($request->input('confirmation-select') == 'approve')
+            $category->status = 'APPROVED';
+        if($request->input('confirmation-select') == 'reject')
+            $category->status = 'REJECTED';
+        if(!$category->save())
+            return redirect()->back()->withErrors(['Failed to confirm category approval!']);
+        flash()->success('Your have ' . strtolower($category->getStatus()) . ' category (' . $category->category_name . ').');
         return redirect()->back();
     }
 }

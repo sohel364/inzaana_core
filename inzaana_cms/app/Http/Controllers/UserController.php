@@ -332,6 +332,7 @@ class UserController extends Controller
         if(session()->has('approvals'))
         {
             $approvals = session('approvals');
+            // dd($approvals);
             return view('manage-approvals')->withUser(Auth::user())->withApprovals($approvals)->withTotalApprovals($this->totalApprovals($approvals));          
         }
         return $this->approvals();
@@ -347,6 +348,10 @@ class UserController extends Controller
         if(array_has($approvals, 'products'))
         {
             $total += $approvals['products']['data']->count();   
+        }
+        if(array_has($approvals, 'stores'))
+        {
+            $total += $approvals['stores']['data']->count();   
         }
         return $total;
     }

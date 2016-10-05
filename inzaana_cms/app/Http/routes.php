@@ -25,7 +25,6 @@ Route::group([ 'as' => 'guest::' ], function() {
         
         Route::get('/showcase', [ 'uses' => 'HomeController@redirectToStore', 'as' => 'showcase' ]); 
     });
-
 }); 
 
 Route::group(['middleware' => 'web'], function () {
@@ -74,7 +73,9 @@ Route::group(['middleware' => 'web'], function () {
             Route::post('/create', [ 'uses' => 'StoreController@create', 'as' => 'stores.create' ]);           
             Route::post('/{store}', [ 'uses' => 'StoreController@postUpdate', 'as' => 'stores.update' ]);           
             Route::get('/{store}/edit/', [ 'uses' => 'StoreController@update', 'as' => 'stores.edit' ]);           
-            Route::post('/{store}/delete/', [ 'uses' => 'StoreController@delete', 'as' => 'stores.delete' ]);           
+            Route::post('/{store}/delete/', [ 'uses' => 'StoreController@delete', 'as' => 'stores.delete' ]); 
+            Route::get('/approvals', [ 'uses' => 'StoreController@approvals', 'as' => 'stores.approvals' ]);
+            Route::post('/approvals/confirm/{id}', [ 'uses' => 'StoreController@confirmApproval', 'as' => 'stores.approvals.confirm' ]);          
         }); 
 
         // routes grouped by /dashboard

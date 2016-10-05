@@ -32,4 +32,15 @@ class Store extends Model
             ['id' => 'OTHERS', 'title' => 'Others / something else...'],
         ]);
     }
+
+    public function getStatus()
+    {
+        switch($this->status)
+        {
+            case 'ON_APPROVAL':     return 'On Apprval';
+            case 'APPROVED':        return 'Approved';
+            case 'REJECTED':        return 'Rejected';
+        }
+        return 'Unknown';
+    }
 }

@@ -23,6 +23,9 @@ class CreateStoresTable extends Migration
             $table->string('sub_domain');
             $table->string('store_type');
             $table->string('description', 1000);
+            $table->enum('status', [
+                'REMOVED', 'COMING_SOON', 'SOLD', 'ON_APPROVAL', 'APPROVED', 'REJECTED'
+            ]);
             $table->timestamps();
         });
     }

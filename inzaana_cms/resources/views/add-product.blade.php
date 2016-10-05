@@ -313,7 +313,7 @@
                       <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ $product->photo_name }}" height="60px" width="90px"/></a></td>
                       <td id="child"><a href="">{{ $product->available_quantity }}</a></td> <!-- Available quantity-->
                       <td id="child"><a href="">{{ $product->return_time_limit }}</a></td> <!-- Time limit for return-->
-                      <td id="child"><a href=""> @include('includes.approval-label', [ 'status' => $product->status, 'labelText' => $product->getStatus() ]) </a></td>
+                      <td id="child">@include('includes.approval-label', [ 'status' => $product->status, 'labelText' => $product->getStatus() ])</td>
                       <td class="text-center" id="child">
                         <form id="product-modification-form" class="form-horizontal" method="POST" >
                           {!! csrf_field() !!}

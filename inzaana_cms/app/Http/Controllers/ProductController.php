@@ -201,6 +201,11 @@ class ProductController extends Controller
         return redirect()->route('user::products');
     }
 
+    private function redirectWithMergedApprovals(array $approvals, \Illuminate\Http\RedirectResponse $route)
+    {
+        return $route->withApprovals(session()->has('approvals') ? collect(session('approvals'))->merge($approvals)->toArray() : $approvals);
+    }
+
     public function approvals()
     {
         $products = collect(Product::whereStatus('ON_APPROVAL')->orWhere('status', 'REJECTED')->orWhere('status', 'APPROVED')->get())->pluck( 'id', 'product_title' );
@@ -210,12 +215,7 @@ class ProductController extends Controller
                 'data' => $products
             ]
         ];
-        $response = redirect()->route('admin::approvals.manage');
-        if(session()->has('approvals'))
-        {
-            $approvals = collect(session('approvals'))->merge($approvals)->toArray();
-        }
-        return $response->withApprovals($approvals);
+        return $this->redirectWithMergedApprovals($approvals, redirect()->route('user::stores.approvals'));
     }
 
     public function confirmApproval(ProductRequest $request, $id)
@@ -223,16 +223,15 @@ class ProductController extends Controller
         $product = Product::find($id);
         if(!$product)
             redirect()->back()->withErrors(['Product not found to approve!']);
-        if($request->has('confirmation-select'))
-        {
-            if($request->input('confirmation-select') == 'approve')
-                $product->status = 'APPROVED';
-            if($request->input('confirmation-select') == 'reject')
-                $product->status = 'REJECTED';
-            if(!$product->save())
-                redirect()->back()->withErrors(['Failed to confirm product approval!']);
-            flash()->success('Your have ' . strtolower($product->getStatus()) . ' product (' . $product->product_title . ').');
-        }
+        if(!$request->has('confirmation-select'))
+            return redirect()->back()->withErrors(['Invalid request of approval confirmation!']);
+        if($request->input('confirmation-select') == 'approve')
+            $product->status = 'APPROVED';
+        if($request->input('confirmation-select') == 'reject')
+            $product->status = 'REJECTED';
+        if(!$product->save())
+            return redirect()->back()->withErrors(['Failed to confirm product approval!']);
+        flash()->success('Your have ' . strtolower($product->getStatus()) . ' product (' . $product->product_title . ').');
         return redirect()->back();
     }
 }

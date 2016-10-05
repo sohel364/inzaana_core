@@ -179,4 +179,38 @@ class StoreController extends Controller
         }
         return redirect()->route('user::vendor.dashboard');
     }
+
+    private function redirectWithMergedApprovals(array $approvals, \Illuminate\Http\RedirectResponse $route)
+    {
+        return $route->withApprovals(session()->has('approvals') ? collect(session('approvals'))->merge($approvals)->toArray() : $approvals);
+    }
+
+    public function approvals()
+    {
+        $stores = collect(Store::whereStatus('ON_APPROVAL')->orWhere('status', 'REJECTED')->orWhere('status', 'APPROVED')->get())->pluck( 'id', 'name' );
+        $approvals = [
+            'stores' => [
+                'type' => Store::class,
+                'data' => $stores
+            ]
+        ];
+        return $this->redirectWithMergedApprovals($approvals, redirect()->route('admin::approvals.manage'));
+    }
+
+    public function confirmApproval(StoreRequest $request, $id)
+    {
+        $store = Store::find($id);
+        if(!$store)
+            redirect()->back()->withErrors(['Your requested store is not found to approve!']);
+        if(!$request->has('confirmation-select'))
+            return redirect()->back()->withErrors(['Invalid request of approval confirmation!']);
+        if($request->input('confirmation-select') == 'approve')
+            $store->status = 'APPROVED';
+        if($request->input('confirmation-select') == 'reject')
+            $store->status = 'REJECTED';
+        if(!$store->save())
+            return redirect()->back()->withErrors(['Failed to confirm store approval!']);
+        flash()->success('Your have ' . strtolower($store->getStatus()) . ' store (' . $store->name . ').');
+        return redirect()->back();
+    }
 }

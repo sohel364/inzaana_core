@@ -33,5 +33,6 @@ $factory->define(Inzaana\Store::class, function (Faker\Generator $faker) {
         'sub_domain' => 'inzaana',
         'store_type' => $faker->word,
         'description' => $faker->realText($faker->numberBetween(50,100)),
+        'status' => 'ON_APPROVAL',
     ];
 });

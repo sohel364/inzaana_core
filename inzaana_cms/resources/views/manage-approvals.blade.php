@@ -50,6 +50,8 @@
                             @include('includes.approval-label', [ 'status' => Inzaana\Category::find($id)->status, 'labelText' => Inzaana\Category::find($id)->getStatus() ])
                           @elseif($approval['type'] == Inzaana\Product::class)
                             @include('includes.approval-label', [ 'status' => Inzaana\Product::find($id)->status, 'labelText' => Inzaana\Product::find($id)->getStatus() ])
+                          @elseif($approval['type'] == Inzaana\Store::class)
+                            @include('includes.approval-label', [ 'status' => Inzaana\Store::find($id)->status, 'labelText' => Inzaana\Store::find($id)->getStatus() ])
                           @endif
                         </th>
                         <td class="text-center">
@@ -57,6 +59,8 @@
                             @include('includes.approval-buttons', [ 'status' => Inzaana\Category::find($id)->status, 'route' => [ 'namespace' => 'user::', 'type' => $type ], 'id' => $id ])
                           @elseif($approval['type'] == Inzaana\Product::class)
                             @include('includes.approval-buttons', [ 'status' => Inzaana\Product::find($id)->status, 'route' => [ 'namespace' => 'user::', 'type' => $type ], 'id' => $id ])
+                          @elseif($approval['type'] == Inzaana\Store::class)
+                            @include('includes.approval-buttons', [ 'status' => Inzaana\Store::find($id)->status, 'route' => [ 'namespace' => 'user::', 'type' => $type ], 'id' => $id ])
                           @endif
                         </td>
                       </tr>
