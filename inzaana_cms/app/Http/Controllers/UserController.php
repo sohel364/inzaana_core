@@ -148,7 +148,7 @@ class UserController extends Controller
                 if(session()->has('approvals'))
                 {
                     $approvals = session('approvals');
-                    return $response->withApprovals($approvals)->withTotalApprovals($this->totalApprovals($approvals));
+                    return $response->withApprovals($approvals)->withTotalApprovals($this->totalApprovals($approvals, ['categories', 'products', 'stores' ]));
                 }
                 return $response;
             }
@@ -333,25 +333,20 @@ class UserController extends Controller
         {
             $approvals = session('approvals');
             // dd($approvals);
-            return view('manage-approvals')->withUser(Auth::user())->withApprovals($approvals)->withTotalApprovals($this->totalApprovals($approvals));          
+            return view('manage-approvals')->withUser(Auth::user())->withApprovals($approvals)->withTotalApprovals($this->totalApprovals($approvals, ['categories', 'products', 'stores' ]));          
         }
         return $this->approvals();
     }
 
-    private static function totalApprovals(array $approvals)
+    private static function totalApprovals(array $approvals, array $approvalTypes)
     {
         $total = 0;
-        if(array_has($approvals, 'categories'))
+        foreach ($approvalTypes as $type)
         {
-            $total += $approvals['categories']['data']->count();   
-        }
-        if(array_has($approvals, 'products'))
-        {
-            $total += $approvals['products']['data']->count();   
-        }
-        if(array_has($approvals, 'stores'))
-        {
-            $total += $approvals['stores']['data']->count();   
+            if(array_has($approvals, $type))
+            {
+                $total += $approvals[$type]['data']->count();   
+            }
         }
         return $total;
     }
