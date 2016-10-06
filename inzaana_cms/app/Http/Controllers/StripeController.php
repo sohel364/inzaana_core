@@ -56,6 +56,12 @@ class StripeController extends Controller
         if(!Auth::user()->subscribed($request->_plan_name)){
             $user->newSubscription($request->_plan_name, $request->_plan_id)
                 ->create($request->stripeToken);
+            /*
+             * Auto renewal disable
+             * */
+            if($request->auto_renewal == null){
+                $user->subscription($request->_plan_name)->cancel();
+            }
             $msg = "Successfully Subscribed.";
         }
 
@@ -78,15 +84,21 @@ class StripeController extends Controller
          * Using Stripe lib for creating plan
          * */
 
+        /*
+         * Processing input data for stripe
+         * */
         $amount = number_format($request->plan_amount,2);
         $amount = (INT)($amount * 100);
+        $interval = strtolower($request->plan_interval);
+
+
         Stripe::setApiKey(getenv('STRIPE_SECRET'));
         $plan = Plan::create(array(
             "id" => $request->plan_id,
             "name" => $request->plan_name,
             "currency" => $request->plan_currency,
             "amount" => $amount,
-            "interval" => $request->plan_interval,
+            "interval" => $interval,
             "trial_period_days" => (INT)$request->plan_trial,
             "statement_descriptor" => $request->plan_des
         ));

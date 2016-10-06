@@ -53,19 +53,23 @@ trait CheckSubscription {
          * */
 
         $trial_days = $this->getFromDatabase('trial_ends_at');
-        $created = Carbon::parse($trial_days->trial_ends_at);
-        $now = Carbon::now();
+        if($trial_days->trial_ends_at == null){
+            return 0;
+        }else{
+            $created = Carbon::parse($trial_days->trial_ends_at);
+            $now = Carbon::now();
 
-        if($created>=$now){
-            $remain = ($created->diffInDays($now)) ? (($created->diffInDays($now)==1) ? $created->diffInDays($now)." Day" : $created->diffInDays($now)." Days"):                    // return Day
-                    (($created->diffInHours($now)) ? (($created->diffInHours($now)==1) ? $created->diffInHours($now)." Hour" : $created->diffInHours($now)." Hours") :              // return Hour
-                    (($created->diffInMinutes($now)) ? (($created->diffInMinutes($now)==1)? $created->diffInMinutes($now)." Minute" :$created->diffInMinutes($now)." Minutes"):     // return Minute
-                    (($created->diffInSeconds($now)) ?  (($created->diffInSeconds($now)==1)? $created->diffInSeconds($now)." Second" : $created->diffInSeconds($now)." Seconds") :  // return Second
-                    false))) ;
-            return $remain;
-        }
-        else{
-            return false;
+            if($created>=$now){
+                $remain = ($created->diffInDays($now)) ? (($created->diffInDays($now)==1) ? $created->diffInDays($now)." Day" : $created->diffInDays($now)." Days"):                    // return Day
+                        (($created->diffInHours($now)) ? (($created->diffInHours($now)==1) ? $created->diffInHours($now)." Hour" : $created->diffInHours($now)." Hours") :              // return Hour
+                        (($created->diffInMinutes($now)) ? (($created->diffInMinutes($now)==1)? $created->diffInMinutes($now)." Minute" :$created->diffInMinutes($now)." Minutes"):     // return Minute
+                        (($created->diffInSeconds($now)) ?  (($created->diffInSeconds($now)==1)? $created->diffInSeconds($now)." Second" : $created->diffInSeconds($now)." Seconds") :  // return Second
+                        false))) ;
+                return $remain;
+            }
+            else{
+                return false;
+            }
         }
     }
 
@@ -110,8 +114,12 @@ trait CheckSubscription {
     public function getPlanEndDate()
     {
         $end_date = $this->getFromDatabase('ends_at as end_date');
-        $plan_date = Carbon::parse($end_date->end_date);
-        return $plan_date->toFormattedDateString();
+        if($end_date->end_date == null){
+            return "Unlimited(Auto renewal feature is on)";
+        }else{
+            $plan_date = Carbon::parse($end_date->end_date);
+            return $plan_date->toFormattedDateString();
+        }
     }
 
     public function getPlanRemainDays()
@@ -124,6 +132,9 @@ trait CheckSubscription {
          * */
 
         $trial_days = $this->getFromDatabase('ends_at');
+        if($trial_days->ends_at==null)
+            return "Unlimited(Auto renewal feature is on)";
+
         $created = Carbon::parse($trial_days->ends_at);
         $now = Carbon::now();
 
