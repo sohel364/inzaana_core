@@ -103,6 +103,12 @@ class AppMailer
         $this->name = config('mail.from.name');
 
         $this->deliver();
+
+        $this->subject = 'Inzaana - Elements Approval Notification!';
+        $this->view = 'auth.emails.notification-approval-admin';
+        $this->to = config('mail.admin.address');
+
+        $this->deliver();
     }
 
 
