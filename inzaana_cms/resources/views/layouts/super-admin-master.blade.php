@@ -49,11 +49,11 @@
             <i class="fa fa-bars"></i>
           </a>
 
-          <form id="topbar-search" action="" method="" class="hidden-sm hidden-xs">
+          {{--<form id="topbar-search" action="" method="" class="hidden-sm hidden-xs">
             <div class="input-icon right text-white"><a href="#"><i class="fa fa-search"></i></a>
               <input type="text" placeholder="Search here..." class="form-control text-white" />
             </div>
-          </form>
+          </form>--}}
 
           <ul class="nav navbar navbar-top-links navbar-right mbn">
 

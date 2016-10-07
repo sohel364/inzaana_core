@@ -35,7 +35,7 @@
                         <input type="hidden" class="form-control" value="{{ str_random(12) }}" name="plan_id">
                         @if($errors->first('plan_id')) <p class="text-danger text-sm danger_text">Please refresh this page and try again.</p> @endif
                         <div class="form-group">
-                            <label for="">Plan Name: <span class="text-red text-md">*</span></label>
+                            <label for="">Plan name: <span class="text-red text-md">*</span></label>
                             <input type="text" class="form-control" value="{{old('plan_name')}}" name="plan_name" id="" placeholder="Enter Plan Name...">
                             @if($errors->first('plan_name')) <p class="text-danger text-sm danger_text">{{ $errors->first('plan_name') }}</p> @endif
                         </div>
@@ -55,13 +55,13 @@
                         <div class="form-group">
                             <label for="">Interval:</label>
                             <select name="plan_interval" id="">
-                                <option value="day">daily</option>
-                                <option value="month">monthly</option>
-                                <option value="year">yearly</option>
-                                <option value="week">weekly</option>
-                                <option value="3-month">every 3 months</option>
-                                <option value="6-month">every 6 months</option>
-                                <option value="custom">custom</option>
+                                <option value="day">Daily</option>
+                                <option value="month">Monthly</option>
+                                <option value="year">Yearly</option>
+                                <option value="week">Weekly</option>
+                                <option value="3-month">Every 3 months</option>
+                                <option value="6-month">Every 6 months</option>
+                                <option value="custom">Custom</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -69,7 +69,7 @@
                             <input type="text" class="form-control" value="{{old('plan_trial')}}" name="plan_trial" id="required_input" disabled>
                         </div>
                         <div class="form-group">
-                            <label for="">Statement desc:</label>
+                            <label for="">Statement description:</label>
                             <input type="text" class="form-control" value="{{old('plan_des')}}" name="plan_des" id="field" maxlength="22">
                             <div id="charNum"></div>
                             @if($errors->first('plan_des')) <p class="text-danger text-sm danger_text">{{ $errors->first('plan_des') }}</p> @endif

@@ -18,23 +18,23 @@
 
     <div class="box-body">
       <div class="row padTB">
-
-       @if(session('success'))
-           <p class="text-primary">{{ session('success') }}</p>
-       @endif
-
-       @if(isset($subscriber))
-         <h4>Plan Name: {{ $subscriber->plan_name }}</h4>
-         @if($user->onTrial())
-               <h4>Trial Left: {{ $user->getTrialTimeString() }}</h4>
-         @endif
-         <h4>Plan Cost: {{ $user->getPlanCost() }}</h4>
-         <h4>Remaining Days: {{ $user->getPlanRemainDays() }}</h4>
-         <h4>Plan End Date: {{ $user->getPlanEndDate() }}</h4>
-       @else
-            <p class="text-center text-warning" style="font-size:22px;">You are not subscribed any plan.</p>
-            <p class="text-center text-black" style="font-size:18px;">For Subscription <a href="plan">click</a> here.</p>
-       @endif
+       <div class="col-md-6">
+           @if(session('success'))
+               <p class="text-primary">{{ session('success') }}</p>
+           @endif
+           @if(isset($subscriber))
+             <h4>Plan Name: {{ $subscriber->plan_name }}</h4>
+             @if($user->onTrial())
+                   <h4>Trial Left: {{ $user->getTrialTimeString() }}</h4>
+             @endif
+             <h4>Plan Cost: {{ $user->getPlanCost() }}</h4>
+             <h4>Remaining Days: {{ $user->getPlanRemainDays() }}</h4>
+             <h4>Plan End Date: {{ $user->getPlanEndDate() }}</h4>
+           @else
+                <p class="text-center text-warning" style="font-size:22px;">You are not subscribed any plan.</p>
+                <p class="text-center text-black" style="font-size:18px;">For Subscription <a href="plan">click</a> here.</p>
+           @endif
+       </div>
 
       </div>
     </div>

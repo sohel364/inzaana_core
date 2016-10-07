@@ -77,6 +77,9 @@
 
                             </div>
                             <div class="modal-footer">
+                                <label for="checkbox" class="pull-left">
+                                    <input type="checkbox" name="auto_renewal" value="1" id="checkbox" checked> Auto renewal
+                                </label>
                                 <input type="submit" class="btn btn-primary" value="Subscribe">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                                 </form>
