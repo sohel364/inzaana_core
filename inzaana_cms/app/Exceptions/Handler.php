@@ -98,6 +98,13 @@ class Handler extends ExceptionHandler
             return redirect()->back();
         }
 
+        if ($e instanceof TokenMismatchException) {
+            $errorMessage = 'Something went wrong during form submission! Please try again';
+            Log::critical('[Inzaana][' . $e->getMessage() . "] validation error.");
+            flash()->error($errorMessage);
+            return redirect()->back();
+        }
+
         /*
          * Stripe Exception Handling
          * Exception List: Card exception, RateLimit exception, InvalidRequest exception, Authentication Exception
