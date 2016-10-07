@@ -1,6 +1,6 @@
 <!-- Left side column. contains the logo and sidebar -->
-  {{ $user = Auth::user() }}
-  {{ $plan_name = \Laravel\Cashier\Subscription::find($user->id)->name }}
+  {{-- $user = Auth::user() --}}
+  {{-- $plan_name = \Laravel\Cashier\Subscription::find($user->id)->name --}}
       <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">

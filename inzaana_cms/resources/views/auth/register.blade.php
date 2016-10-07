@@ -320,8 +320,14 @@
                 <h4 class="formHead animated fadeInLeftShort" data-id="3">My Contact Number:</h4>
               </div>
               <div class="col-xs-6 col-sm-6 col-md-6 text-left">
-                <div class="form-group animated fadeInRightShort" data-id="6">
-                  <input type="phonenumber" name="phone_number" class="form-control input-sm" placeholder="Phone number">
+                <div class="form-group animated fadeInRightShort{{ $errors->has('phone_number') ? ' has-error' : '' }}" data-id="6">
+                  <input type="phone_number" id="phone_number" name="phone_number" class="form-control input-sm" placeholder="Phone number">
+                  
+                  @if ($errors->has('phone_number'))
+                      <span class="help-block">
+                          <strong>{{ $errors->first('phone_number') }}</strong>
+                      </span>
+                  @endif
                 </div>
               </div>
             </div>

@@ -30,7 +30,7 @@
 
               @if(isset($user))
               <!-- form start -->
-              <form role="form" action="{{ route('user::update', [$user]) }}" method="POST">
+              <form role="form" action="{{ route('user::edit.email', [$user]) }}" method="POST">
 
                 {!! csrf_field() !!}
 
@@ -53,7 +53,7 @@
 
                   <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
                     <label for="contact-number">Contact Number</label>
-                    <input type="text" class="form-control" value="{{ $user->phone_number or '' }}" id="phone_number" name="phone_number" placeholder="Your contact number...">            
+                    <input type="text" class="form-control" value="{{ $user->phone_number or old('phone_number') }}" id="phone_number" name="phone_number" placeholder="Your contact number...">            
 
                     @if ($errors->has('phone_number'))
                         <span class="help-block">
@@ -64,7 +64,7 @@
 
                   <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                     <label for="email">Email Address</label>
-                    <input type="text" class="form-control" value="{{ $user->email or '' }}" id="email" name="email" placeholder="Your email address..">            
+                    <input type="text" class="form-control" value="{{ $user->email or old('email') }}" id="email" name="email" placeholder="Your email address..">            
 
                     @if ($errors->has('email'))
                         <span class="help-block">
@@ -88,7 +88,7 @@
 				  
                   <div class="form-group">
                     <label for="address">Address</label>
-                    <input type="text" class="form-control" value="{{ $user->address or '' }}" id="mailing-address" name="mailing-address" placeholder="Your mailing address..">            
+                    <input type="text" class="form-control" value="{{ $user->address or old('address') }}" id="mailing-address" name="mailing-address" placeholder="Your mailing address..">            
 
                     @if ($errors->has('address'))
                         <span class="help-block">

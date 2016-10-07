@@ -86,6 +86,26 @@ class AppMailer
         $this->deliver();
     }
 
+
+    /**
+     * Deliver the email confirmation to user for profile update.
+     *
+     * @param  User $user
+     * @param  array $data
+     * @return void
+     */
+    public function sendEmailProfileUpdateConfirmationTo(User $user, array $data)
+    {
+        $this->from = config('mail.from.address');
+        $this->to = $user->email;
+        $this->view = 'auth.emails.confirm-profile-edit';
+        $this->data = compact('user', 'data');
+        $this->subject = 'Inzaana - Profile change verification!';
+        $this->name = config('mail.from.name');
+
+        $this->deliver();
+    }
+
     /**
      * Deliver the email confirmation to customer.
      *

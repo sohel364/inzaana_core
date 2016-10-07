@@ -260,6 +260,46 @@ class UserController extends Controller
         return view('edit-profile')->withUser($user);
     }
 
+
+    public function verifyProfileChanges(Request $request, AppMailer $mailer, User $user)
+    {
+        $errors = $this->update($request, $user);
+
+        if(!empty($errors))
+        {
+            return redirect()->back()->withErrors($errors);
+        }
+
+        $data['request_url']  = ('name/' . $user->name) . ('/email/' . $user->email);
+        $data['request_url'] .= ('/phone/' . $user->phone_number);
+        $data['request_url'] .= '/password/' . str_replace('/', '_', ($user->password ? $user->password : Auth::user()->password));
+        $data['request_url'] .= '/address/' . str_replace('/', '_', $user->address);
+
+        $mailer->sendEmailProfileUpdateConfirmationTo($user, $data);
+
+        flash()->info('A verification mail is sent to ' . Auth::user()->email . '. Please check your mail inbox/ junk/ spam directives to confirm your changes verified.');
+
+        return redirect()->back();
+    }
+
+    public function confirmProfileUpdate(Request $request, User $user, $name, $email, $phone, $password = null, $address = null)
+    {
+        if($user->id != Auth::user()->id)
+        {
+            return redirect()->route('user::edit', [Auth::user()])->withErrors(['The information you are going to update to your profile is not yours!']);
+        }
+        $user->name = $name;
+        $user->email = $email;
+        $user->address = str_replace('_', '/', $address);
+        $user->phone_number = $phone;
+        if($password)
+            $user->password = str_replace('_', '/', $password);
+        if(!$user->save())
+            return redirect()->back()->withErrors(['Failed to update your profile.']);
+        flash()->success('You have updated your profile successfully!');
+        return redirect()->route('user::edit', [$user]);
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -272,7 +312,7 @@ class UserController extends Controller
         $rules = collect([
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
-            'phone_number' => 'required|min:11',
+            'phone_number' => 'required|digits:11',
             'email_alter' => 'email',
         ]);
 
@@ -293,15 +333,15 @@ class UserController extends Controller
         {
             if(!Auth::attempt(['email' => $request->get('email'), 'password' => $request->get('oldpass')]))
             {
-                return redirect()->back()->withErrors([ 'oldpass' => 'Password did not match with existing.' ]);
+                return [ 'oldpass' => 'Password did not match with existing.' ];
             }
             if($request->input('password') != $request->input('password_confirmation'))
             {
-                return redirect()->back()->withErrors([ 'password_confirmation' => 'Password did not match with new one.' ]);
+                return [ 'password_confirmation' => 'Password did not match with new one.' ];
             }
             if(count($request->input('password')) < 6)
             {
-                return redirect()->back()->withErrors([ 'password' => 'Password must have minimum 6 characters' ]);
+                return [ 'password' => 'Password must have minimum 6 characters' ];
             }
             $user->password = bcrypt($request->input('password'));
         }
@@ -309,17 +349,14 @@ class UserController extends Controller
         $validator = $this->validator($inputs->toArray(), $rules->toArray());
         if($validator->fails())
         {
-            return redirect()->back()->withErrors($validator->errors());
+            return $validator->errors();
         }
         $user->name = $inputs['name'];
         $user->address = $inputs['address'];
         if($inputs->has('email'))
             $user->email = $inputs['email'];
         $user->phone_number = $inputs['phone_number'];
-        if(!$user->save())
-            return redirect()->back()->withErrors(['Failed to update your profile.']);
-        flash()->success('You have updated your profile successfully!');
-        return redirect()->back();
+        return [];
     }
 
     public function approvals()
@@ -374,13 +411,11 @@ class UserController extends Controller
         ]);
         if(empty($faq->title))
         {
-            $errors['title'] = "FAQ title is empty.";
-            return redirect()->route('admin::faqs')->withErrors($errors);
+            return redirect()->route('admin::faqs')->withErrors(['FAQ title is empty.']);
         }
-        if(empty($faq->title))
+        if(empty($faq->description))
         {
-            $errors['description'] = "FAQ description is empty.";
-            return redirect()->route('admin::faqs')->withErrors($errors);
+            return redirect()->route('admin::faqs')->withErrors(['FAQ description is empty.']);
         }
         if(!$faq)
         {
