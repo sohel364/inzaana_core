@@ -10,6 +10,7 @@ use Inzaana\Http\Requests;
 use Inzaana\Http\Controllers\Controller;
 use Inzaana\Product;
 use Inzaana\Category;
+use Inzaana\Mailers\AppMailer;
 
 class ProductController extends Controller
 {
@@ -218,11 +219,11 @@ class ProductController extends Controller
         return $this->redirectWithMergedApprovals($approvals, redirect()->route('user::stores.approvals'));
     }
 
-    public function confirmApproval(ProductRequest $request, $id)
+    public function confirmApproval(ProductRequest $request, AppMailer $mailer, $id)
     {
         $product = Product::find($id);
         if(!$product)
-            redirect()->back()->withErrors(['Product not found to approve!']);
+            return redirect()->back()->withErrors(['Product not found to approve!']);
         if(!$request->has('confirmation-select'))
             return redirect()->back()->withErrors(['Invalid request of approval confirmation!']);
         if($request->input('confirmation-select') == 'approve')
@@ -232,6 +233,13 @@ class ProductController extends Controller
         if(!$product->save())
             return redirect()->back()->withErrors(['Failed to confirm product approval!']);
         flash()->success('Your have ' . strtolower($product->getStatus()) . ' product (' . $product->product_title . ').');
+
+        // Sends approval mail to user who created the product
+        $data['type'] = Product::class;
+        $data['status'] = $product->getStatus();
+        $data['item_name'] = $product->product_title;
+        $data['created_at'] = $product->created_at;
+        $mailer->sendEmailForApprovalNotificationTo($product->user, $data);
         return redirect()->back();
     }
 }

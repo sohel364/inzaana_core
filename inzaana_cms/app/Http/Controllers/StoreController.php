@@ -13,6 +13,7 @@ use Redirect as StoreRedirect;
 
 use Inzaana\Store;
 use Inzaana\User;
+use Inzaana\Mailers\AppMailer;
 
 class StoreController extends Controller
 {
@@ -138,7 +139,8 @@ class StoreController extends Controller
             'name_as_url' => strtolower(str_replace(' ', '', $store)),
             'sub_domain' => $data['sub_domain'],
             'domain' => $data['domain'],
-            'description' => $data['description']
+            'description' => $data['description'],
+            'status' => 'ON_APPROVAL',
         ]);        
         $store->name_as_url = str_replace('.', '', $store->name_as_url); // removes '.' character
         if(!$store)
@@ -169,7 +171,8 @@ class StoreController extends Controller
             'user_id' => Auth::user()->id,
             'name_as_url' => $storeNameUrl,
             'sub_domain' => $subdomain,
-            'domain' => $domain
+            'domain' => $domain,
+            'status' => 'ON_APPROVAL',
         ]);
         $store->name_as_url = str_replace('.', '', $store->name_as_url); // removes '.' character
         if(!$store)
@@ -197,11 +200,11 @@ class StoreController extends Controller
         return $this->redirectWithMergedApprovals($approvals, redirect()->route('admin::approvals.manage'));
     }
 
-    public function confirmApproval(StoreRequest $request, $id)
+    public function confirmApproval(StoreRequest $request, AppMailer $mailer, $id)
     {
         $store = Store::find($id);
         if(!$store)
-            redirect()->back()->withErrors(['Your requested store is not found to approve!']);
+            return redirect()->back()->withErrors(['Your requested store is not found to approve!']);
         if(!$request->has('confirmation-select'))
             return redirect()->back()->withErrors(['Invalid request of approval confirmation!']);
         if($request->input('confirmation-select') == 'approve')
@@ -211,6 +214,12 @@ class StoreController extends Controller
         if(!$store->save())
             return redirect()->back()->withErrors(['Failed to confirm store approval!']);
         flash()->success('Your have ' . strtolower($store->getStatus()) . ' store (' . $store->name . ').');
+        // Sends approval mail to user who created the product
+        $data['type'] = Store::class;
+        $data['status'] = $store->getStatus();
+        $data['item_name'] = $store->name;
+        $data['created_at'] = $store->created_at;
+        $mailer->sendEmailForApprovalNotificationTo($store->user, $data);
         return redirect()->back();
     }
 }

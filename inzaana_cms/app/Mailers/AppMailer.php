@@ -86,6 +86,25 @@ class AppMailer
         $this->deliver();
     }
 
+    /**
+     * Deliver the email notification to vendor for approval status.
+     *
+     * @param  User $user
+     * @param  array $data
+     * @return void
+     */
+    public function sendEmailForApprovalNotificationTo(User $user, array $data)
+    {
+        $this->from = config('mail.from.address');
+        $this->to = $user->email;
+        $this->view = 'auth.emails.notification-approval';
+        $this->data = compact('user', 'data');
+        $this->subject = 'Inzaana - Elements Approval Notification!';
+        $this->name = config('mail.from.name');
+
+        $this->deliver();
+    }
+
 
     /**
      * Deliver the email confirmation to user for profile update.

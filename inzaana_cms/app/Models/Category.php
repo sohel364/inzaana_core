@@ -26,7 +26,7 @@ class Category extends Model
 
     public function products()
     {
-        return $this->hasMany('Inzaana\Product');
+        return $this->hasMany('Inzaana\Product', 'category_subcategory_id');
     }
     
     public function getStatus()

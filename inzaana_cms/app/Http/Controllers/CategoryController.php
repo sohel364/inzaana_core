@@ -7,6 +7,7 @@ use Illuminate\Http\Request as CategoryRequest;
 use Inzaana\Http\Requests;
 use Inzaana\Http\Controllers\Controller;
 use Inzaana\Category;
+use Inzaana\Mailers\AppMailer;
 
 use Auth;
 
@@ -112,11 +113,11 @@ class CategoryController extends Controller
         return redirect()->route('user::products.approvals')->withApprovals($approvals);
     }
 
-    public function confirmApproval(CategoryRequest $request, $id)
+    public function confirmApproval(CategoryRequest $request, AppMailer $mailer, $id)
     {
         $category = Category::find($id);
         if(!$category)
-            redirect()->back()->withErrors(['Category not found to approve!']);
+            return redirect()->back()->withErrors(['Category not found to approve!']);
         if(!$request->has('confirmation-select'))
             return redirect()->back()->withErrors(['Invalid request of approval confirmation!']);
         if($request->input('confirmation-select') == 'approve')
@@ -126,6 +127,15 @@ class CategoryController extends Controller
         if(!$category->save())
             return redirect()->back()->withErrors(['Failed to confirm category approval!']);
         flash()->success('Your have ' . strtolower($category->getStatus()) . ' category (' . $category->category_name . ').');
+        // Sends approval mail to users has a single product
+        $data['type'] = Category::class;
+        $data['status'] = $category->getStatus();
+        $data['item_name'] = $category->category_name;
+        $data['created_at'] = $category->created_at;
+        foreach ($category->products->unique('user_id') as $product)
+        {
+            $mailer->sendEmailForApprovalNotificationTo($product->user, $data);
+        }
         return redirect()->back();
     }
 }
