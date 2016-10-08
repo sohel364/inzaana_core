@@ -40,7 +40,15 @@ class HomeController extends Controller
         // return HomeRedirect::to('http://' . $site . '/');
         // return 'THIS IS PUBLIC PAGE (' . $name . '.inzaana.' . $domain . '/showcase) FOR VENDOR\'S STORE';
 
-        $products = Store::whereNameAsUrl($name)->first()->user->products;
+        $store = Store::whereNameAsUrl($name)->first();
+
+        if(!$store)
+            return redirect()->back()->withErrors(['Something went wrong! Store not found.']);
+
+        if($store->status == 'ON_APPROVAL')
+            return view('store-comingsoon')->withStoreName($store->name);
+
+        $products = $store->user->products;
 
         // dd($products->first()->product_title);
 
