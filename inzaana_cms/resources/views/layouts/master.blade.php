@@ -152,12 +152,20 @@
                                       <option value="org">.org</option>
                                   </select>
                               </label>
-                              <button class="btn btn-info animated fadeInRight btn-poss go" data-id="4" type="submit">Create Store!</button>
-                          </span>
-
+                              <button class="btn btn-info animated fadeInRight btn-poss go" data-id="4" type="submit">Create Store!</button>					 	 							  
+                          </span>						  
                       </div>
                   </form>
-              </div>
+				  <!--Store name suggestion. Just change the visibility to show/hide it : visible/hide-->
+				  <div class="input-group input-group-lg" style="visibility: visible">
+				  <p>
+					<label>
+					  <span class="glyphicon glyphicon-random"></span>
+					  Try : xyz, abc, asd etc
+					</label>
+				  </p>
+				  </div>
+              </div>							  
             </div>
 				</div>
 			  </section>

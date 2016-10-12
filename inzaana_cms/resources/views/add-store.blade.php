@@ -41,6 +41,12 @@
                             <strong>{{ $errors->first('name') }}</strong>
                         </span>
                     @endif
+					<p>
+						<label for="suggestion">
+						  <span class="glyphicon glyphicon-random"></span>
+						  Try : xyz, abc, asd etc
+						</label>						
+					</p>
                   </div>
 
                    <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
