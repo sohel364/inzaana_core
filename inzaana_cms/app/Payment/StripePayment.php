@@ -26,5 +26,7 @@ interface StripePayment {
 
     public function getPlanCost();
 
+    public function getFeature($plan_name, $feature_name);
+
 
 } 

@@ -1,6 +1,14 @@
 <!-- Left side column. contains the logo and sidebar -->
-  {{-- $user = Auth::user() --}}
-  {{-- $plan_name = \Laravel\Cashier\Subscription::find($user->id)->name --}}
+<?php
+  $user = Auth::user();
+  $plan_name = \Laravel\Cashier\Subscription::where('user_id',$user->id)->get()->first();
+  if($plan_name != null)
+    $plan_name = $plan_name->name;
+  else
+    $plan_name = null;
+
+?>
+
       <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
@@ -44,6 +52,7 @@
                     </ul>
       			</li>
 
+            @if($user->getFeature($plan_name,'Store'))
             <li class="treeview">
                     <a href="#">
                       <i class="fa fa-globe"></i> <span>Store <small class="label bg-green">{{ Auth::user()->stores()->count() }}</small></span> 
@@ -54,7 +63,9 @@
                       <li><a href="{{ route('user::stores') }}"><i class="fa fa-plus"></i> Add New Store </a></li>
                     </ul>
             </li>
+            @endif
 
+            @if($user->getFeature($plan_name,'Categories'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-list"></i>
@@ -65,7 +76,9 @@
                 <li><a href="{{ route('user::categories') }}"><i class="fa fa-plus"></i> Add New Category</a></li>
               </ul>
             </li>
+            @endif
 
+            @if($user->getFeature($plan_name,'Products'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-cubes"></i> <span>Products <small class="label bg-green">{{ Auth::user()->products->count() }}</small></span> 
@@ -75,9 +88,11 @@
                 <li><a href="{{ route('user::products') }}"><i class="fa  fa-plus"></i> Add New Product</a></li>
               </ul>
             </li>
+            @endif
 
       <!-- $user->subscribed('main') -->
 
+            @if($user->getFeature($plan_name,'Categories'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-list"></i>
@@ -89,7 +104,9 @@
                 <li><a href="{{ Auth::user()->subscribed('main') ? route('user::categories') : '#' }}"><i class="fa fa-list-ol"></i> List All Categories</a></li>
               </ul>
             </li>
+            @endif
 
+              @if($user->getFeature($plan_name,'Products'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-cubes"></i> <span>Products <small class="label bg-green">{{ Auth::user()->products->count() }}</small></span> 
@@ -104,7 +121,9 @@
                 <li><a href="{{ Auth::user()->subscribed('main') ? route('user::products') : '#' }}"><i class="fa  fa-comments"></i> Reviews <small class="label bg-green">5</small></a></li>
               </ul>
             </li>
+            @endif
 
+              @if($user->getFeature($plan_name,'FAQ'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-question-circle"></i>
@@ -116,7 +135,9 @@
                 <li><a href="{{ Auth::user()->subscribed('main') ? route('user::products') : '#' }}"><i class="fa fa-list-ol"></i> FAQ Category</a></li>
               </ul>
             </li>
+            @endif
 
+              @if($user->getFeature($plan_name,'Orders'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-shopping-cart"></i>
@@ -130,7 +151,9 @@
                 <li><a href="#"><i class="fa fa-exclamation-triangle"></i> Returns <small class="label bg-red">5</small></a></li>
               </ul>
             </li>
+              @endif
 
+              @if($user->getFeature($plan_name,'Customers'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-users"></i> 
@@ -142,6 +165,9 @@
                 <li><a href="#"><i class="fa fa-users"></i> Customer Groups <small class="label bg-orange">3</small></a></li>
               </ul>
             </li>
+            @endif
+
+              @if($user->getFeature($plan_name,'Coupons'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-barcode"></i> 
@@ -153,6 +179,9 @@
                 <li><a href="#"><i class="fa fa-list-ol"></i> List All Coupons</a></li>
               </ul>
             </li>
+            @endif
+
+              @if($user->getFeature($plan_name,'Taxes'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-sliders"></i> <span>Taxes</span>
@@ -164,6 +193,9 @@
                 <li><a href="#"><i class="fa fa-money"></i> Tex Rates <small class="label bg-red">3</small></a></li>
                 </ul>
             </li>
+              @endif
+
+              @if($user->getFeature($plan_name,'Localisation'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-globe"></i> <span> Localisation</span>
@@ -177,6 +209,9 @@
                 <li><a href="#"><i class="fa fa-cart-arrow-down"></i> Order Statuses <small class="label bg-blue">15</small></a></li>
                 </ul>
             </li>
+              @endif
+
+              @if($user->getFeature($plan_name,'Promotional Pages'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-file"></i> <span>Promotional Pages</span>
@@ -187,6 +222,9 @@
                 <li><a href="#"><i class="fa fa-list-ol"></i> List All Pages</a></li>
               </ul>
             </li>
+              @endif
+
+              @if($user->getFeature($plan_name,'Pages'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-file-code-o">
@@ -198,6 +236,9 @@
                 <li><a href="#"><i class="fa fa-list-ol"></i> List All Pages</a></li>
               </ul>
             </li>
+              @endif
+
+              @if($user->getFeature($plan_name,'Extensions'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-plug">
@@ -212,6 +253,9 @@
                 <li><a href="#"><i class="fa fa-bicycle"></i> Product Feeds</a></li>
               </ul>
             </li>
+              @endif
+
+              @if($user->getFeature($plan_name,'Sales'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-cart-plus">
@@ -222,6 +266,9 @@
                 <li><a href="#"><i class="fa fa-envelope-o"></i> Mail</a></li>
               </ul>
             </li>
+              @endif
+
+              @if($user->getFeature($plan_name,'Authority'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-user-secret">
@@ -233,6 +280,9 @@
                 <li><a href="#"><i class="fa fa-group"></i> Authority Groups <small class="label bg-red">7</small></a></li>
               </ul>
             </li>
+              @endif
+
+              @if($user->getFeature($plan_name,'Inventory & Stock Manager'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-cube">
@@ -248,6 +298,9 @@
                 <li><a href="#"><i class="fa fa-history"></i> History</a></li>
               </ul>
             </li>
+              @endif
+
+              @if($user->getFeature($plan_name,'Point Of Sale'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-desktop">
@@ -260,6 +313,9 @@
                 <li><a href="#"><i class="fa fa-wrench"></i> Settings</a></li>
               </ul>
             </li>
+              @endif
+
+              @if($user->getFeature($plan_name,'System'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-cog"></i> <span>System</span>
@@ -301,6 +357,9 @@
                   </li>
               </ul>
             </li>
+              @endif
+
+              @if($user->getFeature($plan_name,'Reports'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-line-chart"></i> <span>Reports</span>
@@ -341,6 +400,9 @@
                 </li>
               </ul>
             </li>
+              @endif
+
+              @if($user->getFeature($plan_name,'Browse Templates'))
             <li class="treeview">
       			  <a href="{{ Auth::user()->subscribed('main') ? route('user::templates') : '#' }}">
         				<span>Browse Templates</span>
@@ -350,12 +412,16 @@
       				  @include('editor.template-list-view')
       			  </ul>
             </li>
+            @endif
+
+              @if($user->getFeature($plan_name,'My Templates'))
             <li class="treeview">
       			  <a href="{{ Auth::user()->subscribed('main') ? route('user::templates.saved') : '#' }}">
         				<span>My Templates</span>
         				<!--<i class="fa fa-angle-left pull-right"></i>-->
       			  </a>
             </li>
+              @endif
 
           </ul>
         </section>

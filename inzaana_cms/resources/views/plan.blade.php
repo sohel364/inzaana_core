@@ -22,10 +22,15 @@
         @if(!$plan->isEmpty())
             @foreach($plan as $single_plan)
                 <div class="col-md-4">
-                    <div class="subscribe_box">
-                        <h2>{{ $single_plan['name'] }}</h2>
-                        <p><strong>Price: {{ $single_plan['amount']  }}</strong></p>
-                        <button class="btn btn-primary" data-toggle="modal" data-name="{{ $single_plan['name'] }}" data-id="{{ $single_plan['plan_id'] }}" data-target="#myModal">Subscribe</button>
+                    <div class="subscribe_box" style="border: 1px solid #d0d0d0;margin-right: 5px;padding: 10px;">
+                        <h2 class="text-center">{{ $single_plan['name'] }}</h2>
+                        <ul>
+                            @foreach($single_plan->planFeature as $feature)
+                                <li>{{ $feature->feature_name }}</li>
+                            @endforeach
+                        </ul>
+                        <p class="text-center label-info"><strong>Price: {{ $single_plan['amount']  }}</strong></p>
+                        <div class="text-center"><button class="btn btn-primary " data-toggle="modal" data-name="{{ $single_plan['name'] }}" data-id="{{ $single_plan['plan_id'] }}" data-target="#myModal">Subscribe</button></div>
                     </div>
                 </div>
             @endforeach

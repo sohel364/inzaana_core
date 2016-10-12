@@ -12,24 +12,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Inzaana\Payment\PaymentException;
 use Carbon\Carbon;
+use Inzaana\StripePlan;
 
 trait CheckSubscription {
 
-    /*
-     * Check if the use has access permission
-     * @return boolean
-     * */
-    public $feature = [
-        'free' => [
-            'Dashboard','Subscription','FAQ'
-        ],
-        'gold' => [
-            'Dashboard','Subscription','FAQ','Store','Categories','Products'
-        ],
-        'platinum' => [
-            'Dashboard','Subscription','FAQ','Store','Categories','Products','Customers','Coupons','Taxes'
-        ]
-    ];
     public function isAccess()
     {
         return false;
@@ -161,8 +147,13 @@ trait CheckSubscription {
         return $query->amount."/".$query->currency;
     }
 
-    public function getFeature($plan_name, $feature_name){
-        return in_array($feature_name, $this->feature[strtolower($plan_name)]);
+    public function getFeature($plan_name, $feature_name)
+    {
+        if($plan_name != null){
+            $feature = StripePlan::with('planFeature')->whereName($plan_name)->first();
+            return in_array($feature_name, array_column($feature->planFeature->toArray(),'feature_name'));
+        }
+        return false;
     }
 
     protected function getFromDatabase($select_column)

@@ -78,20 +78,16 @@
 						<div class="form-group">
 						<label for="autorenew">Enable Auto-renewal: </label>
 							<div class="checkbox">
-								<label><input type="checkbox" value="" checked>Auto Renew</label>
+								<label><input type="checkbox" name="auto_renewal" value="1" checked>Auto Renew</label>
 							</div>
 						</div>
 						<div class="form-group">						
 							<label for="Features">Select features for the plan : </label>
-							<div class="checkbox">
-							<label><input type="checkbox" value="">Feature 1</label>
-							</div>
-							<div class="checkbox">
-							  <label><input type="checkbox" value="">Feature 2</label>
-							</div>
-							<div class="checkbox">
-							  <label><input type="checkbox" value="">Feature 3</label>
-							</div>
+                            <select name="feature_id[]" id="" multiple>
+                                @foreach($features as $feature)
+                                    <option value="{{ $feature->feature_id }}">{{ $feature->feature_name }}</option>
+                                @endforeach
+                            </select>
 						</div>																
 						<div class="form-group">
 							<input type="submit" class="btn btn-primary btn-sm" value="Create Plan">

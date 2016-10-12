@@ -48,12 +48,13 @@
                         <th>Price</th>
                         <th>Trial Period</th>
                         <th>Description</th>
+                        <th>Feature</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th width="20%">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @if($allPlan->isEmpty())
+                @if($allPlan->isEmpty())
                         <p class="text-center text-red">Ooops! There's no plan.</p>
                     @else
                         @foreach($allPlan as $plan)
@@ -62,6 +63,11 @@
                                 <td>{{ $plan->amount }}/{{ $plan->interval }}</td>
                                 <td>{{ $plan->trial_period_days }}</td>
                                 <td>{{ $plan->statement_descriptor }}</td>
+                                <td>
+                                    @foreach($plan->planFeature as $feature)
+                                        <p>{{ $feature->feature_name }}</p>
+                                    @endforeach
+                                </td>
                                 <td>
                                     <div id="update_button{{ str_replace(':','_',$plan->plan_id) }}">
                                         @if($plan->active)
@@ -72,11 +78,13 @@
                                     </div>
                                 </td>
                                 <td>
+                                <a href="{{ action('StripeController@editPlanFeature',$plan) }}" class="btn btn-warning btn-xs">Edit</a>
                                 <form method="POST" action="{{ action('StripeController@deletePlan') }}">
                                     {{ csrf_field() }}
                                     <input type="hidden" name="plan" value="{{ Crypt::encrypt($plan['plan_id']) }}">
                                     <input type="submit" class="btn btn-danger btn-xs" value="Delete">
                                 </form>
+
                                 </td>
                             </tr>
                         @endforeach

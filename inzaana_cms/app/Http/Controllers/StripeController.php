@@ -5,6 +5,7 @@ namespace Inzaana\Http\Controllers;
 use Auth;
 use Crypt;
 use DB;
+use Inzaana\StripePlanFeature;
 use Inzaana\User;
 use Inzaana\StripePlan;
 use Illuminate\Http\Request;
@@ -36,7 +37,8 @@ class StripeController extends Controller
      * */
     public function planForm()
     {
-        return view('super-admin.stripe.create-plan')->with(['user'=> Auth::user()]);
+        $features = StripePlanFeature::all();
+        return view('super-admin.stripe.create-plan')->with(['user'=> Auth::user(),'features'=>$features]);
     }
 
     /*
@@ -70,6 +72,16 @@ class StripeController extends Controller
 
     }
 
+    /*
+     * Plan Swaping
+     * */
+    public function swapPlan(Request $request)
+    {
+        //$user = User::find(Auth::user()->id);
+
+        //$user->subscription('main')->swap('provider-plan-id');
+    }
+
 
 
     /*
@@ -90,7 +102,6 @@ class StripeController extends Controller
         $amount = number_format($request->plan_amount,2);
         $amount = (INT)($amount * 100);
         $interval = strtolower($request->plan_interval);
-
 
         Stripe::setApiKey(getenv('STRIPE_SECRET'));
         $plan = Plan::create(array(
@@ -113,10 +124,13 @@ class StripeController extends Controller
             "amount" => $request->plan_amount,
             "currency" => $request->plan_currency,
             "interval" => $request->plan_interval,
+            "auto_renewal" => (INT)$request->auto_renewal?$request->auto_renewal:0,
             "trial_period_days" => (INT)$request->plan_trial,
             "statement_descriptor" => $request->plan_des,
             "created"=> date('Y-m-d H:i:s')
         ]);
+
+        $stripePlan->planFeature()->attach($request->feature_id);
 
         return redirect()->back()->with(['success'=>'Successfully Created Plan.']);
 
@@ -128,8 +142,27 @@ class StripeController extends Controller
      * */
     public function viewPlan()
     {
-        $allPlan = StripePlan::all();
+        //$allPlan = StripePlan::all();
+        $allPlan = StripePlan::with('planFeature')->get();
         return view('super-admin.stripe.view-plan',compact('allPlan'))->with('user', Auth::user());
+    }
+    /*
+     * View Edit Plan Feature Interface
+     * */
+    public function editPlanFeature($id)
+    {
+        $plan_feature = StripePlan::with('planFeature')->whereId($id)->first();
+        //dd($plan_feature);
+    }
+    /*
+     * Edit Plan Feature Using Plan ID
+     * This Method Edit Only Local Database
+     * Don't Touch Strip Database
+     * Method call  from *** Route::get('/super-admin/edit-feature', [ 'uses' => 'StripeController@editPlanFeature', 'as'=> 'editPlanFeature']);
+     * */
+    public function planFeatureUpdate()
+    {
+
     }
     /*
      * Delete Plan Using Plan ID

@@ -4,6 +4,7 @@ namespace Inzaana\Http\Controllers;
 
 use Auth;
 use Session;
+use Stripe\Subscription;
 use Validator;
 use Inzaana\User;
 use Inzaana\Mailers\AppMailer;
@@ -124,7 +125,9 @@ class UserController extends Controller
          * Using laravel cashier for plan retrieval
          * Method call from Route::get('/dashboard/vendor/plan', [ 'uses' => 'UserController@redirectToVendorPlan', 'as' => 'vendor.plan' ]);
          * */
-        $plan = StripePlan::where('active','=','1')->get();
+        //$plan = StripePlan::where('active','=','1')->get();
+        //$subscribed_plan =Subscription::where('user_id', Auth::user()->id)->get()->first()->name;
+        $plan = StripePlan::with('planFeature')->where('active','=','1')->get();
         return view('plan',compact('plan'))->with('user', Auth::user())
                                             ->with('authenticated', Auth::check());
     }

@@ -52,6 +52,7 @@ class UsersTableSeeder extends Seeder
                     "cvc" => "400"
                 )
             ))->id);
+            $user->subscription('Free')->cancel();
             $user->save();
             Log::debug('[Inzaana][User of email -> ' . $user->email . ', password -> ' . $vendorPassword . ' is created, has ' . $user->stores()->count() . ' stores for testing]');
         });
@@ -91,5 +92,19 @@ class UsersTableSeeder extends Seeder
             Log::info('[Inzaana][' . $users->count() . ' customer users created for testing]');
         else
             Log::error('[Inzaana][No customer user created] -> [Seeding failed]');
+
+        /*
+         * Stripe Plan Features Table Seeding
+         * */
+
+        $feature_list = ['Store','Categories','Products','FAQ','Orders','Customers','Coupons','Taxes','Localisation','Promotional Pages','Pages','Extensions','Sales','Authority','Inventory & Stock Manager','Point Of Sale','Reports','Browse Templates','My Templates'];
+
+        foreach ($feature_list as $feature) {
+           \Inzaana\StripePlanFeature::create(
+               ['feature_name'=>$feature]
+           );
+        }
+
+
     }
 }
