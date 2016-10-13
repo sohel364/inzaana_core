@@ -46,11 +46,9 @@
                 <div class="form-group animated fadeInRightShort" data-id="2">
                   <label>
                     <select name="business" class="form-control" placeholder="Select a business area">
-                      <option value="" class="placehold" selected="">I'm not sure yet.</option>
-                      <option value="">Animal &amp; Pet</option>
-                      <option value="">Art &amp; Entertainment</option>
-                      <option value="">Hardware or Home/Garden Improvement</option>
-                      <option value="">Others / something elase...</option>
+                      @foreach(collect(Inzaana\Store::types()) as $store_type)
+                      <option value="{{ $store_type['id'] }}" class="placehold"{{ ($store_type['id'] == 'NOT_SURE' ) ? ' selected' : '' }}>{{ $store_type['title'] }}</option>
+                      @endforeach
                     </select>
                   </label>
                 </div>

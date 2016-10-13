@@ -53,11 +53,12 @@ class AuthController extends Controller
      */
     protected function validator(array $data)
     {
+        // dd($data);
         return Validator::make($data, [
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|confirmed|min:6',
-            'phone_number' => 'required|digits:11',
+            'phone_number' => 'required|min:11',
         ]);
     }
 
@@ -109,11 +110,14 @@ class AuthController extends Controller
             'email' => $data['email'],
             'email_alter' => preg_replace("/(\w+)@(\w+.)+/", "$1@inzaana.com", $data['email']),
             'phone_number' => $data['phone_number'],
-            'address' =>  array_has($data, 'mailing-address') ? $data['mailing-address'] : '',
+            'country' => array_has($data, 'country') ? $data['country'] : '',
+            'address' =>  array_has($data, 'address') ? $data['address'] : '',
             'verified' => false,
             'password' => bcrypt($data['password']),
             'trial_ends_at' => Carbon::now()->addDays(10),
         ]);
+        session([ 'business' => array_has($data, 'business') ? $data['business'] : '' ]);
+        // dd($data);
         return $user;
     }
 
@@ -125,10 +129,10 @@ class AuthController extends Controller
      * @param  string $store
      * @return mixed
      */
-    public function confirmEmail($token, $site, $store)
+    public function confirmEmail($token, $site, $store, $business)
     {
         // USED TO -> 'Auth\AuthController@create'
-        session(compact('site', 'store'));
+        session(compact('site', 'store', 'business'));
         return $this->confirmEmailCustomer($token);
     }
 
@@ -151,6 +155,7 @@ class AuthController extends Controller
             }
             session()->forget('site');
             session()->forget('store');
+            session()->forget('business');
             return redirect()->route('guest::home', [ 'errors' => collect($errors) ]);
         }
         flash('You are now confirmed. Please login.');
@@ -168,6 +173,7 @@ class AuthController extends Controller
         }
 
         $store = $request->query('store_name');
+        $business = $request->query('business');
         $subdomain = strtolower($request->query('subdomain'));
         $domain = $request->query('domain');
         $site = strtolower(str_replace(' ', '', $store)) . '.' . $subdomain . '.' . $domain;
@@ -187,7 +193,7 @@ class AuthController extends Controller
             return response()->view('home', [ 'errors' => $validator->errors() ]);
         }
         // USED TO -> UserController@index
-        session(compact('site', 'store'));
+        session(compact('site', 'store', 'business'));
 
         return redirect('/register')->with('storeName', $store)
                                     ->with('subdomain', $subdomain)
@@ -201,7 +207,7 @@ class AuthController extends Controller
             $errors['ADMIN_LOGIN_URL_INVALID'] = 'You are not authorized for this login!';
             return response()->view('home', [ 'errors' => collect($errors) ]); 
         }
-        return redirect()->guest('/register')->with('role', 'ADMIN');
+        return redirect()->guest('/register');
     }
 
     public function redirectToCustomerSignup()

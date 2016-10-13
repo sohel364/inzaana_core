@@ -12,7 +12,7 @@
     </p>
 
     <p>
-        We just need you to <a href='{{ url("register/confirm/{$user->token}/site/{$data['site']}/store/{$data['storeName']}") }}'>confirm your email address</a> real quick!
+        We just need you to <a href='{{ url("register/confirm/{$user->token}/site/{$data['site']}/store/{$data['storeName']}/business/{$data['business']}") }}'>confirm your email address</a> real quick!
     </p>
 </body>
 </html> 

@@ -14,7 +14,7 @@ class Store extends Model
      *
      * @var array
      */
-    protected $fillable = [ 'name', 'user_id', 'name_as_url', 'sub_domain', 'domain', 'description' ]; 
+    protected $fillable = [ 'name', 'user_id', 'name_as_url', 'sub_domain', 'domain', 'description', 'store_type' ]; 
     
     protected $guarded = [];
 
@@ -45,6 +45,29 @@ class Store extends Model
         return 'Unknown';
     }
 
+    public function getStoreTypeIndex($id)
+    {
+        foreach ($this->types() as $key => $value)
+        {
+            if($value['id'] == $id)
+            {
+                return $key;
+            }
+        }
+        return 0;
+    }
+
+    public function getStoreTypeAttribute()
+    {
+        foreach ($this->types() as $key => $value)
+        {
+            if($value['id'] == $this->attributes['store_type'])
+            {
+                return $value['title'];
+            }
+        }
+        return 'Unknown';
+    }
 
     /**
      * Suggest store names with given terms

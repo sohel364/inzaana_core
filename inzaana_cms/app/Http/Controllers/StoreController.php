@@ -46,7 +46,7 @@ class StoreController extends Controller
     {
         return view('add-store', $data)->withUser(Auth::user()->id)
                                 ->withStores(Auth::user()->stores)
-                                ->withTypes(collect(Store::types())->first());
+                                ->withTypes(collect(Store::types()));
     }
 
     public function index()
@@ -89,7 +89,9 @@ class StoreController extends Controller
             'name' => $storeName,
             'sub_domain' => 'inzaana',
             'domain' => str_replace('.', '', '.net'),
-            'description' => $request->input('description')
+            'description' => $request->input('description'),
+            'address' => $request->input('address'),
+            'store_type' => $request->input('business')
 
         ]);
         $rules = $this->_rules;
@@ -110,6 +112,8 @@ class StoreController extends Controller
             $store->name_as_url = str_replace('.', '', $store->name_as_url); // removes '.' character
         }
         $store->description = $data['description'];
+        $store->address = $data['address'];
+        $store->store_type = $data['store_type'];
 
         $errors['update_failed'] = 'The store (' . $store->name . ') update is failed!';
         if(!$store->save())
@@ -125,8 +129,9 @@ class StoreController extends Controller
             'name' => $store,
             'sub_domain' => 'inzaana',
             'domain' => str_replace('.', '', '.net'),
-            'description' => $request->input('description')
-
+            'description' => $request->input('description'),
+            'address' => $request->input('address'),
+            'store_type' => $request->input('business')
         ];
         $validator = $this->validator($data, $this->_rules->toArray());
         if ($validator->fails())
@@ -140,6 +145,8 @@ class StoreController extends Controller
             'sub_domain' => $data['sub_domain'],
             'domain' => $data['domain'],
             'description' => $data['description'],
+            'address' => $data['address'],
+            'store_type' => $data['store_type'],
             'status' => 'ON_APPROVAL',
         ]);        
         $store->name_as_url = str_replace('.', '', $store->name_as_url); // removes '.' character
@@ -152,7 +159,7 @@ class StoreController extends Controller
         return redirect()->route('user::stores');
     }
 
-    public function createOnSignUp($name, $site)
+    public function createOnSignUp($name, $site, $business)
     {
         $keywords = preg_split("/[.]+/", $site);
 
@@ -172,6 +179,7 @@ class StoreController extends Controller
             'name_as_url' => $storeNameUrl,
             'sub_domain' => $subdomain,
             'domain' => $domain,
+            'store_type' => $business,
             'status' => 'ON_APPROVAL',
         ]);
         $store->name_as_url = str_replace('.', '', $store->name_as_url); // removes '.' character
@@ -231,6 +239,7 @@ class StoreController extends Controller
             $storeName = Store::whereNameAsUrl(str_replace(' ', '', strtolower($name)))->get();
             if(!$storeName)
                 $suggestions []= $name;
+            $suggestions []= $name;
         }
         return response()->json([ 'store' => collect($storeNames)->take(5) ]);
     }

@@ -55,6 +55,7 @@ class UserController extends Controller
                 // USED FROM -> 'Auth\AuthController@showSignupForm'
                 $data['site'] = session('site');
                 $data['storeName'] = session('store');
+                $data['business'] = session('business');
 
                 $mailer->sendEmailConfirmationTo($user, $data);  
             }
@@ -91,7 +92,8 @@ class UserController extends Controller
         // If vendor user is verified after signup
         $site = session('site');
         $store = session('store');
-        return redirect()->route('user::stores.create-on-signup', compact('store', 'site'));
+        $business = session('business');
+        return redirect()->route('user::stores.create-on-signup', compact('store', 'site', 'business'));
     }   
 
     // View to vendor admin dashboard
@@ -101,6 +103,7 @@ class UserController extends Controller
         {
             session()->forget('site');
             session()->forget('store');  
+            session()->forget('business');  
         }        
         $user = User::find(Auth::user()->id);
         if($user)

@@ -145,7 +145,7 @@
 
                           <span class="input-group-btn input-group-lg ">
 
-                              <input name="subdomain" type="text" class="form-control animated growIn CreateInput go removeBCarve" data-id="2" value="Inzaana" style="width: 106px; left: 0px; top: 0px;">
+                              <input name="subdomain" type="text" class="form-control animated growIn CreateInput go removeBCarve" data-id="2" value="Inzaana" style="width: 106px; left: 0px; top: 0px;" readonly>
                               <label class="animated growIn go" data-id="3">
                                   <select name="domain" class="form-control" placeholder="Select a domain" style="height: 46px; left: 0px; top: 0px; width: 78px;">
                                       <option value="com" class="placehold" selected="">.com</option>
@@ -292,7 +292,7 @@
         requestForStoreSuggestions($.trim(event.currentTarget.value), 
         function(data) {
             //JSON.stringify(data.store)
-            $('#suggestions').html( isEmpty(data.store) ? '' : $('#suggestions').html() + data.store);
+            $('#suggestions').html( isEmpty(data.store) ? '' : ($('#suggestions').html() + data.store));
             // $('#suggestions').html($('#suggestions').html() + 'GOT IT!');
         }, function(xhr, textStatus) {
             // $('#suggestions').html('Suggestion not available!');

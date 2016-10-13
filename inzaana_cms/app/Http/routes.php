@@ -53,7 +53,7 @@ Route::group(['middleware' => 'web'], function () {
 
         Route::group([ 'as' => 'guest::' ], function() {
 
-            Route::get('/register/confirm/{token}/site/{site}/store/{store}', [ 'uses' => 'AuthController@confirmEmail', 'as' => 'register.confirm.vendor' ]);
+            Route::get('/register/confirm/{token}/site/{site}/store/{store}/business/{business}', [ 'uses' => 'AuthController@confirmEmail', 'as' => 'register.confirm.vendor' ]);
             Route::get('/register/confirm/{token}', [ 'uses' => 'AuthController@confirmEmailCustomer', 'as' => 'register.confirm.customer' ]);
             Route::get('/signup', [ 'uses' => 'AuthController@showSignupForm', 'as' => 'signup' ]);
 
@@ -71,7 +71,7 @@ Route::group(['middleware' => 'web'], function () {
 
             Route::get('/', [ 'uses' => 'StoreController@index', 'as' => 'stores' ]);           
             Route::get('/redirect/site/{site}', [ 'uses' => 'StoreController@redirectUrl', 'as' => 'stores.redirect' ]);           
-            Route::get('/create/name/{name}/site/{site}', [ 'uses' => 'StoreController@createOnSignUp', 'as' => 'stores.create-on-signup' ]);           
+            Route::get('/create/name/{name}/site/{site}/business/{business}', [ 'uses' => 'StoreController@createOnSignUp', 'as' => 'stores.create-on-signup' ]);           
             Route::post('/create', [ 'uses' => 'StoreController@create', 'as' => 'stores.create' ]);           
             Route::post('/{store}', [ 'uses' => 'StoreController@postUpdate', 'as' => 'stores.update' ]);           
             Route::get('/{store}/edit/', [ 'uses' => 'StoreController@update', 'as' => 'stores.edit' ]);           

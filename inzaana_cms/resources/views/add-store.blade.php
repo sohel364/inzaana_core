@@ -23,7 +23,7 @@
         requestForStoreSuggestions($.trim(event.currentTarget.value), 
         function(data) {
             //JSON.stringify(data.store)
-            $('#suggestions').html( isEmpty(data.store) ? '' : $('#suggestions').html() + data.store);
+            $('#suggestions').html( isEmpty(data.store) ? '' : ($('#suggestions').html() + data.store));
             // $('#suggestions').html($('#suggestions').html() + 'GOT IT!');
         }, function(xhr, textStatus) {
             // $('#suggestions').html('Suggestion not available!');
@@ -99,7 +99,7 @@
 
                    <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
                     <label for="Store-address">Address</label>
-                    <input type="text" class="form-control" value="" id="address" name="address" placeholder="Add your Store addres here...">
+                    <input type="text" class="form-control" value="{{ isset($store) ? $store->address : '' }}" id="address" name="address" placeholder="Add your Store address here...">
                     @if ($errors->has('address'))
                         <span class="help-block">
                             <strong>{{ $errors->first('address') }}</strong>
@@ -111,11 +111,9 @@
                     <label for="store-type">I am going to sell</label>
 
                     <select name="business" class="form-control" placeholder="Select a business area">
-                      <option value="UNKNOWN" class="placehold">I'm not sure yet.</option>
-                      <option value="ANIMAL_PET" selected>Animal &amp; Pet</option>
-                      <option value="ART_ENTERTAINMENT">Art &amp; Entertainment</option>
-                      <option value="HARDWARE_HOME">Hardware or Home/Garden Improvement</option>
-                      <option value="OTHERS">Others / something else...</option>
+                      @foreach($types as $store_type)
+                      <option value="{{ $store_type['id'] }}" {{ ($store_type['id'] == (isset($store) ? $store->attributes['store_type'] : 'NOT_SURE') ) ? ' selected' : '' }}>{{ $store_type['title'] }}</option>
+                      @endforeach
                     </select>
                 
                   </div>
@@ -165,7 +163,7 @@
 
                       <th class="text-center">Address</th>
                       <th class="text-center">Store URL</th>
-                      <!-- <th class="text-center">I am going to sell</th> -->
+                      <th class="text-center">Store Type</th>
                       <th class="text-center">Store Description</th>
                       <th class="text-center">Status</th>
                       <th class="text-center">Action</th>
@@ -182,7 +180,7 @@
                           <a target="_blank" href="{{ route('user::stores.redirect', [ 'site' => str_replace('.', '', $store->name_as_url) . '.' . $store->sub_domain . '.' . $store->domain ] ) }}">{{ str_replace('.', '', $store->name_as_url) . '.' . $store->sub_domain . '.' . str_replace('.', '', $store->domain) }}</a>
                         </td>
 
-                        <!-- <td class="text-center" id="child"><a href="">{{ $store->sell }}</a></td> -->
+                        <td class="text-center" id="child">{{ $store->store_type }}</td>
 
                         <td class="text-center" id="child">{{ $store->description or 'This is a store named ' . $store->name }}</td>
 
