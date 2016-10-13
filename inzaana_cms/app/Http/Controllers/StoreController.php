@@ -222,4 +222,16 @@ class StoreController extends Controller
         $mailer->sendEmailForApprovalNotificationTo($store->user, $data);
         return redirect()->back();
     }
+
+    public function suggest($input)
+    {
+        $storeNames = Store::suggest($input, 10);
+        $suggestions = array();
+        foreach ($storeNames as $name) {
+            $storeName = Store::whereNameAsUrl(str_replace(' ', '', strtolower($name)))->get();
+            if($storeName)
+                $suggestions []= $name;
+        }
+        return response()->json([ 'store' => collect($suggestions)->take(5) ]);
+    }
 }

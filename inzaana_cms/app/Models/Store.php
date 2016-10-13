@@ -3,6 +3,7 @@
 namespace Inzaana;
 
 use Illuminate\Database\Eloquent\Model;
+use Faker\Factory as StoreFaker;
 
 class Store extends Model
 {
@@ -42,5 +43,34 @@ class Store extends Model
             case 'REJECTED':        return 'Rejected';
         }
         return 'Unknown';
+    }
+
+
+    /**
+     * Suggest store names with given terms
+     *
+     * @param mixed
+     * @param integer
+     * @return array store names
+     */
+    public static function suggest($inputTerms, $limit)
+    {
+        $faker = StoreFaker::create();
+        session([ 'input_terms' => $inputTerms ]); 
+        $nameValidator = function($company) {
+            return str_contains( strtolower((string) $company), strtolower(session('input_terms')) );
+        };
+        $companies = array();
+        try
+        {
+            for ($i=0; $i < $limit; $i++)
+                $companies []= $faker->valid($nameValidator)->company;
+
+        } catch (\OverflowException $e) {
+            
+            session()->forget('input_terms');
+            return "";
+        }
+        return $companies;
     }
 }

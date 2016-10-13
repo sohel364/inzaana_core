@@ -144,6 +144,7 @@
                           <input name="store_name" type="text" class="form-control animated fadeInLeft go" data-id="2" placeholder="Your Store Name...">
 
                           <span class="input-group-btn input-group-lg ">
+
                               <input name="subdomain" type="text" class="form-control animated growIn CreateInput go removeBCarve" data-id="2" value="Inzaana" style="width: 106px; left: 0px; top: 0px;">
                               <label class="animated growIn go" data-id="3">
                                   <select name="domain" class="form-control" placeholder="Select a domain" style="height: 46px; left: 0px; top: 0px; width: 78px;">
@@ -153,18 +154,19 @@
                                   </select>
                               </label>
                               <button class="btn btn-info animated fadeInRight btn-poss go" data-id="4" type="submit">Create Store!</button>					 	 							  
-                          </span>						  
+                          </span>					  
                       </div>
+
+                      <!--Store name suggestion. Just change the visibility to show/hide it : visible/hide-->
+                      <div class="input-group input-group-lg" id="suggestions">
+                      <p>
+                      <label>
+                        <span class="glyphicon glyphicon-random"></span>
+                        <label id="suggestions"></label>
+                      </label>
+                      </p>
+                      </div>  
                   </form>
-				  <!--Store name suggestion. Just change the visibility to show/hide it : visible/hide-->
-				  <div class="input-group input-group-lg" style="visibility: visible">
-				  <p>
-					<label>
-					  <span class="glyphicon glyphicon-random"></span>
-					  Try : xyz, abc, asd etc
-					</label>
-				  </p>
-				  </div>
               </div>							  
             </div>
 				</div>
@@ -282,6 +284,44 @@
         top: 200
       }
     });
+    $( "input[name='store_name']" ).keydown(function(event) {
+
+        var prefix = '<span class="glyphicon glyphicon-random"></span> Try :';
+        // event.currentTarget.removeClass('hidden');
+        $('#suggestions').html(isEmpty(event.currentTarget.value) ? '' : prefix);
+        requestForStoreSuggestions($.trim(event.currentTarget.value), 
+        function(data) {
+            //JSON.stringify(data.store)
+            $('#suggestions').html( isEmpty(data.store) ? '' : $('#suggestions').html() + data.store);
+            // $('#suggestions').html($('#suggestions').html() + 'GOT IT!');
+        }, function(xhr, textStatus) {
+            // $('#suggestions').html('Suggestion not available!');
+            // event.currentTarget.addClass('hidden');
+        });
+    });
+
+    // callbacks & ajax
+    function requestForStoreSuggestions(input, onSuccess, onError)
+    {
+        var routing_url = '/stores/suggest/input/' + input;
+        var request = $.ajax({
+            type: "GET",
+            url: routing_url,
+            dataType: 'json',
+            statusCode: {
+                404: function() {
+                    $('#suggestions').html(isEmpty($.trim(input)) ? '' : 'Something went wrong!');
+                }
+            }
+        });
+        request.done(onSuccess).fail(onError);
+    }
+
+    function isEmpty(value) {
+        return value == "none" || value == "undefined" || value == "";
+    }
+
+
   </script>
 
 </body>
