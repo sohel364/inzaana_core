@@ -231,16 +231,18 @@ class StoreController extends Controller
         return redirect()->back();
     }
 
+
     public function suggest($input)
     {
         $storeNames = Store::suggest($input, 10);
         $suggestions = array();
-        foreach ($storeNames as $name) {
+        foreach ($storeNames as $name)
+        {
             $storeName = Store::whereNameAsUrl(str_replace(' ', '', strtolower($name)))->get();
             if(!$storeName)
                 $suggestions []= $name;
-            $suggestions []= $name;
-        }
-        return response()->json([ 'store' => collect($storeNames)->take(5) ]);
+        } 
+        $stores = empty($suggestions) ? $storeNames : $suggestions;
+        return response()->json([ 'store' => collect($stores)->take(5) ]);
     }
 }

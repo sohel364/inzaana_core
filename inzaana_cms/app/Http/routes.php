@@ -20,6 +20,7 @@
 Route::group([ 'as' => 'guest::' ], function() {
 
     Route::get('/', [ 'uses' => 'HomeController@index', 'as' => 'home' ]);  
+    Route::get('/suggest/input/{input}', [ 'uses' => 'HomeController@suggest', 'as' => 'suggest.home.stores' ]);
     // Subdomain routing
     Route::group(array('domain' => '{name}.inzaana.{domain}'), function() {
         
@@ -105,7 +106,6 @@ Route::group(['middleware' => 'web'], function () {
             Route::get('/edit/mail/confirm/users/{user}/name/{name}/email/{email}/phone/{phone}/password/{password?}/address/{address?}',
                 [ 'uses' => 'UserController@confirmProfileUpdate', 'as' => 'edit.confirm' ])
                 ->where([ 'address' => '.*', 'phone' => '[0-9]+', 'password' => '.*' ]); // validation phone => (?:\s+|)((0|(?:(\+|)91))(?:\s|-)*(?:(?:\d(?:\s|-)*\d{9})|(?:\d{2}(?:\s|-)*\d{8})|(?:\d{3}(?:\s|-)*\d{7}))|\d{10})(?:\s+|);
-            // Route::get('/update/users/{user}', [ 'uses' => 'UserController@update', 'as' => 'update' ]);
         });
 
         Route::get('/user_my_order', [ 'uses' => 'UserController@usermyorder', 'as' => 'orders' ]);

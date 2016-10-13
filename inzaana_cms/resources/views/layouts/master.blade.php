@@ -303,7 +303,7 @@
     // callbacks & ajax
     function requestForStoreSuggestions(input, onSuccess, onError)
     {
-        var routing_url = '/stores/suggest/input/' + input;
+        var routing_url = '/suggest/input/' + input;
         var request = $.ajax({
             type: "GET",
             url: routing_url,
