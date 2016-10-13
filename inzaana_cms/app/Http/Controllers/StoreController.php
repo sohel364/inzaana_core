@@ -229,9 +229,9 @@ class StoreController extends Controller
         $suggestions = array();
         foreach ($storeNames as $name) {
             $storeName = Store::whereNameAsUrl(str_replace(' ', '', strtolower($name)))->get();
-            if($storeName)
+            if(!$storeName)
                 $suggestions []= $name;
         }
-        return response()->json([ 'store' => collect($suggestions)->take(5) ]);
+        return response()->json([ 'store' => collect($storeNames)->take(5) ]);
     }
 }

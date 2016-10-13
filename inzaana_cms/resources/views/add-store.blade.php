@@ -12,6 +12,49 @@
 </ol>
 @endsection
 
+@section('footer-scripts')
+<script>
+
+    $( "input[name='store_name']" ).keydown(function(event) {
+
+        var prefix = 'Try :';
+        // event.currentTarget.removeClass('hidden');
+        $('#suggestions').html(isEmpty(event.currentTarget.value) ? '' : prefix);
+        requestForStoreSuggestions($.trim(event.currentTarget.value), 
+        function(data) {
+            //JSON.stringify(data.store)
+            $('#suggestions').html( isEmpty(data.store) ? '' : $('#suggestions').html() + data.store);
+            // $('#suggestions').html($('#suggestions').html() + 'GOT IT!');
+        }, function(xhr, textStatus) {
+            // $('#suggestions').html('Suggestion not available!');
+            // event.currentTarget.addClass('hidden');
+        });
+    });
+
+    // callbacks & ajax
+    function requestForStoreSuggestions(input, onSuccess, onError)
+    {
+        var routing_url = '/stores/suggest/input/' + input;
+        var request = $.ajax({
+            type: "GET",
+            url: routing_url,
+            dataType: 'json',
+            statusCode: {
+                404: function() {
+                    $('#suggestions').html(isEmpty($.trim(input)) ? '' : 'Something went wrong!');
+                }
+            }
+        });
+        request.done(onSuccess).fail(onError);
+    }
+
+    function isEmpty(value) {
+        return value == "none" || value == "undefined" || value == "";
+    }
+
+</script>
+@endsection
+
 @section('content')
 <div class="box box-info">
     <div class="box-header with-border">
@@ -35,18 +78,23 @@
                 <div class="box-body">
                   <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                     <label for="Store-name">Store</label>
-                    <input type="text" class="form-control" value="{{ isset($store) ? $store->name : '' }}" id="store-name" name="store_name" placeholder="Add your Store name here...">
+                    <input type="text" class="form-control" value="{{ isset($store) ? $store->name : '' }}" id="store_name" name="store_name" placeholder="Add your Store name here...">
                     @if ($errors->has('name'))
                         <span class="help-block">
                             <strong>{{ $errors->first('name') }}</strong>
                         </span>
-                    @endif
-					<p>
-						<label for="suggestion">
-						  <span class="glyphicon glyphicon-random"></span>
-						  Try : xyz, abc, asd etc
-						</label>						
-					</p>
+                    @endif            					
+                    
+                    <!--Store name suggestion. Just change the visibility to show/hide it : visible/hide-->
+                    <div class="input-group input-group-lg">
+                    <p>
+                    <label>
+                      <span class="glyphicon glyphicon-random"></span>
+                      <label id="suggestions"></label>
+                    </label>
+                    </p>
+                    </div> 
+
                   </div>
 
                    <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">

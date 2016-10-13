@@ -158,7 +158,7 @@
                       </div>
 
                       <!--Store name suggestion. Just change the visibility to show/hide it : visible/hide-->
-                      <div class="input-group input-group-lg" id="suggestions">
+                      <div class="input-group input-group-lg">
                       <p>
                       <label>
                         <span class="glyphicon glyphicon-random"></span>
@@ -286,7 +286,7 @@
     });
     $( "input[name='store_name']" ).keydown(function(event) {
 
-        var prefix = '<span class="glyphicon glyphicon-random"></span> Try :';
+        var prefix = 'Try :';
         // event.currentTarget.removeClass('hidden');
         $('#suggestions').html(isEmpty(event.currentTarget.value) ? '' : prefix);
         requestForStoreSuggestions($.trim(event.currentTarget.value), 
