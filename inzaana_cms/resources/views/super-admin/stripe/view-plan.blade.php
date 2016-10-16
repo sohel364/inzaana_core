@@ -78,7 +78,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                <a href="{{ action('StripeController@editPlanFeature',$plan) }}" class="btn btn-warning btn-xs">Edit</a>
+                                <a href="{{ action('StripeController@editPlanFeature',$plan) }}" class="btn btn-warning btn-xs" style="display:none;">Edit</a>
                                 <form method="POST" action="{{ action('StripeController@deletePlan') }}">
                                     {{ csrf_field() }}
                                     <input type="hidden" name="plan" value="{{ Crypt::encrypt($plan['plan_id']) }}">

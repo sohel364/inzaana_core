@@ -7,7 +7,7 @@ interface StripePayment {
      * Check if the use has access permission
      * @return boolean
      * */
-    public function isAccess();
+    public function userAccessPermission();
 
     /*
      * Get the user trial information
@@ -27,6 +27,10 @@ interface StripePayment {
     public function getPlanCost();
 
     public function getFeature($plan_name, $feature_name);
+
+    public function featureAccessPermission($uri);
+
+    public function getPlanId();
 
 
 } 

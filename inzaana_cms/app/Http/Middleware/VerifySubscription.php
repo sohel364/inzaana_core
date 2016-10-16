@@ -35,11 +35,12 @@ class VerifySubscription
      */
     public function handle($request, Closure $next, $stripe)
     {
-        //dd(true);
-        //dd($this->auth->user()->isAccess($stripe));
-        /*if($this->auth->user()->isAccess($this->auth->user()->getPlanName()))
+        if($this->auth->user()->featureAccessPermission($request->path()))
+        {
             return $next($request);
-
-        throw new PaymentException($this->auth->user()->getPlanName());*/
+        }else{
+            abort(403);
+        }
+        /*throw new PaymentException($this->auth->user()->getPlanName());*/
     }
 }

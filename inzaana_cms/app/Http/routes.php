@@ -65,8 +65,7 @@ Route::group(['middleware' => 'web'], function () {
         }); 
     });
 
-    Route::group([ 'as' => 'user::' ], function() {
-
+    Route::group(['middleware'=>'entry:go', 'as' => 'user::' ], function() {
         // Store controller
         Route::group(['prefix' => 'stores'], function () {
 
