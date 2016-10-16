@@ -15,7 +15,7 @@
 @section('footer-scripts')
 <script>
 
-    $( "input[name='store_name']" ).keydown(function(event) {
+    $( "input[name='store_name']" ).focusout(function(event) {
 
         var prefix = 'Try :';
         // event.currentTarget.removeClass('hidden');

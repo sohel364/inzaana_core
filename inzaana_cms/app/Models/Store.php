@@ -70,13 +70,13 @@ class Store extends Model
     }
 
     /**
-     * Suggest store names with given terms
+     * Suggest store names with given terms using faker package
      *
      * @param mixed
      * @param integer
      * @return array store names
      */
-    public static function suggest($inputTerms, $limit)
+    public static function suggestFromFaker($inputTerms, $limit)
     {
         $faker = StoreFaker::create();
         session([ 'input_terms' => $inputTerms ]); 
@@ -93,6 +93,24 @@ class Store extends Model
             
             session()->forget('input_terms');
             return "";
+        }
+        return $companies;
+    }
+
+    /**
+     * Suggest store names with given terms
+     *
+     * @param mixed
+     * @param integer
+     * @return array store names
+     */
+    public static function suggest($inputTerms, $limit)
+    {
+        $company_liability_types = [ 'Ltd.', 'GmbH', 's.r.o.', 'sp. z o.o.', 'LLC', 'Groups' ];
+        // $splitted_terms = preg_split("/[\s]+/", $inputTerms);
+        $companies = array();
+        foreach ($company_liability_types as $key => $value) {
+            $companies []= title_case($inputTerms) . ' ' . date("Y") . ' ' . $company_liability_types[$key];
         }
         return $companies;
     }

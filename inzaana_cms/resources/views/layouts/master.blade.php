@@ -161,7 +161,7 @@
                       <div class="input-group input-group-lg">
                       <p>
                       <label>
-                        <span class="glyphicon glyphicon-random"></span>
+                        <span class="fa fa-random"></span>
                         <label id="suggestions"></label>
                       </label>
                       </p>
@@ -284,7 +284,7 @@
         top: 200
       }
     });
-    $( "input[name='store_name']" ).keydown(function(event) {
+    $( "input[name='store_name']" ).focusout(function(event) {
 
         var prefix = 'Try :';
         // event.currentTarget.removeClass('hidden');

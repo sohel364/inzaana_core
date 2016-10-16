@@ -231,7 +231,6 @@ class StoreController extends Controller
         return redirect()->back();
     }
 
-
     public function suggest($input)
     {
         $storeNames = Store::suggest($input, 10);
