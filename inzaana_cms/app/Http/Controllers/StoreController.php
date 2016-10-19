@@ -233,12 +233,15 @@ class StoreController extends Controller
 
     public function suggest($input)
     {
+        $storeNames = Store::whereNameAsUrl(str_replace(' ', '', strtolower($input)))->get();
+        if(!$storeNames->first())
+            return response()->json([ 'store' => collect([]) ]);
         $storeNames = Store::suggest($input, 10);
         $suggestions = array();
         foreach ($storeNames as $name)
         {
-            $storeName = Store::whereNameAsUrl(str_replace(' ', '', strtolower($name)))->get();
-            if(!$storeName)
+            $storeNames = Store::whereNameAsUrl(str_replace(' ', '', strtolower($name)))->get();
+            if(!$storeNames->first())
                 $suggestions []= $name;
         } 
         $stores = empty($suggestions) ? $storeNames : $suggestions;
