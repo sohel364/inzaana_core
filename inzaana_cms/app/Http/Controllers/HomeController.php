@@ -40,11 +40,16 @@ class HomeController extends Controller
         // return HomeRedirect::to('http://' . $site . '/');
         // return 'THIS IS PUBLIC PAGE (' . $name . '.inzaana.' . $domain . '/showcase) FOR VENDOR\'S STORE';
 
-        $products = Store::whereNameAsUrl($name)->first()->user->products;
+        $store = Store::whereNameAsUrl($name)->first();
+        if(!$store)
+            return abort(404);
+            
+        if($store->status == 'REJECTED')
+            return response()->view('store-comingsoon', [], 404);
+        else if($store->status == 'ON_APPROVAL')
+            return view('store-comingsoon');
 
-        // dd($products->first()->product_title);
-
-        return view('vendor-store')->withProducts($products)->withSubDomain($name . '.inzaana.' . $domain)->withStoreNameUrl($name);
+        return view('vendor-store')->withProducts($store->user->products)->withSubDomain($name . '.inzaana.' . $domain)->withStoreNameUrl($name);
     }
 
     public function suggest($input)
