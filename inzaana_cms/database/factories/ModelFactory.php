@@ -24,13 +24,13 @@ $factory->define(Inzaana\User::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(Inzaana\Store::class, function (Faker\Generator $faker) {
-	$storeName = $faker->name;
+	$storeName = $faker->company;
     return [
         'name' => $storeName,
-        'domain' => $faker->tld,
+        // 'domain' => 'com',//$faker->tld,
         'address' => $faker->address,
-        'name_as_url' => strtolower(str_replace(' ', '', $storeName)),
-        'sub_domain' => 'inzaana',
+        'name_as_url' => strtolower(preg_replace('/[\s.,\']/', '', $storeName)),
+        // 'sub_domain' => 'inzaana',
         'store_type' => $faker->word,
         'description' => $faker->realText($faker->numberBetween(50,100)),
         'status' => 'ON_APPROVAL',

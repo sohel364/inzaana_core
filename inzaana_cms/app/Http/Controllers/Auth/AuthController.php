@@ -56,7 +56,7 @@ class AuthController extends Controller
         // dd($data);
         return Validator::make($data, [
             'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
+            'email' => 'required|email|confirmed|max:255|unique:users',
             'password' => 'required|confirmed|min:6',
             'phone_number' => 'required|min:11',
         ]);
@@ -91,16 +91,16 @@ class AuthController extends Controller
 
     // public function showRegistrationForm()
     // {
-    //     if($this->getPreviousRouteName() != 'guest::signup')
-    //     {
-    //         if(!session('storeName') || !session('store'))
-    //         {
-    //             return redirect()->route('guest::home');                
-    //         }
-    //         session()->forget('site');
-    //         session()->forget('store');
-    //     }
-    //     return $this->showRegisterFormParent();
+    //     // if($this->getPreviousRouteName() != 'guest::signup')
+    //     // {
+    //     //     if(!session('storeName') || !session('store'))
+    //     //     {
+    //     //         return redirect()->route('guest::home');                
+    //     //     }
+    //     //     session()->forget('site');
+    //     //     session()->forget('store');
+    //     // }
+    //     return $this->showRegisterFormParent()->withErrors(['Has errors']);
     // }
 
     protected function create(array $data)
@@ -212,7 +212,7 @@ class AuthController extends Controller
 
     public function redirectToCustomerSignup()
     {
-        return response()->view('auth.register-customer', [ 'errors' => collect([]) ]);
+        return view('auth.register-customer', ['errors' => session()->has('errors') ? session('errors') : collect([])] );
     }
 
     public function mailToAdminForSpecialSignup(AdminMailer $mailer)
