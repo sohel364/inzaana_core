@@ -30,7 +30,7 @@
                         <p class="text-success">{{ session('success') }}</p>
                     @endif
                         <p class="text-success text-right"><span class="text-red">*</span> Mandatory field.</p>
-                    <form class="form-horizontal" {{--action="{{ route('admin::create.plan') }}"--}} method="POST">
+                    <form class="form-horizontal" id="create_plan" {{--action="{{ route('admin::create.plan') }}"--}} method="POST">
                         {{ csrf_field() }}
                         <input type="hidden" class="form-control" value="{{ str_random(12) }}" name="plan_id">
                         @if($errors->first('plan_id')) <p class="text-danger text-sm danger_text">Please refresh this page and try again.</p> @endif
@@ -49,20 +49,28 @@
                         </div>
                         <div class="form-group">
                             <label for="">Amount: <span class="text-red text-md">*</span></label><span id="symbol"> &#8377;</span>
-                            <input type="text" class="form-control" value="{{old('plan_amount')}}" name="plan_amount" id="plan_amount" placeholder="5.25">
+                            <input type="text" class="form-control amount" value="{{old('plan_amount')}}" name="plan_amount" id="plan_amount" placeholder="5.25">
                             @if($errors->first('plan_amount')) <p class="text-danger text-sm danger_text">{{ $errors->first('plan_amount') }}</p> @endif
                         </div>
                         <div class="form-group">
                             <label for="">Interval:</label>
-                            <select name="plan_interval" id="">
+                            <select name="plan_interval" id="plan_interval">
                                 <option value="day">Daily</option>
                                 <option value="month">Monthly</option>
                                 <option value="year">Yearly</option>
                                 <option value="week">Weekly</option>
                                 <option value="3-month">Every 3 months</option>
                                 <option value="6-month">Every 6 months</option>
-                                <option value="custom">Custom</option>
+                                <option value="custom" id="custom_interval">Custom</option>
                             </select>
+                                <div class="custom" style="display: none">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="interval_count" value="0" maxlength="3" class="" id="interval_count" style="width: 5%">
+                                    <select name="coustom_interval" id="custom_interval">
+                                        <option value="month" id="mnth">months</option>
+                                        <option value="week" id="week">weeks</option>
+                                        <option value="day" id="day">days</option>
+                                    </select>
+                                </div>
                         </div>
                         <div class="form-group">
                             <label for="">Trial period days: <span class="text-red text-md" id="required_field"></span></label>
@@ -102,5 +110,6 @@
     <!--END CONTENT-->
 @endsection
 @section('footer-script')
+    <script src="{{ URL::asset('js/numeric.js') }}"></script>
     <script src="{{ URL::asset('super-admin-asset/stripe/plan-create.js') }}"></script>
 @endsection

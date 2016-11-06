@@ -3,7 +3,7 @@
   $user = Auth::user();
   $plan_name = \Laravel\Cashier\Subscription::where('user_id',$user->id)->get()->first();
   if($plan_name != null)
-    $plan_name = $plan_name->name;
+    $plan_name = $plan_name->stripe_plan;
   else
     $plan_name = null;
 
@@ -78,7 +78,7 @@
             </li>
             @endif
 
-            @if($user->getFeature($plan_name,'Categories'))
+            @if(true/*$user->getFeature($plan_name,'Products')*/)
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-cubes"></i> <span>Products <small class="label bg-green">{{ Auth::user()->products->count() }}</small></span> 
@@ -92,7 +92,7 @@
 
       <!-- $user->subscribed('main') -->
 
-            @if($user->getFeature($plan_name,'Categories'))
+            @if(false/*$user->getFeature($plan_name,'Categories')*/)
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-list"></i>
@@ -106,7 +106,7 @@
             </li>
             @endif
 
-              @if($user->getFeature($plan_name,'Products'))
+              @if(false/*$user->getFeature($plan_name,'Products')*/)
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-cubes"></i> <span>Products <small class="label bg-green">{{ Auth::user()->products->count() }}</small></span> 

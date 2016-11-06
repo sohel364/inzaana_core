@@ -44,7 +44,12 @@ class UsersTableSeeder extends Seeder
             $user->password = bcrypt($vendorPassword);
             $user->email_alter = preg_replace("/(\w+)@(\w+.)+/", "$1@inzaana.com", $user->email);
             $user->stores()->save(factory(Inzaana\Store::class)->make());
-            $user->newSubscription('Free', 'VuvmBePBCq3L')->create(\Stripe\Token::create(array(
+
+            /*
+             * Temporarily comment this code
+             * User will be push on onTrials category
+             * */
+            /*$user->newSubscription('Free', 'VuvmBePBCq3L')->create(\Stripe\Token::create(array(
                 "card" => array(
                     "number" => "5555555555554444",
                     "exp_month" => 9,
@@ -52,7 +57,10 @@ class UsersTableSeeder extends Seeder
                     "cvc" => "400"
                 )
             ))->id);
-            $user->subscription('Free')->cancel();
+
+            $user->subscription('Free')->cancel();*/
+
+            $user->trial_ends_at = Carbon\Carbon::now()->addDays(10);
             $user->save();
             Log::debug('[Inzaana][User of email -> ' . $user->email . ', password -> ' . $vendorPassword . ' is created, has ' . $user->stores()->count() . ' stores for testing]');
         });
@@ -64,7 +72,7 @@ class UsersTableSeeder extends Seeder
         /*
          * Add plan in local database
          * */
-        Inzaana\StripePlan::create([
+        $stripe_plan = Inzaana\StripePlan::create([
             "plan_id"               => 'VuvmBePBCq3L',
             "name"                  => 'Free',
             "amount"                => '0.00',
@@ -97,13 +105,15 @@ class UsersTableSeeder extends Seeder
          * Stripe Plan Features Table Seeding
          * */
 
-        $feature_list = ['Store','Categories','Products','FAQ','Orders','Customers','Coupons','Taxes','Localisation','Promotional Pages','Pages','Extensions','Sales','Authority','Inventory & Stock Manager','Point Of Sale','Reports','Browse Templates','My Templates'];
+        $features = new \Inzaana\StripePlanFeature();
 
-        foreach ($feature_list as $feature) {
+        foreach ($features->feature_list as $feature) {
            \Inzaana\StripePlanFeature::create(
                ['feature_name'=>$feature]
            );
         }
+
+        $stripe_plan->planFeature()->attach([2,4,5]);
 
 
     }

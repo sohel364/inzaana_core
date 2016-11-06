@@ -57,6 +57,7 @@ class StripeController extends Controller
         $msg = "You have already subscribed.";
         if(!Auth::user()->subscribed($request->_plan_name)){
             $user->newSubscription($request->_plan_name, $request->_plan_id)
+                ->trialDays((INT)$request->_trial_days)
                 ->create($request->stripeToken);
             /*
              * Auto renewal disable
@@ -75,11 +76,13 @@ class StripeController extends Controller
     /*
      * Plan Swaping
      * */
-    public function swapPlan(Request $request)
+    public function swapSubscriptionPlan(Request $request)
     {
-        //$user = User::find(Auth::user()->id);
-
-        //$user->subscription('main')->swap('provider-plan-id');
+        $user = Auth::user();
+        //dd($request->all());
+        $user->subscription($request->_plan_name)->swap($request->_plan_id);
+        $user->updateSubscription($request->_plan_id);
+        return redirect()->back();
     }
 
 
@@ -96,12 +99,24 @@ class StripeController extends Controller
          * Using Stripe lib for creating plan
          * */
 
+
         /*
          * Processing input data for stripe
          * */
         $amount = number_format($request->plan_amount,2);
         $amount = (INT)($amount * 100);
         $interval = strtolower($request->plan_interval);
+        $interval_count = 1;
+
+        if($interval == 'custom')
+        {
+            $interval_count = (INT)$request->interval_count;
+            $interval = $request->coustom_interval;
+        }else if($interval == '3-month' || $interval == '6-month'){
+            $array = explode('-', $interval);
+            $interval_count = (INT)$array[0];
+            $interval = $array[1];
+        }
 
         Stripe::setApiKey(getenv('STRIPE_SECRET'));
         $plan = Plan::create(array(
@@ -110,6 +125,7 @@ class StripeController extends Controller
             "currency" => $request->plan_currency,
             "amount" => $amount,
             "interval" => $interval,
+            "interval_count" => $interval_count,
             "trial_period_days" => (INT)$request->plan_trial,
             "statement_descriptor" => $request->plan_des
         ));
@@ -123,7 +139,8 @@ class StripeController extends Controller
             "name" => $request->plan_name,
             "amount" => $request->plan_amount,
             "currency" => $request->plan_currency,
-            "interval" => $request->plan_interval,
+            "interval" => $interval,
+            "interval_count" => $interval_count,
             "auto_renewal" => (INT)$request->auto_renewal?$request->auto_renewal:0,
             "trial_period_days" => (INT)$request->plan_trial,
             "statement_descriptor" => $request->plan_des,
@@ -144,15 +161,59 @@ class StripeController extends Controller
     {
         //$allPlan = StripePlan::all();
         $allPlan = StripePlan::with('planFeature')->get();
-        return view('super-admin.stripe.view-plan',compact('allPlan'))->with('user', Auth::user());
+        $plan_collect = [];
+        foreach($allPlan as $plan)
+        {
+
+            if($plan->interval_count > 1)
+            {
+                $plan->interval = "Every ". $plan->interval_count ." ".$plan->interval."s";
+            }
+            $plan_collect[] = $plan;
+
+        }
+        $allPlan = collect($plan_collect);
+        $sln = 1;
+        return view('super-admin.stripe.view-plan',compact('allPlan','sln'))->with('user', Auth::user());
     }
     /*
      * View Edit Plan Feature Interface
      * */
-    public function editPlanFeature($id)
+    public function editPlanFeature($plan_id)
     {
-        $plan_feature = StripePlan::with('planFeature')->whereId($id)->first();
-        //dd($plan_feature);
+        $plan_info = StripePlan::with('planFeature')->where('plan_id','=',$plan_id)->first();
+        $plan_data = [];
+        if($plan_info)
+        {
+            if($plan_info->interval_count > 1)
+            {
+                $plan_info->interval = "Every ". $plan_info->interval_count ." ".$plan_info->interval."s";
+            }
+            $feature_list = [];
+            foreach($plan_info->planFeature as $feature){
+                $feature_list[] = $feature->feature_name;
+            }
+            $plan_data = [
+                'id' => $plan_info->plan_id,
+                'plan_name' => $plan_info->name,
+                'price' => $plan_info->amount." ".$plan_info->currency_symbol[$plan_info->currency]."/".$plan_info->interval,
+                'trial' => $plan_info->trial_period_days,
+                'renewal' => $plan_info->auto_renewal,
+                'description' => $plan_info->statement_descriptor,
+                'feature' => $feature_list
+            ];
+        }
+        $all_feature = StripePlanFeature::all();
+        $feature = [];
+        foreach($all_feature as $value)
+        {
+            $feature[$value->feature_id] = $value->feature_name;
+        }
+
+        return response()->view('includes.modal', compact('plan_data', 'feature'))
+            ->header('Content-Type', 'html');
+
+        //return response()->json(['dump_data' =>$dumping_data]);
     }
     /*
      * Edit Plan Feature Using Plan ID
@@ -160,8 +221,43 @@ class StripeController extends Controller
      * Don't Touch Strip Database
      * Method call  from *** Route::get('/super-admin/edit-feature', [ 'uses' => 'StripeController@editPlanFeature', 'as'=> 'editPlanFeature']);
      * */
-    public function planFeatureUpdate()
+    public function planFeatureUpdate(Request $request)
     {
+        // Complete this code but test not yet.
+        /*$plan_id = $request->plan_id;
+        $plan_name = $request->plan_name;
+        $trial = $request->trial;
+        $description = $request->description;
+        $renewal = isset($request->auto_renewal) ? 1 : 0;
+        $feature = $request->feature_id;
+        $stripe_plan = StripePlan::where('plan_id','=',$plan_id)
+                        ->update([
+                            'name' => $plan_name,
+                            'trial_period_days'=>$trial,
+                            'statement_descriptor'=>$description,
+                            'auto_renewal'=>$renewal,
+                        ]);
+
+        $stripe_plan->planFeature()->attach($feature);*/
+
+        // View generate
+        $allPlan = StripePlan::with('planFeature')->get();
+        $plan_collect = [];
+        foreach($allPlan as $plan)
+        {
+            if($plan->interval_count > 1)
+            {
+                $plan->interval = "Every ". $plan->interval_count ." ".$plan->interval."s";
+            }
+            $plan_collect[] = $plan;
+
+        }
+        $sln = 1;
+        $allPlan = collect($plan_collect);
+        $allPlan = compact('allPlan', 'sln');
+
+        return response()->view('includes.plan-dom',$allPlan)
+            ->header('Content-Type', 'html');
 
     }
     /*
@@ -174,16 +270,43 @@ class StripeController extends Controller
         $this->validate($plan_id, [
             'plan' => 'required'
         ]);
-        $plan_id = Crypt::decrypt($plan_id->plan);
+        $plan_id = $plan_id->plan;
+        //$plan_id = Crypt::decrypt($plan_id->confirm_action);
+
         //if($plan_id == null) //Todo List: Abort or redirect back same page with meaning full message.
 
-        Stripe::setApiKey(getenv('STRIPE_SECRET'));
-        Plan::retrieve($plan_id)->delete(); // Delete From Remote Database
+        //Stripe::setApiKey(getenv('STRIPE_SECRET'));
+        //Plan::retrieve($plan_id)->delete(); // Delete From Remote Database
 
-        StripePlan::where('plan_id','=',$plan_id)->delete(); // Delete From local database
+        $stripe_plan = StripePlan::where('plan_id','=',$plan_id)->first();
+        $plan_name = $stripe_plan->name;
+        $plan_name = $plan_name."(Removed)";
+        StripePlan::where('plan_id','=',$plan_id)->update(['name' => $plan_name,'active'=>0]);
 
-        return redirect()->route('admin::viewPlan')->with(['success'=>'Successfully Deleted.']);
+        // view generate
+        $allPlan = StripePlan::with('planFeature')->get();
+        $plan_collect = [];
+        foreach($allPlan as $plan)
+        {
+            if($plan->interval_count > 1)
+            {
+                $plan->interval = "Every ". $plan->interval_count ." ".$plan->interval."s";
+            }
+            $plan_collect[] = $plan;
+
+        }
+        $sln = 1;
+        $allPlan = collect($plan_collect);
+        $allPlan = compact('allPlan', 'sln');
+
+        return response()->view('includes.plan-dom',$allPlan)
+            ->header('Content-Type', 'html');
+
+        //StripePlan::where('plan_id','=',$plan_id)->delete(); // Delete From local database
+        return Response::json([true]);
+        //return redirect()->route('admin::viewPlan')->with(['success'=>'Successfully Deleted.']);
     }
+
     /*
      * Plan view update
      * View Active Plan
@@ -192,13 +315,11 @@ class StripeController extends Controller
      * */
     public function updateStatus(Request $data)
     {
-        //dd(Input ('plan_id'));
-        $all_data = $data->json()->all();
-        $id = $all_data['plan_id'];
+        $all_data = $data->all();
+        $id = $plan_id = $all_data['plan'];
+        $plan = StripePlan::where('plan_id',$id)->update(['active' => $all_data['confirm_action']]);
 
-        $plan = StripePlan::where('plan_id',$id)->update(['active' => $all_data['status']]);
-
-        return Response::json(['plan_id'=>$id ,'id'=> $all_data['status']]);
+        return Response::json(['plan_id'=>$id,'confirm' => $all_data['confirm_action']]);
     }
     /*
      * View All Subscriber
@@ -211,9 +332,10 @@ class StripeController extends Controller
         $subscribers = DB::table('subscriptions')
                     ->join('users','users.id','=','subscriptions.user_id')
                     ->join('stripe_plans','stripe_plans.plan_id','=','subscriptions.stripe_plan')
-                    ->select('subscriptions.name as plan_name','subscriptions.stripe_id','subscriptions.quantity','users.name as subscriber_name','users.email','stripe_plans.amount','stripe_plans.interval','stripe_plans.trial_period_days as trial')
+                    ->select('subscriptions.id','subscriptions.name as plan_name','subscriptions.stripe_id','subscriptions.quantity','users.name as subscriber_name','users.email','stripe_plans.amount','stripe_plans.interval','stripe_plans.trial_period_days as trial')
                     ->get();
-        return view('super-admin.stripe.view-subscriber',compact('subscribers'))->with('user', Auth::user());
+        $sln = 1;
+        return view('super-admin.stripe.view-subscriber',compact('subscribers','sln'))->with('user', Auth::user());
 
     }
     /*
@@ -234,6 +356,12 @@ class StripeController extends Controller
         return view('my-subscription',compact('subscriber','user'));
 
     }
+
+    public function changeState(Request $req, $id)
+    {
+        dd($req->all());
+    }
+
     /*
      * Show All Invoice For Specific User
      * Using Laravel Cashier For Invoice Generating

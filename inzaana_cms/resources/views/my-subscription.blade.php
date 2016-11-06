@@ -28,7 +28,7 @@
                    <h4>Trial Left: {{ $user->getTrialTimeString() }}</h4>
              @endif
              <h4>Plan Cost: {{ $user->getPlanCost() }}</h4>
-             <h4>Remaining Days: {{ $user->getPlanRemainDays() }}</h4>
+             <h4>Remaining: {{ $user->getPlanRemainDays() }}</h4>
              <h4>Plan End Date: {{ $user->getPlanEndDate() }}</h4>
            @else
                 <p class="text-center text-warning" style="font-size:22px;">You are not subscribed any plan.</p>

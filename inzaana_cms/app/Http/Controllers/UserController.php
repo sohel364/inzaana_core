@@ -128,10 +128,30 @@ class UserController extends Controller
          * Using laravel cashier for plan retrieval
          * Method call from Route::get('/dashboard/vendor/plan', [ 'uses' => 'UserController@redirectToVendorPlan', 'as' => 'vendor.plan' ]);
          * */
+
         //$plan = StripePlan::where('active','=','1')->get();
         //$subscribed_plan =Subscription::where('user_id', Auth::user()->id)->get()->first()->name;
-        $plan = StripePlan::with('planFeature')->where('active','=','1')->get();
-        return view('plan',compact('plan'))->with('user', Auth::user())
+
+        $allplan = StripePlan::with('planFeature')->where('active','=','1')->get();
+        //dd($allplan);
+        $plan_collect = [];
+        foreach($allplan as $plan)
+        {
+
+            if($plan->interval_count > 1)
+            {
+                $plan->interval = "Every ". $plan->interval_count ." ".$plan->interval."s";
+            }
+            $plan_collect[] = $plan;
+
+        }
+        $allplan = collect($plan_collect);
+
+        $user = Auth::user();
+
+        $user_subscriptions = User::with('subscriptions')->whereId($user->id)->first();
+
+        return view('plan',compact('allplan'))->with('user', $user_subscriptions)
                                             ->with('authenticated', Auth::check());
     }
 

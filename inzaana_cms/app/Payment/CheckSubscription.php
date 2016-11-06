@@ -14,17 +14,29 @@ use Inzaana\Payment\PaymentException;
 use Carbon\Carbon;
 use Inzaana\StripePlan;
 use Inzaana\StripePlanFeature;
+use Laravel\Cashier\Subscription;
 
 trait CheckSubscription {
 
     public function userAccessPermission()
     {
-        return false;
-        if($this->getPlanEndDate())
-            dd($this->getPlanEndDate());
-        return $this->getPlanEndDate();
+        if($this->getSubscriptionEndDate()){
+            return true;
+        }else{
+            if($this->onTrial()){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
     }
-
+    /*
+     * At first get uri from middleware
+     * explode uri by '/' and make search by this array in database.
+     * If feature found from database then fetching every element in stripe_plan_has_features table
+     * If found then return true.
+     * */
     public function  featureAccessPermission($uri)
     {
         $uri = explode('/',$uri);
@@ -38,7 +50,7 @@ trait CheckSubscription {
                                 ->where('plan_id','=',$this->getPlanId())
                                 ->where('feature_id','=',$feature->feature_id)
                                 ->count();
-                if(!$isPermitted && $this->id != 1)
+                if(!$isPermitted) // TODO:: Need to update this permitted logic
                     return false;
             }
             return true;
@@ -59,8 +71,8 @@ trait CheckSubscription {
          * Carbon::now() create real time object
          * */
 
-        $trial_days = $this->getFromDatabase('trial_ends_at') ? $this->getFromDatabase('trial_ends_at') : array();
-        if(empty($trial_days)){
+        $trial_days = $this->getFromDatabase('trial_ends_at');
+        if(!isset($trial_days[0]->trial_ends_at)){
             return false;
         }else{
             $created = Carbon::parse($trial_days[0]->trial_ends_at);
@@ -134,10 +146,27 @@ trait CheckSubscription {
         }
     }
 
+    public function getSubscriptionEndDate()
+    {
+        /*$end_date = $this->getFromDatabase('ends_at as end_date') ? $this->getFromDatabase('ends_at as end_date') : array();
+        if(empty($end_date)){
+            return true;
+        }else{
+            return Carbon::today()->lt(Carbon::parse($end_date[0]->end_date));
+        }*/
+        $end_date = $this->getFromDatabase('ends_at as end_date');
+        if (isset($end_date[0]->end_date)) {
+            return Carbon::today()->lt(Carbon::parse($end_date[0]->end_date));
+        } else {
+            return true;
+        }
+    }
+
     public function getPlanEndDate()
     {
-        $end_date = $this->getFromDatabase('ends_at as end_date') ? $this->getFromDatabase('ends_at as end_date') : array();
-        if(empty($end_date)){
+        $end_date = $this->getFromDatabase('ends_at as end_date');
+
+        if(!isset($end_date[0]->end_date)){
             return "Unlimited(Auto renewal feature is on)";
         }else{
             $plan_date = Carbon::parse($end_date[0]->end_date);
@@ -154,8 +183,8 @@ trait CheckSubscription {
          * Carbon::now() create real time object
          * */
 
-        $trial_days = $this->getFromDatabase('ends_at') ? $this->getFromDatabase('ends_at'): array();
-        if(empty($trial_days))
+        $trial_days = $this->getFromDatabase('ends_at');
+        if(!isset($trial_days[0]->ends_at))
             return "Unlimited(Auto renewal feature is on)";
 
         $created = Carbon::parse($trial_days[0]->ends_at);
@@ -184,11 +213,11 @@ trait CheckSubscription {
         return $query? $query[0]->amount."/".$query[0]->currency : false;
     }
 
-    public function getFeature($plan_name, $feature_name)
+    public function getFeature($plan_id, $feature_name)
     {
-        if($plan_name != null){
-            $feature = StripePlan::with('planFeature')->whereName($plan_name)->first();
-            return in_array($feature_name, array_column($feature->planFeature->toArray(),'feature_name'));
+        if($plan_id != null){
+            $feature = StripePlan::with('planFeature')->where('plan_id','=',$plan_id)->first();
+            return in_array($feature_name, array_column(isset($feature) ? $feature->planFeature->toArray():[],'feature_name'));
         }
         return false;
     }
@@ -200,4 +229,44 @@ trait CheckSubscription {
         return $data_query ? $data_query : false;
     }
 
+    public function getPlanNameById($plan_id)
+    {
+        $data_query = DB::table('stripe_plans')->select('name')->where('plan_id','=',$plan_id)->get();
+        return $data_query ? $data_query[0]->name : false;
+    }
+    public function updateSubscription($plan_id)
+    {
+        DB::table('subscriptions')
+            ->where('user_id','=',$this->id)
+            ->update(['name' => $this->getPlanNameById($plan_id)]);
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
