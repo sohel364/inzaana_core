@@ -36,7 +36,7 @@
 
                 <div class="box-body">							
         				  <div class="form-group{{ $errors->has('profile_image') ? ' has-error' : '' }}">
-        						<img src="{{ asset('/dist/img/user2-160x160.jpg') }}" class="img-rounded" alt="Cinque Terre" width="304" height="236">										
+        						<img src="{{ asset('/dist/img/avatar.png') }}" class="img-rounded" alt="Cinque Terre" width="304" height="236">
         						<input id="file-input" type="file"/>
         				 </div>
 				 
@@ -51,16 +51,33 @@
                     @endif
                   </div>
 
-                  <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
-                    <label for="contact-number">Contact Number</label>
-                    <input type="text" class="form-control" value="{{ $user->phone_number or old('phone_number') }}" id="phone_number" name="phone_number" placeholder="Your contact number...">            
 
-                    @if ($errors->has('phone_number'))
-                        <span class="help-block">
+                    <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
+                        <label for="contact-number"> Contact Number</label>
+
+                        <div class="row col-sm-12 col-md-12 col-lg-12">
+                            <div class="row col-sm-1 col-md-1 col-lg-1" style="text-align: right">code</div>
+                            <div class="form-group col-sm-3 col-md-3 col-lg-3">
+                                <div>
+                                    <select name="code" text="code" class="form-control">
+                                        <option>+88</option>
+                                        <option>+46</option>
+                                        <option>+69</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-7 col-md-7 col-lg-7">
+                                <input type="text" class="form-control" value="" id="phone_number" name="phone_number" placeholder="Phone number...">
+                            </div>
+                        </div>
+
+                        @if ($errors->has('phone_number'))
+                            <span class="help-block">
                               <strong>{{ $errors->first('phone_number') }}</strong>
                           </span>
-                    @endif
-                  </div>
+                        @endif
+                    </div>
 
                   <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                     <label for="email">Email Address</label>
@@ -72,9 +89,9 @@
                           </span>
                     @endif
                   </div>
-				  
-				          @if($user->email_alter)
-				          <div class="form-group{{ $errors->has('email_alter') ? ' has-error' : '' }}">
+
+                    @if($user->email_alter)
+				  <div class="form-group{{ $errors->has('email_alter') ? ' has-error' : '' }}">
                     <label for="email_alter">Inzaana web-mail</label>
                     <input type="text" class="form-control" value="{{ $user->email_alter }}" id="email_alter" name="email_alter" placeholder="Your inzaana web-email.." readonly>            
 
@@ -88,13 +105,26 @@
 				  
                   <div class="form-group">
                     <label for="address">Address</label>
-                    <input type="text" class="form-control" value="{{ $user->address or old('address') }}" id="mailing-address" name="mailing-address" placeholder="Your mailing address..">            
+					<input type="text" class="form-control" value="" id="address_flat_house_floor_building" name="address_flat_house_floor_building" placeholder="Flat / house no / floor / Building">
+                    <br/>
+                    <input type="text" class="form-control" value="" id="address_colony_street_locality" name="address_colony_street_locality" placeholder="Colony / Street / Locality">
+                    <br/>
+                    <input type="text" class="form-control" value="" id="address_landmark" name="address_landmark" placeholder="Landmark (optional)">
+                    <br/>
+                    <input type="text" class="form-control" value="" id="address_town_city" name="address_town_city" placeholder="Town / City">
+                    <br/>
+                    <select name="state" class="form-control" placeholder="Select State">
+                            <option>Andhra Pradesh</option>
+                            <option>Assam</option>
+                            <option>Bihar</option>
+                    </select>
 
                     @if ($errors->has('address'))
                         <span class="help-block">
                               <strong>{{ $errors->first('address') }}</strong>
-                          </span>
+                        </span>
                     @endif
+
                   </div>
 				  
         				  <div class="form-group{{ $errors->has('oldpass') ? ' has-error' : '' }}">
