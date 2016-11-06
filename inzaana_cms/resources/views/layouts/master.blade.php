@@ -15,7 +15,9 @@
   <link href="{{ URL::asset('css/font-awesome-4.2.0/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
   <link href="{{ URL::asset('css3-animate-it-master/css/animations.css') }}" rel="stylesheet" type="text/css">
   <link href="{{ URL::asset('css/font-awesome-animation.css') }}" rel="stylesheet" type="text/css">
-  <link href="{{ URL::asset('css/select2.css') }}" rel="stylesheet" type="text/css">  
+  <link href="{{ URL::asset('css/select2.css') }}" rel="stylesheet" type="text/css">
+
+
   @yield('header-style')
   
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -174,7 +176,7 @@
 			  <!--End of Home-->
 	<div class="clearfix"></div>
      
-	<div class="container">
+	<div class="container grid2">
     @yield('content')
   </div>
 	 

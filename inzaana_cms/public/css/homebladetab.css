@@ -1,0 +1,55 @@
+.tab li a:hover {
+    background-color: #5BC0DE;;
+}
+
+
+
+.grid1 .col-md-6 a, a:hover, a:active, a:visited {
+    text-decoration:none;
+	border:0!important;
+}
+
+.grid1 .col-md-6 a:focus{
+    text-decoration:none;
+	border:0!important;
+	 color: #5BC0DE;
+    
+ 
+}
+
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+	text-align: center;
+}
+	.grid1 .col-md-6{
+    position: relative;
+    min-height: 50px;
+    padding: 0%;
+	text-align: center;
+border: 0px solid #ccc;
+text-decoration: none;
+
+
+}
+.grid2 .col-md-12{
+    position: relative;
+    border: 0px solid #ccc;
+    padding: 0%;
+}
+.grid3 .col-md-12{
+top: 0px;
+}
+.centering{
+font-size: 20px;
+color: black;
+position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+	text-decoration: none;
+}

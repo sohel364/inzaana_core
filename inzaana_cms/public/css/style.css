@@ -37,7 +37,8 @@ a:focus {
   width: 180px;
   height: 1px;
   background-color: #cccccc;
-  margin: 21px auto 21px;
+  margin: auto;
+
 }
 
 .title-separator span {
