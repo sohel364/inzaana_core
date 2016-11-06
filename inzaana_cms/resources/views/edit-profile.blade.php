@@ -57,7 +57,7 @@
 
                         <div class="row col-sm-12 col-md-12 col-lg-12">
                             <div class="row col-sm-1 col-md-1 col-lg-1" style="text-align: right">code</div>
-                            <div class="form-group col-sm-3 col-md-3 col-lg-3">
+                            <div class="form-group col-sm-2 col-md-2 col-lg-2">
                                 <div>
                                     <select name="code" text="code" class="form-control">
                                         <option>+88</option>
@@ -70,6 +70,7 @@
                             <div class="col-sm-7 col-md-7 col-lg-7">
                                 <input type="text" class="form-control" value="" id="phone_number" name="phone_number" placeholder="Phone number...">
                             </div>
+                            <div class="col-sm-1 col-md-1 col-lg-1"><button type="button" class="btn btn-primary">verify</button></div>
                         </div>
 
                         @if ($errors->has('phone_number'))
@@ -89,6 +90,16 @@
                           </span>
                     @endif
                   </div>
+                    <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                        <label for="email">Alternate Email Address</label>
+                        <input type="text" class="form-control" value="{{ $user->email or old('email') }}" id="email" name="email" placeholder="Alternate email address..">
+
+                        @if ($errors->has('email'))
+                            <span class="help-block">
+                              <strong>{{ $errors->first('email') }}</strong>
+                          </span>
+                        @endif
+                    </div>
 
                     @if($user->email_alter)
 				  <div class="form-group{{ $errors->has('email_alter') ? ' has-error' : '' }}">
