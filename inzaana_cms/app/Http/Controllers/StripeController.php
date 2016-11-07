@@ -5,6 +5,7 @@ namespace Inzaana\Http\Controllers;
 use Auth;
 use Crypt;
 use DB;
+use Illuminate\Support\Facades\Input;
 use Inzaana\StripePlanFeature;
 use Inzaana\User;
 use Inzaana\StripePlan;
@@ -327,15 +328,81 @@ class StripeController extends Controller
      * Retrieve all subscribers from local database
      * Method call from Route::get('/super-admin/view-subscriber', [ 'uses' => 'StripeController@viewSubscriber', 'as'=> 'viewSubscriber']);
      * */
-    public function viewSubscriber()
+    public function viewSubscriber(Request $request)
     {
+        /*$sql = "SELECT
+                    users.name as name,s.id,s.name,s.stripe_id,s.quantity,users.name,users.email,sp.amount,sp.interval,sp.interval_count,sp.trial_period_days,
+                      GROUP_CONCAT(stores.name) AS `store_name`
+                    FROM users
+                        JOIN subscriptions as s on s.user_id=users.id
+                        JOIN stripe_plans as sp on sp.plan_id=s.stripe_plan
+                       JOIN stores
+                        ON users.id = stores.user_id
+                        WHERE stores.status = 'APPROVED'
+                    GROUP BY stores.user_id";*/
+
+        $sort = 'name';
+        $order = 'ASC';
+        $loadView = 'super-admin.stripe.view-subscriber';
+        if($request->ajax())
+        {
+            $sort = Input::get('sort');
+            $order = (Input::get('order')=='DESC')? "ASC" : "DESC";
+            $loadView = 'super-admin.includes.subscriber-dom';
+        }
+        switch($sort){
+            case 'name':
+                $sort = 'users.name';
+                break;
+            case 'plan':
+                $sort = 'stripe_plans.name';
+                break;
+            case 'email':
+                $sort = 'users.email';
+                break;
+            default:
+                $sort = 'users.name';
+                break;
+        }
+
         $subscribers = DB::table('subscriptions')
                     ->join('users','users.id','=','subscriptions.user_id')
                     ->join('stripe_plans','stripe_plans.plan_id','=','subscriptions.stripe_plan')
-                    ->select('subscriptions.id','subscriptions.name as plan_name','subscriptions.stripe_id','subscriptions.quantity','users.name as subscriber_name','users.email','stripe_plans.amount','stripe_plans.interval','stripe_plans.trial_period_days as trial')
+                    ->join('stores','stores.user_id','=','users.id')
+                    ->select('subscriptions.id','subscriptions.name as plan_name','subscriptions.stripe_id','subscriptions.quantity','users.name as subscriber_name','users.email','stripe_plans.amount','stripe_plans.interval','stripe_plans.interval_count','stripe_plans.trial_period_days as trial', DB::raw('GROUP_CONCAT(stores.name,"#",stores.status) AS store_name'))
+                    /*->where('stores.status','=','APPROVED')*/
+                    ->groupBy('stores.user_id')
+                    ->orderBy($sort,$order)
                     ->get();
+        $subscriber_collect = [];
+        foreach($subscribers as $subscriber)
+        {
+            if($subscriber->interval_count > 1)
+            {
+                $subscriber->interval = "Every ". $subscriber->interval_count ." ".$subscriber->interval."s";
+            }
+            $store_name = $subscriber->store_name;
+            $data_process = [];
+            if($store_name != null)
+            {
+                $store_name = explode(',',$store_name);
+                foreach ($store_name as $name) {
+                    if($name != null){
+                        $name = explode('#',$name);
+                        $data_process[] = $name;
+                    }
+                }
+            }
+            $subscriber->store_name = collect($data_process);
+        }
+
         $sln = 1;
-        return view('super-admin.stripe.view-subscriber',compact('subscribers','sln'))->with('user', Auth::user());
+        $user = Auth::user();
+        $sort = Input::get('sort');
+        return response()->view($loadView,compact('subscribers','sln','order','sort','user'))
+            ->header('Content-Type', 'html');
+
+        //return view('super-admin.stripe.view-subscriber',compact('subscribers','sln'))->with('user', Auth::user());
 
     }
     /*
