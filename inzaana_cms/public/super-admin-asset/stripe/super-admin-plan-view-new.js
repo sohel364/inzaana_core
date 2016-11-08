@@ -49,9 +49,10 @@
     });
 
 
-    $(document).on('submit','#plan_edit_form', function (e) {
+    /*$(document).on('submit','#plan_edit_form', function (e) {
         e.preventDefault();
-        /*var formData = $(this).serialize();
+        alert("here");
+        /!*var formData = $(this).serialize();
         var id = $(this).attr('id');
         var url = $(this).attr('action');
         $.ajax({
@@ -68,10 +69,14 @@
 
             },
             timeout: 10000
-        });*/
+        });*!/
 
 
-    });
+    });*/
+$('#plan_edit_form').submit(function (e) {
+    e.preventDefault();
+    alert("here");
+});
 
     $(document).on('submit','.delete', function (e) {
         e.preventDefault();
@@ -125,6 +130,27 @@
             },
             timeout: 10000
         });
+    });
+
+    $(document).on('click','#click_by_sort', function (e) {
+        e.preventDefault();
+        var sort = $(this).attr('data-sort');
+        var order = $(this).attr('data-order');
+        var url = window.location.pathname;
+        $.ajax({
+            async: true,
+            type: 'GET',
+            url: url+'?sort='+sort+'&order='+order, // you need change it.
+            processData: false, // high importance!
+            success: function (data) {
+                $('#plan-area').html(data);
+            },
+            error: function(data){
+
+            },
+            timeout: 10000
+        });
+
     });
 
 

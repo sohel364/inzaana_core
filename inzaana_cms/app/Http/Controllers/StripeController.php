@@ -158,10 +158,36 @@ class StripeController extends Controller
      * This information get from local Database Using Laravel Cashier
      * Method call from *** Route::get('super-admin/view-plan', [ 'uses' => 'StripeController@viewPlan', 'as'=> 'viewPlan']);
      * */
-    public function viewPlan()
+    public function viewPlan(Request $request)
     {
         //$allPlan = StripePlan::all();
-        $allPlan = StripePlan::with('planFeature')->get();
+
+        $sort = 'name';
+        $order = 'ASC';
+        $loadView = 'super-admin.stripe.view-plan';
+        if($request->ajax())
+        {
+            $sort = Input::get('sort');
+            $order = (Input::get('order')=='DESC')? "ASC" : "DESC";
+            $loadView = 'super-admin.includes.plan-dom';
+        }
+        switch($sort){
+            case 'name':
+                $sort = 'name';
+                break;
+            case 'price':
+                $sort = 'amount';
+                break;
+            case 'trial':
+                $sort = 'trial_period_days';
+                break;
+            default:
+                $sort = 'name';
+                break;
+        }
+
+
+        $allPlan = StripePlan::with('planFeature')->orderBy($sort,$order)->get();
         $plan_collect = [];
         foreach($allPlan as $plan)
         {
@@ -174,13 +200,16 @@ class StripeController extends Controller
 
         }
         $allPlan = collect($plan_collect);
+        $user = Auth::user();
         $sln = 1;
-        return view('super-admin.stripe.view-plan',compact('allPlan','sln'))->with('user', Auth::user());
+        return response()->view($loadView,compact('allPlan','sln','order','sort','user'))
+            ->header('Content-Type', 'html');
+        /*return view('super-admin.stripe.view-plan',compact('allPlan','sln'))->with('user', Auth::user());*/
     }
     /*
      * View Edit Plan Feature Interface
      * */
-    public function editPlanFeature($plan_id)
+    public function editPlanFeatureView($plan_id)
     {
         $plan_info = StripePlan::with('planFeature')->where('plan_id','=',$plan_id)->first();
         $plan_data = [];
@@ -300,7 +329,7 @@ class StripeController extends Controller
         $allPlan = collect($plan_collect);
         $allPlan = compact('allPlan', 'sln');
 
-        return response()->view('includes.plan-dom',$allPlan)
+        return response()->view('super-admin.includes.plan-dom',$allPlan)
             ->header('Content-Type', 'html');
 
         //StripePlan::where('plan_id','=',$plan_id)->delete(); // Delete From local database

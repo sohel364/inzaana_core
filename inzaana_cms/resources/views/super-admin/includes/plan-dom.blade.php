@@ -3,12 +3,42 @@
         <thead>
         <tr>
             <th>SLN</th>
-            <th>Plan Name</th>
-            <th>Price</th>
-            <th>Trial Period</th>
-            <th>Description</th>
-            <th>Feature</th>
-            <th>Status</th>
+            <th data-sort="name" data-order="{{ $order }}" id="click_by_sort">
+                <a href="#">Plan Name
+                    @if($order == 'ASC' && $sort == 'name')
+                        <i class="fa fa-caret-up" aria-hidden="true"></i>
+                    @elseif($order == 'DESC' && $sort == 'name')
+                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    @endif
+                </a>
+            </th>
+            <th data-sort="price" data-order="{{ $order }}" id="click_by_sort">
+                <a href="#">Price
+                    @if($order == 'ASC' && $sort == 'price')
+                        <i class="fa fa-caret-up" aria-hidden="true"></i>
+                    @elseif($order == 'DESC' && $sort == 'price')
+                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    @endif
+                </a>
+            </th>
+            <th data-sort="trial" data-order="{{ $order }}" id="click_by_sort">
+                <a href="#">Trial Period
+                    @if($order == 'ASC' && $sort == 'trial')
+                        <i class="fa fa-caret-up" aria-hidden="true"></i>
+                    @elseif($order == 'DESC' && $sort == 'trial')
+                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    @endif
+                </a>
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Feature
+            </th>
+            <th>
+                Status
+            </th>
             <th width="20%">Action</th>
         </tr>
         </thead>
@@ -29,7 +59,7 @@
                         <label for="" id="{{ $plan['plan_id'] }}" class="label {{ $plan['active'] ? "label-success": "label-warning" }}">{{ $plan['active'] ? "Active": "Inactive" }}</label>
                     </td>
                     <td>
-                        <a href="{{ action('StripeController@editPlanFeature',$plan) }}" class="btn btn-warning btn-xs" style="display: none;">Edit</a>
+                        <a href="{{ action('StripeController@editPlanFeatureView',$plan) }}" class="btn btn-warning btn-xs" style="display: none;">Edit</a>
 
                         <form action="view-plan/ajax/update" method="post" name="action" id="{{ $plan['plan_id'] }}" class="form-horizontal change_status">
                             {{ csrf_field() }}

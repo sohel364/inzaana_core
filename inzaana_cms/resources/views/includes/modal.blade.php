@@ -55,10 +55,19 @@
 
             </div>
             <div class="modal-footer">
-                <input type="submit" class="btn btn-primary" id="modal_submit"  value="Update">
+                <input type="submit" class="btn btn-primary" id="modal_submit" onclick="getClick()"  value="Update">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+@section('footer-script')
+    {{--<script src="{{ URL::asset('super-admin-asset/stripe/super-admin-plan-view.js') }}"></script>--}}
+    <script>
+        function getClick(){
+            alert("got it");
+        }
+    </script>
+@endsection
