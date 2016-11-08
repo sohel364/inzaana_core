@@ -344,7 +344,7 @@ class UserController extends Controller
         $rules = collect([
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
-            'phone_number' => 'required|digits:11',
+            'phone_number' => 'required|numeric',
             'email_alter' => 'email',
         ]);
 
