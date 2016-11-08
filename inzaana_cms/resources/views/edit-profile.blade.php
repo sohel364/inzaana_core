@@ -60,9 +60,9 @@
                             <div class="form-group col-sm-2 col-md-2 col-lg-2">
                                 <div>
                                     <select name="code" text="code" class="form-control">
-                                        <option>+88</option>
-                                        <option>+46</option>
-                                        <option>+69</option>
+                                        <option>+088</option>
+                                        <option>+465</option>
+                                        <option>+695</option>
                                     </select>
                                 </div>
 
@@ -129,13 +129,8 @@
                             <option>Assam</option>
                             <option>Bihar</option>
                     </select>
-
-                    @if ($errors->has('address'))
-                        <span class="help-block">
-                              <strong>{{ $errors->first('address') }}</strong>
-                        </span>
-                    @endif
-
+					<label for="Postcode">Postcode</label>
+                   <input type="text" class="form-control" value="" id="postcode" name="postcode" placeholder="Postcode">
                   </div>
 				  
         				  <div class="form-group{{ $errors->has('oldpass') ? ' has-error' : '' }}">

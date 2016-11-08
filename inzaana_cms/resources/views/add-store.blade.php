@@ -97,7 +97,35 @@
 
                   </div>
 
-                   <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
+<div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
+                        <label for="contact-number"> Contact Number</label>
+
+                        <div class="row col-sm-12 col-md-12 col-lg-12">
+                            <div class="row col-sm-1 col-md-1 col-lg-1" style="text-align: right">code</div>
+                            <div class="form-group col-sm-2 col-md-2 col-lg-2">
+                                <div>
+                                    <select name="code" text="code" class="form-control">
+                                        <option>+088</option>
+                                        <option>+999</option>
+                                        <option>+965</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-7 col-md-7 col-lg-7">
+                                <input type="text" class="form-control" value="" id="phone_number" name="phone_number" placeholder="Phone number...">
+                            </div>
+                            <div class="col-sm-1 col-md-1 col-lg-1"><button type="button" class="btn btn-primary">verify</button></div>
+                        </div>
+
+                        @if ($errors->has('phone_number'))
+                            <span class="help-block">
+                              <strong>{{ $errors->first('phone_number') }}</strong>
+                          </span>
+                        @endif
+                    </div>
+
+                   <!--<div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
                     <label for="Store-address">Address</label>
                     <input type="text" class="form-control" value="{{ isset($store) ? $store->address : '' }}" id="address" name="address" placeholder="Add your Store address here...">
                     @if ($errors->has('address'))
@@ -105,6 +133,25 @@
                             <strong>{{ $errors->first('address') }}</strong>
                         </span>
                     @endif
+                  </div>-->
+				  <div class="form-group">
+                    <label for="address">Address</label>
+					<input type="text" class="form-control" value="" id="address_flat_house_floor_building" name="address_flat_house_floor_building" placeholder="Flat / house no / floor / Building">
+                    <br/>
+                    <input type="text" class="form-control" value="" id="address_colony_street_locality" name="address_colony_street_locality" placeholder="Colony / Street / Locality">
+                    <br/>
+                    <input type="text" class="form-control" value="" id="address_landmark" name="address_landmark" placeholder="Landmark (optional)">
+                    <br/>
+                    <input type="text" class="form-control" value="" id="address_town_city" name="address_town_city" placeholder="Town / City">
+                    <br/>
+                    <label for="state">State</label>
+                    <select name="state" class="form-control" placeholder="Select State">
+                            <option>Andhra Pradesh</option>
+                            <option>Assam</option>
+                            <option>Bihar</option>
+                    </select>
+                   <label for="Postcode">Postcode</label>
+                   <input type="text" class="form-control" value="" id="postcode" name="postcode" placeholder="Postcode">
                   </div>
 
                   <div class="form-group">
