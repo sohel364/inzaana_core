@@ -114,6 +114,8 @@
                     <br/>
                     <input type="text" class="form-control" value="" id="address_town_city" name="address_town_city" placeholder="Town / City">
                     <br/>
+					
+					<label for="state">State</label>
                     <select name="state" class="form-control" placeholder="Select State">
                             <option>Andhra Pradesh</option>
                             <option>Assam</option>
