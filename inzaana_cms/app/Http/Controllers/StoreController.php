@@ -214,10 +214,17 @@ class StoreController extends Controller
             return redirect()->back()->withErrors(['Your requested store is not found to approve!']);
         if(!$request->has('confirmation-select'))
             return redirect()->back()->withErrors(['Invalid request of approval confirmation!']);
-        if($request->input('confirmation-select') == 'approve')
-            $store->status = 'APPROVED';
-        if($request->input('confirmation-select') == 'reject')
-            $store->status = 'REJECTED';
+
+        switch($request->input('confirmation-select'))
+        {
+            case 'approve': 
+                $category->status = 'APPROVED';
+            case 'reject':
+                $category->status = 'REJECTED';
+            case 'remove':
+                $category->status = 'REMOVED';
+        }
+        
         if(!$store->save())
             return redirect()->back()->withErrors(['Failed to confirm store approval!']);
         flash()->success('Your have ' . strtolower($store->getStatus()) . ' store (' . $store->name . ').');

@@ -178,7 +178,36 @@
   <!--CORE JAVASCRIPT-->
 {{--  <script src="{{ URL::asset('user_admin_dashboard_asset/script/main.js') }}"></script>--}}
   <script src="{{ URL::asset('super-admin-asset/config.js') }}"></script>
-    @yield('footer-script')
+  @yield('footer-script')
+
+  <script type="text/javascript">
+        
+    $(document).ready(function () {
+
+        // new hotness
+        (function loopsiloop(){
+           setTimeout(function(){
+               $.ajax({
+                   url: '/who-am-i',
+                   success: function( response ){
+                       // do something with the response
+                      if(response)
+                      {
+                          loopsiloop(); // recurse
+                      } 
+                      else                     
+                        window.location.href = '/login';
+                   },
+                   error: function(){
+                      window.location.href = '/login';
+                   }
+               });
+           }, 5000);
+        })();
+
+    });
+  </script>
+
 </body>
 
 </html>

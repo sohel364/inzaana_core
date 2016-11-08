@@ -99,6 +99,11 @@ class UserController extends Controller
     // View to vendor admin dashboard
     public function redirectToDashboard()
     {
+        if(Auth::guest())
+        {
+            flash()->error('Your session is timed out. Please login and confirm again.');
+            return Auth::guest('/login');
+        }
         if(session()->has('site') || session()->has('store'))
         {
             session()->forget('site');
@@ -123,6 +128,11 @@ class UserController extends Controller
     // View plan for vendor
     public function redirectToVendorPlan()
     {
+        if(Auth::guest())
+        {
+            flash()->error('Your session is timed out. Please login and confirm again.');
+            return Auth::guest('/login');
+        }
         /*
          * View Plan for subscription
          * Using laravel cashier for plan retrieval
@@ -138,6 +148,11 @@ class UserController extends Controller
     // View plan for vendor
     public function redirectToDashboardAdmin()
     {
+        if(Auth::guest())
+        {
+            flash()->error('Your session is timed out. Please login and confirm again.');
+            return Auth::guest('/login');
+        }
         $user = User::find(Auth::user()->id);
         if($user)
         {
@@ -170,6 +185,11 @@ class UserController extends Controller
     // view to customer dashboard
     public function redirectToDashboardCustomer()
     {
+        if(Auth::guest())
+        {
+            flash()->error('Your session is timed out. Please login and confirm again.');
+            return Auth::guest('/login');
+        }
         $user = User::find(Auth::user()->id);
         if($user)
         {
@@ -376,7 +396,9 @@ class UserController extends Controller
         {
             $approvals = session('approvals');
             // dd($approvals);
-            return view('manage-approvals')->withUser(Auth::user())->withApprovals($approvals)->withTotalApprovals($this->totalApprovals($approvals, ['categories', 'products', 'stores' ]));          
+            return view('manage-approvals')->withUser(Auth::user())
+                                           ->withApprovals($approvals)
+                                           ->withTotalApprovals($this->totalApprovals($approvals, ['categories', 'products', 'stores' ]));          
         }
         return $this->approvals();
     }

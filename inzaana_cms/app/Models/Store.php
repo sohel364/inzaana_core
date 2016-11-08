@@ -41,6 +41,7 @@ class Store extends Model
             case 'ON_APPROVAL':     return 'On Apprval';
             case 'APPROVED':        return 'Approved';
             case 'REJECTED':        return 'Rejected';
+            case 'REMOVED':         return 'Removed';
         }
         return 'Unknown';
     }
