@@ -108,7 +108,6 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $data['name'] . ' ' . $data['last_name'],
             'email' => $data['email'],
-            'email_alter' => preg_replace("/(\w+)@(\w+.)+/", "$1@inzaana.com", $data['email']),
             'phone_number' => $data['phone_number'],
             'country' => array_has($data, 'country') ? $data['country'] : '',
             'address' =>  array_has($data, 'address') ? $data['address'] : '',

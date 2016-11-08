@@ -93,6 +93,12 @@ class UserController extends Controller
         $site = session('site');
         $store = session('store');
         $business = session('business');
+        
+        // If a vendor is verified create an web mail address as an alternative email address
+        $user = Auth::user();
+        $user->email_alter =  preg_replace("/(\w+)@(\w+.)+/", "$1@inzaana.com", $user->email);
+        $user->save();
+
         return redirect()->route('user::stores.create-on-signup', compact('store', 'site', 'business'));
     }   
 

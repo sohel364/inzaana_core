@@ -90,19 +90,9 @@
                           </span>
                     @endif
                   </div>
-                    <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                        <label for="email">Alternate Email Address</label>
-                        <input type="text" class="form-control" value="{{ $user->email or old('email') }}" id="email" name="email" placeholder="Alternate email address..">
 
-                        @if ($errors->has('email'))
-                            <span class="help-block">
-                              <strong>{{ $errors->first('email') }}</strong>
-                          </span>
-                        @endif
-                    </div>
-
-                    @if($user->email_alter)
-				  <div class="form-group{{ $errors->has('email_alter') ? ' has-error' : '' }}">
+                  @if($user->email_alter)
+			            <div class="form-group{{ $errors->has('email_alter') ? ' has-error' : '' }}">
                     <label for="email_alter">Inzaana web-mail</label>
                     <input type="text" class="form-control" value="{{ $user->email_alter }}" id="email_alter" name="email_alter" placeholder="Your inzaana web-email.." readonly>            
 
@@ -116,7 +106,7 @@
 				  
                   <div class="form-group">
                     <label for="address">Address</label>
-					<input type="text" class="form-control" value="" id="address_flat_house_floor_building" name="address_flat_house_floor_building" placeholder="Flat / house no / floor / Building">
+					           <input type="text" class="form-control" value="" id="address_flat_house_floor_building" name="address_flat_house_floor_building" placeholder="Flat / house no / floor / Building">
                     <br/>
                     <input type="text" class="form-control" value="" id="address_colony_street_locality" name="address_colony_street_locality" placeholder="Colony / Street / Locality">
                     <br/>
@@ -129,7 +119,7 @@
                             <option>Assam</option>
                             <option>Bihar</option>
                     </select>
-					<label for="Postcode">Postcode</label>
+					           <label for="Postcode">Postcode</label>
                    <input type="text" class="form-control" value="" id="postcode" name="postcode" placeholder="Postcode">
                   </div>
 				  
