@@ -120,10 +120,22 @@ class CategoryController extends Controller
             return redirect()->back()->withErrors(['Category not found to approve!']);
         if(!$request->has('confirmation-select'))
             return redirect()->back()->withErrors(['Invalid request of approval confirmation!']);
-        if($request->input('confirmation-select') == 'approve')
-            $category->status = 'APPROVED';
-        if($request->input('confirmation-select') == 'reject')
-            $category->status = 'REJECTED';
+
+        switch($request->input('confirmation-select'))
+        {
+            case 'approve': 
+                $category->status = 'APPROVED';
+            case 'reject':
+                $category->status = 'REJECTED';
+            case 'remove':
+                $category->status = 'REMOVED';
+        }
+
+        // if($request->input('confirmation-select') == 'approve')
+        //     $category->status = 'APPROVED';
+        // if($request->input('confirmation-select') == 'reject')
+        //     $category->status = 'REJECTED';
+        
         if(!$category->save())
             return redirect()->back()->withErrors(['Failed to confirm category approval!']);
         flash()->success('Your have ' . strtolower($category->getStatus()) . ' category (' . $category->category_name . ').');
