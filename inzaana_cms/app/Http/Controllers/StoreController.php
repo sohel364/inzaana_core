@@ -36,8 +36,8 @@ class StoreController extends Controller
 
         $this->_rules = collect([
             'name' => 'required|unique:stores|max:30',
-            'sub_domain' => 'required',
-            'domain' => 'required',
+            // 'sub_domain' => 'required',
+            // 'domain' => 'required',
             'description' => 'max:1000'
         ]);
     }
@@ -51,7 +51,7 @@ class StoreController extends Controller
 
     public function index()
     {
-        return $this->viewUserStore([]);
+        return $this->viewUserStore([ 'phone_number' => [0, '']  ]);
     }
 
     public function redirectUrl($site)
@@ -79,21 +79,34 @@ class StoreController extends Controller
 
     public function update(Store $store)
     {
-        return $this->viewUserStore(compact('store'));
+        $user = User::find($store->user_id);
+        $phone_number = User::getPhoneCode($user->phone_number);
+        $address = User::getAddress($store->address ? $store->address : $user->address);
+        return $this->viewUserStore(compact('store', 'phone_number', 'address'));
     }
 
     public function postUpdate(StoreRequest $request, Store $store)
     {
         $storeName = $request->input('store_name');
+
+        $delimiter_address = "<address>";
+        $address = $request->input('address') . $delimiter_address;
+        $address .= $request->input('address_flat_house_floor_building') . $delimiter_address;
+        $address .= $request->input('address_colony_street_locality') . $delimiter_address;
+        $address .= $request->input('address_landmark') . $delimiter_address;
+        $address .= $request->input('address_town_city') . $delimiter_address;
+        $address .= $request->input('postcode');
+
         $data = collect([
             'name' => $storeName,
             // 'sub_domain' => 'inzaana',
             // 'domain' => 'com',//str_replace('.', '', '.net'),
             'description' => $request->input('description'),
-            'address' => $request->input('address'),
+            'address' => $address,
             'store_type' => $request->input('business')
 
         ]);
+
         $rules = $this->_rules;
         if($storeName == $store->name)
         {
@@ -115,9 +128,8 @@ class StoreController extends Controller
         $store->address = $data['address'];
         $store->store_type = $data['store_type'];
 
-        $errors['update_failed'] = 'The store (' . $store->name . ') update is failed!';
         if(!$store->save())
-            return redirect()->back()->withErrors($errors)->withInputs();
+            return redirect()->back()->withErrors(['The store (' . $store->name . ') update is failed!']);
         flash()->success('Store (' . $store->name . ') information will be updated when approved by authority. Please contact Inzaana administrator for further assistance.');
         return redirect()->route('user::stores');
     }
@@ -125,12 +137,21 @@ class StoreController extends Controller
     public function create(StoreRequest $request)
     {
         $store = $request->input('store_name');
+
+        $delimiter_address = "<address>";
+        $address = $request->input('mailing-address') . $delimiter_address;
+        $address .= $request->input('address_flat_house_floor_building') . $delimiter_address;
+        $address .= $request->input('address_colony_street_locality') . $delimiter_address;
+        $address .= $request->input('address_landmark') . $delimiter_address;
+        $address .= $request->input('address_town_city') . $delimiter_address;
+        $address .= $request->input('postcode');
+
         $data = [
             'name' => $store,
             // 'sub_domain' => 'inzaana',
             // 'domain' => 'com', //str_replace('.', '', '.net'),
             'description' => $request->input('description'),
-            'address' => $request->input('address'),
+            'address' => $address,
             'store_type' => $request->input('business')
         ];
         $validator = $this->validator($data, $this->_rules->toArray());

@@ -104,7 +104,7 @@ Route::group(['middleware' => 'web'], function () {
             Route::post('/edit/mail/users/{user}', [ 'uses' => 'UserController@verifyProfileChanges', 'as' => 'edit.email' ]);
             Route::get('/edit/mail/confirm/users/{user}/name/{name}/email/{email}/phone/{phone}/password/{password?}/address/{address?}',
                 [ 'uses' => 'UserController@confirmProfileUpdate', 'as' => 'edit.confirm' ])
-                ->where([ 'address' => '.*', 'phone' => '[0-9]+', 'password' => '.*' ]); // validation phone => (?:\s+|)((0|(?:(\+|)91))(?:\s|-)*(?:(?:\d(?:\s|-)*\d{9})|(?:\d{2}(?:\s|-)*\d{8})|(?:\d{3}(?:\s|-)*\d{7}))|\d{10})(?:\s+|);
+                ->where([ 'address' => '.*', 'phone' => '[+0-9]{4}+[-]+[0-9]+', 'password' => '.*' ]); // validation phone => (?:\s+|)((0|(?:(\+|)91))(?:\s|-)*(?:(?:\d(?:\s|-)*\d{9})|(?:\d{2}(?:\s|-)*\d{8})|(?:\d{3}(?:\s|-)*\d{7}))|\d{10})(?:\s+|);
         });
 
         Route::get('/user_my_order', [ 'uses' => 'UserController@usermyorder', 'as' => 'orders' ]);

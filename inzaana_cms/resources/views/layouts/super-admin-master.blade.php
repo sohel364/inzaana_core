@@ -178,7 +178,7 @@
   <!--CORE JAVASCRIPT-->
 {{--  <script src="{{ URL::asset('user_admin_dashboard_asset/script/main.js') }}"></script>--}}
   <script src="{{ URL::asset('super-admin-asset/config.js') }}"></script>
-  @yield('footer-script')
+  @yield('footer-scripts')
 
   <script type="text/javascript">
         

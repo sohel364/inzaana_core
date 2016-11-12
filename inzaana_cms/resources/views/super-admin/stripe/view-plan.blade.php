@@ -98,6 +98,6 @@
     <!--END CONTENT-->
 @endsection
 
-@section('footer-script')
+@section('footer-scripts')
     <script src="{{ URL::asset('super-admin-asset/stripe/super-admin-plan-view.js') }}"></script>
 @endsection

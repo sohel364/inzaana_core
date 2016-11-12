@@ -108,6 +108,6 @@
 
 @endsection
 
-@section('footer-script')
+@section('footer-scripts')
         <script src="{{ URL::asset('super-admin-asset/faqs.js') }}"></script>
 @endsection

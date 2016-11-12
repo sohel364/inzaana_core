@@ -12,8 +12,26 @@
 </ol>
 @endsection
 
+@section('header-style')
+  <link rel="stylesheet" href="/jquery-validation/css/screen.css">
+  <style type="text/css">
+
+  #edit-profile-form label.error {
+    margin-left: 10px;
+    width: auto;
+    display: inline;
+  }
+
+  </style>
+@endsection
+
 @section('footer-scripts')
+
+<script src="/jquery-validation/lib/jquery.js"></script>
+<script src="/jquery-validation/dist/jquery.validate.js"></script>
+<script src="/form-validation/edit-store-validation.js"></script>
 <script>
+    $().ready(onReadyEditStoreValidation);
 
     $( "input[name='store_name']" ).focusout(function(event) {
 
@@ -71,7 +89,7 @@
               </div>
 
               <!-- form start -->
-              <form role="form" action="{{ isset($store) ? route('user::stores.update', [$store]) : route('user::stores.create') }}" method="POST">
+              <form role="form" id="edit-store-form" action="{{ isset($store) ? route('user::stores.update', [$store]) : route('user::stores.create') }}" method="POST">
 
                 {!! csrf_field() !!}
 
@@ -97,7 +115,7 @@
 
                   </div>
 
-<div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
+                    <div>
                         <label for="contact-number"> Contact Number</label>
 
                         <div class="row col-sm-12 col-md-12 col-lg-12">
@@ -105,44 +123,35 @@
                             <div class="form-group col-sm-2 col-md-2 col-lg-2">
                                 <div>
                                     <select name="code" text="code" class="form-control">
-                                        <option>+088</option>
-                                        <option>+999</option>
-                                        <option>+965</option>
+                                        <option {{ $phone_number[0] == 0 ? 'selected' : '' }}>+088</option>
+                                        <option {{ $phone_number[0] == 1 ? 'selected' : '' }}>+465</option>
+                                        <option {{ $phone_number[0] == 2 ? 'selected' : '' }}>+695</option>
                                     </select>
                                 </div>
 
                             </div>
-                            <div class="col-sm-7 col-md-7 col-lg-7">
-                                <input type="text" class="form-control" value="" id="phone_number" name="phone_number" placeholder="Phone number...">
+                            <div class="col-sm-7 col-md-7 col-lg-7 form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
+                                <input type="text" class="form-control" value="{{ $phone_number[1] or '' }}" id="phone_number" name="phone_number" placeholder="Phone number...">
+
+                                @if ($errors->has('phone_number'))
+                                    <span class="help-block">
+                                      <strong>{{ $errors->first('phone_number') }}</strong>
+                                  </span>
+                                @endif
                             </div>
                             <div class="col-sm-1 col-md-1 col-lg-1"><button type="button" class="btn btn-primary">verify</button></div>
                         </div>
-
-                        @if ($errors->has('phone_number'))
-                            <span class="help-block">
-                              <strong>{{ $errors->first('phone_number') }}</strong>
-                          </span>
-                        @endif
                     </div>
 
-                   <!--<div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
-                    <label for="Store-address">Address</label>
-                    <input type="text" class="form-control" value="{{ isset($store) ? $store->address : '' }}" id="address" name="address" placeholder="Add your Store address here...">
-                    @if ($errors->has('address'))
-                        <span class="help-block">
-                            <strong>{{ $errors->first('address') }}</strong>
-                        </span>
-                    @endif
-                  </div>-->
-				  <div class="form-group">
+				          <div class="form-group">
                     <label for="address">Address</label>
-					<input type="text" class="form-control" value="" id="address_flat_house_floor_building" name="address_flat_house_floor_building" placeholder="Flat / house no / floor / Building">
+					           <input type="text" class="form-control" value="{{ $address['HOUSE'] or '' }}" id="address_flat_house_floor_building" name="address_flat_house_floor_building" placeholder="Flat / house no / floor / Building">
                     <br/>
-                    <input type="text" class="form-control" value="" id="address_colony_street_locality" name="address_colony_street_locality" placeholder="Colony / Street / Locality">
+                    <input type="text" class="form-control" value="{{ $address['STREET'] or '' }}" id="address_colony_street_locality" name="address_colony_street_locality" placeholder="Colony / Street / Locality">
                     <br/>
-                    <input type="text" class="form-control" value="" id="address_landmark" name="address_landmark" placeholder="Landmark (optional)">
+                    <input type="text" class="form-control" value="{{ $address['LANDMARK'] or '' }}" id="address_landmark" name="address_landmark" placeholder="Landmark (optional)">
                     <br/>
-                    <input type="text" class="form-control" value="" id="address_town_city" name="address_town_city" placeholder="Town / City">
+                    <input type="text" class="form-control" value="{{ $address['TOWN'] or '' }}" id="address_town_city" name="address_town_city" placeholder="Town / City">
                     <br/>
                     <label for="state">State</label>
                     <select name="state" class="form-control" placeholder="Select State">
@@ -150,8 +159,8 @@
                             <option>Assam</option>
                             <option>Bihar</option>
                     </select>
-                   <label for="Postcode">Postcode</label>
-                   <input type="text" class="form-control" value="" id="postcode" name="postcode" placeholder="Postcode">
+                   <label for="postcode">Postcode</label>
+                   <input type="text" class="form-control" value="{{ $address['POSTCODE'] or '' }}" id="postcode" name="postcode" placeholder="Postcode">
                   </div>
 
                   <div class="form-group">
@@ -217,11 +226,12 @@
                     </tr>
                     @if(isset($stores))
                       @foreach($stores as $store)
+                        <?php $address = Inzaana\User::getAddress($store->address ? $store->address : Auth::user()->address) ?>
                       <tr>
                         <!-- <td class="text-center" id="child"><a href="">001</a> </td> -->
                         <td class="text-center" id="child"><a href="#">{{ $store->name }}</a></td>
 
-                        <td class="text-center" id="child">{{ $store->address }}</td>
+                        <td class="text-center" id="child">{{ $address['HOUSE'] . ', ' . $address['STREET'] . ', ' . $address['LANDMARK'] . ', ' . $address['TOWN'] }}</td>
 
                         <td class="text-center" id="child">
                           <a target="_blank" href="{{ route('user::stores.redirect', [ 'site' => str_replace('.', '', $store->name_as_url) . '.' . $store->sub_domain . '.' . $store->domain ] ) }}">{{ str_replace('.', '', $store->name_as_url) . '.' . $store->sub_domain . '.' . str_replace('.', '', $store->domain) }}</a>

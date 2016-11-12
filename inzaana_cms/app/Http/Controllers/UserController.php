@@ -289,9 +289,12 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('edit-profile')->withUser($user);
+        $phoneNumber = User::getPhoneCode($user->phone_number);
+        $address = User::getAddress($user->address);
+        return view('edit-profile') ->withUser($user)
+                                    ->withPhoneNumber($phoneNumber)
+                                    ->withAddress($address);
     }
-
 
     public function verifyProfileChanges(Request $request, AppMailer $mailer, User $user)
     {
@@ -316,6 +319,7 @@ class UserController extends Controller
 
     public function confirmProfileUpdate(Request $request, User $user, $name, $email, $phone, $password = null, $address = null)
     {
+        // return 'Phone:' . $phone . ' Address:' . $address;
         if($user->id != Auth::user()->id)
         {
             return redirect()->route('user::edit', [Auth::user()])->withErrors(['The information you are going to update to your profile is not yours!']);
@@ -344,15 +348,24 @@ class UserController extends Controller
         $rules = collect([
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
-            'phone_number' => 'required|numeric',
+            'phone_number' => 'required|numeric|digits:11',
             'email_alter' => 'email',
         ]);
+
+        $delimiter_address = "<address>";
+        $address = $request->input('mailing-address') . $delimiter_address;
+        $address .= $request->input('address_flat_house_floor_building') . $delimiter_address;
+        $address .= $request->input('address_colony_street_locality') . $delimiter_address;
+        $address .= $request->input('address_landmark') . $delimiter_address;
+        $address .= $request->input('address_town_city') . $delimiter_address;
+        $address .= $request->input('postcode');
 
         $inputs = collect([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'phone_number' => $request->input('phone_number'),
-            'address' => $request->input('mailing-address'),
+            'code' => $request->input('code'),
+            'address' => $address,
         ]);
 
         if($request->input('email') == $user->email)
@@ -387,7 +400,9 @@ class UserController extends Controller
         $user->address = $inputs['address'];
         if($inputs->has('email'))
             $user->email = $inputs['email'];
-        $user->phone_number = $inputs['phone_number'];
+        
+        $delimiter_phone_number = '-';
+        $user->phone_number = $inputs['code'] . $delimiter_phone_number . $inputs['phone_number'];
         return [];
     }
 

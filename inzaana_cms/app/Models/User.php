@@ -109,4 +109,27 @@ class User extends Model implements AuthenticatableContract,
     {        
         return $this->hasMany('Inzaana\Store');
     }
+
+    public static function getPhoneCode($phone_number)
+    {
+        $codes = [ '+088', '+465', '+695' ];
+        $keywords = preg_split("/[-]+/", $phone_number);
+        $phone_number = $keywords[1];
+        foreach($codes as $key => $value)
+        {
+            if($value == $keywords[0])
+            {
+                return [ $key, $phone_number ];
+            }
+        }
+        return [0, ''];
+    }
+
+    public static function getAddress($address)
+    {        
+        $keywords = preg_split("/<address>/", $address);
+        if(count($keywords) == 0)
+            return [ 'DEFAULT' => '', 'HOUSE' => '', 'STREET' => '', 'LANDMARK' => '', 'TOWN' => '', 'POSTCODE' => '' ];
+        return [ 'DEFAULT' => $keywords[0], 'HOUSE' => $keywords[1], 'STREET' => $keywords[2], 'LANDMARK' => $keywords[3], 'TOWN' => $keywords[4], 'POSTCODE' => $keywords[5] ];
+    }
 }
