@@ -37,12 +37,13 @@
                                     {{ csrf_field() }}
                                     <input type="hidden" value="{{ $user->subscriptions[0]->name }}" name="_plan_name">
                                     <input type="hidden" value="{{ $single_plan['plan_id'] }}" name="_plan_id">
+                                    <input type="hidden" value="{{ $single_plan['coupon_id'] }}" name="_coupon_id">
                                     <input type="submit" value="Migrate Plan" class="btn btn-primary">
                                 </form>
                             @elseif(isset($user->subscriptions[0]) && $user->subscriptions[0]->stripe_plan == $single_plan['plan_id'])
                                 <button class="btn btn-success" onclick="showMessage()">Subscribed</button>
                             @else
-                                <button class="btn btn-primary" data-toggle="modal" data-name="{{ (isset($user->subscriptions[0]) && ($user->stripe_id != null)) ? $user->subscriptions[0]->name : $single_plan['name'] }}" data-id="{{ $single_plan['plan_id'] }}" data-trial="{{ $single_plan['trial_period_days'] }}" data-target="#myModal">Subscribe</button>
+                                <button class="btn btn-primary" data-toggle="modal" data-name="{{ (isset($user->subscriptions[0]) && ($user->stripe_id != null)) ? $user->subscriptions[0]->name : $single_plan['name'] }}" data-id="{{ $single_plan['plan_id'] }}" data-coupon="{{ $single_plan['coupon_id'] }}" data-trial="{{ $single_plan['trial_period_days'] }}" data-target="#myModal">Subscribe</button>
                             @endif
                         </div>
                     </div>
@@ -90,6 +91,7 @@
                                             </div>
                                             <input type="hidden" name="_plan_name" id="plane_name">
                                             <input type="hidden" name="_plan_id" id="plane_id">
+                                            <input type="hidden" name="_coupon_id" id="coupon_id">
                                             <input type="hidden" name="_trial_days" id="trial_days">
 
                                     </div>
@@ -124,10 +126,12 @@
               var plan_id = button.data('id') // Extract info from data-* attributes
               var plan_name = button.data('name') // Extract info from data-* attributes
               var trial_days = button.data('trial') // Extract info from data-* attributes
+                var coupon_id = button.data('coupon') //Extract coupon data from button
               // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
               // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
                $('#plane_name').val(plan_name);
                $('#plane_id').val(plan_id);
+               $('#coupon_id').val(coupon_id);
                $('#trial_days').val(trial_days);
               /*var modal = $(this)
               modal.find('#plan_name').val(plan_id)

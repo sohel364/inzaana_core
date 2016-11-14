@@ -4,7 +4,7 @@ namespace Inzaana\Http\Requests;
 
 use Inzaana\Http\Requests\Request;
 
-class StripePlanRequest extends Request
+class StripeCouponRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,11 @@ class StripePlanRequest extends Request
     public function rules()
     {
         return [
-            'plan_id'=> 'unique:stripe_plans,plan_id',
-            'plan_name'=> 'required|regex:/^[(a-zA-Z\s)]+$/u|unique:stripe_plans,name',
-            'plan_amount'=> 'required|numeric',
-            'plan_des'=> 'max:22',
-            'feature_id' => 'required',
+            'coupon_id'=> 'unique:coupons,coupon_id',
+            'coupon_name'=> 'required|unique:coupons,coupon_name',
+            'duration'=> 'required',
+            'max_redemptions'=> 'required',
+            'redeem_by'=> 'required',
         ];
     }
 }

@@ -5,13 +5,16 @@ namespace Inzaana\Http\Controllers;
 use Auth;
 use Crypt;
 use DB;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Input;
 use Inzaana\StripePlanFeature;
 use Inzaana\User;
 use Inzaana\StripePlan;
+use Inzaana\StripeCoupon;
 use Illuminate\Http\Request;
 use Inzaana\Http\Requests;
 use Inzaana\Http\Requests\StripePlanRequest;
+use Inzaana\Http\Requests\StripeCouponRequest;
 use Inzaana\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 
@@ -19,6 +22,7 @@ use Illuminate\Support\Facades\Response;
  * Stripe Api lib
  * */
 use \Stripe\Plan;
+use \Stripe\Coupon;
 use \Stripe\Stripe;
 use \Stripe\Subscription;
 
@@ -32,6 +36,142 @@ class StripeController extends Controller
         //dd($user->subscribed());
     }
 
+    public function couponForm()
+    {
+        return view('super-admin.stripe.create-coupon')->with(['user'=> Auth::user()]);
+    }
+
+    public function createCoupon(StripeCouponRequest $request)
+    {
+        $coupon_id = $request->coupon_id;
+        $coupon_name = $request->coupon_name;
+        $duration = $request->duration;
+        $duration_in_month = ($duration == 'repeating') ? (INT)$request->duration_in_months : NULL;
+        $max_redemption = (INT)$request->max_redemptions;
+        $redeem_by = Carbon::parse($request->redeem_by);
+        if($request->amount_off_checked){
+            $percent_off= NULL;
+            $coupon_currency = $request->coupon_currency;
+            $amount_off = (INT)($request->amount_off * 100);
+        }else{
+            $percent_off= (INT)$request->percent_off;
+            $coupon_currency = NULL;
+            $amount_off = NULL;
+        }
+        Stripe::setApiKey(getenv('STRIPE_SECRET'));
+        $coupon = Coupon::create(array(
+                "id" => $coupon_id,
+                "duration" => $duration,
+                "duration_in_months" => $duration_in_month,
+                "max_redemptions" => $max_redemption,
+                "percent_off" => $percent_off,
+                "amount_off" => $amount_off,
+                "currency" => $coupon_currency,
+                "redeem_by" => $redeem_by->timestamp
+                )
+        );
+
+        $coupon_local = StripeCoupon::create([
+                        "coupon_id" => $coupon_id,
+                        "coupon_name" => $coupon_name,
+                        "duration" => $duration,
+                        "duration_in_months" => $duration_in_month,
+                        "max_redemptions" => $max_redemption,
+                        "percent_off" => $percent_off,
+                        "amount_off" => $amount_off,
+                        "currency" => $coupon_currency,
+                        "redeem_by" => $redeem_by
+                    ]);
+
+        if($coupon_local)
+        {
+            flash('Your Coupon (' . $coupon_local->coupon_name . ') is successfully created.');
+        }
+        else
+        {
+            flash('Your Coupon (' . $coupon_local->coupon_name . ') is failed to create. Please contact your administrator for assistance.');
+        }
+
+        return redirect()->back();
+    }
+
+    public function viewCoupon(Request $request)
+    {
+        $sort = 'name';
+        $order = 'ASC';
+        $loadView = 'super-admin.stripe.view-coupon';
+        if($request->ajax())
+        {
+            $sort = Input::get('sort');
+            $order = (Input::get('order')=='DESC')? "ASC" : "DESC";
+            $loadView = 'super-admin.includes.coupon-dom';
+        }
+        switch($sort){
+            case 'name':
+                $sort = 'coupon_name';
+                break;
+            case 'percent_off':
+                $sort = 'percent_off';
+                break;
+            case 'amount_off':
+                $sort = 'amount_off';
+                break;
+            default:
+                $sort = 'coupon_name';
+                break;
+        }
+
+
+        $allCoupon = StripeCoupon::orderBy($sort, $order)->get();
+        $coupon_collect = [];
+        foreach($allCoupon as $coupon)
+        {
+
+            if($coupon->duration == 'repeating')
+            {
+                $coupon->duration = "Every ". $coupon->duration_in_months ." Months";
+            }
+            $coupon->amount_off = $coupon->amount_off/100;
+            $redeem_by = Carbon::parse($coupon->redeem_by);
+            $coupon->redeem_by = $redeem_by->toFormattedDateString();
+            $coupon_collect[] = $coupon;
+
+        }
+        $allCoupon = collect($coupon_collect);
+        $user = Auth::user();
+        $sln = 1;
+        return response()->view($loadView,compact('allCoupon','sln','order','sort','user'))
+            ->header('Content-Type', 'html');
+    }
+
+    public function updateCouponStatus(Request $data)
+    {
+        $all_data = $data->all();
+        $id = $all_data['coupon'];
+        $coupon = StripeCoupon::where('coupon_id','=',$id)->update(['valid' => $all_data['confirm_action']]);
+        return Response::json(['coupon_id'=>$id,'confirm' => $all_data['confirm_action']]);
+    }
+
+    public function deleteCoupon(Request $coupon)
+    {
+        $this->validate($coupon, [
+            'coupon' => 'required'
+        ]);
+        $coupon_id = $coupon->coupon;
+        //$plan_id = Crypt::decrypt($plan_id->confirm_action);
+
+        //if($plan_id == null) //Todo List: Abort or redirect back same page with meaning full message.
+
+        //Stripe::setApiKey(getenv('STRIPE_SECRET'));
+        //Coupon::retrieve($coupon_id)->delete(); // Delete From Remote Database
+
+        $stripe_coupon = StripeCoupon::where('coupon_id','=',$coupon_id)->first();
+        $coupon_name = $stripe_coupon->coupon_name;
+        $coupon_name = $coupon_name."(Removed)";
+        StripeCoupon::where('coupon_id','=',$coupon_id)->update(['coupon_name' => $coupon_name,'valid'=>0]);
+        $this->viewCoupon();
+    }
+
     /*
      * Show Stripe Plan Create Form
      * Call from Route::get('super-admin/create-plan', [ 'uses' => 'StripeController@planForm', 'as'=> 'planForm']);
@@ -39,7 +179,8 @@ class StripeController extends Controller
     public function planForm()
     {
         $features = StripePlanFeature::all();
-        return view('super-admin.stripe.create-plan')->with(['user'=> Auth::user(),'features'=>$features]);
+        $coupon = StripeCoupon::all();
+        return view('super-admin.stripe.create-plan')->with(['user'=> Auth::user(),'features'=>$features,'coupons'=>$coupon]);
     }
 
     /*
@@ -57,11 +198,19 @@ class StripeController extends Controller
         //dd($user->newSubscription($request->_plan_name, $request->_plan_id));
         $msg = "You have already subscribed.";
         if(!Auth::user()->subscribed($request->_plan_name)){
-            $user->newSubscription($request->_plan_name, $request->_plan_id)
-                ->trialDays((INT)$request->_trial_days)
-                ->create($request->stripeToken);
+            if($request->_coupon_id != null){
+                $user->newSubscription($request->_plan_name, $request->_plan_id)
+                    ->withCoupon($request->_coupon_id)
+                    ->trialDays((INT)$request->_trial_days)
+                    ->create($request->stripeToken);
+            }else{
+                $user->newSubscription($request->_plan_name, $request->_plan_id)
+                    ->trialDays((INT)$request->_trial_days)
+                    ->create($request->stripeToken);
+            }
+
             /*
-             * Auto renewal disable
+             * Auto renewal disables
              * */
             if($request->auto_renewal == null){
                 $user->subscription($request->_plan_name)->cancel();
@@ -99,7 +248,6 @@ class StripeController extends Controller
          * This ApiKey get from environment variable
          * Using Stripe lib for creating plan
          * */
-
 
         /*
          * Processing input data for stripe
@@ -145,12 +293,22 @@ class StripeController extends Controller
             "auto_renewal" => (INT)$request->auto_renewal?$request->auto_renewal:0,
             "trial_period_days" => (INT)$request->plan_trial,
             "statement_descriptor" => $request->plan_des,
+            "coupon_id" => ($request->discount == 1) ? $request->stripe_coupon : null,
             "created"=> date('Y-m-d H:i:s')
         ]);
 
         $stripePlan->planFeature()->attach($request->feature_id);
 
-        return redirect()->back()->with(['success'=>'Successfully Created Plan.']);
+        if($stripePlan)
+        {
+            flash('Your Plan (' . $stripePlan->name . ') is successfully created.');
+        }
+        else
+        {
+            flash('Your Plan (' . $stripePlan->name . ') is failed to create. Please contact your administrator for assistance.');
+        }
+
+        return redirect()->back();
 
     }
     /*
@@ -240,7 +398,9 @@ class StripeController extends Controller
             $feature[$value->feature_id] = $value->feature_name;
         }
 
-        return response()->view('includes.modal', compact('plan_data', 'feature'))
+        $coupons = StripeCoupon::all();
+
+        return response()->view('super-admin.includes.modal', compact('plan_data', 'feature','coupons'))
             ->header('Content-Type', 'html');
 
         //return response()->json(['dump_data' =>$dumping_data]);
@@ -346,7 +506,7 @@ class StripeController extends Controller
     public function updateStatus(Request $data)
     {
         $all_data = $data->all();
-        $id = $plan_id = $all_data['plan'];
+        $id = $all_data['plan'];
         $plan = StripePlan::where('plan_id',$id)->update(['active' => $all_data['confirm_action']]);
 
         return Response::json(['plan_id'=>$id,'confirm' => $all_data['confirm_action']]);

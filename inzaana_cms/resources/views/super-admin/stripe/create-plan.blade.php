@@ -82,6 +82,24 @@
                             <div id="charNum"></div>
                             @if($errors->first('plan_des')) <p class="text-danger text-sm danger_text">{{ $errors->first('plan_des') }}</p> @endif
                         </div>
+
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="discount" id="discount" value="1">Apply Discount</label>
+                            </div>
+                        </div>
+
+                        <div class="discount_block" id="discount_block" style="display: none">
+                            <div class="form-group">
+                                <label for="">Coupon Name: </label>
+                                <select name="stripe_coupon" id="coupon">
+                                    @foreach($coupons as $coupon)
+                                        <option value="{{ $coupon['coupon_id'] }}">{{ $coupon['coupon_name'] }}</option>
+                                    @endforeach
+
+                                </select>
+                            </div>
+                        </div>
 						
 						<div class="form-group">
 						<label for="autorenew">Enable Auto-renewal: </label>

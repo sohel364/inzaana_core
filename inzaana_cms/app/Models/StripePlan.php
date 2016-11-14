@@ -10,10 +10,10 @@ class StripePlan extends Model
     public $currency_symbol = ['INR' =>'&#8377;','USD' => '&#36;','BDT' => '&#x9f3;'];
     public $sln = 0;
     protected $fillable = [
-        'plan_id','name', 'amount', 'currency','interval','interval_count','active','auto_renewal','trial_period_days','statement_descriptor','created',
+        'plan_id','name', 'amount', 'currency','interval','interval_count','active','auto_renewal','trial_period_days','statement_descriptor','created','coupon_id',
     ];
     //public $primaryKey = false;
-    public $timestamps = false;
+//    /public $timestamps = false;
 
     public function planFeature()
     {

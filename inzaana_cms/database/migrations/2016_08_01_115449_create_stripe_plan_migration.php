@@ -15,17 +15,19 @@ class CreateStripePlanMigration extends Migration
     {
         Schema::create('stripe_plans', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('plan_id',32)->unique();
+            $table->string('plan_id')->unique();
             $table->string('name')->unique();
             $table->string('amount');
             $table->string('currency');
             $table->string('interval');
-            $table->integer('interval_count',6);
+            $table->integer('interval_count');
             $table->tinyInteger('active');
             $table->tinyInteger('auto_renewal');
             $table->string('trial_period_days');
             $table->string('statement_descriptor');
+            $table->string('coupon_id')->nullable();
             $table->dateTime('created');
+            $table->timestamps();
         });
     }
 

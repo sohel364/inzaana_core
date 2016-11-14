@@ -103,6 +103,15 @@ $('#interval_count').on('blur',function () {
     }
 });
 
+$( "#discount" ).on( "click", function (e) {
+    var len = $( "#discount:checked" ).length;
+    if(len){
+        $('#discount_block').css('display','block');
+    }else{
+        $('#discount_block').css('display','none');
+    }
+});
+
 
 
 
