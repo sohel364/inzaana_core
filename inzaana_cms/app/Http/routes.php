@@ -30,17 +30,31 @@ Route::group([ 'as' => 'guest::' ], function() {
 
 Route::group(['middleware' => 'web'], function () {
 
+    Route::get('/swap-plan', [ 'uses' => 'StripeController@swapPlan', 'as' => 'swap' ]); // Plan swaping
+    Route::get('/subscribe', [ 'uses' => 'UserController@redirectToVendorPlan', 'as' => 'subscribe' ]); //When onTrial time expired middleware redirect every request to this route
+    Route::post('/subscribe', [ 'uses' => 'StripeController@subscriptionPlan', 'as' => 'vendor.subscriptionPlan' ]);
+    Route::post('/plan-swap', [ 'uses' => 'StripeController@swapSubscriptionPlan', 'as' => 'swapSubscriptionPlan' ]);
+
     Route::group(['as' => 'admin::'], function () {
         //Stripe Route for Super Admin
+        Route::get('/super-admin/create-coupon', [ 'uses' => 'StripeController@couponForm', 'as'=> 'couponForm']);
+        Route::post('/super-admin/create-coupon', [ 'uses' => 'StripeController@createCoupon', 'as'=> 'create.coupon']);
+        Route::get('/super-admin/view-coupon', [ 'uses' => 'StripeController@viewCoupon', 'as'=> 'viewCoupon']);
+        Route::post('/super-admin/delete-coupon', [ 'uses' => 'StripeController@deleteCoupon', 'as'=> 'deleteCoupon']);
+        Route::post('/super-admin/view-coupon/ajax/update', [ 'uses' => 'StripeController@updateCouponStatus', 'as'=> 'updateCouponStatus']);
+
         Route::get('/super-admin/create-plan', [ 'uses' => 'StripeController@planForm', 'as'=> 'planForm']);
         Route::post('/super-admin/create-plan', [ 'uses' => 'StripeController@createPlan', 'as'=> 'create.plan']);
         Route::get('/super-admin/view-plan', [ 'uses' => 'StripeController@viewPlan', 'as'=> 'viewPlan']);
-        Route::get('/super-admin/edit-feature/{id}', [ 'uses' => 'StripeController@editPlanFeature', 'as'=> 'editPlanFeature']);
-        Route::post('/super-admin/edit-feature', [ 'uses' => 'StripeController@planFeatureUpdate', 'as'=> 'planFeatureUpdate']);
         Route::post('/super-admin/delete-plan', [ 'uses' => 'StripeController@deletePlan', 'as'=> 'deletePlan']);
         Route::post('/super-admin/view-plan/ajax/update', [ 'uses' => 'StripeController@updateStatus', 'as'=> 'updateStatus']);
+
+        Route::get('/super-admin/edit-feature/{id}', [ 'uses' => 'StripeController@editPlanFeatureView', 'as'=> 'editPlanFeature']);
+        Route::post('/super-admin/edit-feature', [ 'uses' => 'StripeController@planFeatureUpdate', 'as'=> 'planFeatureUpdate']);
+
         Route::get('/super-admin/view-subscriber', [ 'uses' => 'StripeController@viewSubscriber', 'as'=> 'viewSubscriber']);
-        Route::get('/super-admin/view-subscriber/approvals/confirm/{id}', [ 'uses' => 'StripeController@confirmApproval', 'as'=> 'subscribers.approvals.confirm']);
+        Route::post('/super-admin/view-subscriber/approvals/confirm/{id}', [ 'uses' => 'StripeController@changeState', 'as'=> 'subscribers.approvals.confirm']);
+
         Route::get('/super-admin/approvals', [ 'uses' => 'UserController@approvals', 'as'=> 'approvals']);
         Route::get('/super-admin/approvals/manage', [ 'uses' => 'UserController@manageApprovals', 'as'=> 'approvals.manage']);
         Route::get('/super-admin/faqs', [ 'uses' => 'UserController@faqs', 'as'=> 'faqs']);
@@ -62,10 +76,11 @@ Route::group(['middleware' => 'web'], function () {
             Route::get('/signup/customer', [ 'uses' => 'AuthController@redirectToCustomerSignup', 'as' => 'signup.customer' ]);
             Route::get('/signup/admin', [ 'uses' => 'AuthController@mailToAdminForSpecialSignup', 'as' => 'signup.mailto.admin' ]);
             Route::get('/signup/admin/t/{token}/o/{original}', [ 'uses' => 'AuthController@redirectToAdminSignup', 'as' => 'signup.admin' ]);
-        }); 
+        });
+
     });
 
-    Route::group(['middleware'=>'entry:go', 'as' => 'user::' ], function() {
+    Route::group(['middleware'=>['feature','subscription'], 'as' => 'user::' ], function() {
         // Store controller
         Route::group(['prefix' => 'stores'], function () {
 
@@ -94,6 +109,7 @@ Route::group(['middleware' => 'web'], function () {
                 Route::get('/', [ 'uses' => 'UserController@redirectToDashboard', 'as' => 'vendor.dashboard' ]); 
                 Route::get('/plan', [ 'uses' => 'UserController@redirectToVendorPlan', 'as' => 'vendor.plan' ]);
                 Route::post('/plan', [ 'uses' => 'StripeController@subscriptionPlan', 'as' => 'vendor.subscriptionPlan' ]);
+
                 Route::get('/view-my-subscription', [ 'uses' => 'StripeController@viewMySubscription', 'as'=> 'viewMySubscription']);
 
             });

@@ -3,7 +3,7 @@
   $user = Auth::user();
   $plan_name = \Laravel\Cashier\Subscription::where('user_id',$user->id)->get()->first();
   if($plan_name != null)
-    $plan_name = $plan_name->name;
+    $plan_name = $plan_name->stripe_plan;
   else
     $plan_name = null;
 
@@ -65,7 +65,6 @@
 
       <!-- $user->subscribed('main') -->
 
-            @if($user->getFeature($plan_name,'Categories'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-list"></i>
@@ -77,7 +76,6 @@
                 <li><a href="{{ Auth::user()->subscribed('main') ? route('user::categories') : '#' }}"><i class="fa fa-list-ol"></i> List All Categories</a></li>
               </ul>
             </li>
-            @endif
 
             @if($user->getFeature($plan_name,'Products'))
             <li class="treeview">

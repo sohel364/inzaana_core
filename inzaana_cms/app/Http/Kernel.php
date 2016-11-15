@@ -47,6 +47,7 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \Inzaana\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'entry' => \Inzaana\Http\Middleware\VerifySubscription::class,
+        'subscription' => \Inzaana\Http\Middleware\VerifySubscription::class,
+        'feature' => \Inzaana\Http\Middleware\FeaturePermission::class,
     ];
 }

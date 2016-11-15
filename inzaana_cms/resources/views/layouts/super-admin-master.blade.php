@@ -104,6 +104,20 @@
             </li>
 
             <li>
+              <a href="/super-admin/create-coupon">
+                <i class="fa fa-shopping-cart fa-fw"></i>
+                <span class="menu-title">Create Coupon</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="/super-admin/view-coupon">
+                <i class="fa fa-shopping-cart fa-fw"></i>
+                <span class="menu-title">View Coupon</span>
+              </a>
+            </li>
+
+            <li>
               <a href="/super-admin/create-plan">
                 <i class="fa fa-shopping-cart fa-fw"></i>
                 <span class="menu-title">Create Plan</span>

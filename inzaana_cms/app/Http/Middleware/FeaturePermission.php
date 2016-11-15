@@ -4,9 +4,8 @@ namespace Inzaana\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
-use Inzaana\Payment\PaymentException;
 
-class VerifySubscription
+class FeaturePermission
 {
     /**
      * The Guard implementation.
@@ -25,24 +24,22 @@ class VerifySubscription
     {
         $this->auth = $auth;
     }
-
     /**
      * Handle an incoming request.
-     *
+     * Check feature exist on plan
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next /*@param $stripe*/)
+    public function handle($request, Closure $next)
     {
-        if($this->auth->user()->userAccessPermission())
+        if($this->auth->user()->featureAccessPermission($request->path()))
         {
             return $next($request);
         }elseif($this->auth->user()->id == 1){ // This line perform super admin request bypass
             return $next($request);
         }else{
-            return redirect('/subscribe');
+            abort(403);
         }
-        /*throw new PaymentException($this->auth->user()->getPlanName());*/
     }
 }
