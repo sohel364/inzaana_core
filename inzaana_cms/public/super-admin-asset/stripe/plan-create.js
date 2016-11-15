@@ -17,10 +17,12 @@ $('#plan_amount').on('blur',function () {
         $('#plan_amount').val(amount.toFixed(2));
     }
     if(this.value == '0.00'){
+        $('#discount').prop('disabled',true);
         $("#required_input").prop('disabled',false);
         $("#required_input").prop('required',true);
         $("#required_field").html('*');
     }else{
+        $('#discount').prop('disabled',false);
         $("#required_input").prop('disabled',true);
         $("#required_field").html('');
     }
