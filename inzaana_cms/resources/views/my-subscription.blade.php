@@ -24,13 +24,13 @@
            @endif
            @if(isset($subscriber))
                <h4>Plan Name: {{ $subscriber->plan_name }}</h4>
-             @if($user->onTrial())
-                   <h4>Trial Left: {{ $user->getTrialTimeString() }}</h4>
+             @if($subscriber->cus_id == null && $user->onTrial())
+                   <h4>Trial Left: {{ $subscriber->trial_date }} {{--{{ $user->getTrialTimeString() }}--}}</h4>
              @endif
                @if($subscriber->coupon_id != null)
                    <h4>Discount Offer: {{ $subscriber->coupon['coupon_name'] }}</h4>
                    <h4>Original Price: {{ $user->getPlanCost() }}</h4>
-                   <h4>After Discount: {{ $subscriber->coupon['discount_price'] }} </h4>
+                   <h4>After Discount: {{ $subscriber->coupon['discount_price']."/".$subscriber->currency }} </h4>
                @else
                    <h4>Plan Price: {{ $user->getPlanCost() }}</h4>
                @endif

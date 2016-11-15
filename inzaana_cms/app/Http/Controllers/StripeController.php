@@ -369,8 +369,20 @@ class StripeController extends Controller
                     if($plan->coupon_id == $coupon_single->coupon_id){
                         $coupon_information['coupon_name'] = $coupon_single->coupon_name;
                         $coupon_information['coupon_id'] = $coupon_single->coupon_id;
+
+                        if($coupon_single->percent_off != null){
+                            $coupon_information['discount'] = $coupon_single->percent_off."%";
+                            $coupon_information['discount_price'] = ($plan->amount - (($plan->amount * $coupon_single->percent_off)/100));
+                        }
+                        else{
+                            $coupon_information['discount'] = ($coupon_single->amount_off/100)."/".$coupon_single->currency;
+                            $coupon_information['discount_price'] = ($plan->amount - ($coupon_single->amount_off/100));
+                        }
+
                         $coupon_information['percent_off'] = $coupon_single->percent_off;
                         $coupon_information['amount_off'] = $coupon_single->amount_off;
+
+
                         $coupon_information['currency'] = $coupon_single->currency;
                         $coupon_information['duration'] = $coupon_single->duration;
                         if($coupon_single->duration == 'repeating')
@@ -522,7 +534,7 @@ class StripeController extends Controller
             ->header('Content-Type', 'html');
 
         //StripePlan::where('plan_id','=',$plan_id)->delete(); // Delete From local database
-        return Response::json([true]);
+        //return Response::json([true]);
         //return redirect()->route('admin::viewPlan')->with(['success'=>'Successfully Deleted.']);
     }
 
@@ -620,8 +632,16 @@ class StripeController extends Controller
                     if($subscriber->coupon_id == $coupon_single->coupon_id){
                         $coupon_information['coupon_name'] = $coupon_single->coupon_name;
                         $coupon_information['coupon_id'] = $coupon_single->coupon_id;
-                        $coupon_information['percent_off'] = $coupon_single->percent_off;
-                        $coupon_information['amount_off'] = $coupon_single->amount_off;
+
+                        if($coupon_single->percent_off != null){
+                            $coupon_information['discount'] = $coupon_single->percent_off."%";
+                            $coupon_information['discount_price'] = ($subscriber->amount - (($subscriber->amount * $coupon_single->percent_off)/100));
+                        }
+                        else{
+                            $coupon_information['discount'] = ($coupon_single->amount_off/100)."/".$coupon_single->currency;
+                            $coupon_information['discount_price'] = ($subscriber->amount - ($coupon_single->amount_off/100));
+                        }
+
                         $coupon_information['currency'] = $coupon_single->currency;
                         $coupon_information['duration'] = $coupon_single->duration;
                         if($coupon_single->duration == 'repeating')
@@ -635,6 +655,7 @@ class StripeController extends Controller
             }
             $subscriber->coupon = $coupon_information;
         }
+        /*dd($subscribers);*/
         $sln = 1;
         $user = Auth::user();
         $sort = Input::get('sort');
@@ -656,25 +677,32 @@ class StripeController extends Controller
         $subscriber = DB::table('subscriptions')
                     ->join('users','users.id','=','subscriptions.user_id')
                     ->join('stripe_plans','stripe_plans.plan_id','=','subscriptions.stripe_plan')
-                    ->select('subscriptions.name as plan_name','subscriptions.stripe_id','subscriptions.quantity','users.name as subscriber_name','users.email','stripe_plans.amount','stripe_plans.currency','stripe_plans.interval','stripe_plans.coupon_id','stripe_plans.trial_period_days as trial')
+                    ->select('subscriptions.name as plan_name','subscriptions.stripe_id','subscriptions.quantity','users.name as subscriber_name','users.email','users.stripe_id as cus_id','users.trial_ends_at as trial_date','stripe_plans.amount','stripe_plans.currency','stripe_plans.interval','stripe_plans.coupon_id','stripe_plans.trial_period_days as trial')
                     ->where('users.id','=',Auth::user()->id)
                     ->first();
-        $coupon_info = StripeCoupon::where('coupon_id','=',$subscriber->coupon_id)->first();
-        $coupon['coupon_name'] = $coupon_info->coupon_name;
-        $redeem_by = Carbon::parse($coupon_info->redeem_by);
-        $coupon['redeem_by'] = $redeem_by->toFormattedDateString();
-        if($coupon_info->percent_off != null){
-            $coupon['discount'] = $coupon_info->percent_off."%";
-            $coupon['discount_price'] = ($subscriber->amount - (($subscriber->amount * $coupon_info->percent_off)/100))."/".$coupon_info->currency;
+        if($subscriber) {
+            if ($subscriber->trial_date != null) {
+                $date = Carbon::parse($subscriber->trial_date);
+                $subscriber->trial_date = $date->toFormattedDateString();
+            }
+            if ($subscriber->coupon_id != null) {
+                $coupon_info = StripeCoupon::where('coupon_id', '=', $subscriber->coupon_id)->first();
+                $coupon = [];
+                if ($coupon_info) {
+                    $coupon['coupon_name'] = $coupon_info->coupon_name;
+                    $redeem_by = Carbon::parse($coupon_info->redeem_by);
+                    $coupon['redeem_by'] = $redeem_by->toFormattedDateString();
+                    if ($coupon_info->percent_off != null) {
+                        $coupon['discount'] = $coupon_info->percent_off . "%";
+                        $coupon['discount_price'] = ($subscriber->amount - (($subscriber->amount * $coupon_info->percent_off) / 100));
+                    } else {
+                        $coupon['discount'] = ($coupon_info->amount_off / 100) . "/" . $coupon_info->currency;
+                        $coupon['discount_price'] = ($subscriber->amount - ($coupon_info->amount_off / 100));
+                    }
+                }
+                $subscriber->coupon = $coupon;
+            }
         }
-        else{
-            $coupon['discount'] = ($coupon_info->amount_off/100)."/".$coupon_info->currency;
-            $coupon['discount_price'] = ($subscriber->amount - ($coupon_info->amount_off/100))."/".$coupon_info->currency;
-        }
-        $subscriber->coupon = $coupon;
-
-        /*dd($subscriber);*/
-
         return view('my-subscription',compact('subscriber','user'));
 
     }

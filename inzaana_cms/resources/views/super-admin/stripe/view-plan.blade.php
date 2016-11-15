@@ -97,7 +97,14 @@
                             <tr>
                                 <td>{{ $sln++ }}</td>
                                 <td>{{ $plan->name }}</td>
-                                <td>{{ $plan->amount ."". $plan->currency_symbol[$plan->currency] }}/{{ $plan->interval }}</td>
+                                <td>
+                                    @if($plan->coupon_id != null)
+                                        <s>{{ $plan->amount."". $plan->currency_symbol[$plan->currency] }}/{{ $plan->interval }}</s>, {{ $plan->coupon['discount_price']."". $plan->currency_symbol[$plan->currency] }}/{{ $plan->interval }}
+                                    @else
+                                        {{ $plan->amount."". $plan->currency_symbol[$plan->currency] }}/{{ $plan->interval }}
+                                    @endif
+
+                                </td>
                                 <td>{{ $plan->trial_period_days }}</td>
                                 <td>{{ $plan->statement_descriptor }}</td>
                                 <td>

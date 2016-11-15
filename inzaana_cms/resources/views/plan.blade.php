@@ -24,13 +24,22 @@
                 <div class="col-md-4">
                     <div class="subscribe_box" style="border: 1px solid #d0d0d0;margin-right: 5px;padding: 10px;">
                         <h2 class="text-center">{{ $single_plan['name'] }}</h2>
+                        @if($single_plan['coupon_id'] != null)
+                            <h3 class="text-center">{{ $single_plan->coupon['coupon_name'] }}</h3>
+                        @endif
                         <p class="text-center text-info">Trial days: {{ $single_plan['trial_period_days'] }}</p>
                         <ul>
                             @foreach($single_plan->planFeature as $feature)
                                 <li>{{ $feature->feature_name }}</li>
                             @endforeach
                         </ul>
-                        <p class="text-center label-info"><strong>Price: {{ $single_plan['amount'] ."". $single_plan->currency_symbol[$single_plan->currency]  }}/{{ $single_plan->interval }}</strong></p>
+                        @if($single_plan['coupon_id'] != null)
+                            <p class="text-center label-warning"><strong>Original Price: {{ $single_plan['amount'] ."". $single_plan->currency_symbol[$single_plan->currency]  }}/{{ $single_plan->interval }}</strong></p>
+                            <p class="text-center label-info"><strong>Discount Price: {{ $single_plan->coupon['discount_price'] ."". $single_plan->currency_symbol[$single_plan->currency]  }}/{{ $single_plan->interval }}</strong></p>
+                        @else
+                            <p class="text-center label-info"><strong>Price: {{ $single_plan['amount'] ."". $single_plan->currency_symbol[$single_plan->currency]  }}/{{ $single_plan->interval }}</strong></p>
+                        @endif
+
                         <div class="text-center">
                             @if(isset($user->subscriptions[0]) && $user->stripe_id != null && $user->subscriptions[0]->stripe_plan != $single_plan['plan_id'])
                                 <form method="post" action="{{ route('swapSubscriptionPlan') }}">

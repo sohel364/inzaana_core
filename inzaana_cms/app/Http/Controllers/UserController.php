@@ -3,6 +3,8 @@
 namespace Inzaana\Http\Controllers;
 
 use Auth;
+use Carbon\Carbon;
+use Inzaana\StripeCoupon;
 use Session;
 use Stripe\Subscription;
 use Validator;
@@ -134,6 +136,7 @@ class UserController extends Controller
 
         $allplan = StripePlan::with('planFeature')->where('active','=','1')->get();
         //dd($allplan);
+        $coupon_all = StripeCoupon::all();
         $plan_collect = [];
         foreach($allplan as $plan)
         {
@@ -142,13 +145,41 @@ class UserController extends Controller
             {
                 $plan->interval = "Every ". $plan->interval_count ." ".$plan->interval."s";
             }
+
+            $coupon_information = [];
+            if($plan->coupon_id != null)
+            {
+                foreach($coupon_all as $coupon_single){
+                    if($plan->coupon_id == $coupon_single->coupon_id){
+                        $coupon_information['coupon_name'] = $coupon_single->coupon_name;
+                        $coupon_information['coupon_id'] = $coupon_single->coupon_id;
+
+                        if($coupon_single->percent_off != null){
+                            $coupon_information['discount'] = $coupon_single->percent_off."%";
+                            $coupon_information['discount_price'] = ($plan->amount - (($plan->amount * $coupon_single->percent_off)/100));
+                        }
+                        else{
+                            $coupon_information['discount'] = ($coupon_single->amount_off/100)."/".$coupon_single->currency;
+                            $coupon_information['discount_price'] = ($plan->amount - ($coupon_single->amount_off/100));
+                        }
+
+                        $coupon_information['currency'] = $coupon_single->currency;
+                        $coupon_information['duration'] = $coupon_single->duration;
+                        if($coupon_single->duration == 'repeating')
+                            $coupon_information['duration'] = $coupon_single->duration_in_months." Months";
+                        $coupon_information['max_redemptions'] = $coupon_single->max_redemptions;
+                        $coupon_redeem = Carbon::parse($coupon_single->redeem_by);
+                        $coupon_information['redeem_by'] = $coupon_redeem->toFormattedDateString();
+                    }
+                }
+            }
+            $plan->coupon = $coupon_information;
             $plan_collect[] = $plan;
 
         }
         $allplan = collect($plan_collect);
 
         $user = Auth::user();
-
         $user_subscriptions = User::with('subscriptions')->whereId($user->id)->first();
 
         return view('plan',compact('allplan'))->with('user', $user_subscriptions)
