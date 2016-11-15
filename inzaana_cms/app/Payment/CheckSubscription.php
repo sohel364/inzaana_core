@@ -72,12 +72,11 @@ trait CheckSubscription {
          * */
 
         $trial_days = $this->getFromDatabase('trial_ends_at');
-        if(!isset($trial_days[0]->trial_ends_at)){
+        if(!isset($trial_days[0]->trial_ends_at) && $trial_days[0]->trial_ends_at == null){
             return false;
         }else{
             $created = Carbon::parse($trial_days[0]->trial_ends_at);
             $now = Carbon::now();
-
             if($created>=$now){
                 $remain = ($created->diffInDays($now)) ? (($created->diffInDays($now)==1) ? $created->diffInDays($now)." Day" : $created->diffInDays($now)." Days"):                    // return Day
                         (($created->diffInHours($now)) ? (($created->diffInHours($now)==1) ? $created->diffInHours($now)." Hour" : $created->diffInHours($now)." Hours") :              // return Hour
@@ -165,7 +164,6 @@ trait CheckSubscription {
     public function getPlanEndDate()
     {
         $end_date = $this->getFromDatabase('ends_at as end_date');
-
         if(!isset($end_date[0]->end_date)){
             return "Unlimited(Auto renewal feature is on)";
         }else{
@@ -224,7 +222,6 @@ trait CheckSubscription {
 
     protected function getFromDatabase($select_column)
     {
-
         $data_query = DB::table('subscriptions')->select($select_column)->where('user_id','=',$this->id)->get();
         return $data_query ? $data_query : false;
     }

@@ -656,10 +656,25 @@ class StripeController extends Controller
         $subscriber = DB::table('subscriptions')
                     ->join('users','users.id','=','subscriptions.user_id')
                     ->join('stripe_plans','stripe_plans.plan_id','=','subscriptions.stripe_plan')
-                    ->select('subscriptions.name as plan_name','subscriptions.stripe_id','subscriptions.quantity','users.name as subscriber_name','users.email','stripe_plans.amount','stripe_plans.interval','stripe_plans.trial_period_days as trial')
+                    ->select('subscriptions.name as plan_name','subscriptions.stripe_id','subscriptions.quantity','users.name as subscriber_name','users.email','stripe_plans.amount','stripe_plans.currency','stripe_plans.interval','stripe_plans.coupon_id','stripe_plans.trial_period_days as trial')
                     ->where('users.id','=',Auth::user()->id)
                     ->first();
-        //dd($subscriber);
+        $coupon_info = StripeCoupon::where('coupon_id','=',$subscriber->coupon_id)->first();
+        $coupon['coupon_name'] = $coupon_info->coupon_name;
+        $redeem_by = Carbon::parse($coupon_info->redeem_by);
+        $coupon['redeem_by'] = $redeem_by->toFormattedDateString();
+        if($coupon_info->percent_off != null){
+            $coupon['discount'] = $coupon_info->percent_off."%";
+            $coupon['discount_price'] = ($subscriber->amount - (($subscriber->amount * $coupon_info->percent_off)/100))."/".$coupon_info->currency;
+        }
+        else{
+            $coupon['discount'] = ($coupon_info->amount_off/100)."/".$coupon_info->currency;
+            $coupon['discount_price'] = ($subscriber->amount - ($coupon_info->amount_off/100))."/".$coupon_info->currency;
+        }
+        $subscriber->coupon = $coupon;
+
+        /*dd($subscriber);*/
+
         return view('my-subscription',compact('subscriber','user'));
 
     }

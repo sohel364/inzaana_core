@@ -23,11 +23,17 @@
                <p class="text-primary">{{ session('success') }}</p>
            @endif
            @if(isset($subscriber))
-             <h4>Plan Name: {{ $subscriber->plan_name }}</h4>
+               <h4>Plan Name: {{ $subscriber->plan_name }}</h4>
              @if($user->onTrial())
                    <h4>Trial Left: {{ $user->getTrialTimeString() }}</h4>
              @endif
-             <h4>Plan Cost: {{ $user->getPlanCost() }}</h4>
+               @if($subscriber->coupon_id != null)
+                   <h4>Discount Offer: {{ $subscriber->coupon['coupon_name'] }}</h4>
+                   <h4>Original Price: {{ $user->getPlanCost() }}</h4>
+                   <h4>After Discount: {{ $subscriber->coupon['discount_price'] }} </h4>
+               @else
+                   <h4>Plan Price: {{ $user->getPlanCost() }}</h4>
+               @endif
              <h4>Remaining: {{ $user->getPlanRemainDays() }}</h4>
              <h4>Plan End Date: {{ $user->getPlanEndDate() }}</h4>
            @else
