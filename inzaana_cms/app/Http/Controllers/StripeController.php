@@ -28,6 +28,8 @@ use \Stripe\Subscription;
 
 class StripeController extends Controller
 {
+    public static $sort = 'name';
+    public static $order = 'ASC';
     public function payment(Request $request)
     {
         //$user = User::find(1);
@@ -97,13 +99,15 @@ class StripeController extends Controller
 
     public function viewCoupon(Request $request)
     {
-        $sort = 'name';
-        $order = 'ASC';
         $loadView = 'super-admin.stripe.view-coupon';
+        $sort = StripeController::$sort;
+        $order = StripeController::$order;
         if($request->ajax())
         {
-            $sort = Input::get('sort');
-            $order = (Input::get('order')=='DESC')? "ASC" : "DESC";
+            if(Input::get('sort') != null)
+                $sort = Input::get('sort');
+            if(Input::get('order') != null)
+                $order = (Input::get('order')=='DESC')? "ASC" : "DESC";
             $loadView = 'super-admin.includes.coupon-dom';
         }
         switch($sort){
@@ -157,6 +161,8 @@ class StripeController extends Controller
         $this->validate($coupon, [
             'coupon' => 'required'
         ]);
+        StripeController::$order = $coupon->order; //TODO: hook previous sorting name namd sorting order
+        StripeController::$sort = $coupon->sort;
         $coupon_id = $coupon->coupon;
         //$plan_id = Crypt::decrypt($plan_id->confirm_action);
 
@@ -179,7 +185,7 @@ class StripeController extends Controller
     public function planForm()
     {
         $features = StripePlanFeature::all();
-        $coupon = StripeCoupon::all();
+        $coupon = StripeCoupon::where('valid','=',1)->get();
         return view('super-admin.stripe.create-plan')->with(['user'=> Auth::user(),'features'=>$features,'coupons'=>$coupon]);
     }
 
@@ -346,6 +352,7 @@ class StripeController extends Controller
 
 
         $allPlan = StripePlan::with('planFeature')->orderBy($sort,$order)->get();
+        $coupon_all = StripeCoupon::all();
         $plan_collect = [];
         foreach($allPlan as $plan)
         {
@@ -354,6 +361,28 @@ class StripeController extends Controller
             {
                 $plan->interval = "Every ". $plan->interval_count ." ".$plan->interval."s";
             }
+
+            $coupon_information = [];
+            if($plan->coupon_id != null)
+            {
+                foreach($coupon_all as $coupon_single){
+                    if($plan->coupon_id == $coupon_single->coupon_id){
+                        $coupon_information['coupon_name'] = $coupon_single->coupon_name;
+                        $coupon_information['coupon_id'] = $coupon_single->coupon_id;
+                        $coupon_information['percent_off'] = $coupon_single->percent_off;
+                        $coupon_information['amount_off'] = $coupon_single->amount_off;
+                        $coupon_information['currency'] = $coupon_single->currency;
+                        $coupon_information['duration'] = $coupon_single->duration;
+                        if($coupon_single->duration == 'repeating')
+                            $coupon_information['duration'] = $coupon_single->duration_in_months." Months";
+                        $coupon_information['max_redemptions'] = $coupon_single->max_redemptions;
+                        $coupon_redeem = Carbon::parse($coupon_single->redeem_by);
+                        $coupon_information['redeem_by'] = $coupon_redeem->toFormattedDateString();
+                    }
+                }
+
+            }
+            $plan->coupon = $coupon_information;
             $plan_collect[] = $plan;
 
         }
@@ -558,11 +587,12 @@ class StripeController extends Controller
                     ->join('users','users.id','=','subscriptions.user_id')
                     ->join('stripe_plans','stripe_plans.plan_id','=','subscriptions.stripe_plan')
                     ->join('stores','stores.user_id','=','users.id')
-                    ->select('subscriptions.id','subscriptions.name as plan_name','subscriptions.stripe_id','subscriptions.quantity','users.name as subscriber_name','users.email','stripe_plans.amount','stripe_plans.interval','stripe_plans.interval_count','stripe_plans.trial_period_days as trial', DB::raw('GROUP_CONCAT(stores.name,"#",stores.status) AS store_name'))
+                    ->select('subscriptions.id','subscriptions.name as plan_name','subscriptions.stripe_id','subscriptions.quantity','users.name as subscriber_name','users.email','users.phone_number as contact','users.address','stripe_plans.amount','stripe_plans.interval','stripe_plans.interval_count','stripe_plans.coupon_id','stripe_plans.trial_period_days as trial', DB::raw('GROUP_CONCAT(stores.name,"#",stores.status) AS store_name'))
                     /*->where('stores.status','=','APPROVED')*/
                     ->groupBy('stores.user_id')
                     ->orderBy($sort,$order)
                     ->get();
+        $coupon_all = StripeCoupon::all();
         $subscriber_collect = [];
         foreach($subscribers as $subscriber)
         {
@@ -583,8 +613,28 @@ class StripeController extends Controller
                 }
             }
             $subscriber->store_name = collect($data_process);
-        }
+            $coupon_information = [];
+            if($subscriber->coupon_id != null)
+            {
+                foreach($coupon_all as $coupon_single){
+                    if($subscriber->coupon_id == $coupon_single->coupon_id){
+                        $coupon_information['coupon_name'] = $coupon_single->coupon_name;
+                        $coupon_information['coupon_id'] = $coupon_single->coupon_id;
+                        $coupon_information['percent_off'] = $coupon_single->percent_off;
+                        $coupon_information['amount_off'] = $coupon_single->amount_off;
+                        $coupon_information['currency'] = $coupon_single->currency;
+                        $coupon_information['duration'] = $coupon_single->duration;
+                        if($coupon_single->duration == 'repeating')
+                            $coupon_information['duration'] = $coupon_single->duration_in_months." Months";
+                        $coupon_information['max_redemptions'] = $coupon_single->max_redemptions;
+                        $coupon_redeem = Carbon::parse($coupon_single->redeem_by);
+                        $coupon_information['redeem_by'] = $coupon_redeem->toFormattedDateString();
+                    }
+                }
 
+            }
+            $subscriber->coupon = $coupon_information;
+        }
         $sln = 1;
         $user = Auth::user();
         $sort = Input::get('sort');
@@ -609,6 +659,7 @@ class StripeController extends Controller
                     ->select('subscriptions.name as plan_name','subscriptions.stripe_id','subscriptions.quantity','users.name as subscriber_name','users.email','stripe_plans.amount','stripe_plans.interval','stripe_plans.trial_period_days as trial')
                     ->where('users.id','=',Auth::user()->id)
                     ->first();
+        //dd($subscriber);
         return view('my-subscription',compact('subscriber','user'));
 
     }

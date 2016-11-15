@@ -83,6 +83,9 @@
                                     Store
                                 </th>
                                 <th>
+                                    Discount
+                                </th>
+                                <th>
                                     Status
                                 </th>
                                 <th>
@@ -100,8 +103,8 @@
                                     <td> {{ $sln++ }} </td>
                                     <td>{{ $subscriber->subscriber_name }}</td>
                                     <td>{{ $subscriber->email }}</td>
-                                    <td>0173043343</td>
-                                    <td>33/A eskaton garden</td>
+                                    <td>{{ $subscriber->contact }}</td>
+                                    <td>{{ $subscriber->address }}</td>
                                     <td>{{ $subscriber->plan_name }} ({{ $subscriber->amount }}/{{ $subscriber->interval }})</td>
                                     <td>
                                         @foreach($subscriber->store_name as $store)
@@ -114,6 +117,19 @@
                                             </li>
                                         @endforeach
 
+                                    </td>
+                                    <td>
+                                        @if($subscriber->coupon_id != null)
+                                            {{ $subscriber->coupon['coupon_name'] }}<br>
+                                            @if($subscriber->coupon['percent_off'] != null)
+                                                {{ $subscriber->coupon['percent_off'] }} <br>
+                                            @else
+                                                {{ $subscriber->coupon['amount_off']."/". $subscriber->coupon['currency']}}<br>
+                                            @endif
+                                            {{ $subscriber->coupon['redeem_by'] }}<br>
+                                        @else
+                                            No Discount
+                                        @endif
                                     </td>
                                     <td><span class="label label-success">Active</span></td>
                                     <td>{{ $subscriber->trial }}</td>

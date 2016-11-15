@@ -81,6 +81,9 @@
                         Feature
                     </th>
                     <th>
+                        Discount
+                    </th>
+                    <th>
                         Status
                     </th>
                     <th width="20%">Action</th>
@@ -101,6 +104,13 @@
                                     @foreach($plan->planFeature as $feature)
                                         <p>{{ $feature->feature_name }}</p>
                                     @endforeach
+                                </td>
+                                <td>
+                                    @if($plan->coupon_id != null)
+                                        {{ $plan->coupon['coupon_name'] }}
+                                    @else
+                                        No Offer
+                                    @endif
                                 </td>
                                 <td>
                                     <label for="" id="{{ $plan['plan_id'] }}" class="label {{ $plan['active'] ? "label-success": "label-warning" }}">{{ $plan['active'] ? "Active": "Inactive" }}</label>

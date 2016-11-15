@@ -103,6 +103,8 @@
                                         <form action="view-coupon/ajax/update" method="post" name="action" id="{{ $coupon['coupon_id'] }}" class="form-horizontal change_status">
                                             {{ csrf_field() }}
                                             <input type="hidden" name="coupon" id="coupon_id" value="{{ $coupon['coupon_id'] }}">
+                                            <input type="hidden" name="order" value="{{ $order }}">
+                                            <input type="hidden" name="sort" value="{{ $sort }}">
                                             <select name="confirm_action" id="select_action" onchange="setFormActionOnChange(this)">
                                                 <option value="1">Active</option>
                                                 <option value="0">Inactive</option>
