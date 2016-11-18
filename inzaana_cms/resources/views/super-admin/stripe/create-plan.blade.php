@@ -106,23 +106,18 @@
 							<div class="checkbox">
 								<label><input type="checkbox" name="auto_renewal" value="1" checked>Auto Renew</label>
 							</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="Features">Select features for the plan : </label>
-                            <div class="side-by-side clearfix">
-                                <div>
-                                    <select data-placeholder="Choose a Country..." style="width:350px;" multiple
-                                            tabindex="3">
-                                        @foreach($features as $feature)
-                                            <option value="{{ $feature->feature_id }}">{{ $feature->feature_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" class="btn btn-primary btn-sm" value="Create Plan">
-                        </div>
+						</div>
+						<div class="form-group">						
+							<label for="Features">Select features for the plan : </label>
+                            <select name="feature_id[]" id="" multiple>
+                                @foreach($features as $feature)
+                                    <option value="{{ $feature->feature_id }}">{{ $feature->feature_name }}</option>
+                                @endforeach
+                            </select>
+						</div>																
+						<div class="form-group">
+							<input type="submit" class="btn btn-primary btn-sm" value="Create Plan">
+						</div>
                     </form>
 
                 </div>

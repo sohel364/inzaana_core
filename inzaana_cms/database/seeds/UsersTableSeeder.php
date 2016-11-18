@@ -44,8 +44,9 @@ class UsersTableSeeder extends Seeder
             $user->password = bcrypt($vendorPassword);
             $user->email_alter = preg_replace("/(\w+)@(\w+.)+/", "$1@inzaana.com", $user->email);
             $user->stores()->save(factory(Inzaana\Store::class)->make());
-            
-            /* Temporarily comment this code
+
+            /*
+             * Temporarily comment this code
              * User will be push on onTrials category
              * */
             /*$user->newSubscription('Free', 'VuvmBePBCq3L')->create(\Stripe\Token::create(array(
@@ -56,13 +57,11 @@ class UsersTableSeeder extends Seeder
                     "cvc" => "400"
                 )
             ))->id);
-            
 
             $user->subscription('Free')->cancel();*/
 
             $user->trial_ends_at = Carbon\Carbon::now()->addDays(10);
             $user->save();
-
             Log::debug('[Inzaana][User of email -> ' . $user->email . ', password -> ' . $vendorPassword . ' is created, has ' . $user->stores()->count() . ' stores for testing]');
         });
         if($users->count() > 0)

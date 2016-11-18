@@ -95,7 +95,7 @@
 </div>
 <!--END CONTENT-->
 @endsection
-@section('footer-script')
+@section('footer-scripts')
     <script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
     <script src="{{ URL::asset('js/numeric.js') }}"></script>
     <script src="{{ URL::asset('super-admin-asset/stripe/coupon-create.js') }}"></script>
