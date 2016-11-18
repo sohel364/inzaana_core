@@ -149,9 +149,9 @@
 					
 					         <label for="state">State</label>
                     <select name="state" class="form-control" placeholder="Select State">
-                            <option>Andhra Pradesh</option>
-                            <option>Assam</option>
-                            <option>Bihar</option>
+                        <option value="Andhra Pradesh" {{ $address['STATE'] == 'Andhra Pradesh' ? ' selected' : '' }}>Andhra Pradesh</option>
+                        <option value="Assam" {{ $address['STATE'] == 'Assam' ? ' selected' : '' }}>Assam</option>
+                        <option value="Bihar" {{ $address['STATE'] == 'Bihar' ? ' selected' : '' }}>Bihar</option>
                     </select>
 					         <label for="Postcode">Postcode</label>
                    <input type="text" class="form-control" value="{{ $address['POSTCODE'] or '' }}" id="postcode" name="postcode" placeholder="Postcode">

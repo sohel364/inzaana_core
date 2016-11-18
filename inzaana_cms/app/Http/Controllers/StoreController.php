@@ -20,6 +20,7 @@ class StoreController extends Controller
     
     private $_viewData = [];
     private $_rules = [];
+    private $delimiter_phone_number = '-';
 
 	/**
      * Create a new authentication controller instance.
@@ -51,7 +52,8 @@ class StoreController extends Controller
 
     public function index()
     {
-        return $this->viewUserStore([ 'phone_number' => [0, '']  ]);
+        $defaultData = [ 'phone_number' => [0, ''], 'address' =>  User::decodeAddress('') ];
+        return $this->viewUserStore($defaultData);
     }
 
     public function redirectUrl($site)
@@ -80,8 +82,8 @@ class StoreController extends Controller
     public function update(Store $store)
     {
         $user = User::find($store->user_id);
-        $phone_number = User::getPhoneCode($user->phone_number);
-        $address = User::getAddress($store->address ? $store->address : $user->address);
+        $phone_number = User::decodePhoneNumber($store->phone_number ? $store->phone_number : $user->phone_number);
+        $address = User::decodeAddress($store->address ? $store->address : $user->address);
         return $this->viewUserStore(compact('store', 'phone_number', 'address'));
     }
 
@@ -89,13 +91,9 @@ class StoreController extends Controller
     {
         $storeName = $request->input('store_name');
 
-        $delimiter_address = "<address>";
-        $address = $request->input('address') . $delimiter_address;
-        $address .= $request->input('address_flat_house_floor_building') . $delimiter_address;
-        $address .= $request->input('address_colony_street_locality') . $delimiter_address;
-        $address .= $request->input('address_landmark') . $delimiter_address;
-        $address .= $request->input('address_town_city') . $delimiter_address;
-        $address .= $request->input('postcode');
+        $address = User::encodeAddress($request->only(
+            'mailing-address', 'address_flat_house_floor_building', 'address_colony_street_locality', 'address_landmark', 'address_town_city', 'postcode', 'state'
+        ));
 
         $data = collect([
             'name' => $storeName,
@@ -103,6 +101,7 @@ class StoreController extends Controller
             // 'domain' => 'com',//str_replace('.', '', '.net'),
             'description' => $request->input('description'),
             'address' => $address,
+            'phone_number' => $request->input('code') . $this->delimiter_phone_number . $request->input('phone_number'),
             'store_type' => $request->input('business')
 
         ]);
@@ -127,6 +126,7 @@ class StoreController extends Controller
         $store->description = $data['description'];
         $store->address = $data['address'];
         $store->store_type = $data['store_type'];
+        $store->phone_number = $data['phone_number'];
 
         if(!$store->save())
             return redirect()->back()->withErrors(['The store (' . $store->name . ') update is failed!']);
@@ -138,13 +138,9 @@ class StoreController extends Controller
     {
         $store = $request->input('store_name');
 
-        $delimiter_address = "<address>";
-        $address = $request->input('mailing-address') . $delimiter_address;
-        $address .= $request->input('address_flat_house_floor_building') . $delimiter_address;
-        $address .= $request->input('address_colony_street_locality') . $delimiter_address;
-        $address .= $request->input('address_landmark') . $delimiter_address;
-        $address .= $request->input('address_town_city') . $delimiter_address;
-        $address .= $request->input('postcode');
+        $address = User::encodeAddress($request->only(
+            'mailing-address', 'address_flat_house_floor_building', 'address_colony_street_locality', 'address_landmark', 'address_town_city', 'postcode', 'state'
+        ));
 
         $data = [
             'name' => $store,
@@ -152,6 +148,7 @@ class StoreController extends Controller
             // 'domain' => 'com', //str_replace('.', '', '.net'),
             'description' => $request->input('description'),
             'address' => $address,
+            'phone_number' => $request->input('code') . $this->delimiter_phone_number . $request->input('phone_number'),
             'store_type' => $request->input('business')
         ];
         $validator = $this->validator($data, $this->_rules->toArray());
@@ -167,6 +164,7 @@ class StoreController extends Controller
             // 'domain' => 'com', //$data['domain'],
             'description' => $data['description'],
             'address' => $data['address'],
+            'phone_number' => $data['phone_number'],
             'store_type' => $data['store_type'],
             'status' => 'ON_APPROVAL',
         ]);        

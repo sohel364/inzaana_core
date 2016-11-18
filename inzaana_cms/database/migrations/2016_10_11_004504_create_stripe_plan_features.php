@@ -12,6 +12,7 @@ class CreateStripePlanFeatures extends Migration
      */
     public function up()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
         Schema::create('stripe_plan_features', function (Blueprint $table) {
             $table->increments('feature_id');
             $table->string('feature_name');
@@ -33,6 +34,7 @@ class CreateStripePlanFeatures extends Migration
      */
     public function down()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
         Schema::drop("stripe_plan_features");
         Schema::drop("stripe_plan_has_features");
     }

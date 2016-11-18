@@ -155,9 +155,9 @@
                     <br/>
                     <label for="state">State</label>
                     <select name="state" class="form-control" placeholder="Select State">
-                            <option>Andhra Pradesh</option>
-                            <option>Assam</option>
-                            <option>Bihar</option>
+                        <option value="Andhra Pradesh" {{ $address['STATE'] == 'Andhra Pradesh' ? ' selected' : '' }}>Andhra Pradesh</option>
+                        <option value="Assam" {{ $address['STATE'] == 'Assam' ? ' selected' : '' }}>Assam</option>
+                        <option value="Bihar" {{ $address['STATE'] == 'Bihar' ? ' selected' : '' }}>Bihar</option>
                     </select>
                    <label for="postcode">Postcode</label>
                    <input type="text" class="form-control" value="{{ $address['POSTCODE'] or '' }}" id="postcode" name="postcode" placeholder="Postcode">
@@ -168,7 +168,7 @@
 
                     <select name="business" class="form-control" placeholder="Select a business area">
                       @foreach($types as $store_type)
-                      <option value="{{ $store_type['id'] }}" {{ ($store_type['id'] == (isset($store) ? $store->attributes['store_type'] : 'NOT_SURE') ) ? ' selected' : '' }}>{{ $store_type['title'] }}</option>
+                      <option value="{{ $store_type['id'] }}" {{ ($store_type['id'] == ( isset($store) ? $store->store_type : 'NOT_SURE') ) ? ' selected' : '' }}>{{ $store_type['title'] }}</option>
                       @endforeach
                     </select>
                 
@@ -226,18 +226,21 @@
                     </tr>
                     @if(isset($stores))
                       @foreach($stores as $store)
-                        <?php $address = Inzaana\User::getAddress($store->address ? $store->address : Auth::user()->address) ?>
                       <tr>
                         <!-- <td class="text-center" id="child"><a href="">001</a> </td> -->
                         <td class="text-center" id="child"><a href="#">{{ $store->name }}</a></td>
 
-                        <td class="text-center" id="child">{{ $address['HOUSE'] . ', ' . $address['STREET'] . ', ' . $address['LANDMARK'] . ', ' . $address['TOWN'] }}</td>
+                        <td class="text-center" id="child">{{ $store->decodeAddress() }}</td>
 
                         <td class="text-center" id="child">
                           <a target="_blank" href="{{ route('user::stores.redirect', [ 'site' => str_replace('.', '', $store->name_as_url) . '.' . $store->sub_domain . '.' . $store->domain ] ) }}">{{ str_replace('.', '', $store->name_as_url) . '.' . $store->sub_domain . '.' . str_replace('.', '', $store->domain) }}</a>
                         </td>
 
-                        <td class="text-center" id="child">{{ $store->store_type }}</td>
+                        <td class="text-center" id="child">
+                          @foreach($types as $store_type)
+                            {{ $store_type['id'] == $store->store_type ? $store_type['title'] : '' }}
+                          @endforeach
+                        </td>
 
                         <td class="text-center" id="child">{{ $store->description or 'This is a store named ' . $store->name }}</td>
 

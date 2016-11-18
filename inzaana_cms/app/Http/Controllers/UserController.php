@@ -340,8 +340,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $phoneNumber = User::getPhoneCode($user->phone_number);
-        $address = User::getAddress($user->address);
+        $phoneNumber = User::decodePhoneNumber($user->phone_number);
+        $address = User::decodeAddress($user->address);
         return view('edit-profile') ->withUser($user)
                                     ->withPhoneNumber($phoneNumber)
                                     ->withAddress($address);
@@ -403,13 +403,9 @@ class UserController extends Controller
             'email_alter' => 'email',
         ]);
 
-        $delimiter_address = "<address>";
-        $address = $request->input('mailing-address') . $delimiter_address;
-        $address .= $request->input('address_flat_house_floor_building') . $delimiter_address;
-        $address .= $request->input('address_colony_street_locality') . $delimiter_address;
-        $address .= $request->input('address_landmark') . $delimiter_address;
-        $address .= $request->input('address_town_city') . $delimiter_address;
-        $address .= $request->input('postcode');
+        $address = User::encodeAddress($request->only(
+            'mailing-address', 'address_flat_house_floor_building', 'address_colony_street_locality', 'address_landmark', 'address_town_city', 'postcode', 'state'  
+        ));
 
         $inputs = collect([
             'name' => $request->input('name'),
@@ -454,6 +450,7 @@ class UserController extends Controller
         
         $delimiter_phone_number = '-';
         $user->phone_number = $inputs['code'] . $delimiter_phone_number . $inputs['phone_number'];
+        // no errors means empty array
         return [];
     }
 

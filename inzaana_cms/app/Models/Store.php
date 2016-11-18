@@ -5,6 +5,9 @@ namespace Inzaana;
 use Illuminate\Database\Eloquent\Model;
 use Faker\Factory as StoreFaker;
 
+use Auth;
+use Inzaana\User;
+
 class Store extends Model
 {
     //
@@ -46,6 +49,30 @@ class Store extends Model
         return 'Unknown';
     }
 
+    /**
+     * Get the decoded address either from user or it's own
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getAddressAttribute($value)
+    {
+        return $value ? $value : Auth::user()->address;
+    }
+
+    public function decodeAddress($less = true)
+    {
+        $addressDecoded = User::decodeAddress($this->attributes['address']);
+        if($less)
+            return $addressDecoded['HOUSE'] . ', ' . $addressDecoded['STREET'] . ', ' . $addressDecoded['LANDMARK'] . ', ' . $addressDecoded['TOWN'];
+        return  $addressDecoded['HOUSE'] . ', '
+                . $addressDecoded['STREET'] . ', ' 
+                . $addressDecoded['LANDMARK'] . ', '
+                . $addressDecoded['TOWN'] . ', '
+                . $addressDecoded['STATE'] . ', '
+                . $addressDecoded['POSTCODE'];
+    }
+
     public function getStoreTypeIndex($id)
     {
         foreach ($this->types() as $key => $value)
@@ -56,18 +83,6 @@ class Store extends Model
             }
         }
         return 0;
-    }
-
-    public function getStoreTypeAttribute()
-    {
-        foreach ($this->types() as $key => $value)
-        {
-            if($value['id'] == $this->attributes['store_type'])
-            {
-                return $value['title'];
-            }
-        }
-        return 'Unknown';
     }
 
     /**
