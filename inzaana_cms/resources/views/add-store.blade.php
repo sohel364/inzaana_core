@@ -30,8 +30,11 @@
 <script src="/jquery-validation/lib/jquery.js"></script>
 <script src="/jquery-validation/dist/jquery.validate.js"></script>
 <script src="/form-validation/edit-store-validation.js"></script>
+<script src="/form-validation/edit-profile-validation.js"></script>
 <script>
     $().ready(onReadyEditStoreValidation);
+    $('#phone_number').keypress(validateNumber);
+    $('#postcode').keypress(validateNumber);
 
     $( "input[name='store_name']" ).focusout(function(event) {
 

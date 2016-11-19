@@ -40,6 +40,8 @@
   //   }
   // });
   $().ready(onReadyEditProfileValidation);
+  $('#phone_number').keypress(validateNumber);
+  $('#postcode').keypress(validateNumber);
 
   </script>
 
