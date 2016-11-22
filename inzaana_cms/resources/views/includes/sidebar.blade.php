@@ -52,6 +52,7 @@
                     </ul>
       			</li>
 
+            @if($user->getFeature($plan_name,'Store'))
             <li class="treeview">
                     <a href="#">
                       <i class="fa fa-globe"></i> <span>Store <small class="label bg-green">{{ Auth::user()->stores()->count() }}</small></span> 
@@ -62,6 +63,7 @@
                       <li><a href="{{ route('user::stores') }}"><i class="fa fa-plus"></i> Add New Store </a></li>
                     </ul>
             </li>
+            @endif
 
             @if($user->getFeature($plan_name,'Categories'))
             <li class="treeview">
@@ -76,7 +78,7 @@
             </li>
             @endif
 
-            @if(true)
+            @if($user->getFeature($plan_name,'Products'))
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-cubes"></i> <span>Products <small class="label bg-green">{{ Auth::user()->products->count() }}</small></span> 
