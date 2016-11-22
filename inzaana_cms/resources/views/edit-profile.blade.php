@@ -13,6 +13,40 @@
 </ol>
 @endsection
 
+@section('header-style')
+  <link rel="stylesheet" href="/jquery-validation/css/screen.css">
+  <style type="text/css">
+
+  #edit-profile-form label.error {
+    margin-left: 10px;
+    width: auto;
+    display: inline;
+  }
+
+  </style>
+@endsection
+
+@section('footer-scripts')
+
+  <script src="/jquery-validation/lib/jquery.js"></script>
+  <script src="/jquery-validation/dist/jquery.validate.js"></script>
+  <script src="/form-validation/edit-profile-validation.js"></script>
+
+  <script type="text/javascript">
+  // //just for the demos, avoids form submit
+  // $.validator.setDefaults({
+  //   submitHandler: function() {
+  //     alert("submitted!");
+  //   }
+  // });
+  $().ready(onReadyEditProfileValidation);
+  $('#phone_number').keypress(validateNumber);
+  $('#postcode').keypress(validateNumber);
+
+  </script>
+
+@endsection
+
 @section('content')
 <div class="box box-info">
     <div class="box-header with-border">
@@ -30,19 +64,19 @@
 
               @if(isset($user))
               <!-- form start -->
-              <form role="form" action="{{ route('user::edit.email', [$user]) }}" method="POST">
+              <form role="form" id="edit-profile-form" action="{{ route('user::edit.email', [$user]) }}" method="POST">
 
                 {!! csrf_field() !!}
 
                 <div class="box-body">							
         				  <div class="form-group{{ $errors->has('profile_image') ? ' has-error' : '' }}">
-        						<img src="{{ asset('/dist/img/user2-160x160.jpg') }}" class="img-rounded" alt="Cinque Terre" width="304" height="236">										
+        						<img src="{{ asset('/dist/img/avatar.png') }}" class="img-rounded" alt="Cinque Terre" width="304" height="236">
         						<input id="file-input" type="file"/>
         				 </div>
 				 
                   <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                     <label for="name">Name</label>
-                    <input type="text" class="form-control" value="{{ $user->name or '' }}" id="name" name="name" placeholder="Your name..">
+                    <input type="text" class="form-control" value="{{ $user->name or '' }}" id="name" name="name" placeholder="Your name.." required>
 
                     @if ($errors->has('name'))
                         <span class="help-block">
@@ -51,16 +85,34 @@
                     @endif
                   </div>
 
-                  <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
-                    <label for="contact-number">Contact Number</label>
-                    <input type="text" class="form-control" value="{{ $user->phone_number or old('phone_number') }}" id="phone_number" name="phone_number" placeholder="Your contact number...">            
 
-                    @if ($errors->has('phone_number'))
-                        <span class="help-block">
-                              <strong>{{ $errors->first('phone_number') }}</strong>
-                          </span>
-                    @endif
-                  </div>
+                    <div>
+                        <label for="contact-number"> Contact Number</label>
+
+                        <div class="row col-sm-12 col-md-12 col-lg-12">
+                            <div class="row col-sm-1 col-md-1 col-lg-1" style="text-align: right">code</div>
+                            <div class="form-group col-sm-2 col-md-2 col-lg-2">
+                                <div>
+                                    <select name="code" text="code" class="form-control">
+                                        <option {{ $phone_number[0] == 0 ? 'selected' : '' }}>+088</option>
+                                        <option {{ $phone_number[0] == 1 ? 'selected' : '' }}>+465</option>
+                                        <option {{ $phone_number[0] == 2 ? 'selected' : '' }}>+695</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-7 col-md-7 col-lg-7 form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
+                                <input type="text" class="form-control" value="{{ $phone_number[1] or '' }}" id="phone_number" name="phone_number" placeholder="Phone number...">
+
+                                @if ($errors->has('phone_number'))
+                                    <span class="help-block">
+                                      <strong>{{ $errors->first('phone_number') }}</strong>
+                                  </span>
+                                @endif
+                            </div>
+                            <div class="col-sm-1 col-md-1 col-lg-1"><button type="button" class="btn btn-primary">verify</button></div>
+                        </div>
+                    </div>
 
                   <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                     <label for="email">Email Address</label>
@@ -72,9 +124,9 @@
                           </span>
                     @endif
                   </div>
-				  
-				          @if($user->email_alter)
-				          <div class="form-group{{ $errors->has('email_alter') ? ' has-error' : '' }}">
+
+                  @if($user->email_alter)
+			            <div class="form-group{{ $errors->has('email_alter') ? ' has-error' : '' }}">
                     <label for="email_alter">Inzaana web-mail</label>
                     <input type="text" class="form-control" value="{{ $user->email_alter }}" id="email_alter" name="email_alter" placeholder="Your inzaana web-email.." readonly>            
 
@@ -88,13 +140,23 @@
 				  
                   <div class="form-group">
                     <label for="address">Address</label>
-                    <input type="text" class="form-control" value="{{ $user->address or old('address') }}" id="mailing-address" name="mailing-address" placeholder="Your mailing address..">            
-
-                    @if ($errors->has('address'))
-                        <span class="help-block">
-                              <strong>{{ $errors->first('address') }}</strong>
-                          </span>
-                    @endif
+					           <input type="text" class="form-control" value="{{ $address['HOUSE'] or '' }}" id="address_flat_house_floor_building" name="address_flat_house_floor_building" placeholder="Flat / house no / floor / Building">
+                    <br/>
+                    <input type="text" class="form-control" value="{{ $address['STREET'] or '' }}" id="address_colony_street_locality" name="address_colony_street_locality" placeholder="Colony / Street / Locality">
+                    <br/>
+                    <input type="text" class="form-control" value="{{ $address['LANDMARK'] or '' }}" id="address_landmark" name="address_landmark" placeholder="Landmark (optional)">
+                    <br/>
+                    <input type="text" class="form-control" value="{{ $address['TOWN'] or '' }}" id="address_town_city" name="address_town_city" placeholder="Town / City">
+                    <br/>
+					
+					         <label for="state">State</label>
+                    <select name="state" class="form-control" placeholder="Select State">
+                        <option value="Andhra Pradesh" {{ $address['STATE'] == 'Andhra Pradesh' ? ' selected' : '' }}>Andhra Pradesh</option>
+                        <option value="Assam" {{ $address['STATE'] == 'Assam' ? ' selected' : '' }}>Assam</option>
+                        <option value="Bihar" {{ $address['STATE'] == 'Bihar' ? ' selected' : '' }}>Bihar</option>
+                    </select>
+					         <label for="Postcode">Postcode</label>
+                   <input type="text" class="form-control" value="{{ $address['POSTCODE'] or '' }}" id="postcode" name="postcode" placeholder="Postcode">
                   </div>
 				  
         				  <div class="form-group{{ $errors->has('oldpass') ? ' has-error' : '' }}">

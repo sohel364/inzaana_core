@@ -5,6 +5,9 @@ namespace Inzaana;
 use Illuminate\Database\Eloquent\Model;
 use Faker\Factory as StoreFaker;
 
+use Auth;
+use Inzaana\User;
+
 class Store extends Model
 {
     //
@@ -41,8 +44,33 @@ class Store extends Model
             case 'ON_APPROVAL':     return 'On Apprval';
             case 'APPROVED':        return 'Approved';
             case 'REJECTED':        return 'Rejected';
+            case 'REMOVED':         return 'Removed';
         }
         return 'Unknown';
+    }
+
+    /**
+     * Get the decoded address either from user or it's own
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getAddressAttribute($value)
+    {
+        return $value ? $value : Auth::user()->address;
+    }
+
+    public function decodeAddress($less = true)
+    {
+        $addressDecoded = User::decodeAddress($this->attributes['address']);
+        if($less)
+            return $addressDecoded['HOUSE'] . ', ' . $addressDecoded['STREET'] . ', ' . $addressDecoded['LANDMARK'] . ', ' . $addressDecoded['TOWN'];
+        return  $addressDecoded['HOUSE'] . ', '
+                . $addressDecoded['STREET'] . ', ' 
+                . $addressDecoded['LANDMARK'] . ', '
+                . $addressDecoded['TOWN'] . ', '
+                . $addressDecoded['STATE'] . ', '
+                . $addressDecoded['POSTCODE'];
     }
 
     public function getStoreTypeIndex($id)
@@ -57,26 +85,14 @@ class Store extends Model
         return 0;
     }
 
-    public function getStoreTypeAttribute()
-    {
-        foreach ($this->types() as $key => $value)
-        {
-            if($value['id'] == $this->attributes['store_type'])
-            {
-                return $value['title'];
-            }
-        }
-        return 'Unknown';
-    }
-
     /**
-     * Suggest store names with given terms
+     * Suggest store names with given terms using faker package
      *
      * @param mixed
      * @param integer
      * @return array store names
      */
-    public static function suggest($inputTerms, $limit)
+    public static function suggestFromFaker($inputTerms, $limit)
     {
         $faker = StoreFaker::create();
         session([ 'input_terms' => $inputTerms ]); 
@@ -93,6 +109,24 @@ class Store extends Model
             
             session()->forget('input_terms');
             return "";
+        }
+        return $companies;
+    }
+
+    /**
+     * Suggest store names with given terms
+     *
+     * @param mixed
+     * @param integer
+     * @return array store names
+     */
+    public static function suggest($inputTerms, $limit)
+    {
+        $company_liability_types = [ 'Ltd.', 'GmbH', 's.r.o.', 'sp. z o.o.', 'LLC', 'Groups' ];
+        // $splitted_terms = preg_split("/[\s]+/", $inputTerms);
+        $companies = array();
+        foreach ($company_liability_types as $key => $value) {
+            $companies []= title_case($inputTerms) . ' ' . date("Y") . ' ' . $company_liability_types[$key];
         }
         return $companies;
     }

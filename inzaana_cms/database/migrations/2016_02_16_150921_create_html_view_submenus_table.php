@@ -13,6 +13,8 @@ class CreateHtmlViewSubmenusTable extends Migration
     public function up()
     {
         //
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+
         Schema::create('html_view_submenus', function (Blueprint $table) {
             $table->bigIncrements('id');
 
@@ -40,6 +42,8 @@ class CreateHtmlViewSubmenusTable extends Migration
     public function down()
     {
         //
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        
         Schema::dropIfExists('html_view_submenus');
     }
 }

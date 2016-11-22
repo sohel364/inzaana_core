@@ -20,6 +20,7 @@ class StoreController extends Controller
     
     private $_viewData = [];
     private $_rules = [];
+    private $delimiter_phone_number = '-';
 
 	/**
      * Create a new authentication controller instance.
@@ -36,8 +37,8 @@ class StoreController extends Controller
 
         $this->_rules = collect([
             'name' => 'required|unique:stores|max:30',
-            'sub_domain' => 'required',
-            'domain' => 'required',
+            // 'sub_domain' => 'required',
+            // 'domain' => 'required',
             'description' => 'max:1000'
         ]);
     }
@@ -51,7 +52,8 @@ class StoreController extends Controller
 
     public function index()
     {
-        return $this->viewUserStore([]);
+        $defaultData = [ 'phone_number' => [0, ''], 'address' =>  User::decodeAddress('') ];
+        return $this->viewUserStore($defaultData);
     }
 
     public function redirectUrl($site)
@@ -79,21 +81,31 @@ class StoreController extends Controller
 
     public function update(Store $store)
     {
-        return $this->viewUserStore(compact('store'));
+        $user = User::find($store->user_id);
+        $phone_number = User::decodePhoneNumber($store->phone_number ? $store->phone_number : $user->phone_number);
+        $address = User::decodeAddress($store->address ? $store->address : $user->address);
+        return $this->viewUserStore(compact('store', 'phone_number', 'address'));
     }
 
     public function postUpdate(StoreRequest $request, Store $store)
     {
         $storeName = $request->input('store_name');
+
+        $address = User::encodeAddress($request->only(
+            'mailing-address', 'address_flat_house_floor_building', 'address_colony_street_locality', 'address_landmark', 'address_town_city', 'postcode', 'state'
+        ));
+
         $data = collect([
             'name' => $storeName,
-            'sub_domain' => 'inzaana',
-            'domain' => str_replace('.', '', '.net'),
+            // 'sub_domain' => 'inzaana',
+            // 'domain' => 'com',//str_replace('.', '', '.net'),
             'description' => $request->input('description'),
-            'address' => $request->input('address'),
+            'address' => $address,
+            'phone_number' => $request->input('code') . $this->delimiter_phone_number . $request->input('phone_number'),
             'store_type' => $request->input('business')
 
         ]);
+
         $rules = $this->_rules;
         if($storeName == $store->name)
         {
@@ -114,10 +126,10 @@ class StoreController extends Controller
         $store->description = $data['description'];
         $store->address = $data['address'];
         $store->store_type = $data['store_type'];
+        $store->phone_number = $data['phone_number'];
 
-        $errors['update_failed'] = 'The store (' . $store->name . ') update is failed!';
         if(!$store->save())
-            return redirect()->back()->withErrors($errors)->withInputs();
+            return redirect()->back()->withErrors(['The store (' . $store->name . ') update is failed!']);
         flash()->success('Store (' . $store->name . ') information will be updated when approved by authority. Please contact Inzaana administrator for further assistance.');
         return redirect()->route('user::stores');
     }
@@ -125,12 +137,18 @@ class StoreController extends Controller
     public function create(StoreRequest $request)
     {
         $store = $request->input('store_name');
+
+        $address = User::encodeAddress($request->only(
+            'mailing-address', 'address_flat_house_floor_building', 'address_colony_street_locality', 'address_landmark', 'address_town_city', 'postcode', 'state'
+        ));
+
         $data = [
             'name' => $store,
-            'sub_domain' => 'inzaana',
-            'domain' => str_replace('.', '', '.net'),
+            // 'sub_domain' => 'inzaana',
+            // 'domain' => 'com', //str_replace('.', '', '.net'),
             'description' => $request->input('description'),
-            'address' => $request->input('address'),
+            'address' => $address,
+            'phone_number' => $request->input('code') . $this->delimiter_phone_number . $request->input('phone_number'),
             'store_type' => $request->input('business')
         ];
         $validator = $this->validator($data, $this->_rules->toArray());
@@ -142,10 +160,11 @@ class StoreController extends Controller
             'name' => $store,
             'user_id' => Auth::user()->id,
             'name_as_url' => strtolower(str_replace(' ', '', $store)),
-            'sub_domain' => $data['sub_domain'],
-            'domain' => $data['domain'],
+            // 'sub_domain' => $data['sub_domain'],
+            // 'domain' => 'com', //$data['domain'],
             'description' => $data['description'],
             'address' => $data['address'],
+            'phone_number' => $data['phone_number'],
             'store_type' => $data['store_type'],
             'status' => 'ON_APPROVAL',
         ]);        
@@ -155,7 +174,7 @@ class StoreController extends Controller
             $message = 'Failed to create store named (' . $store->name . ')';
             return redirect()->back()->withErrors([$message]);
         }
-        flash()->success('Store (' . $store->name . ') information will be published when approved by authority. Please contact Inzaana administrator for further assistance.');
+        flash()->success('Store (' . $store->name . ') information will be published when approved by the authority. Please contact Inzaana administrator for further assistance.');
         return redirect()->route('user::stores');
     }
 
@@ -165,8 +184,7 @@ class StoreController extends Controller
 
         if(count($keywords) < 3)
         {     
-            $errors['store'] = 'Failed to create store! Please check your shop name again.';
-            return response()->view('home', [ 'errors' => collect($errors) ]);       
+            return response()->view('home', [ 'errors' => collect(['Failed to create store! Please check your shop name again.']) ]);       
         }
 
         $storeNameUrl = $keywords[0];
@@ -177,8 +195,8 @@ class StoreController extends Controller
             'name' => $name,
             'user_id' => Auth::user()->id,
             'name_as_url' => $storeNameUrl,
-            'sub_domain' => $subdomain,
-            'domain' => $domain,
+            // 'sub_domain' => $subdomain,
+            // 'domain' => $domain,
             'store_type' => $business,
             'status' => 'ON_APPROVAL',
         ]);
@@ -215,10 +233,17 @@ class StoreController extends Controller
             return redirect()->back()->withErrors(['Your requested store is not found to approve!']);
         if(!$request->has('confirmation-select'))
             return redirect()->back()->withErrors(['Invalid request of approval confirmation!']);
-        if($request->input('confirmation-select') == 'approve')
-            $store->status = 'APPROVED';
-        if($request->input('confirmation-select') == 'reject')
-            $store->status = 'REJECTED';
+
+        switch($request->input('confirmation-select'))
+        {
+            case 'approve': 
+                $category->status = 'APPROVED';
+            case 'reject':
+                $category->status = 'REJECTED';
+            case 'remove':
+                $category->status = 'REMOVED';
+        }
+        
         if(!$store->save())
             return redirect()->back()->withErrors(['Failed to confirm store approval!']);
         flash()->success('Your have ' . strtolower($store->getStatus()) . ' store (' . $store->name . ').');
@@ -231,15 +256,17 @@ class StoreController extends Controller
         return redirect()->back();
     }
 
-
     public function suggest($input)
     {
+        $storeNames = Store::whereNameAsUrl(str_replace(' ', '', strtolower($input)))->get();
+        if(!$storeNames->first())
+            return response()->json([ 'store' => collect([]) ]);
         $storeNames = Store::suggest($input, 10);
         $suggestions = array();
         foreach ($storeNames as $name)
         {
-            $storeName = Store::whereNameAsUrl(str_replace(' ', '', strtolower($name)))->get();
-            if(!$storeName)
+            $storeNames = Store::whereNameAsUrl(str_replace(' ', '', strtolower($name)))->get();
+            if(!$storeNames->first())
                 $suggestions []= $name;
         } 
         $stores = empty($suggestions) ? $storeNames : $suggestions;

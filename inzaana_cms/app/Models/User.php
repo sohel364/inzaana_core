@@ -109,4 +109,53 @@ class User extends Model implements AuthenticatableContract,
     {        
         return $this->hasMany('Inzaana\Store');
     }
+
+    public static function decodePhoneNumber($phone_number)
+    {
+        $codes = [ '+088', '+465', '+695' ];
+        $keywords = preg_split("/[-]+/", $phone_number);
+        if(count($keywords) == 1)
+        {
+            return [ 0, $keywords[0]];
+        }
+        $phone_number = $keywords[1];
+        foreach($codes as $key => $value)
+        {
+            if($value == $keywords[0])
+            {
+                return [ $key, $phone_number ];
+            }
+        }
+        return [0, ''];
+    }
+
+    public static function decodeAddress($address)
+    {        
+        $keywords = preg_split("/<address>/", $address);
+        if(count($keywords) == 1)
+            return [ 'DEFAULT' => '', 'HOUSE' => '', 'STREET' => '', 'LANDMARK' => '', 'TOWN' => '', 'POSTCODE' => '', 'STATE' => '' ];
+        $addressDecoded = array();
+        $sections = [ 'DEFAULT', 'HOUSE', 'STREET', 'LANDMARK', 'TOWN', 'POSTCODE', 'STATE' ];
+        $index = 0;
+        foreach($keywords as $keyword)
+        {
+            $addressDecoded[$sections[$index]] = $keyword;
+            ++$index;
+        }
+        return $addressDecoded;
+    }
+
+    public static function encodeAddress(array $inputs)
+    {
+        $delimiter_address = "<address>";
+        $address = $inputs['mailing-address'] . $delimiter_address;
+        $address .= $inputs['address_flat_house_floor_building'] . $delimiter_address;
+        $address .= $inputs['address_colony_street_locality'] . $delimiter_address;
+        $address .= $inputs['address_landmark'] . $delimiter_address;
+        $address .= $inputs['address_town_city'] . $delimiter_address;
+        $address .= $inputs['postcode'] . $delimiter_address;
+        $address .= $inputs['state'];
+
+        return $address;
+    }
 }

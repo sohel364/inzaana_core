@@ -47,6 +47,6 @@
     <!--END CONTENT-->
 @endsection
 
-@section('footer-script')
+@section('footer-scripts')
 
 @endsection

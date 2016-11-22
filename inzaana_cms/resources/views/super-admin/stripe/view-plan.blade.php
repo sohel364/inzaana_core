@@ -167,7 +167,7 @@
 <div id="modal_container">{{--Modal load here--}}</div>
 @endsection
 
-@section('footer-script')
+@section('footer-scripts')
     {{--<script src="{{ URL::asset('super-admin-asset/stripe/super-admin-plan-view.js') }}"></script>--}}
     <script src="{{ URL::asset('super-admin-asset/stripe/super-admin-plan-view-new.js') }}"></script>
 @endsection

@@ -13,6 +13,8 @@ class CreateTemplatesTable extends Migration
     public function up()
     {
         //
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        
         Schema::create('templates', function (Blueprint $table) {
             $table->bigIncrements('id');
             // If you don't put [->unsigned()] below in user_id it will mismatches 
@@ -42,6 +44,7 @@ class CreateTemplatesTable extends Migration
     public function down()
     {
         //
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
         Schema::dropIfExists('templates');
     }
 }

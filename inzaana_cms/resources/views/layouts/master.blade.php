@@ -15,7 +15,9 @@
   <link href="{{ URL::asset('css/font-awesome-4.2.0/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
   <link href="{{ URL::asset('css3-animate-it-master/css/animations.css') }}" rel="stylesheet" type="text/css">
   <link href="{{ URL::asset('css/font-awesome-animation.css') }}" rel="stylesheet" type="text/css">
-  <link href="{{ URL::asset('css/select2.css') }}" rel="stylesheet" type="text/css">  
+  <link href="{{ URL::asset('css/select2.css') }}" rel="stylesheet" type="text/css">
+
+
   @yield('header-style')
   
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -161,7 +163,7 @@
                       <div class="input-group input-group-lg">
                       <p>
                       <label>
-                        <span class="glyphicon glyphicon-random"></span>
+                        <span class="fa fa-random"></span>
                         <label id="suggestions"></label>
                       </label>
                       </p>
@@ -174,7 +176,7 @@
 			  <!--End of Home-->
 	<div class="clearfix"></div>
      
-	<div class="container">
+	<div class="container grid2">
     @yield('content')
   </div>
 	 
@@ -284,7 +286,7 @@
         top: 200
       }
     });
-    $( "input[name='store_name']" ).keydown(function(event) {
+    $( "input[name='store_name']" ).focusout(function(event) {
 
         var prefix = 'Try :';
         // event.currentTarget.removeClass('hidden');
@@ -321,7 +323,34 @@
         return value == "none" || value == "undefined" || value == "";
     }
 
+  </script>
+  
+  <script type="text/javascript">
+        
+    $(document).ready(function () {
 
+        // new hotness
+        (function loopsiloop(){
+           setTimeout(function(){
+               $.ajax({
+                   url: '/who-am-i',
+                   success: function( response ){
+                       // do something with the response
+                      if(response)
+                      {
+                          loopsiloop(); // recurse
+                      } 
+                      else                     
+                        window.location.href = '/login';
+                   },
+                   error: function(){
+                      window.location.href = '/login';
+                   }
+               });
+           }, 5000);
+        })();
+
+    });
   </script>
 
 </body>

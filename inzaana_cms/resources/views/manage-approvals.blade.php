@@ -31,17 +31,19 @@
                 <div class="box-body table-responsive no-padding">
                   <table id="parent" class="table table-hover">
                     <tr>
-                      <!-- <th class="text-center hidden">ID</th> -->
+                      <th class="text-center">SL</th>
                       <th class="text-center">Approval Type</th>
                       <th class="text-center">Approval Title</th>
                       <th class="text-center">Submitted by</th>
                       <th class="text-center">Status</th>
                       <th class="text-center">Action</th>
                     </tr>
+                    <?php $index = 1; ?>
+
                     @foreach(collect($approvals) as $type => $approval)
                       @forelse($approval['data'] as $title => $id)
                       <tr>
-                        <!-- <th class="text-center hidden">ID</th> -->
+                        <th class="text-center"><?php echo $index++; ?></th>
                         <td class="text-center">{{ $approval['type'] }}</td>
                         <td class="text-center">{{ $title }}</td>
                         <td class="text-center">{{ 'Unknown' }}</td>

@@ -36,6 +36,7 @@
 	
      
     @include('flash')
+    <!-- @include('errors') -->
     @yield('content')
 	 
   <div class="clearfix"></div>

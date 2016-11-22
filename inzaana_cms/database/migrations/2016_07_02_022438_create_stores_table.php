@@ -18,10 +18,13 @@ class CreateStoresTable extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->string('name', 30);
             $table->string('name_as_url')->unique();
+            $table->string('phone_number');
             $table->string('address', 500);
-            $table->string('domain');
-            $table->string('sub_domain');
-            $table->string('store_type');
+            $table->string('domain')->default('com');
+            $table->string('sub_domain')->default('inzaana');
+            $table->enum('store_type', [
+                'NOT_SURE', 'ANIMAL_PET', 'ART_ENTERTAINMENT', 'HARDWARE_HOME_DEVELOPMENT', 'OTHERS'
+            ])->default('NOT_SURE');
             $table->string('description', 1000);
             $table->enum('status', [
                 'ON_APPROVAL', 'APPROVED', 'REJECTED', 'REMOVED', 'COMING_SOON', 'SOLD'

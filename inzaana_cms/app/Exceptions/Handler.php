@@ -91,12 +91,12 @@ class Handler extends ExceptionHandler
         //         return (new SymfonyDisplayer(config('app.debug')))->createResponse($e);
         //     }
         // }
-        if ($e instanceof ValidationException) {
-            $errorMessage = 'Please fill up all necessary fields.';
-            Log::critical('[Inzaana][' . $e->getMessage() . "] validation error.");
-            flash()->error($errorMessage);
-            return redirect()->back();
-        }
+        // if ($e instanceof ValidationException) {
+        //     $errorMessage = 'Please fill up all necessary fields.';
+        //     Log::critical('[Inzaana][' . $e->getMessage() . "] validation error.");
+        //     flash()->error($errorMessage);
+        //     return redirect()->back()->withErrors(collect(['Has Errors man.']));
+        // }
 
         if ($e instanceof TokenMismatchException) {
             $errorMessage = 'Something went wrong during form submission! Please try again';

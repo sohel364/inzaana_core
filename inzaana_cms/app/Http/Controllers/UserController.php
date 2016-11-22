@@ -95,12 +95,23 @@ class UserController extends Controller
         $site = session('site');
         $store = session('store');
         $business = session('business');
+        
+        // If a vendor is verified create an web mail address as an alternative email address
+        $user = Auth::user();
+        $user->email_alter =  preg_replace("/(\w+)@(\w+.)+/", "$1@inzaana.com", $user->email);
+        $user->save();
+
         return redirect()->route('user::stores.create-on-signup', compact('store', 'site', 'business'));
     }   
 
     // View to vendor admin dashboard
     public function redirectToDashboard()
     {
+        if(Auth::guest())
+        {
+            flash()->error('Your session is timed out. Please login and confirm again.');
+            return Auth::guest('/login');
+        }
         if(session()->has('site') || session()->has('store'))
         {
             session()->forget('site');
@@ -125,6 +136,11 @@ class UserController extends Controller
     // View plan for vendor
     public function redirectToVendorPlan()
     {
+        if(Auth::guest())
+        {
+            flash()->error('Your session is timed out. Please login and confirm again.');
+            return Auth::guest('/login');
+        }
         /*
          * View Plan for subscription
          * Using laravel cashier for plan retrieval
@@ -189,6 +205,11 @@ class UserController extends Controller
     // View plan for vendor
     public function redirectToDashboardAdmin()
     {
+        if(Auth::guest())
+        {
+            flash()->error('Your session is timed out. Please login and confirm again.');
+            return Auth::guest('/login');
+        }
         $user = User::find(Auth::user()->id);
         if($user)
         {
@@ -221,6 +242,11 @@ class UserController extends Controller
     // view to customer dashboard
     public function redirectToDashboardCustomer()
     {
+        if(Auth::guest())
+        {
+            flash()->error('Your session is timed out. Please login and confirm again.');
+            return Auth::guest('/login');
+        }
         $user = User::find(Auth::user()->id);
         if($user)
         {
@@ -314,9 +340,12 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('edit-profile')->withUser($user);
+        $phoneNumber = User::decodePhoneNumber($user->phone_number);
+        $address = User::decodeAddress($user->address);
+        return view('edit-profile') ->withUser($user)
+                                    ->withPhoneNumber($phoneNumber)
+                                    ->withAddress($address);
     }
-
 
     public function verifyProfileChanges(Request $request, AppMailer $mailer, User $user)
     {
@@ -341,6 +370,7 @@ class UserController extends Controller
 
     public function confirmProfileUpdate(Request $request, User $user, $name, $email, $phone, $password = null, $address = null)
     {
+        // return 'Phone:' . $phone . ' Address:' . $address;
         if($user->id != Auth::user()->id)
         {
             return redirect()->route('user::edit', [Auth::user()])->withErrors(['The information you are going to update to your profile is not yours!']);
@@ -369,15 +399,20 @@ class UserController extends Controller
         $rules = collect([
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
-            'phone_number' => 'required|digits:11',
+            'phone_number' => 'required|numeric|digits:11',
             'email_alter' => 'email',
         ]);
+
+        $address = User::encodeAddress($request->only(
+            'mailing-address', 'address_flat_house_floor_building', 'address_colony_street_locality', 'address_landmark', 'address_town_city', 'postcode', 'state'  
+        ));
 
         $inputs = collect([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'phone_number' => $request->input('phone_number'),
-            'address' => $request->input('mailing-address'),
+            'code' => $request->input('code'),
+            'address' => $address,
         ]);
 
         if($request->input('email') == $user->email)
@@ -412,7 +447,10 @@ class UserController extends Controller
         $user->address = $inputs['address'];
         if($inputs->has('email'))
             $user->email = $inputs['email'];
-        $user->phone_number = $inputs['phone_number'];
+        
+        $delimiter_phone_number = '-';
+        $user->phone_number = $inputs['code'] . $delimiter_phone_number . $inputs['phone_number'];
+        // no errors means empty array
         return [];
     }
 
@@ -427,7 +465,9 @@ class UserController extends Controller
         {
             $approvals = session('approvals');
             // dd($approvals);
-            return view('manage-approvals')->withUser(Auth::user())->withApprovals($approvals)->withTotalApprovals($this->totalApprovals($approvals, ['categories', 'products', 'stores' ]));          
+            return view('manage-approvals')->withUser(Auth::user())
+                                           ->withApprovals($approvals)
+                                           ->withTotalApprovals($this->totalApprovals($approvals, ['categories', 'products', 'stores' ]));          
         }
         return $this->approvals();
     }
