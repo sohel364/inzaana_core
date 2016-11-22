@@ -76,7 +76,7 @@
             </li>
             @endif
 
-            @if(true/*$user->getFeature($plan_name,'Products')*/)
+            @if(true)
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-cubes"></i> <span>Products <small class="label bg-green">{{ Auth::user()->products->count() }}</small></span> 
