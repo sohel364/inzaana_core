@@ -48,16 +48,22 @@
         });
     });
 
+$( "#discount" ).live( "click", function (e) {
+    var len = $( "#discount:checked" ).length;
+    if(len){
+        $('#discount_block').css('display','block');
+    }else{
+        $('#discount_block').css('display','none');
+    }
+});
 
-    /*$(document).on('submit','#plan_edit_form', function (e) {
+    $('#modal_submit').live('click', function (e) {
         e.preventDefault();
-        alert("here");
-        /!*var formData = $(this).serialize();
-        var id = $(this).attr('id');
+        var formData = $('#plan_update').serialize();
         var url = $(this).attr('action');
         $.ajax({
             async: true,
-            type: 'GET',
+            type: 'POST',
             data: formData,
             url: '/super-admin/edit-feature', // you need change it.
             processData: false, // high importance!
@@ -69,10 +75,11 @@
 
             },
             timeout: 10000
-        });*!/
+        });
 
 
-    });*/
+    });
+
 $('#plan_edit_form').submit(function (e) {
     e.preventDefault();
     alert("here");

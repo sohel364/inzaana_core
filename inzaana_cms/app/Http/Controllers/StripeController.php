@@ -427,6 +427,7 @@ class StripeController extends Controller
                 'plan_name' => $plan_info->name,
                 'price' => $plan_info->amount." ".$plan_info->currency_symbol[$plan_info->currency]."/".$plan_info->interval,
                 'trial' => $plan_info->trial_period_days,
+                'coupon_id' => $plan_info->coupon_id,
                 'renewal' => $plan_info->auto_renewal,
                 'description' => $plan_info->statement_descriptor,
                 'feature' => $feature_list
@@ -455,23 +456,28 @@ class StripeController extends Controller
     public function planFeatureUpdate(Request $request)
     {
         // Complete this code but test not yet.
-        /*$plan_id = $request->plan_id;
+        $plan_id = $request->plan_id;
         $plan_name = $request->plan_name;
         $trial = $request->trial;
         $description = $request->description;
         $renewal = isset($request->auto_renewal) ? 1 : 0;
         $feature = $request->feature_id;
-        $stripe_plan = StripePlan::where('plan_id','=',$plan_id)
-                        ->update([
+        $stripe_plan = StripePlan::where('plan_id','=',$plan_id)->first();
+        $stripe_plan->update([
                             'name' => $plan_name,
                             'trial_period_days'=>$trial,
                             'statement_descriptor'=>$description,
                             'auto_renewal'=>$renewal,
+                            "coupon_id" => ($request->stripe_coupon != NULL) ? $request->stripe_coupon : NULL,
                         ]);
 
-        $stripe_plan->planFeature()->attach($feature);*/
+        $stripe_plan->planFeature()->detach();
+        $stripe_plan->planFeature()->attach($feature);
 
         // View generate
+        return $this->viewPlan($request);
+        /*$sort = 'name';
+        $order = 'ASC';
         $allPlan = StripePlan::with('planFeature')->get();
         $plan_collect = [];
         foreach($allPlan as $plan)
@@ -485,10 +491,10 @@ class StripeController extends Controller
         }
         $sln = 1;
         $allPlan = collect($plan_collect);
-        $allPlan = compact('allPlan', 'sln');
+        $allPlan = compact('allPlan', 'sln','order','sort');
 
-        return response()->view('includes.plan-dom',$allPlan)
-            ->header('Content-Type', 'html');
+        return response()->view('super-admin.includes.plan-dom',$allPlan)
+            ->header('Content-Type', 'html');*/
 
     }
     /*

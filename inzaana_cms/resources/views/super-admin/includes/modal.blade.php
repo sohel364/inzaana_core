@@ -8,7 +8,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <form method="POST" class="form-inline" id="plan_edit_form">
+                        <form method="POST" class="form-inline test" id="plan_update" >
                             {{ csrf_field() }}
                             <input type="hidden" name="plan_id" value="{{ $plan_data['id'] }}">
                             <span class="plan-edit-errors text-danger"></span>
@@ -29,38 +29,43 @@
                                     <span>Trial Period:</span>
                                 </label>
                                 <input type="text" size="4" class="form-control" name="trial" value="{{ $plan_data['trial'] }}">
-                            </div>
+                            </div><br>
                             <div class="form-group">
                                 <label>
                                     <span>Description:</span>
                                 </label>
                                 <input type="text" class="form-control" name="description" value="{{ $plan_data['description'] }}">
-                            </div>
+                            </div><br>
 
                             <div class="form-group">
                                 <div class="checkbox">
-                                    <label><input type="checkbox" name="discount" id="discount" value="1">Apply Discount</label>
+                                    <label><input type="checkbox" name="discount" id="discount" value="1" {{ isset($plan_data['coupon_id']) ? "checked":'' }}>Apply Discount</label>
                                 </div>
-                            </div>
+                            </div><br>
 
-                            <div class="discount_block" id="discount_block" style="display: none">
+                            <div class="discount_block" id="discount_block" style="display: {{ isset($plan_data['coupon_id']) ? "block":"none" }}">
                                 <div class="form-group">
                                     <label for="">Coupon Name: </label>
                                     <select name="stripe_coupon" id="coupon">
+                                        <option value="" selected>---select---</option>
                                         @foreach($coupons as $coupon)
-                                            <option value="{{ $coupon['coupon_id'] }}">{{ $coupon['coupon_name'] }}</option>
+                                            @if($plan_data['coupon_id'] == $coupon['coupon_id'])
+                                                <option value="{{ $coupon['coupon_id'] }}" selected>{{ $coupon['coupon_name'] }}</option>
+                                            @else
+                                                <option value="{{ $coupon['coupon_id'] }}">{{ $coupon['coupon_name'] }}</option>
+                                            @endif
                                         @endforeach
 
                                     </select>
                                 </div>
-                            </div>
+                            </div><br>
 
                             <div class="form-group">
                                 <label for="autorenew">Auto-renewal: </label>
                                 <div class="checkbox">
                                     <label><input type="checkbox" name="auto_renewal" value="1" {{ $plan_data['renewal'] ? "checked":"" }}>Auto Renew</label>
                                 </div>
-                            </div>
+                            </div><br>
                             <div class="form-group">
                                 <label for="Features">Select features for the plan : </label>
                                 <select name="feature_id[]" id="" multiple>
