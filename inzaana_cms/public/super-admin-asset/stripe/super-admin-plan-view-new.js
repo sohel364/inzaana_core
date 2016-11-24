@@ -48,14 +48,14 @@
         });
     });
 
-$( "#discount" ).live( "click", function (e) {
-    var len = $( "#discount:checked" ).length;
-    if(len){
-        $('#discount_block').css('display','block');
-    }else{
-        $('#discount_block').css('display','none');
-    }
-});
+    $( "#discount" ).live( "click", function (e) {
+        var len = $( "#discount:checked" ).length;
+        if(len){
+            $('#discount_block').css('display','block');
+        }else{
+            $('#discount_block').css('display','none');
+        }
+    });
 
     $('#modal_submit').live('click', function (e) {
         e.preventDefault();

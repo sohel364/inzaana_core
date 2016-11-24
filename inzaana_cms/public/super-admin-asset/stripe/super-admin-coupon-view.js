@@ -48,31 +48,28 @@ $(document).on('submit','.edit', function (e) {
     });
 });
 
+$('#modal_submit').live('click', function (e) {
+    e.preventDefault();
+    var formData = $('#coupon_update').serialize();
+    var url = $(this).attr('action');
+    $.ajax({
+        async: true,
+        type: 'POST',
+        data: formData,
+        url: '/super-admin/edit-coupon', // you need change it.
+        processData: false, // high importance!
+        success: function (data) {
+            $('#myModal').modal('hide');
+            $('#coupon-area').html(data); // refresh dom
+        },
+        error: function(data){
 
-/*$(document).on('submit','#plan_edit_form', function (e) {
- e.preventDefault();
- alert("here");
- /!*var formData = $(this).serialize();
- var id = $(this).attr('id');
- var url = $(this).attr('action');
- $.ajax({
- async: true,
- type: 'GET',
- data: formData,
- url: '/super-admin/edit-feature', // you need change it.
- processData: false, // high importance!
- success: function (data) {
- $('#myModal').modal('hide');
- $('#plan-area').html(data); // refresh dom
- },
- error: function(data){
-
- },
- timeout: 10000
- });*!/
+        },
+        timeout: 10000
+    });
 
 
- });*/
+});
 
 $(document).on('submit','.delete', function (e) {
     e.preventDefault();

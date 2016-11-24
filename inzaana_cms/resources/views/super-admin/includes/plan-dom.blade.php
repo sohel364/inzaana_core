@@ -84,6 +84,8 @@
 
                         <form action="view-plan/ajax/update" method="post" name="action" id="{{ $plan['plan_id'] }}" class="form-horizontal change_status">
                             {{ csrf_field() }}
+                            <input type="hidden" name="sort" value="{{ $sort }}">
+                            <input type="hidden" name="order" value="{{ $order }}">
                             <input type="hidden" name="plan" id="plan_id" value="{{ $plan['plan_id'] }}{{--{{ Crypt::encrypt($plan['plan_id']) }}--}}">
                             <select name="confirm_action" id="select_action" onchange="setFormActionOnChange(this)">
                                 <option value="1">Active</option>

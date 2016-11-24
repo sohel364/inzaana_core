@@ -11,6 +11,8 @@
                         <form method="POST" class="form-inline test" id="plan_update" >
                             {{ csrf_field() }}
                             <input type="hidden" name="plan_id" value="{{ $plan_data['id'] }}">
+                            <input type="hidden" name="order_edit" value="{{ $plan_data['order'] }}">
+                            <input type="hidden" name="sort_edit" value="{{ $plan_data['sort'] }}">
                             <span class="plan-edit-errors text-danger"></span>
                             <div class="form-group" style="display: block">
                                 <label>
