@@ -114,6 +114,19 @@ $( "#discount" ).on( "click", function (e) {
     }
 });
 
+$(document).on('change','#coupon',function(e){
+    var coupon = $('#coupon').val();
+    var currency = $('option:selected','#coupon').data('currency');
+    var plan_currency = $('#currency').val();
+    if(currency != 'select')
+    {
+        if(currency != plan_currency){
+            $('#coupon').val(null);
+            alert("Plan and Coupon currency mismatch please correct it.");
+
+        }
+    }
+});
 
 
 
