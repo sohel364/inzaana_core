@@ -141,7 +141,7 @@
                                         <option value="1">Active</option>
                                         <option value="0">Inactive</option>
                                         <option value="{{ $plan['plan_id'] }}">Edit</option>
-                                        <option value="Delete" >Delete</option>
+                                        <option value="Delete" style="display:none" >Delete</option>
                                     </select>
                                     <input type="submit" class="btn btn-info btn-sm btn-flat" id="submit-{{ $plan['plan_id'] }}" data-toggle="modal" data-target="" value="Confirm">
                                 </form>
