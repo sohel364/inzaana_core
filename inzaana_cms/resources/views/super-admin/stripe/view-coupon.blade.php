@@ -113,13 +113,6 @@
                                             </select>
                                             <input type="submit" class="btn btn-info btn-sm btn-flat" id="submit-{{ $coupon['coupon_id'] }}" data-toggle="modal" data-target="" value="Confirm">
                                         </form>
-
-                                        {{-- <form method="POST" action="{{ action('StripeController@deletePlan') }}">
-                                             {{ csrf_field() }}
-                                             <input type="hidden" name="plan" value="{{ Crypt::encrypt($plan['plan_id']) }}">
-                                             <input type="submit" class="btn btn-danger btn-xs" value="Delete">
-                                         </form>--}}
-
                                     </td>
                                 </tr>
                             @endforeach

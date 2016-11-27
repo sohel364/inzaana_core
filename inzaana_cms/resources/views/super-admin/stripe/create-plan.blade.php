@@ -93,8 +93,9 @@
                             <div class="form-group">
                                 <label for="">Coupon Name: </label>
                                 <select name="stripe_coupon" id="coupon">
+                                    <option value="" data-currency="select">---select---</option>
                                     @foreach($coupons as $coupon)
-                                        <option value="{{ $coupon['coupon_id'] }}">{{ $coupon['coupon_name'] }}</option>
+                                        <option value="{{ $coupon['coupon_id'] }}" data-currency="{{ isset($coupon['currency'])?$coupon['currency']: 'select' }}">{{ $coupon['coupon_name'] }}</option>
                                     @endforeach
 
                                 </select>
@@ -128,6 +129,7 @@
     <!--END CONTENT-->
 @endsection
 @section('footer-scripts')
+    <script src="{{ URL::asset('js/numeric.js') }}"></script>
     <script src="{{ URL::asset('js/numeric.js') }}"></script>
     <script src="{{ URL::asset('super-admin-asset/stripe/plan-create.js') }}"></script>
 @endsection

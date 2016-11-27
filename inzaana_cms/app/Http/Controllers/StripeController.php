@@ -28,8 +28,7 @@ use \Stripe\Subscription;
 
 class StripeController extends Controller
 {
-    public static $sort = 'name';
-    public static $order = 'ASC';
+
     public function payment(Request $request)
     {
         //$user = User::find(1);
@@ -100,8 +99,8 @@ class StripeController extends Controller
     public function viewCoupon(Request $request)
     {
         $loadView = 'super-admin.stripe.view-coupon';
-        $sort = StripeController::$sort;
-        $order = StripeController::$order;
+        $sort = 'name';
+        $order = 'ASC';
         if($request->ajax())
         {
             if(Input::get('sort') != null)
@@ -154,6 +153,40 @@ class StripeController extends Controller
         $id = $all_data['coupon'];
         $coupon = StripeCoupon::where('coupon_id','=',$id)->update(['valid' => $all_data['confirm_action']]);
         return Response::json(['coupon_id'=>$id,'confirm' => $all_data['confirm_action']]);
+    }
+
+    public function editCouponView(Request $request)
+    {
+        $coupon = StripeCoupon::where('coupon_id','=',$request->coupon)->first();
+        $coupon_data = [];
+        if($coupon)
+        {
+            $coupon_data['coupon_id'] = $coupon->coupon_id;
+            $coupon_data['coupon_name'] = $coupon->coupon_name;
+            if($coupon->percent_off != null)
+            {
+                $coupon_data['discount'] = $coupon->percent_off."%";
+            }else{
+                $coupon_data['discount'] = $coupon->amount_off."/".$coupon->currency;
+            }
+            $coupon_data['max_redemptions'] = ($coupon->max_redemptions > 1)? $coupon->max_redemptions." Peoples": $coupon->max_redemptions." People";
+            $redeem_by = Carbon::parse($coupon->redeem_by);
+            $coupon_data['redeem_by'] = $redeem_by->toFormattedDateString();
+            $coupon_data['order'] = $request->order;
+            $coupon_data['sort'] = $request->sort;
+        }
+        $coupon_data = collect($coupon_data);
+        return response()->view('super-admin.includes.coupon-modal', compact('coupon_data'))
+            ->header('Content-Type', 'html');
+    }
+
+    public function couponUpdate(Request $request)
+    {
+        $coupon = StripeCoupon::where('coupon_id','=',$request->coupon_id)->first();
+        $coupon->update([
+            'coupon_name' => $request->coupon_name,
+        ]);
+        return $this->viewCoupon($request);
     }
 
     public function deleteCoupon(Request $coupon)
@@ -325,14 +358,14 @@ class StripeController extends Controller
     public function viewPlan(Request $request)
     {
         //$allPlan = StripePlan::all();
-
-        $sort = 'name';
-        $order = 'ASC';
+        //dd($request->all());
+        $sort = isset($request->sort_edit)? $request->sort_edit :'name';
+        $order = isset($request->order_edit)? $request->order_edit :'ASC';
         $loadView = 'super-admin.stripe.view-plan';
         if($request->ajax())
         {
-            $sort = Input::get('sort');
-            $order = (Input::get('order')=='DESC')? "ASC" : "DESC";
+            $sort = isset($request->sort_edit)? $request->sort_edit : Input::get('sort');
+            $order = isset($request->order_edit)? $request->order_edit : ((Input::get('order')=='DESC')? "ASC" : "DESC");
             $loadView = 'super-admin.includes.plan-dom';
         }
         switch($sort){
@@ -408,9 +441,9 @@ class StripeController extends Controller
     /*
      * View Edit Plan Feature Interface
      * */
-    public function editPlanFeatureView($plan_id)
+    public function editPlanFeatureView(Request $request)
     {
-        $plan_info = StripePlan::with('planFeature')->where('plan_id','=',$plan_id)->first();
+        $plan_info = StripePlan::with('planFeature')->where('plan_id','=',$request->plan)->first();
         $plan_data = [];
         if($plan_info)
         {
@@ -427,9 +460,12 @@ class StripeController extends Controller
                 'plan_name' => $plan_info->name,
                 'price' => $plan_info->amount." ".$plan_info->currency_symbol[$plan_info->currency]."/".$plan_info->interval,
                 'trial' => $plan_info->trial_period_days,
+                'coupon_id' => $plan_info->coupon_id,
                 'renewal' => $plan_info->auto_renewal,
                 'description' => $plan_info->statement_descriptor,
-                'feature' => $feature_list
+                'feature' => $feature_list,
+                'sort' => $request->sort,
+                'order' => $request->order,
             ];
         }
         $all_feature = StripePlanFeature::all();
@@ -455,23 +491,28 @@ class StripeController extends Controller
     public function planFeatureUpdate(Request $request)
     {
         // Complete this code but test not yet.
-        /*$plan_id = $request->plan_id;
+        $plan_id = $request->plan_id;
         $plan_name = $request->plan_name;
         $trial = $request->trial;
         $description = $request->description;
         $renewal = isset($request->auto_renewal) ? 1 : 0;
         $feature = $request->feature_id;
-        $stripe_plan = StripePlan::where('plan_id','=',$plan_id)
-                        ->update([
+        $stripe_plan = StripePlan::where('plan_id','=',$plan_id)->first();
+        $stripe_plan->update([
                             'name' => $plan_name,
                             'trial_period_days'=>$trial,
                             'statement_descriptor'=>$description,
                             'auto_renewal'=>$renewal,
+                            "coupon_id" => ($request->stripe_coupon != NULL) ? $request->stripe_coupon : NULL,
                         ]);
 
-        $stripe_plan->planFeature()->attach($feature);*/
+        $stripe_plan->planFeature()->detach();
+        $stripe_plan->planFeature()->attach($feature);
 
         // View generate
+        return $this->viewPlan($request);
+        /*$sort = 'name';
+        $order = 'ASC';
         $allPlan = StripePlan::with('planFeature')->get();
         $plan_collect = [];
         foreach($allPlan as $plan)
@@ -485,10 +526,10 @@ class StripeController extends Controller
         }
         $sln = 1;
         $allPlan = collect($plan_collect);
-        $allPlan = compact('allPlan', 'sln');
+        $allPlan = compact('allPlan', 'sln','order','sort');
 
-        return response()->view('includes.plan-dom',$allPlan)
-            ->header('Content-Type', 'html');
+        return response()->view('super-admin.includes.plan-dom',$allPlan)
+            ->header('Content-Type', 'html');*/
 
     }
     /*

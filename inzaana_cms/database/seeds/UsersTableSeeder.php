@@ -72,7 +72,7 @@ class UsersTableSeeder extends Seeder
         /*
          * Add plan in local database
          * */
-        $stripe_plan = Inzaana\StripePlan::create([
+        /*$stripe_plan = Inzaana\StripePlan::create([
             "plan_id"               => 'VuvmBePBCq3L',
             "name"                  => 'Free',
             "amount"                => '0.00',
@@ -82,7 +82,7 @@ class UsersTableSeeder extends Seeder
             "trial_period_days"     => '12',
             "statement_descriptor"  => 'Free Trial Package.',
             "created"               => date('Y-m-d H:i:s')
-        ]);
+        ]);*/
 
         /*
          * Seed Customer
@@ -113,7 +113,7 @@ class UsersTableSeeder extends Seeder
            );
         }
 
-        $stripe_plan->planFeature()->attach([2,4,5]);
+        //$stripe_plan->planFeature()->attach([2,4,5]);
 
 
     }

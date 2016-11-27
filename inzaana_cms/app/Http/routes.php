@@ -43,6 +43,9 @@ Route::group(['middleware' => 'web'], function () {
         Route::post('/super-admin/delete-coupon', [ 'uses' => 'StripeController@deleteCoupon', 'as'=> 'deleteCoupon']);
         Route::post('/super-admin/view-coupon/ajax/update', [ 'uses' => 'StripeController@updateCouponStatus', 'as'=> 'updateCouponStatus']);
 
+        Route::get('/super-admin/edit-coupon/{id}', [ 'uses' => 'StripeController@editCouponView', 'as'=> 'editCoupon']);
+        Route::post('/super-admin/edit-coupon', [ 'uses' => 'StripeController@couponUpdate', 'as'=> 'couponUpdate']);
+
         Route::get('/super-admin/create-plan', [ 'uses' => 'StripeController@planForm', 'as'=> 'planForm']);
         Route::post('/super-admin/create-plan', [ 'uses' => 'StripeController@createPlan', 'as'=> 'create.plan']);
         Route::get('/super-admin/view-plan', [ 'uses' => 'StripeController@viewPlan', 'as'=> 'viewPlan']);

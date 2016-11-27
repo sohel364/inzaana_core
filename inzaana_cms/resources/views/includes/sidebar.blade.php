@@ -52,6 +52,7 @@
                     </ul>
       			</li>
 
+            @if($user->getFeature($plan_name,'Store'))
             <li class="treeview">
                     <a href="#">
                       <i class="fa fa-globe"></i> <span>Store <small class="label bg-green">{{ Auth::user()->stores()->count() }}</small></span> 
@@ -62,9 +63,36 @@
                       <li><a href="{{ route('user::stores') }}"><i class="fa fa-plus"></i> Add New Store </a></li>
                     </ul>
             </li>
+            @endif
+
+            @if($user->getFeature($plan_name,'Categories'))
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-list"></i>
+                <span>Categories <small class="label bg-green">{{ Inzaana\Category::count() }}</small></span> 
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="{{ route('user::categories') }}"><i class="fa fa-plus"></i> Add New Category</a></li>
+              </ul>
+            </li>
+            @endif
+
+            @if($user->getFeature($plan_name,'Products'))
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-cubes"></i> <span>Products <small class="label bg-green">{{ Auth::user()->products->count() }}</small></span> 
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+                <ul class="treeview-menu">
+                <li><a href="{{ route('user::products') }}"><i class="fa  fa-plus"></i> Add New Product</a></li>
+              </ul>
+            </li>
+            @endif
 
       <!-- $user->subscribed('main') -->
 
+            @if(false/*$user->getFeature($plan_name,'Categories')*/)
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-list"></i>
@@ -76,8 +104,9 @@
                 <li><a href="{{ Auth::user()->subscribed('main') ? route('user::categories') : '#' }}"><i class="fa fa-list-ol"></i> List All Categories</a></li>
               </ul>
             </li>
+              @endif
 
-            @if($user->getFeature($plan_name,'Products'))
+              @if(false/*$user->getFeature($plan_name,'Products')*/)
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-cubes"></i> <span>Products <small class="label bg-green">{{ Auth::user()->products->count() }}</small></span> 

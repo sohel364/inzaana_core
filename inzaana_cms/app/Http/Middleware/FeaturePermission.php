@@ -33,10 +33,10 @@ class FeaturePermission
      */
     public function handle($request, Closure $next)
     {
-        if($this->auth->user()->featureAccessPermission($request->path()))
+        if($this->auth->user() != null && $this->auth->user()->featureAccessPermission($request->path()))
         {
             return $next($request);
-        }elseif($this->auth->user()->id == 1){ // This line perform super admin request bypass
+        }elseif($this->auth->user() != null && $this->auth->user()->id == 1){ // This line perform super admin request bypass
             return $next($request);
         }else{
             abort(403);

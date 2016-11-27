@@ -35,10 +35,10 @@ class VerifySubscription
      */
     public function handle($request, Closure $next /*@param $stripe*/)
     {
-        if($this->auth->user()->userAccessPermission())
+        if($this->auth->user() != null && $this->auth->user()->userAccessPermission())
         {
             return $next($request);
-        }elseif($this->auth->user()->id == 1){ // This line perform super admin request bypass
+        }elseif($this->auth->user() != null && $this->auth->user()->id == 1){ // This line perform super admin request bypass
             return $next($request);
         }else{
             return redirect('/subscribe');

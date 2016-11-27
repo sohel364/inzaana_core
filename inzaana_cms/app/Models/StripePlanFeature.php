@@ -14,4 +14,10 @@ class StripePlanFeature extends Model
     //public $primaryKey = false;
     public $timestamps = false;
     protected $primaryKey = "feature_id";
+
+   /* public function plan() wrong code
+    {
+        return $this->hasMany('Inzaana\StripePlan','stripe_plan_has_features','plan_id','feature_id');
+        //->withPivot('position_id','create_at');
+    }*/
 }
