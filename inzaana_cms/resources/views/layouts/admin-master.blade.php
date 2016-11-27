@@ -272,31 +272,14 @@
 
         @yield('footer-scripts')
 
-
+        <script src="{{ asset('/browser-events/browser-event-navigation.js') }}" type="text/javascript"></script>
         <script type="text/javascript">
               
-          $(document).ready(function () {
+          $(auth).ready(function () {
 
-              // new hotness
-              (function loopsiloop(){
-                 setTimeout(function(){
-                     $.ajax({
-                         url: '/who-am-i',
-                         success: function( response ){
-                             // do something with the response
-                            if(response)
-                            {
-                                loopsiloop(); // recurse
-                            } 
-                            else                     
-                              window.location.href = '/login';
-                         },
-                         error: function(){
-                            window.location.href = '/login';
-                         }
-                     });
-                 }, 5000);
-              })();
+              auth.logout = function() {
+                window.location.href = '/logout';
+              }
 
           });
         </script>

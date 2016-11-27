@@ -5,6 +5,7 @@
           event.preventDefault();
       }
   }
+  
   function onReadyEditProfileValidation() {
 
       // validate signup form on keyup and submit
@@ -29,8 +30,8 @@
               digits: true
             },
             postcode: {
-              minlength: 4,
-              maxlength: 4,
+              minlength: 6,
+              maxlength: 6,
               digits: true
             }
           },
@@ -52,8 +53,8 @@
             },
             postcode: {
               digits: "Please enter digits",
-              minlength: "Your post code must be exact 4 digits long",
-              maxlength: "Your post code must be exact 4 digits long"
+              minlength: "Your post code must be exact 6 digits long",
+              maxlength: "Your post code must be exact 6 digits long"
             }
           }
       });

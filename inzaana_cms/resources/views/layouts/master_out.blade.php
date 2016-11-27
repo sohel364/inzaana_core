@@ -52,7 +52,7 @@
   <script src="{{ URL::asset('js/scroll.js') }}"></script>
   <script src="{{ URL::asset('js/smothScrolling.js') }}"></script>
 
-  @yield('footer-script')
+  @yield('footer-scripts')
 
   <script>
     $('#nav').affix({
