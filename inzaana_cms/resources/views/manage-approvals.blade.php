@@ -18,7 +18,7 @@
             <div class="col-xs-12">
               <div class="box">
                 <div class="box-header">
-                  <div class="pull-right exportxls"><a href="#">Export to XLS</a></div>
+                  <div class="pull-right exportxls"><a href="#">Export to XLS</a> </div>
                   <h3 class="box-title">Manage Vendor Approvals </h3>
 
                   <div class="box-tools">
