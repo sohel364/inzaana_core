@@ -175,7 +175,8 @@ class AuthController extends Controller
         $business = $request->query('business');
         $subdomain = strtolower($request->query('subdomain'));
         $domain = $request->query('domain');
-        $site = strtolower(str_replace(' ', '', $store)) . '.' . $subdomain . '.' . $domain;
+        $site = strtolower(str_replace('.', '', str_replace(' ', '', $store))); // trimes spaces and removes dot (.) characters
+        $site .= '.' . $subdomain . '.' . $domain;
 
         $inputsWithTableNames = [
             'name' => $store,

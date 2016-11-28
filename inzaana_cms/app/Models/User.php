@@ -158,4 +158,30 @@ class User extends Model implements AuthenticatableContract,
 
         return $address;
     }
+
+    public static function postcodes($country)
+    {
+        $parser = \KzykHys\CsvParser\CsvParser::fromFile(str_replace('\\', '\\\\', storage_path('app/csv/india_contacts_db.csv')));
+        $postcodes = array();
+        if($country == 'INDIA')
+        {
+            foreach ($parser as $record) {
+                $postcodes []= $record[3];
+            }
+        }
+        return collect($postcodes)->unique()->forget(0);
+    }
+
+    public static function states($country)
+    {
+        $parser = \KzykHys\CsvParser\CsvParser::fromFile(str_replace('\\', '\\\\', storage_path('app/csv/india_contacts_db.csv')));
+        $states = array();
+        if($country == 'INDIA')
+        {
+            foreach ($parser as $record) {
+                $states []= $record[0];
+            }
+        }
+        return collect($states)->unique()->forget(0);
+    }
 }

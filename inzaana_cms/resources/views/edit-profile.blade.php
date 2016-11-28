@@ -31,6 +31,7 @@
   <script src="/jquery-validation/lib/jquery.js"></script>
   <script src="/jquery-validation/dist/jquery.validate.js"></script>
   <script src="/form-validation/edit-profile-validation.js"></script>
+  <script src="/data-requests/postcodes-request.js"></script>
 
   <script type="text/javascript">
   // //just for the demos, avoids form submit
@@ -42,6 +43,20 @@
   $().ready(onReadyEditProfileValidation);
   $('#phone_number').keypress(validateNumber);
   $('#postcode').keypress(validateNumber);
+
+  ElementDataManager.load('INDIA', function(context, data) {
+      var options = '';
+      $.each(data.value, function( index, value ) {
+          options += '<option value="' + index + '">' + value + '</option>';
+      });
+      // if(context == 'postcodes')
+      //   $('#state').html(options);
+      if(data.context == context[1])
+      {
+          $('#state').html(options);
+          hideSavingIcon();
+      }
+  });
 
   </script>
 
@@ -150,7 +165,7 @@
                     <br/>
 					
 					         <label for="state">State</label>
-                    <select name="state" class="form-control" placeholder="Select State">
+                    <select id="state" name="state" class="form-control" placeholder="Select State">
                         <option value="Andhra Pradesh" {{ $address['STATE'] == 'Andhra Pradesh' ? ' selected' : '' }}>Andhra Pradesh</option>
                         <option value="Assam" {{ $address['STATE'] == 'Assam' ? ' selected' : '' }}>Assam</option>
                         <option value="Bihar" {{ $address['STATE'] == 'Bihar' ? ' selected' : '' }}>Bihar</option>
