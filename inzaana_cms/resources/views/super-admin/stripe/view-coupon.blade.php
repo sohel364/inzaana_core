@@ -20,6 +20,8 @@
         </ol>
         <div class="clearfix">
         </div>
+        <div class="pull-right"><a href="#">Export to XLS</a></div>
+        <div class="clearfix"></div>
     </div>
     <!--END TITLE & BREADCRUMB PAGE-->
     <!--BEGIN CONTENT-->

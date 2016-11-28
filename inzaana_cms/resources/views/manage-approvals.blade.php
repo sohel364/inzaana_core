@@ -18,7 +18,9 @@
             <div class="col-xs-12">
               <div class="box">
                 <div class="box-header">
+                  <div class="pull-right exportxls"><a href="#">Export to XLS</a></div>
                   <h3 class="box-title">Manage Vendor Approvals </h3>
+
                   <div class="box-tools">
                     <div class="input-group" style="width: 150px;">
                       <input type="text" name="table_search" class="form-control input-sm pull-right" placeholder="Search">

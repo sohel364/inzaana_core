@@ -25,8 +25,11 @@
             <li><i class="fa fa-home"></i>&nbsp;<a href="index.html">Home</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
             <li class="active">Dashboard</li>
         </ol>
+
         <div class="clearfix">
         </div>
+        <div class="pull-right"><a href="#">Export to XLS</a></div>
+        <div class="clearfix"></div>
     </div>
     <!--END TITLE & BREADCRUMB PAGE-->
     <!--BEGIN CONTENT-->
