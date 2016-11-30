@@ -2,7 +2,7 @@
  * Shows loading icons while saving operation is ongoing
  */
 function showSavingIcon(itemCount) {
-    var sweetAlert = {
+    var sweetAlertWithTimout = {
         title: "Please wait!",
         text: 'Loading form information ...',
         timer: 1000 * itemCount,
@@ -11,7 +11,15 @@ function showSavingIcon(itemCount) {
         type: 'info',
         showConfirmButton: false
     };
-    swal( sweetAlert );
+    var sweetAlert = {
+        title: "Please wait!",
+        text: 'Loading form information ...',
+        imageUrl: '/dist/img/loading40.gif',
+        imageSize: '220x20',
+        type: 'info',
+        showConfirmButton: false
+    };
+    swal( itemCount > 0 ? sweetAlertWithTimout : sweetAlert );
 }
 /*
 /*
@@ -26,7 +34,7 @@ function isEmpty(value) {
 }
 
 var ElementDataManager = {
-    timeout: 100,
+    timeout: 10,
     element: 'form',
     context: ['postcodes', 'states'],
     data: {},
@@ -39,6 +47,9 @@ var ElementDataManager = {
             ElementDataManager.data = data;
 
         ElementDataManager.ready(ElementDataManager.context, ElementDataManager.data);
+        
+        if(ElementDataManager.isCompleted())
+            hideSavingIcon();
     },
     onError: function(xhr, textStatus) {
         ElementDataManager.data = { "id": 0, "value" : "-- Select --" };
@@ -58,7 +69,7 @@ var ElementDataManager = {
             statusCode: {
                 404: function() {
                     ElementDataManager.data = { "id": 0, "value" : "-- Select --" };
-                    ElementDataManager.ready(this.context, this.data);
+                    ElementDataManager.ready(ElementDataManager.context, ElementDataManager.data);
                 }
             }
         });
@@ -66,6 +77,7 @@ var ElementDataManager = {
         req.done(this.onSuccess).fail(this.onError);
     },
     load: function(data, onReady) {
+
         $(this.element).ready(function() {
             ElementDataManager.ready = onReady;
 
@@ -74,5 +86,6 @@ var ElementDataManager = {
                 ElementDataManager.request(value, data);
             });
         });
-    }
+    },
+    isCompleted: function() { return false; }
 }

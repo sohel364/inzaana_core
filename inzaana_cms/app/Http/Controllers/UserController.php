@@ -532,7 +532,7 @@ class UserController extends Controller
 
     public function getPostCodes($country)
     {
-        return response()->json([ 'context' => 'postcodes', 'value' => User::postcodes($country) ]); //User::postcodes($country)
+        return response()->json([ 'context' => 'postcodes', 'value' => User::postcodes($country, 30) ]);
     }
 
     public function getStates($country)

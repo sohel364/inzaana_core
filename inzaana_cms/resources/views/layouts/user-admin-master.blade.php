@@ -15,7 +15,10 @@
   <link type="text/css" rel="stylesheet" href="{{ asset('user_admin_dashboard_asset/styles/style-responsive.css') }}">
   <link type="text/css" rel="stylesheet" href="{{ asset('user_admin_dashboard_asset/styles/sidebar.css') }}">
   <link type="text/css" rel="stylesheet" href="{{ asset('user_admin_dashboard_asset/css3-animate-it-master/css/animations.css') }}">
-     @yield('header-style')
+  <!-- For sweet message box alert -->
+  <link href="{{ asset('dist/sweetalert.css') }}" rel="stylesheet" type="text/css">
+  
+  @yield('header-style')
 </head>
 
 <body>
@@ -172,6 +175,8 @@
   <script src="{{ URL::asset('user_admin_dashboard_asset/css3-animate-it-master/js/css3-animate-it.js') }}"></script>
   <!--CORE JAVASCRIPT-->
   <script src="{{ URL::asset('super-admin-asset/config.js') }}"></script>
+  <!-- For sweet message box alert -->
+  <script type="text/javascript" src="{{ asset('dist/sweetalert.min.js') }}"></script>
   
   @yield('footer-scripts')
 

@@ -42,20 +42,28 @@
   // });
   $().ready(onReadyEditProfileValidation);
   $('#phone_number').keypress(validateNumber);
-  $('#postcode').keypress(validateNumber);
 
+  ElementDataManager.timeout = 0;
+  ElementDataManager.isCompleted = function() { return $('select#state option').length > 0 && $('select#postcode option').length > 0; };
   ElementDataManager.load('INDIA', function(context, data) {
       var options = '';
-      $.each(data.value, function( index, value ) {
-          options += '<option value="' + index + '">' + value + '</option>';
-      });
-      // if(context == 'postcodes')
-      //   $('#state').html(options);
+      var id = '';
+      var addressKey = '';
       if(data.context == context[1])
       {
-          $('#state').html(options);
-          hideSavingIcon();
+          addressKey = '$address[\'STATE\']';
+          id = '#state';
       }
+      else if(data.context == context[0])
+      {
+          addressKey = '$address[\'POSTCODE\']';
+          id = '#postcode';
+      }
+      $.each(data.value, function( index, value ) {
+          options += "<option value='" + index + "' {{ " + addressKey + " == '" + index + "' ? ' selected' : ''}} >" + value + "</option>";
+      });
+
+      $(id).html(options);
   });
 
   </script>
@@ -166,12 +174,11 @@
 					
 					         <label for="state">State</label>
                     <select id="state" name="state" class="form-control" placeholder="Select State">
-                        <option value="Andhra Pradesh" {{ $address['STATE'] == 'Andhra Pradesh' ? ' selected' : '' }}>Andhra Pradesh</option>
-                        <option value="Assam" {{ $address['STATE'] == 'Assam' ? ' selected' : '' }}>Assam</option>
-                        <option value="Bihar" {{ $address['STATE'] == 'Bihar' ? ' selected' : '' }}>Bihar</option>
                     </select>
-					         <label for="Postcode">Postcode</label>
-                   <input type="text" class="form-control" value="{{ $address['POSTCODE'] or '' }}" id="postcode" name="postcode" placeholder="Postcode">
+					         
+                   <label for="Postcode">Postcode</label>
+                    <select id="postcode" name="postcode" placeholder="Postcode" class="form-control" placeholder="Select Postcode">
+                    </select>
                   </div>
 				  
         				  <div class="form-group{{ $errors->has('oldpass') ? ' has-error' : '' }}">
