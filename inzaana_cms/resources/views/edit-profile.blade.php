@@ -117,9 +117,9 @@
                             <div class="form-group col-sm-2 col-md-2 col-lg-2">
                                 <div>
                                     <select name="code" text="code" class="form-control">
-                                        <option {{ $phone_number[0] == 0 ? 'selected' : '' }}>+088</option>
-                                        <option {{ $phone_number[0] == 1 ? 'selected' : '' }}>+465</option>
-                                        <option {{ $phone_number[0] == 2 ? 'selected' : '' }}>+695</option>
+                                      @foreach($area_codes as $key => $area_code)
+                                        <option value="{{ $area_code }}" {{ $phone_number[0] == $key ? 'selected' : '' }}>{{ $area_code }}</option>
+                                      @endforeach
                                     </select>
                                 </div>
 

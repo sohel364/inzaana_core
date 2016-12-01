@@ -110,16 +110,20 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasMany('Inzaana\Store');
     }
 
+    public static function areaCodes()
+    {
+        return [ '+562', '+522', '+141', '+135', '+91', '+11', '+22', '+33', '+44', '+20', '+40', '+79', '+80' ];
+    }
+
     public static function decodePhoneNumber($phone_number)
     {
-        $codes = [ '+088', '+465', '+695' ];
         $keywords = preg_split("/[-]+/", $phone_number);
         if(count($keywords) == 1)
         {
             return [ 0, $keywords[0]];
         }
         $phone_number = $keywords[1];
-        foreach($codes as $key => $value)
+        foreach(User::areaCodes() as $key => $value)
         {
             if($value == $keywords[0])
             {

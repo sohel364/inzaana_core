@@ -12,6 +12,11 @@
 */
 
 $factory->define(Inzaana\User::class, function (Faker\Generator $faker) {
+
+    $faker->addProvider(new Faker\Provider\en_IN\Person($faker));
+    $faker->addProvider(new Faker\Provider\en_IN\Address($faker));
+    $faker->addProvider(new Faker\Provider\en_IN\PhoneNumber($faker));
+
     $fakeAddress = [
         'mailing-address' => $faker->address,
         'address_flat_house_floor_building' => $faker->address,
@@ -21,18 +26,24 @@ $factory->define(Inzaana\User::class, function (Faker\Generator $faker) {
         'postcode' => $faker->postcode,
         'state' => $faker->state,
     ];
+    $phoneNumber = $faker->randomElement(Inzaana\User::areaCodes()) . '-' . preg_replace('/\+[0-9]{2}/', '', $faker->e164PhoneNumber);
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->email,
         'password' => bcrypt(str_random(10)),
         'verified' => true,
         'remember_token' => str_random(10),
-        'phone_number' => $faker->e164PhoneNumber,
+        'phone_number' => $phoneNumber,
         'address' => Inzaana\User::encodeAddress($fakeAddress),
     ];
 });
 
 $factory->define(Inzaana\Store::class, function (Faker\Generator $faker) {
+
+    $faker->addProvider(new Faker\Provider\en_IN\Person($faker));
+    $faker->addProvider(new Faker\Provider\en_IN\Address($faker));
+    $faker->addProvider(new Faker\Provider\en_US\Company($faker));
+
 	$storeName = $faker->company;
     $fakeAddress = [
         'mailing-address' => $faker->address,

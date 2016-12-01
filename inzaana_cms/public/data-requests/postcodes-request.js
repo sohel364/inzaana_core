@@ -1,5 +1,5 @@
 /*
- * Shows loading icons while saving operation is ongoing
+ * Shows waiting icons while requesting data operation is ongoing
  */
 function showSavingIcon(itemCount) {
     var sweetAlertWithTimout = {

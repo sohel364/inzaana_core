@@ -352,7 +352,8 @@ class UserController extends Controller
         $address = User::decodeAddress($user->address);
         return view('edit-profile') ->withUser($user)
                                     ->withPhoneNumber($phoneNumber)
-                                    ->withAddress($address);
+                                    ->withAddress($address)
+                                    ->withAreaCodes(collect(User::areaCodes()));
     }
 
     public function verifyProfileChanges(Request $request, AppMailer $mailer, User $user)
