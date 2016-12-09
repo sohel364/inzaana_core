@@ -31,7 +31,7 @@
                     @endif
                         <p class="text-success text-right"><span class="text-red">*</span> Mandatory field.</p>
                     <form class="form-horizontal" id="create_plan" {{--action="{{ route('admin::create.plan') }}"--}} method="POST">
-                        {{ csrf_field() }}
+                        {{ csrf_field() }}{{--sUor70TX8DNRx42x7KpAGeClM0kz3lQBzsGnPdv3--}}
                         <input type="hidden" class="form-control" value="{{ str_random(12) }}" name="plan_id">
                         @if($errors->first('plan_id')) <p class="text-danger text-sm danger_text">Please refresh this page and try again.</p> @endif
                         <div class="form-group">

@@ -84,7 +84,7 @@
                         @if($errors->first('redeem_by')) <p class="text-danger text-sm danger_text">{{ $errors->first('redeem_by') }}</p> @endif
                     </div>
                     <div class="form-group">
-                        <input type="submit" class="btn btn-primary btn-sm" value="Create Plan">
+                        <input type="submit" class="btn btn-primary btn-sm" value="Create Coupon">
                     </div>
                 </form>
 

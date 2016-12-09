@@ -36,6 +36,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('/plan-swap', [ 'uses' => 'StripeController@swapSubscriptionPlan', 'as' => 'swapSubscriptionPlan' ]);
 
     Route::group(['as' => 'admin::'], function () {
+        //Email notifications
+        Route::post('/super-admin/email-notification', [ 'uses' => 'StripeController@emailNotifications', 'as'=> 'email.notification']);
         //Stripe Route for Super Admin
         Route::get('/super-admin/create-coupon', [ 'uses' => 'StripeController@couponForm', 'as'=> 'couponForm']);
         Route::post('/super-admin/create-coupon', [ 'uses' => 'StripeController@createCoupon', 'as'=> 'create.coupon']);

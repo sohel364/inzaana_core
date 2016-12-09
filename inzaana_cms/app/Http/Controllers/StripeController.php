@@ -28,6 +28,10 @@ use \Stripe\Subscription;
 
 class StripeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function payment(Request $request)
     {
@@ -35,6 +39,22 @@ class StripeController extends Controller
         //$user->newSubscription('main', '6024')->create($request->stripeToken);
         //$user->subscription('main')->cancel();
         //dd($user->subscribed());
+    }
+    public function emailNotifications(Request $request)
+    {
+
+        $emails = $request->email;
+        foreach($emails as $email){
+            $email = explode('#', $email);
+            if($email){
+                $name_sub = isset($email[0])? $email[0] : NULL;
+                $email_sub = isset($email[1]) ? $email[1] : NULL;
+                $date_sub = isset($email[2]) ? Carbon::parse($email[2]) : NULL;
+            }
+        }
+        echo $name_sub;
+        echo $email_sub;
+        echo $date_sub;
     }
 
     public function couponForm()
@@ -44,6 +64,7 @@ class StripeController extends Controller
 
     public function createCoupon(StripeCouponRequest $request)
     {
+        //dd($request->all());
         $coupon_id = $request->coupon_id;
         $coupon_name = $request->coupon_name;
         $duration = $request->duration;
@@ -696,11 +717,12 @@ class StripeController extends Controller
             }
             $subscriber->coupon = $coupon_information;
         }
+        $email_user = DB::select('SELECT t2.name,t2.email,t1.ends_at FROM `subscriptions` as t1 inner join users as t2 on t1.`user_id`=t2.id WHERE `ends_at` BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 1 DAY)');
         /*dd($subscribers);*/
         $sln = 1;
         $user = Auth::user();
         $sort = Input::get('sort');
-        return response()->view($loadView,compact('subscribers','sln','order','sort','user'))
+        return response()->view($loadView,compact('subscribers','email_user','sln','order','sort','user'))
             ->header('Content-Type', 'html');
 
         //return view('super-admin.stripe.view-subscriber',compact('subscribers','sln'))->with('user', Auth::user());

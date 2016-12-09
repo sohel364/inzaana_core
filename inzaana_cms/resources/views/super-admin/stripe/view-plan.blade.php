@@ -75,6 +75,9 @@
                         </a>
                     </th>
                     <th>
+                        R L
+                    </th>
+                    <th>
                         Description
                     </th>
                     <th>
@@ -106,6 +109,7 @@
 
                                 </td>
                                 <td>{{ $plan->trial_period_days }}</td>
+                                <td>5</td>
                                 <td>{{ $plan->statement_descriptor }}</td>
                                 <td>
                                     @foreach($plan->planFeature as $feature)
