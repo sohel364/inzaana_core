@@ -110,16 +110,20 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasMany('Inzaana\Store');
     }
 
+    public static function areaCodes()
+    {
+        return [ '+562', '+522', '+141', '+135', '+91', '+11', '+22', '+33', '+44', '+20', '+40', '+79', '+80' ];
+    }
+
     public static function decodePhoneNumber($phone_number)
     {
-        $codes = [ '+088', '+465', '+695' ];
         $keywords = preg_split("/[-]+/", $phone_number);
         if(count($keywords) == 1)
         {
             return [ 0, $keywords[0]];
         }
         $phone_number = $keywords[1];
-        foreach($codes as $key => $value)
+        foreach(User::areaCodes() as $key => $value)
         {
             if($value == $keywords[0])
             {
@@ -157,5 +161,37 @@ class User extends Model implements AuthenticatableContract,
         $address .= $inputs['state'];
 
         return $address;
+    }
+
+    public static function postcodes($country, $viewCount = 0)
+    {
+        $parser = \KzykHys\CsvParser\CsvParser::fromFile(str_replace('\\', '\\\\', storage_path('app/csv/india_contacts_db.csv')));
+        $postcodes = array();
+        $i = 0;
+        if($country == 'INDIA')
+        {
+            foreach ($parser as $record) {
+                if(++$i == $viewCount)
+                    break;
+                $postcodes []= $record[3];
+            }
+        }
+        return collect($postcodes)->unique()->forget(0);
+    }
+
+    public static function states($country, $viewCount = 0)
+    {
+        $parser = \KzykHys\CsvParser\CsvParser::fromFile(str_replace('\\', '\\\\', storage_path('app/csv/india_contacts_db.csv')));
+        $states = array();
+        $i = 0;
+        if($country == 'INDIA')
+        {
+            foreach ($parser as $record) {
+                if(++$i == $viewCount)
+                    break;
+                $states []= $record[0];
+            }
+        }
+        return collect($states)->unique()->forget(0);
     }
 }

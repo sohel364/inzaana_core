@@ -15,7 +15,10 @@
   <link type="text/css" rel="stylesheet" href="{{ asset('user_admin_dashboard_asset/styles/style-responsive.css') }}">
   <link type="text/css" rel="stylesheet" href="{{ asset('user_admin_dashboard_asset/styles/sidebar.css') }}">
   <link type="text/css" rel="stylesheet" href="{{ asset('user_admin_dashboard_asset/css3-animate-it-master/css/animations.css') }}">
-     @yield('header-style')
+  <!-- For sweet message box alert -->
+  <link href="{{ asset('dist/sweetalert.css') }}" rel="stylesheet" type="text/css">
+  
+  @yield('header-style')
 </head>
 
 <body>
@@ -171,38 +174,13 @@
   <script src="{{ URL::asset('user_admin_dashboard_asset/script/bootstrap-hover-dropdown.js') }}"></script>
   <script src="{{ URL::asset('user_admin_dashboard_asset/css3-animate-it-master/js/css3-animate-it.js') }}"></script>
   <!--CORE JAVASCRIPT-->
-{{--  <script src="{{ URL::asset('user_admin_dashboard_asset/script/main.js') }}"></script>--}}
   <script src="{{ URL::asset('super-admin-asset/config.js') }}"></script>
+  <!-- For sweet message box alert -->
+  <script type="text/javascript" src="{{ asset('dist/sweetalert.min.js') }}"></script>
+  
   @yield('footer-scripts')
 
-
-  <script type="text/javascript">
-        
-    $(document).ready(function () {
-
-        // new hotness
-        (function loopsiloop(){
-           setTimeout(function(){
-               $.ajax({
-                   url: '/who-am-i',
-                   success: function( response ){
-                       // do something with the response
-                      if(response)
-                      {
-                          loopsiloop(); // recurse
-                      } 
-                      else                     
-                        window.location.href = '/login';
-                   },
-                   error: function(){
-                      window.location.href = '/login';
-                   }
-               });
-           }, 5000);
-        })();
-
-    });
-  </script>
+  <script src="{{ asset('/browser-events/browser-event-navigation.js') }}" type="text/javascript"></script>
 
 </body>
 

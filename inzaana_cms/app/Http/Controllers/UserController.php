@@ -52,12 +52,16 @@ class UserController extends Controller
             $user = User::find(Auth::user()->id);
 
             // If it's a vendor user verification
-            if(session()->has('site') && session('store'))
+            if(session()->has('site') && session()->has('store'))
             {
                 // USED FROM -> 'Auth\AuthController@showSignupForm'
                 $data['site'] = session('site');
                 $data['storeName'] = session('store');
                 $data['business'] = session('business');
+
+                session()->forget('site');
+                session()->forget('store');  
+                session()->forget('business');
 
                 $mailer->sendEmailConfirmationTo($user, $data);  
             }
@@ -95,6 +99,10 @@ class UserController extends Controller
         $site = session('site');
         $store = session('store');
         $business = session('business');
+        
+        session()->forget('site');
+        session()->forget('store');  
+        session()->forget('business');  
         
         // If a vendor is verified create an web mail address as an alternative email address
         $user = Auth::user();
@@ -344,7 +352,8 @@ class UserController extends Controller
         $address = User::decodeAddress($user->address);
         return view('edit-profile') ->withUser($user)
                                     ->withPhoneNumber($phoneNumber)
-                                    ->withAddress($address);
+                                    ->withAddress($address)
+                                    ->withAreaCodes(collect(User::areaCodes()));
     }
 
     public function verifyProfileChanges(Request $request, AppMailer $mailer, User $user)
@@ -520,6 +529,16 @@ class UserController extends Controller
         }
         flash()->success('Your FAQ is published!');
         return redirect()->back();
+    }
+
+    public function getPostCodes($country)
+    {
+        return response()->json([ 'context' => 'postcodes', 'value' => User::postcodes($country, 30) ]);
+    }
+
+    public function getStates($country)
+    {
+        return response()->json([ 'context' => 'states', 'value' => User::states($country) ]);
     }
 
     /**

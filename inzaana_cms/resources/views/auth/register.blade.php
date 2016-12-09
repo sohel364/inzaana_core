@@ -453,7 +453,18 @@
 @endsection
 
 
-@section('footer-script')
-<script src="{{ URL::asset('js/signUp.js') }}"></script>
-<script src="{{ URL::asset('js/bootstrap-formhelpers-countries.js') }}"></script>
+@section('footer-scripts')
+
+  <script src="/jquery-validation/lib/jquery.js"></script>
+  <script src="/jquery-validation/dist/jquery.validate.js"></script>
+  <script src="/form-validation/edit-profile-validation.js"></script>
+
+  <script type="text/javascript">
+    $().ready(onReadyEditProfileValidation);
+    $('#phone_number').keypress(validateNumber);
+  </script>
+
+  <script src="{{ URL::asset('js/signUp.js') }}"></script>
+  <script src="{{ URL::asset('js/bootstrap-formhelpers-countries.js') }}"></script>
+
 @endsection

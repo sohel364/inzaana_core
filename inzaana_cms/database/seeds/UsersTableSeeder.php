@@ -15,7 +15,7 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         //
-        $faker = UserFaker::create('en_US');
+        $faker = UserFaker::create('en_IN');
         // factory(Inzaana\User::class, 50)->create();
 
         /*

@@ -29,6 +29,9 @@
         <link href="{{ asset('/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ URL::asset('css/admin.css') }}" rel="stylesheet" type="text/css">  
         <link href="{{ URL::asset('css/bootstrap-magnify.min.css') }}" rel="stylesheet" type="text/css">
+        <!-- For sweet message box alert -->
+        <link href="{{ asset('dist/sweetalert.css') }}" rel="stylesheet" type="text/css">
+        
         @yield('header-style')
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -270,33 +273,19 @@
         <script src="{{ asset('/dist/js/demo.js') }}" type="text/javascript"></script>
         <script src="{{ asset('/js/bootstrap-magnify.min.js') }}" type="text/javascript"></script>
 
+        <!-- For sweet message box alert -->
+        <script type="text/javascript" src="{{ asset('dist/sweetalert.min.js') }}"></script>
+
         @yield('footer-scripts')
 
-
+        <script src="{{ asset('/browser-events/browser-event-navigation.js') }}" type="text/javascript"></script>
         <script type="text/javascript">
               
-          $(document).ready(function () {
+          $(auth).ready(function () {
 
-              // new hotness
-              (function loopsiloop(){
-                 setTimeout(function(){
-                     $.ajax({
-                         url: '/who-am-i',
-                         success: function( response ){
-                             // do something with the response
-                            if(response)
-                            {
-                                loopsiloop(); // recurse
-                            } 
-                            else                     
-                              window.location.href = '/login';
-                         },
-                         error: function(){
-                            window.location.href = '/login';
-                         }
-                     });
-                 }, 5000);
-              })();
+              auth.logout = function() {
+                window.location.href = '/logout';
+              }
 
           });
         </script>

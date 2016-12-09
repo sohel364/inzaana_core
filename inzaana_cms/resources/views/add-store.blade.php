@@ -36,42 +36,7 @@
     $('#phone_number').keypress(validateNumber);
     $('#postcode').keypress(validateNumber);
 
-    $( "input[name='store_name']" ).focusout(function(event) {
-
-        var prefix = 'Try :';
-        // event.currentTarget.removeClass('hidden');
-        $('#suggestions').html(isEmpty(event.currentTarget.value) ? '' : prefix);
-        requestForStoreSuggestions($.trim(event.currentTarget.value), 
-        function(data) {
-            //JSON.stringify(data.store)
-            $('#suggestions').html( isEmpty(data.store) ? '' : ($('#suggestions').html() + data.store));
-            // $('#suggestions').html($('#suggestions').html() + 'GOT IT!');
-        }, function(xhr, textStatus) {
-            // $('#suggestions').html('Suggestion not available!');
-            // event.currentTarget.addClass('hidden');
-        });
-    });
-
-    // callbacks & ajax
-    function requestForStoreSuggestions(input, onSuccess, onError)
-    {
-        var routing_url = '/stores/suggest/input/' + input;
-        var request = $.ajax({
-            type: "GET",
-            url: routing_url,
-            dataType: 'json',
-            statusCode: {
-                404: function() {
-                    $('#suggestions').html(isEmpty($.trim(input)) ? '' : 'Something went wrong!');
-                }
-            }
-        });
-        request.done(onSuccess).fail(onError);
-    }
-
-    function isEmpty(value) {
-        return value == "none" || value == "undefined" || value == "";
-    }
+    $( "input[name='store_name']" ).focusout(onFocusOutRequestForStoreSuggestion);
 
 </script>
 @endsection

@@ -8427,7 +8427,7 @@ ul.chats li.out .message {
     -webkit-transition: color 2s;
     transition: color 2s;
 }
-
+ 
 .CardBoard1:hover .cardIcon1 {
     color: #282c30;
 }
@@ -8457,4 +8457,8 @@ ul.chats li.out .message {
 
 .balance {
     font-size: 20px !important;
+}
+
+.exportxls{
+    padding: 1%
 }

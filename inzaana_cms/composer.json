@@ -12,7 +12,8 @@
         "intervention/imagecache": "^2.3",
         "laravel/cashier": "~6.0",
         "stripe/stripe-php": "^3.17",
-        "dompdf/dompdf": "^0.6.1"
+        "dompdf/dompdf": "^0.6.1",
+        "kzykhys/php-csv-parser": "^1.4"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

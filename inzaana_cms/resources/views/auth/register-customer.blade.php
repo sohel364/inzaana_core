@@ -92,26 +92,25 @@
                                     @endif
                                 </div>
                             </div>
-							
-							<div class="col-xs-6 col-sm-6 col-md-6 text-left">
+
+                        </div>
+
+                        <div class="row">
+                            
+                            <div class="col-xs-6 col-sm-6 col-md-6 text-left">
                                 <div class="form-group animated fadeInRightShort{{ $errors->has('phone_number') ? ' has-error' : '' }}" data-id="6">
                                     <input type="text" id="phone_number" name="phone_number" class="form-control input-sm" placeholder="Phone number" value="">
                                     
                                     @if ($errors->has('phone_number'))
                                         <span class="help-block">
-                                              <strong>{{ $errors->first('phone_number') }}</strong>
-                                          </span>
+                                          <strong>{{ $errors->first('phone_number') }}</strong>
+                                      </span>
                                     @endif
                                 </div>
                             </div>
-							
-
-							<div class="col-xs-6 col-sm-6 col-md-6 text-left">
-                                <div class="form-group animated fadeInRightShort" data-id="6">
-                                    <textarea type="address" name="address" class="form-control input-sm" placeholder="Address" value=""></textarea>
-                                </div>
-                            </div>
+                            
                         </div>
+                        
                         <div class="row">
                             <div class="col-xs-4 col-sm-3 col-md-3">
                                 <span class="button-checkbox animated fadeInLeftShort" data-id="11">
@@ -168,7 +167,16 @@
 @endsection
 
 
-@section('footer-script')
+@section('footer-scripts')
+
+    <script src="/jquery-validation/lib/jquery.js"></script>
+    <script src="/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="/form-validation/edit-profile-validation.js"></script>
+
+    <script type="text/javascript">
+        $().ready(onReadyEditProfileValidation);
+        $('#phone_number').keypress(validateNumber);
+    </script>
     <script src="{{ URL::asset('js/signUp.js') }}"></script>
     <script src="{{ URL::asset('js/bootstrap-formhelpers-countries.js') }}"></script>
 @endsection

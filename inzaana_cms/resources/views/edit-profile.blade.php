@@ -31,6 +31,7 @@
   <script src="/jquery-validation/lib/jquery.js"></script>
   <script src="/jquery-validation/dist/jquery.validate.js"></script>
   <script src="/form-validation/edit-profile-validation.js"></script>
+  <script src="/data-requests/postcodes-request.js"></script>
 
   <script type="text/javascript">
   // //just for the demos, avoids form submit
@@ -41,7 +42,29 @@
   // });
   $().ready(onReadyEditProfileValidation);
   $('#phone_number').keypress(validateNumber);
-  $('#postcode').keypress(validateNumber);
+
+  ElementDataManager.timeout = 0;
+  ElementDataManager.isCompleted = function() { return $('select#state option').length > 0 && $('select#postcode option').length > 0; };
+  ElementDataManager.load('INDIA', function(context, data) {
+      var options = '';
+      var id = '';
+      var addressKey = '';
+      if(data.context == context[1])
+      {
+          addressKey = '$address[\'STATE\']';
+          id = '#state';
+      }
+      else if(data.context == context[0])
+      {
+          addressKey = '$address[\'POSTCODE\']';
+          id = '#postcode';
+      }
+      $.each(data.value, function( index, value ) {
+          options += "<option value='" + index + "' {{ " + addressKey + " == '" + index + "' ? ' selected' : ''}} >" + value + "</option>";
+      });
+
+      $(id).html(options);
+  });
 
   </script>
 
@@ -94,9 +117,9 @@
                             <div class="form-group col-sm-2 col-md-2 col-lg-2">
                                 <div>
                                     <select name="code" text="code" class="form-control">
-                                        <option {{ $phone_number[0] == 0 ? 'selected' : '' }}>+088</option>
-                                        <option {{ $phone_number[0] == 1 ? 'selected' : '' }}>+465</option>
-                                        <option {{ $phone_number[0] == 2 ? 'selected' : '' }}>+695</option>
+                                      @foreach($area_codes as $key => $area_code)
+                                        <option value="{{ $area_code }}" {{ $phone_number[0] == $key ? 'selected' : '' }}>{{ $area_code }}</option>
+                                      @endforeach
                                     </select>
                                 </div>
 
@@ -150,13 +173,12 @@
                     <br/>
 					
 					         <label for="state">State</label>
-                    <select name="state" class="form-control" placeholder="Select State">
-                        <option value="Andhra Pradesh" {{ $address['STATE'] == 'Andhra Pradesh' ? ' selected' : '' }}>Andhra Pradesh</option>
-                        <option value="Assam" {{ $address['STATE'] == 'Assam' ? ' selected' : '' }}>Assam</option>
-                        <option value="Bihar" {{ $address['STATE'] == 'Bihar' ? ' selected' : '' }}>Bihar</option>
+                    <select id="state" name="state" class="form-control" placeholder="Select State">
                     </select>
-					         <label for="Postcode">Postcode</label>
-                   <input type="text" class="form-control" value="{{ $address['POSTCODE'] or '' }}" id="postcode" name="postcode" placeholder="Postcode">
+					         
+                   <label for="Postcode">Postcode</label>
+                    <select id="postcode" name="postcode" placeholder="Postcode" class="form-control" placeholder="Select Postcode">
+                    </select>
                   </div>
 				  
         				  <div class="form-group{{ $errors->has('oldpass') ? ' has-error' : '' }}">

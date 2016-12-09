@@ -144,8 +144,6 @@ class StoreController extends Controller
 
         $data = [
             'name' => $store,
-            // 'sub_domain' => 'inzaana',
-            // 'domain' => 'com', //str_replace('.', '', '.net'),
             'description' => $request->input('description'),
             'address' => $address,
             'phone_number' => $request->input('code') . $this->delimiter_phone_number . $request->input('phone_number'),
@@ -159,20 +157,16 @@ class StoreController extends Controller
         $store = Store::create([
             'name' => $store,
             'user_id' => Auth::user()->id,
-            'name_as_url' => strtolower(str_replace(' ', '', $store)),
-            // 'sub_domain' => $data['sub_domain'],
-            // 'domain' => 'com', //$data['domain'],
+            'name_as_url' => strtolower(str_replace('.', '', str_replace(' ', '', $store))),
             'description' => $data['description'],
             'address' => $data['address'],
             'phone_number' => $data['phone_number'],
             'store_type' => $data['store_type'],
             'status' => 'ON_APPROVAL',
-        ]);        
-        $store->name_as_url = str_replace('.', '', $store->name_as_url); // removes '.' character
+        ]);
         if(!$store)
         {
-            $message = 'Failed to create store named (' . $store->name . ')';
-            return redirect()->back()->withErrors([$message]);
+            return redirect()->back()->withErrors(['Failed to create store named (' . $store->name . ')']);
         }
         flash()->success('Store (' . $store->name . ') information will be published when approved by the authority. Please contact Inzaana administrator for further assistance.');
         return redirect()->route('user::stores');
@@ -183,7 +177,13 @@ class StoreController extends Controller
         $keywords = preg_split("/[.]+/", $site);
 
         if(count($keywords) < 3)
-        {     
+        {
+            session()->forget('site');
+            session()->forget('store');  
+            session()->forget('business');
+
+            Auth::user()->delete();
+
             return response()->view('home', [ 'errors' => collect(['Failed to create store! Please check your shop name again.']) ]);       
         }
 
@@ -195,16 +195,18 @@ class StoreController extends Controller
             'name' => $name,
             'user_id' => Auth::user()->id,
             'name_as_url' => $storeNameUrl,
-            // 'sub_domain' => $subdomain,
-            // 'domain' => $domain,
             'store_type' => $business,
             'status' => 'ON_APPROVAL',
         ]);
-        $store->name_as_url = str_replace('.', '', $store->name_as_url); // removes '.' character
         if(!$store)
-        { 
-            $errors['store'] = 'Failed to create store! Please check your shop name again.';
-            return response()->view('home', [ 'errors' => collect($errors) ]);  
+        {
+            session()->forget('site');
+            session()->forget('store');  
+            session()->forget('business');
+
+            Auth::user()->delete();
+
+            return response()->view('home', [ 'errors' => collect(['Failed to create store! Please check your shop name again.']) ]);  
         }
         return redirect()->route('user::vendor.dashboard');
     }
