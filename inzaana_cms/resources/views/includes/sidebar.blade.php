@@ -308,8 +308,10 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-circle"></i> POS</a></li>
-                <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                <li><a href="{{route('user::vendor.tools')}}"><i class="fa fa-circle"></i> Tools</a></li>
+                <li>
+                    <a href="{{route('user::vendor.licenses')}}"><i class="fa fa-dashboard"></i> Manage Licenses</a>
+                </li>
                 <li><a href="#"><i class="fa fa-wrench"></i> Settings</a></li>
               </ul>
             </li>
@@ -414,14 +416,14 @@
             </li>
             @endif
 
-              @if($user->getFeature($plan_name,'My Templates'))
+            @if($user->getFeature($plan_name,'My Templates'))
             <li class="treeview">
       			  <a href="{{ Auth::user()->subscribed('main') ? route('user::templates.saved') : '#' }}">
         				<span>My Templates</span>
         				<!--<i class="fa fa-angle-left pull-right"></i>-->
       			  </a>
             </li>
-              @endif
+            @endif
 
           </ul>
         </section>
