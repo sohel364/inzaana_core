@@ -31,7 +31,8 @@
   <script src="/jquery-validation/lib/jquery.js"></script>
   <script src="/jquery-validation/dist/jquery.validate.js"></script>
   <script src="/form-validation/edit-profile-validation.js"></script>
-  <script src="/data-requests/postcodes-request.js"></script>
+  <script src="/data-requests/element-data-manager.js"></script>
+  <script src="/data-requests/postcodes-states-request.js"></script>
 
   <script type="text/javascript">
   // //just for the demos, avoids form submit
@@ -42,29 +43,6 @@
   // });
   $().ready(onReadyEditProfileValidation);
   $('#phone_number').keypress(validateNumber);
-
-  ElementDataManager.timeout = 0;
-  ElementDataManager.isCompleted = function() { return $('select#state option').length > 0 && $('select#postcode option').length > 0; };
-  ElementDataManager.load('INDIA', function(context, data) {
-      var options = '';
-      var id = '';
-      var addressKey = '';
-      if(data.context == context[1])
-      {
-          addressKey = '$address[\'STATE\']';
-          id = '#state';
-      }
-      else if(data.context == context[0])
-      {
-          addressKey = '$address[\'POSTCODE\']';
-          id = '#postcode';
-      }
-      $.each(data.value, function( index, value ) {
-          options += "<option value='" + index + "' {{ " + addressKey + " == '" + index + "' ? ' selected' : ''}} >" + value + "</option>";
-      });
-
-      $(id).html(options);
-  });
 
   </script>
 

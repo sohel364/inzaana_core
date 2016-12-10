@@ -31,6 +31,8 @@
 <script src="/jquery-validation/dist/jquery.validate.js"></script>
 <script src="/form-validation/edit-store-validation.js"></script>
 <script src="/form-validation/edit-profile-validation.js"></script>
+<script src="/data-requests/element-data-manager.js"></script>
+<script src="/data-requests/postcodes-states-request.js"></script>
 <script>
     $().ready(onReadyEditStoreValidation);
     $('#phone_number').keypress(validateNumber);
@@ -121,14 +123,14 @@
                     <br/>
                     <input type="text" class="form-control" value="{{ $address['TOWN'] or '' }}" id="address_town_city" name="address_town_city" placeholder="Town / City">
                     <br/>
+
                     <label for="state">State</label>
-                    <select name="state" class="form-control" placeholder="Select State">
-                        <option value="Andhra Pradesh" {{ $address['STATE'] == 'Andhra Pradesh' ? ' selected' : '' }}>Andhra Pradesh</option>
-                        <option value="Assam" {{ $address['STATE'] == 'Assam' ? ' selected' : '' }}>Assam</option>
-                        <option value="Bihar" {{ $address['STATE'] == 'Bihar' ? ' selected' : '' }}>Bihar</option>
+                    <select id="state" name="state" class="form-control" placeholder="Select State">
                     </select>
-                   <label for="postcode">Postcode</label>
-                   <input type="text" class="form-control" value="{{ $address['POSTCODE'] or '' }}" id="postcode" name="postcode" placeholder="Postcode">
+                   
+                    <label for="Postcode">Postcode</label>
+                    <select id="postcode" name="postcode" placeholder="Postcode" class="form-control" placeholder="Select Postcode">
+                    </select>
                   </div>
 
                   <div class="form-group">
