@@ -120,7 +120,7 @@ class User extends Model implements AuthenticatableContract,
         $keywords = preg_split("/[-]+/", $phone_number);
         if(count($keywords) == 1)
         {
-            return [ 0, $keywords[0]];
+            return [ 4, $keywords[0]];
         }
         $phone_number = $keywords[1];
         foreach(User::areaCodes() as $key => $value)
@@ -130,7 +130,7 @@ class User extends Model implements AuthenticatableContract,
                 return [ $key, $phone_number ];
             }
         }
-        return [0, ''];
+        return [5, ''];
     }
 
     public static function decodeAddress($address)

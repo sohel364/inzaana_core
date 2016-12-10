@@ -47,7 +47,8 @@ class StoreController extends Controller
     {
         return view('add-store', $data)->withUser(Auth::user()->id)
                                 ->withStores(Auth::user()->stores)
-                                ->withTypes(collect(Store::types()));
+                                ->withTypes(collect(Store::types()))
+                                ->withAreaCodes(collect(User::areaCodes()));
     }
 
     public function index()
