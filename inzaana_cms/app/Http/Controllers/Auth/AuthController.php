@@ -115,8 +115,8 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
             'trial_ends_at' => Carbon::now()->addDays(10),
         ]);
-        session([ 'business' => array_has($data, 'business') ? $data['business'] : '' ]);
         // dd($data);
+        session([ 'business' => array_has($data, 'business') ? $data['business'] : '' ]);
         return $user;
     }
 

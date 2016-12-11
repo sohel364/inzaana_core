@@ -48,7 +48,6 @@ class UserController extends Controller
         if(!Auth::user()->verified) //&& $request->session()->has('user')
         {            
             // USED FROM -> 'Auth\AuthController@showSignupForm'
-            // $user = session('user');
             $user = User::find(Auth::user()->id);
 
             // If it's a vendor user verification
