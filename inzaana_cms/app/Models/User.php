@@ -166,13 +166,19 @@ class User extends Model implements AuthenticatableContract,
     public static function postcodes($country, $viewCount = 0)
     {
         $parser = \KzykHys\CsvParser\CsvParser::fromFile(str_replace('\\', '\\\\', storage_path('app/csv/india_contacts_db.csv')));
-        $postcodes = array();
+        static $postcodes = array();
+
+        if(count($postcodes) > 0)
+            return collect($postcodes)->unique()->forget(0);
+
         $i = 0;
         if($country == 'INDIA')
         {
             foreach ($parser as $record) {
                 if(++$i == $viewCount)
                     break;
+                if($record[3] == 'NULL')
+                    continue;
                 $postcodes []= $record[3];
             }
         }
@@ -182,13 +188,19 @@ class User extends Model implements AuthenticatableContract,
     public static function states($country, $viewCount = 0)
     {
         $parser = \KzykHys\CsvParser\CsvParser::fromFile(str_replace('\\', '\\\\', storage_path('app/csv/india_contacts_db.csv')));
-        $states = array();
+        static $states = array();
+        
+        if(count($states) > 0)
+            return collect($states)->unique()->forget(0);
+
         $i = 0;
         if($country == 'INDIA')
         {
             foreach ($parser as $record) {
                 if(++$i == $viewCount)
                     break;
+                if($record[0] == 'NULL')
+                    continue;
                 $states []= $record[0];
             }
         }

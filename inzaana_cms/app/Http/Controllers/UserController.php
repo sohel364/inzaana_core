@@ -396,6 +396,7 @@ class UserController extends Controller
         $user->email = $email;
         $user->address = str_replace('_', '/', $address);
         $user->phone_number = $phone;
+        // dd($user);
         if($password)
             $user->password = str_replace('_', '/', $password);
         if(!$user->save())
