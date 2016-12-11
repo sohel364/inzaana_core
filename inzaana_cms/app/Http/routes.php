@@ -116,7 +116,8 @@ Route::group(['middleware' => 'web'], function () {
                 Route::post('/plan', [ 'uses' => 'StripeController@subscriptionPlan', 'as' => 'vendor.subscriptionPlan' ]);
 
                 Route::get('/view-my-subscription', [ 'uses' => 'StripeController@viewMySubscription', 'as'=> 'viewMySubscription']);
-
+                Route::get('/tools', [ 'uses' => 'UserController@downloadTools', 'as'=>'vendor.tools']);
+                Route::get('/licenses', [ 'uses' => 'UserController@getLicenseKeys', 'as'=>'vendor.licenses']);
             });
             // route: /dashboard/
             Route::get('/admin', [ 'uses' => 'UserController@redirectToDashboardAdmin', 'as' => 'admin.dashboard' ]);

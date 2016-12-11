@@ -281,6 +281,15 @@ class UserController extends Controller
         //
     }
 
+    public function downloadTools()
+    {
+        return view('inzaana-tools')->withUser(Auth::user());
+    }
+
+    public function getLicenseKeys()
+    {
+        return view('tools-license')->withUser(Auth::user());
+    }
     /**
      * Store a newly created resource in storage.
      *
