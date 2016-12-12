@@ -31,8 +31,6 @@
 <script src="/jquery-validation/dist/jquery.validate.js"></script>
 <script src="/form-validation/edit-store-validation.js"></script>
 <script src="/form-validation/edit-profile-validation.js"></script>
-<script src="/data-requests/element-data-manager.js"></script>
-<script src="/data-requests/postcodes-states-request.js"></script>
 <script>
     $().ready(onReadyEditStoreValidation);
     $('#phone_number').keypress(validateNumber);
@@ -124,13 +122,31 @@
                     <input type="text" class="form-control" value="{{ $address['TOWN'] or '' }}" id="address_town_city" name="address_town_city" placeholder="Town / City">
                     <br/>
 
-                    <label for="state">State</label>
-                    <select id="state" name="state" class="form-control" placeholder="Select State">
-                    </select>
-                   
-                    <label for="Postcode">Postcode</label>
-                    <select id="postcode" name="postcode" placeholder="Postcode" class="form-control" placeholder="Select Postcode">
-                    </select>
+                    <div class="row col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group col-sm-9 col-md-9 col-lg-9">
+                          <label for="state">State</label>
+                          <select id="state" name="state" class="form-control" placeholder="Select State">
+                            @foreach ($states as $state)
+                              <option value='{{ $state->id }}' {{ $address['STATE'] == $state->id ? ' selected' : ''}} >{{ $state->state_name }}</option>
+                            @endforeach
+                          </select>
+                        </div>
+                      <div class="col-sm-3 col-md-3 col-lg-3">{{ $states->links() }}</div>    
+                    </div>     
+
+                    <div class="row col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group col-sm-9 col-md-9 col-lg-9">
+                          <label for="postcode">Postcode</label>
+                          <select id="postcode" name="postcode" class="form-control" placeholder="Select Postcode">
+                            @foreach ($post_codes as $code)
+                              <option value='{{ $code->id }}' {{ $address['POSTCODE'] == $code->id ? ' selected' : ''}} >{{ $code->post_code }}</option>
+                            @endforeach
+                          </select>
+                        </div>
+                      <div class="col-sm-3 col-md-3 col-lg-3">{{ $post_codes->links() }}</div>    
+                    </div>
+                  </div>
+                  
                   </div>
 
                   <div class="form-group">

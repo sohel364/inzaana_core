@@ -19,6 +19,7 @@ use Inzaana\Http\Controllers\Controller;
 
 // @addedby tajuddin.khandaker.cse.ju@gmail.com
 use Illuminate\Support\Facades\Input as UserInput;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -361,7 +362,9 @@ class UserController extends Controller
         return view('edit-profile') ->withUser($user)
                                     ->withPhoneNumber($phoneNumber)
                                     ->withAddress($address)
-                                    ->withAreaCodes(collect(User::areaCodes()));
+                                    ->withAreaCodes(collect(User::areaCodes()))
+                                    ->withStates(DB::table('states')->select('id', 'state_name')->simplePaginate(10))
+                                    ->withPostCodes(DB::table('post_codes')->select('id', 'post_code')->simplePaginate(10));
     }
 
     public function verifyProfileChanges(Request $request, AppMailer $mailer, User $user)
@@ -542,12 +545,12 @@ class UserController extends Controller
 
     public function getPostCodes($country)
     {
-        return response()->json([ 'context' => 'postcodes', 'value' => User::postcodes($country, 30) ]);
+        return response()->json([ 'context' => 'postcodes', 'value' => DB::table('post_codes')->select('id', 'post_code')->take(10) ]);
     }
 
     public function getStates($country)
     {
-        return response()->json([ 'context' => 'states', 'value' => User::states($country) ]);
+        return response()->json([ 'context' => 'states', 'value' => DB::table('states')->select('id', 'state_name')->take(10) ]);
     }
 
     /**

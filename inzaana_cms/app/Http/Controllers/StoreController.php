@@ -3,6 +3,7 @@
 namespace Inzaana\Http\Controllers;
 
 use Illuminate\Http\Request as StoreRequest;
+use Illuminate\Support\Facades\DB;
 
 use Inzaana\Http\Requests;
 use Inzaana\Http\Controllers\Controller;
@@ -48,7 +49,9 @@ class StoreController extends Controller
         return view('add-store', $data)->withUser(Auth::user()->id)
                                 ->withStores(Auth::user()->stores)
                                 ->withTypes(collect(Store::types()))
-                                ->withAreaCodes(collect(User::areaCodes()));
+                                ->withAreaCodes(collect(User::areaCodes()))
+                                ->withStates(DB::table('states')->select('id', 'state_name')->simplePaginate(10))
+                                ->withPostCodes(DB::table('post_codes')->select('id', 'post_code')->simplePaginate(10));
     }
 
     public function index()

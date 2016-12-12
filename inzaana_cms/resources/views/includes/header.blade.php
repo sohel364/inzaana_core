@@ -217,7 +217,7 @@
                         <li class="user-header">
                             <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image" />
                             <p>
-                            {{ Auth::user()->name }} - Web Developer
+                            {{ Auth::user()->name }} - Inzaana Vendor
                             <small>Member since {{ date('F d, Y', strtotime(Auth::user()->created_at)) }}</small>
                             </p>
                         </li>
