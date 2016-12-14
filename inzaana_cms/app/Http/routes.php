@@ -65,8 +65,8 @@ Route::group(['middleware' => 'web'], function () {
         Route::get('/super-admin/faqs', [ 'uses' => 'UserController@faqs', 'as'=> 'faqs']);
         Route::post('/super-admin/faqs/create', [ 'uses' => 'UserController@createFaqs', 'as'=> 'faqs.create']);
     });
-    Route::auth();
 
+    Route::auth();
 
     // Routing grouped by namespace
     Route::group(['namespace' => 'Auth'], function() {
@@ -85,7 +85,11 @@ Route::group(['middleware' => 'web'], function () {
 
     });
 
-    Route::group(['middleware'=>['feature','subscription'], 'as' => 'user::' ], function() {
+    Route::get('/edit/mail/confirm/users/{user}/name/{name}/email/{email}/phone/{phone}/password/{password?}/address/{address?}',
+        [ 'uses' => 'UserController@confirmProfileUpdate', 'as' => 'edit.confirm' ])
+        ->where([ 'address' => '.*', 'phone' => '[+0-9]{3,4}+[-]+[0-9]+', 'password' => '.*' ]); // validation phone => (?:\s+|)((0|(?:(\+|)91))(?:\s|-)*(?:(?:\d(?:\s|-)*\d{9})|(?:\d{2}(?:\s|-)*\d{8})|(?:\d{3}(?:\s|-)*\d{7}))|\d{10})(?:\s+|);
+
+    Route::group(['middleware' => ['feature','subscription'], 'as' => 'user::' ], function() {
         // Store controller
         Route::group(['prefix' => 'stores'], function () {
 
@@ -99,13 +103,22 @@ Route::group(['middleware' => 'web'], function () {
             Route::get('/approvals', [ 'uses' => 'StoreController@approvals', 'as' => 'stores.approvals' ]);
             Route::post('/approvals/confirm/{id}', [ 'uses' => 'StoreController@confirmApproval', 'as' => 'stores.approvals.confirm' ]);          
             Route::get('/suggest/input/{input}', [ 'uses' => 'StoreController@suggest', 'as' => 'stores.suggest' ]);          
-        }); 
+        });
 
         // routes grouped by /dashboard
         Route::group(['prefix' => 'dashboard'], function () {
 
             // User controller
             Route::get('/', [ 'uses' => 'UserController@index', 'as' => 'home' ]);
+
+            // route: /dashboard/
+            Route::get('/admin', [ 'uses' => 'UserController@redirectToDashboardAdmin', 'as' => 'admin.dashboard' ]);
+            Route::get('/customer', [ 'uses' => 'UserController@redirectToDashboardCustomer', 'as' => 'customer.dashboard' ]);
+            Route::get('/edit/users/{user}', [ 'uses' => 'UserController@edit', 'as' => 'edit' ]);
+            Route::post('/edit/mail/users/{user}', [ 'uses' => 'UserController@verifyProfileChanges', 'as' => 'edit.email' ]);
+
+            // Route::get('/postcodes/country/{country}', [ 'uses' => 'UserController@getPostCodes', 'as' => 'postcodes' ]);
+            // Route::get('/states/country/{country}', [ 'uses' => 'UserController@getStates', 'as' => 'states' ]);
 
             // routes grouped by /vendor
             // route: /dashboard/vendor/
@@ -119,17 +132,6 @@ Route::group(['middleware' => 'web'], function () {
                 Route::get('/tools', [ 'uses' => 'UserController@downloadTools', 'as'=>'vendor.tools']);
                 Route::get('/licenses', [ 'uses' => 'UserController@getLicenseKeys', 'as'=>'vendor.licenses']);
             });
-            // route: /dashboard/
-            Route::get('/admin', [ 'uses' => 'UserController@redirectToDashboardAdmin', 'as' => 'admin.dashboard' ]);
-            Route::get('/customer', [ 'uses' => 'UserController@redirectToDashboardCustomer', 'as' => 'customer.dashboard' ]);
-            Route::get('/edit/users/{user}', [ 'uses' => 'UserController@edit', 'as' => 'edit' ]);
-            Route::post('/edit/mail/users/{user}', [ 'uses' => 'UserController@verifyProfileChanges', 'as' => 'edit.email' ]);
-            Route::get('/edit/mail/confirm/users/{user}/name/{name}/email/{email}/phone/{phone}/password/{password?}/address/{address?}',
-                [ 'uses' => 'UserController@confirmProfileUpdate', 'as' => 'edit.confirm' ])
-                ->where([ 'address' => '.*', 'phone' => '[+0-9]{3,4}+[-]+[0-9]+', 'password' => '.*' ]); // validation phone => (?:\s+|)((0|(?:(\+|)91))(?:\s|-)*(?:(?:\d(?:\s|-)*\d{9})|(?:\d{2}(?:\s|-)*\d{8})|(?:\d{3}(?:\s|-)*\d{7}))|\d{10})(?:\s+|);
-
-            Route::get('/postcodes/country/{country}', [ 'uses' => 'UserController@getPostCodes', 'as' => 'postcodes' ]);
-            Route::get('/states/country/{country}', [ 'uses' => 'UserController@getStates', 'as' => 'states' ]);
         });
 
         Route::get('/user_my_order', [ 'uses' => 'UserController@usermyorder', 'as' => 'orders' ]);

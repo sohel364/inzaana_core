@@ -12,7 +12,7 @@
     </p>
 
     <p>
-        We just need you to <a href='{{ url("/dashboard/edit/mail/confirm/users/{$user->id}/{$data['request_url']}") }}'> confirm your changes</a> real quick!
+        We just need you to <a href='{{ url("/edit/mail/confirm/users/{$user->id}/{$data['request_url']}") }}'> confirm your changes</a> real quick!
     </p>
 </body>
 </html> 

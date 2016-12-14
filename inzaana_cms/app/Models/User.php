@@ -1,6 +1,8 @@
 <?php
 
 namespace Inzaana;
+
+use Auth;
 use Laravel\Cashier\Billable;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
@@ -25,6 +27,7 @@ class User extends Model implements AuthenticatableContract,
      * @var string
      */
     protected $table = 'users';
+    
     protected $dates = ['trial_ends_at'];
 
     /**
@@ -32,7 +35,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password', 'phone_number', 'trial_ends_at'];
+    protected $fillable = ['name', 'email', 'password', 'phone_number', 'country', 'trial_ends_at'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -76,6 +79,24 @@ class User extends Model implements AuthenticatableContract,
     public function remove()
     {
         return $this->delete();
+    }
+
+    public function saveConfirmedProfile($name, $email, $phone, $password = null, $address = null)
+    {
+        if($this->id != Auth::user()->id)
+        {
+            return $errors['auth_mismatch'] = 'The information you are going to update to your profile is not yours!';
+        }
+        $this->name = $name;
+        $this->email = $email;
+        $this->address = str_replace('_', '/', $address);
+        $this->phone_number = $phone;
+        // dd($user);
+        if($password)
+            $this->password = str_replace('_', '/', $password);
+        if(!$this->save())
+            return $errors['failed_update'] = 'Failed to update your profile.';
+        return [];
     }
 
     /**

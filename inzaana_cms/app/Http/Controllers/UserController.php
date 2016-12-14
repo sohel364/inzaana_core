@@ -380,30 +380,30 @@ class UserController extends Controller
         $data['request_url'] .= ('/phone/' . $user->phone_number);
         $data['request_url'] .= '/password/' . str_replace('/', '_', ($user->password ? $user->password : Auth::user()->password));
         $data['request_url'] .= '/address/' . str_replace('/', '_', $user->address);
-
         $mailer->sendEmailProfileUpdateConfirmationTo($user, $data);
 
-        flash()->info('A verification mail is sent to ' . Auth::user()->email . '. Please check your mail inbox/ junk/ spam directives to confirm your changes verified.');
+        flash()->info('A verification mail is sent to ' . ($user->email ? $user->email : Auth::user()->email) . '. Please check your mail inbox/ junk/ spam directives to confirm your changes verified.');
 
         return redirect()->back();
     }
 
     public function confirmProfileUpdate(Request $request, User $user, $name, $email, $phone, $password = null, $address = null)
     {
-        // return 'Phone:' . $phone . ' Address:' . $address;
-        if($user->id != Auth::user()->id)
+        if(Auth::guest())
         {
-            return redirect()->route('user::edit', [Auth::user()])->withErrors(['The information you are going to update to your profile is not yours!']);
+            flash()->error('Please login to confirm your changes of profile edit.');
+            return Auth::guest('/login');
         }
-        $user->name = $name;
-        $user->email = $email;
-        $user->address = str_replace('_', '/', $address);
-        $user->phone_number = $phone;
-        // dd($user);
-        if($password)
-            $user->password = str_replace('_', '/', $password);
-        if(!$user->save())
-            return redirect()->back()->withErrors(['Failed to update your profile.']);
+        // return 'Phone:' . $phone . ' Address:' . $address;
+        $errors = $user->saveConfirmedProfile($name, $email, $phone, $password, $address);
+        if(array_has($errors, 'auth_mismatch'))
+        {
+            return redirect()->route('user::edit', [Auth::user()])->withErrors($errors['auth_mismatch']);   
+        }
+        if(array_has($errors, 'failed_update'))
+        {
+            return redirect()->back()->withErrors($errors['failed_update']);   
+        }
         flash()->success('You have updated your profile successfully!');
         return redirect()->route('user::edit', [$user]);
     }

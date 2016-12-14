@@ -56,11 +56,6 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        if ($e instanceof ModelNotFoundException) {
-            $e = new NotFoundHttpException($e->getMessage(), $e);
-            Log::critical('[Inzaana][' . $e->getMessage() . "] db model problem.");
-            return redirect()->back();
-        }
         if ($e instanceof PDOException) {
             $errorMessage['DEFAULT'] = 'Something went wrong while connecting database. Please contact your server administrator.';
             $errorMessage['42S22'] = 'Your information contains data that has no property in database. Please contact Inzaana for help.';
