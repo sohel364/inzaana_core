@@ -115,7 +115,7 @@
 
                   <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                     <label for="email">Email Address</label>
-                    <input type="text" class="form-control" value="{{ $user->email or old('email') }}" id="email" name="email" placeholder="Your email address..">            
+                    <input type="email" class="form-control" value="{{ $user->email or old('email') }}" id="email" name="email" placeholder="Your email address..">            
 
                     @if ($errors->has('email'))
                         <span class="help-block">

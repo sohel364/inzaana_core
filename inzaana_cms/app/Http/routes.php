@@ -90,6 +90,8 @@ Route::group(['middleware' => 'web'], function () {
         ->where([ 'address' => '.*', 'phone' => '[+0-9]{3,4}+[-]+[0-9]+', 'password' => '.*' ]); // validation phone => (?:\s+|)((0|(?:(\+|)91))(?:\s|-)*(?:(?:\d(?:\s|-)*\d{9})|(?:\d{2}(?:\s|-)*\d{8})|(?:\d{3}(?:\s|-)*\d{7}))|\d{10})(?:\s+|);
 
     Route::group(['middleware' => ['feature','subscription'], 'as' => 'user::' ], function() {
+
+        // Route::group(['middleware' => ['feature','subscription'], function() 
         // Store controller
         Route::group(['prefix' => 'stores'], function () {
 

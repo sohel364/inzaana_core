@@ -115,7 +115,7 @@
                             <td>{{ $subscriber->subscriber_name }}</td>
                             <td>{{ $subscriber->email }}</td>
                             <td>{{ $subscriber->contact }}</td>
-                            <td>{{ $subscriber->address }}</td>
+                            <td>{{ Inzaana\User::tidyAddress($subscriber->address) }}</td>
                             <td>
                                 @if($subscriber->coupon_id != null)
                                     {{ $subscriber->plan_name }} (<s>{{ $subscriber->amount }}/{{ $subscriber->interval }}</s> {{ $subscriber->coupon['discount_price'] }}/{{ $subscriber->interval }})

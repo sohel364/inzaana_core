@@ -4,22 +4,21 @@ namespace Inzaana\Http\Controllers;
 
 use Auth;
 use Carbon\Carbon;
-use Inzaana\StripeCoupon;
 use Session;
-use Stripe\Subscription;
 use Validator;
-use Inzaana\User;
-use Inzaana\Mailers\AppMailer;
-use Illuminate\Http\Request;
-use Inzaana\StripePlan;
-use Inzaana\Faq;
-
-use Inzaana\Http\Requests;
-use Inzaana\Http\Controllers\Controller;
 
 // @addedby tajuddin.khandaker.cse.ju@gmail.com
+use Illuminate\Http\Request;
+use Inzaana\Http\Requests;
+use Inzaana\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input as UserInput;
-use Illuminate\Support\Facades\DB;
+
+use Stripe\Subscription;
+use Inzaana\StripeCoupon;
+use Inzaana\StripePlan;
+use Inzaana\Mailers\AppMailer;
+use Inzaana\User;
+use Inzaana\Faq;
 
 class UserController extends Controller
 {
@@ -357,14 +356,17 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $phoneNumber = User::decodePhoneNumber($user->phone_number);
-        $address = User::decodeAddress($user->address);
         return view('edit-profile') ->withUser($user)
-                                    ->withPhoneNumber($phoneNumber)
-                                    ->withAddress($address)
+                                    ->withPhoneNumber(User::decodePhoneNumber($user->phone_number))
+                                    ->withAddress(User::decodeAddress($user->address))
                                     ->withAreaCodes(collect(User::areaCodes()))
-                                    ->withStates(DB::table('states')->select('id', 'state_name')->simplePaginate(10))
-                                    ->withPostCodes(DB::table('post_codes')->select('id', 'post_code')->simplePaginate(10));
+                                    ->withStates($user->getStatesPaginated(10))
+                                    ->withPostCodes($user->getPostCodesPaginated(10));
+    }
+
+    private function redirectToUserProfileEdit(User $user, $errors = [])
+    {
+        return redirect()->route('user::edit', [$user])->withErrors($errors);
     }
 
     public function verifyProfileChanges(Request $request, AppMailer $mailer, User $user)
@@ -373,39 +375,38 @@ class UserController extends Controller
 
         if(!empty($errors))
         {
-            return redirect()->back()->withErrors($errors);
+            return $this->redirectToUserProfileEdit($user, $errors);
         }
 
         $data['request_url']  = ('name/' . $user->name) . ('/email/' . $user->email);
         $data['request_url'] .= ('/phone/' . $user->phone_number);
         $data['request_url'] .= '/password/' . str_replace('/', '_', ($user->password ? $user->password : Auth::user()->password));
         $data['request_url'] .= '/address/' . str_replace('/', '_', $user->address);
+
+        // dd($data);
         $mailer->sendEmailProfileUpdateConfirmationTo($user, $data);
 
         flash()->info('A verification mail is sent to ' . ($user->email ? $user->email : Auth::user()->email) . '. Please check your mail inbox/ junk/ spam directives to confirm your changes verified.');
 
-        return redirect()->back();
+        return $this->redirectToUserProfileEdit($user);
     }
 
     public function confirmProfileUpdate(Request $request, User $user, $name, $email, $phone, $password = null, $address = null)
     {
-        if(Auth::guest())
-        {
-            flash()->error('Please login to confirm your changes of profile edit.');
-            return Auth::guest('/login');
-        }
         // return 'Phone:' . $phone . ' Address:' . $address;
         $errors = $user->saveConfirmedProfile($name, $email, $phone, $password, $address);
         if(array_has($errors, 'auth_mismatch'))
         {
-            return redirect()->route('user::edit', [Auth::user()])->withErrors($errors['auth_mismatch']);   
+            Auth::logout();
+            flash()->error($errors['auth_mismatch']);
+            return redirect('/login');
         }
         if(array_has($errors, 'failed_update'))
         {
-            return redirect()->back()->withErrors($errors['failed_update']);   
+            return redirect()->back()->withErrors($errors);   
         }
         flash()->success('You have updated your profile successfully!');
-        return redirect()->route('user::edit', [$user]);
+        return $this->redirectToUserProfileEdit($user);
     }
 
     /**
@@ -452,7 +453,7 @@ class UserController extends Controller
             {
                 return [ 'password_confirmation' => 'Password did not match with new one.' ];
             }
-            if(count($request->input('password')) < 6)
+            if(strlen($request->input('password')) < 6)
             {
                 return [ 'password' => 'Password must have minimum 6 characters' ];
             }

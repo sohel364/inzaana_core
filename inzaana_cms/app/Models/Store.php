@@ -17,7 +17,7 @@ class Store extends Model
      *
      * @var array
      */
-    protected $fillable = [ 'name', 'user_id', 'name_as_url', 'sub_domain', 'domain', 'description', 'store_type' ]; 
+    protected $fillable = [ 'name', 'user_id', 'name_as_url', 'sub_domain', 'domain', 'address', 'phone_number', 'description', 'store_type' ]; 
     
     protected $guarded = [];
 
@@ -58,19 +58,6 @@ class Store extends Model
     public function getAddressAttribute($value)
     {
         return $value ? $value : Auth::user()->address;
-    }
-
-    public function decodeAddress($less = true)
-    {
-        $addressDecoded = User::decodeAddress($this->attributes['address']);
-        if($less)
-            return $addressDecoded['HOUSE'] . ', ' . $addressDecoded['STREET'] . ', ' . $addressDecoded['LANDMARK'] . ', ' . $addressDecoded['TOWN'];
-        return  $addressDecoded['HOUSE'] . ', '
-                . $addressDecoded['STREET'] . ', ' 
-                . $addressDecoded['LANDMARK'] . ', '
-                . $addressDecoded['TOWN'] . ', '
-                . $addressDecoded['STATE'] . ', '
-                . $addressDecoded['POSTCODE'];
     }
 
     public function getStoreTypeIndex($id)
@@ -129,5 +116,10 @@ class Store extends Model
             $companies []= title_case($inputTerms) . ' ' . date("Y") . ' ' . $company_liability_types[$key];
         }
         return $companies;
+    }
+
+    public function getSiteAddress()
+    {
+        return str_replace('.', '', $this->name_as_url) . '.' . $this->sub_domain . '.' . $this->domain;
     }
 }

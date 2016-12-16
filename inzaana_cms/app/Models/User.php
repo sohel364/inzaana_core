@@ -4,6 +4,7 @@ namespace Inzaana;
 
 use Auth;
 use Laravel\Cashier\Billable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -43,6 +44,14 @@ class User extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+    // As of PHP 5.6.0
+    const MAX_RECORD_STATES_PER_PAGE = 10;
+    const MAX_RECORD_POSTCODES_PER_PAGE = 10;
+    const TIDY_ADDRESS_DEVIDER = ', ';
+    const SEEDING_DATA_SOURCE_CSV = 'app/csv/india_contacts_db.csv';
+    // As of PHP 7.1.0 -> you can do privacy
+    // private const MAX_RECORD_STATES_PER_PAGE = 10;
 
     /**
      * Boot the model.
@@ -170,6 +179,25 @@ class User extends Model implements AuthenticatableContract,
         return $addressDecoded;
     }
 
+    public static function tidyAddress($address)
+    {
+        $tidyAddress = '';
+        $decodedAddress = User::decodeAddress($address);
+
+        foreach($decodedAddress as $key => $value)
+        {
+            if(!$value)
+            {
+                $tidyAddress = rtrim($tidyAddress, self::TIDY_ADDRESS_DEVIDER);
+                continue;
+            }
+            if($key == 'POSTCODE' || $key == 'STATE')
+                continue;
+            $tidyAddress .= $value . ($key == 'TOWN' ? '' : self::TIDY_ADDRESS_DEVIDER);
+        }
+        return $tidyAddress;
+    }
+
     public static function encodeAddress(array $inputs)
     {
         $delimiter_address = "<address>";
@@ -186,7 +214,7 @@ class User extends Model implements AuthenticatableContract,
 
     public static function postcodes($country, $viewCount = 0)
     {
-        $parser = \KzykHys\CsvParser\CsvParser::fromFile(str_replace('\\', '\\\\', storage_path('app/csv/india_contacts_db.csv')));
+        $parser = \KzykHys\CsvParser\CsvParser::fromFile(str_replace('\\', '\\\\', storage_path(self::SEEDING_DATA_SOURCE_CSV)));
         static $postcodes = array();
 
         if(count($postcodes) > 0)
@@ -208,7 +236,7 @@ class User extends Model implements AuthenticatableContract,
 
     public static function states($country, $viewCount = 0)
     {
-        $parser = \KzykHys\CsvParser\CsvParser::fromFile(str_replace('\\', '\\\\', storage_path('app/csv/india_contacts_db.csv')));
+        $parser = \KzykHys\CsvParser\CsvParser::fromFile(str_replace('\\', '\\\\', storage_path(self::SEEDING_DATA_SOURCE_CSV)));
         static $states = array();
         
         if(count($states) > 0)
@@ -226,5 +254,15 @@ class User extends Model implements AuthenticatableContract,
             }
         }
         return collect($states)->unique()->forget(0);
+    }
+
+    public function getStatesPaginated($recordPerPage = self::MAX_RECORD_STATES_PER_PAGE)
+    {
+        return DB::table('states')->select('id', 'state_name')->simplePaginate($recordPerPage);
+    }
+
+    public function getPostCodesPaginated($recordPerPage = self::MAX_RECORD_POSTCODES_PER_PAGE)
+    {
+        return DB::table('post_codes')->select('id', 'post_code')->simplePaginate($recordPerPage);
     }
 }

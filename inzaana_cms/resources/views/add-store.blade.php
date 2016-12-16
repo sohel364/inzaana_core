@@ -213,13 +213,14 @@
                     @if(isset($stores))
                       @foreach($stores as $store)
                       <tr>
-                        <!-- <td class="text-center" id="child"><a href="">001</a> </td> -->
-                        <td class="text-center" id="child"><a href="#">{{ $store->name }}</a></td>
+                        <td class="text-center" id="child">
+                          <a target="_blank" href="{{ route('user::stores.redirect', [ 'site' => $store->getSiteAddress() ] ) }}">{{ $store->name }}</a>
+                        </td>
 
-                        <td class="text-center" id="child">{{ $store->decodeAddress() }}</td>
+                        <td class="text-center" id="child">{{ Inzaana\User::tidyAddress($store->address) }}</td>
 
                         <td class="text-center" id="child">
-                          <a target="_blank" href="{{ route('user::stores.redirect', [ 'site' => str_replace('.', '', $store->name_as_url) . '.' . $store->sub_domain . '.' . $store->domain ] ) }}">{{ str_replace('.', '', $store->name_as_url) . '.' . $store->sub_domain . '.' . str_replace('.', '', $store->domain) }}</a>
+                          <a target="_blank" href="{{ route('user::stores.redirect', [ 'site' => $store->getSiteAddress() ] ) }}">{{ str_replace('.', '', $store->name_as_url) . '.' . $store->sub_domain . '.' . str_replace('.', '', $store->domain) }}</a>
                         </td>
 
                         <td class="text-center" id="child">

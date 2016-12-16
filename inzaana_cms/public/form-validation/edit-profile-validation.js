@@ -13,10 +13,10 @@
           rules: {
             name: "required",
             password: {
-              minlength: 5
+              minlength: 6
             },
             password_confirmation: {
-              minlength: 5,
+              minlength: 6,
               equalTo: "#password"
             },
             email: {
@@ -33,10 +33,10 @@
           messages: {
             name: "Please enter your full name",
             password: {
-              minlength: "Your password must be at least 5 characters long"
+              minlength: "Your password must be at least 6 characters long"
             },
             password_confirmation: {
-              minlength: "Your password must be at least 5 characters long",
+              minlength: "Your password must be at least 6 characters long",
               equalTo: "Please enter the same password as above"
             },
             email: "Please enter a valid email address",

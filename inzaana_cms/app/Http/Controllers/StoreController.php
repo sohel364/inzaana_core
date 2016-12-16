@@ -50,8 +50,8 @@ class StoreController extends Controller
                                 ->withStores(Auth::user()->stores)
                                 ->withTypes(collect(Store::types()))
                                 ->withAreaCodes(collect(User::areaCodes()))
-                                ->withStates(DB::table('states')->select('id', 'state_name')->simplePaginate(10))
-                                ->withPostCodes(DB::table('post_codes')->select('id', 'post_code')->simplePaginate(10));
+                                ->withStates(Auth::user()->getStatesPaginated(10))
+                                ->withPostCodes(Auth::user()->getPostCodesPaginated(10));
     }
 
     public function index()
@@ -140,14 +140,14 @@ class StoreController extends Controller
 
     public function create(StoreRequest $request)
     {
-        $store = $request->input('store_name');
+        $store_name = $request->input('store_name');
 
         $address = User::encodeAddress($request->only(
             'mailing-address', 'address_flat_house_floor_building', 'address_colony_street_locality', 'address_landmark', 'address_town_city', 'postcode', 'state'
         ));
 
         $data = [
-            'name' => $store,
+            'name' => $store_name,
             'description' => $request->input('description'),
             'address' => $address,
             'phone_number' => $request->input('code') . $this->delimiter_phone_number . $request->input('phone_number'),
@@ -159,9 +159,9 @@ class StoreController extends Controller
             return redirect()->back()->withErrors($validator->errors())->withInput();
         }        
         $store = Store::create([
-            'name' => $store,
+            'name' => $store_name,
             'user_id' => Auth::user()->id,
-            'name_as_url' => strtolower(str_replace('.', '', str_replace(' ', '', $store))),
+            'name_as_url' => strtolower(str_replace('.', '', str_replace(' ', '', $store_name))),
             'description' => $data['description'],
             'address' => $data['address'],
             'phone_number' => $data['phone_number'],
@@ -173,7 +173,7 @@ class StoreController extends Controller
             return redirect()->back()->withErrors(['Failed to create store named (' . $store->name . ')']);
         }
         flash()->success('Store (' . $store->name . ') information will be published when approved by the authority. Please contact Inzaana administrator for further assistance.');
-        return redirect()->route('user::stores');
+        return redirect()->back();
     }
 
     public function createOnSignUp($name, $site, $business)
