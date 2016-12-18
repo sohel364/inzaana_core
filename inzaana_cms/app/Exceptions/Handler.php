@@ -97,7 +97,7 @@ class Handler extends ExceptionHandler
             $errorMessage = 'Something went wrong during form submission! Please try again';
             Log::critical('[Inzaana][' . $e->getMessage() . "] validation error.");
             flash()->error($errorMessage);
-            return redirect()->back();
+            return redirect('/login');
         }
 
         /*

@@ -107,7 +107,6 @@ class StoreController extends Controller
             'address' => $address,
             'phone_number' => $request->input('code') . $this->delimiter_phone_number . $request->input('phone_number'),
             'store_type' => $request->input('business')
-
         ]);
 
         $rules = $this->_rules;

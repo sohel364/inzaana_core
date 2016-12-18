@@ -113,13 +113,13 @@
 
 				          <div class="form-group">
                     <label for="address">Address</label>
-					           <input type="text" class="form-control" value="{{ $address['HOUSE'] or '' }}" id="address_flat_house_floor_building" name="address_flat_house_floor_building" placeholder="Flat / house no / floor / Building">
+					           <input type="text" class="form-control" value="{{ $address['HOUSE'] or old('address_flat_house_floor_building') }}" id="address_flat_house_floor_building" name="address_flat_house_floor_building" placeholder="Flat / house no / floor / Building">
                     <br/>
-                    <input type="text" class="form-control" value="{{ $address['STREET'] or '' }}" id="address_colony_street_locality" name="address_colony_street_locality" placeholder="Colony / Street / Locality">
+                    <input type="text" class="form-control" value="{{ $address['STREET'] or old('address_colony_street_locality') }}" id="address_colony_street_locality" name="address_colony_street_locality" placeholder="Colony / Street / Locality">
                     <br/>
-                    <input type="text" class="form-control" value="{{ $address['LANDMARK'] or '' }}" id="address_landmark" name="address_landmark" placeholder="Landmark (optional)">
+                    <input type="text" class="form-control" value="{{ $address['LANDMARK'] or old('address_landmark') }}" id="address_landmark" name="address_landmark" placeholder="Landmark (optional)">
                     <br/>
-                    <input type="text" class="form-control" value="{{ $address['TOWN'] or '' }}" id="address_town_city" name="address_town_city" placeholder="Town / City">
+                    <input type="text" class="form-control" value="{{ $address['TOWN'] or old('address_town_city') }}" id="address_town_city" name="address_town_city" placeholder="Town / City">
                     <br/>
 
                     <div class="row col-sm-12 col-md-12 col-lg-12">
