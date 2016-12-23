@@ -16,7 +16,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Foundation\Validation\ValidationException;
-// use Illuminate\Exception\SymfonyDisplayer;
 
 use Log;
 use PDOException;
@@ -59,13 +58,12 @@ class Handler extends ExceptionHandler
         if ($e instanceof PDOException) {
             $errorMessage['DEFAULT'] = 'Something went wrong while connecting database. Please contact your server administrator.';
             $errorMessage['42S22'] = 'Your information contains data that has no property in database. Please contact Inzaana for help.';
-            $errorCode = $e->getCode();
-            if(!$errorMessage[$errorCode])
-                $errorCode = 'DEFAULT';
+            $errorMessage['HY000'] = 'Database access denied';
+            $errorCode = !array_has($errorMessage, $errorCode) ? 'DEFAULT' : $e->getCode();
 
             Log::critical('[Inzaana][' . $e->getMessage() . "] " . $errorMessage[$errorCode] . ".");
             flash()->error($errorMessage[$errorCode]);
-            return redirect()->back();
+            return redirect('/login');
         }
         if ($e instanceof QueryException) {
             $errorMessage = 'Something went wrong while running database query. Please contact your database server administrator.';
@@ -73,25 +71,6 @@ class Handler extends ExceptionHandler
             flash()->error($errorMessage);
             return redirect()->back();
         }
-        // if ($e instanceof HttpException) {
-        //     $status = $e->getStatusCode();
-        //     $errors[403] = 'You are not authorized to route this action as you are tried. Please follow the routes as we guide you.';
-
-        //     if (view()->exists("errors.{$status}"))
-        //     {
-        //         return response()->view("errors.{$status}", [ 'errors' => collect($errors) ], $status);
-        //     }
-        //     else
-        //     {
-        //         return (new SymfonyDisplayer(config('app.debug')))->createResponse($e);
-        //     }
-        // }
-        // if ($e instanceof ValidationException) {
-        //     $errorMessage = 'Please fill up all necessary fields.';
-        //     Log::critical('[Inzaana][' . $e->getMessage() . "] validation error.");
-        //     flash()->error($errorMessage);
-        //     return redirect()->back()->withErrors(collect(['Has Errors man.']));
-        // }
 
         if ($e instanceof TokenMismatchException) {
             $errorMessage = 'Something went wrong during form submission! Please try again';

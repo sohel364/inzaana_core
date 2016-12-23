@@ -16,10 +16,10 @@ class AuthorisedUserViewsTest extends TestCase
         $this->assertTrue(true);
     }
 	
-    public function testNewUserRegistration()
+    public function testUserLogin()
     {
-        $this->visit('/sign-up')
-             ->see('Inzaana | Sign-Up');
+        $this->visit('/login')
+             ->see('Inzaana | Log-In');
     }
  //    public function testNewUserRegistration()
     // {

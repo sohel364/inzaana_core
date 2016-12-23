@@ -26,7 +26,7 @@ Route::group([ 'as' => 'guest::' ], function() {
         
         Route::get('/showcase', [ 'uses' => 'HomeController@redirectToStore', 'as' => 'showcase' ]); 
     });
-}); 
+});
 
 Route::group(['middleware' => 'web'], function () {
 
@@ -89,23 +89,14 @@ Route::group(['middleware' => 'web'], function () {
         [ 'uses' => 'UserController@confirmProfileUpdate', 'as' => 'edit.confirm' ])
         ->where([ 'address' => '.*', 'phone' => '[+0-9]{3,4}+[-]+[0-9]+', 'password' => '.*' ]); // validation phone => (?:\s+|)((0|(?:(\+|)91))(?:\s|-)*(?:(?:\d(?:\s|-)*\d{9})|(?:\d{2}(?:\s|-)*\d{8})|(?:\d{3}(?:\s|-)*\d{7}))|\d{10})(?:\s+|);
 
-    Route::group(['middleware' => ['feature','subscription'], 'as' => 'user::' ], function() {
+    Route::group([ 'as' => 'user::' ], function() {
 
-        // Route::group(['middleware' => ['feature','subscription'], function() 
-        // Store controller
-        Route::group(['prefix' => 'stores'], function () {
 
-            Route::get('/', [ 'uses' => 'StoreController@index', 'as' => 'stores' ]);           
-            Route::get('/redirect/site/{site}', [ 'uses' => 'StoreController@redirectUrl', 'as' => 'stores.redirect' ]);           
-            Route::get('/create/name/{name}/site/{site}/business/{business}', [ 'uses' => 'StoreController@createOnSignUp', 'as' => 'stores.create-on-signup' ]);           
-            Route::post('/create', [ 'uses' => 'StoreController@create', 'as' => 'stores.create' ]);           
-            Route::post('/{store}', [ 'uses' => 'StoreController@postUpdate', 'as' => 'stores.update' ]);           
-            Route::get('/{store}/edit/', [ 'uses' => 'StoreController@update', 'as' => 'stores.edit' ]);           
-            Route::post('/{store}/delete/', [ 'uses' => 'StoreController@delete', 'as' => 'stores.delete' ]); 
-            Route::get('/approvals', [ 'uses' => 'StoreController@approvals', 'as' => 'stores.approvals' ]);
-            Route::post('/approvals/confirm/{id}', [ 'uses' => 'StoreController@confirmApproval', 'as' => 'stores.approvals.confirm' ]);          
-            Route::get('/suggest/input/{input}', [ 'uses' => 'StoreController@suggest', 'as' => 'stores.suggest' ]);          
-        });
+        Route::get('/user_my_order', [ 'uses' => 'UserController@usermyorder', 'as' => 'orders' ]);
+        Route::get('/user_product_return', [ 'uses' => 'UserController@userproductreturn', 'as' => 'products.return' ]);
+        Route::get('/user_reward_points', [ 'uses' => 'UserController@userrewardpoints', 'as' => 'reward-points' ]);
+        Route::get('/user_wallet', [ 'uses' => 'UserController@userwallet', 'as' => 'wallet' ]);
+        Route::get('/who-am-i', [ 'uses' => 'UserController@user', 'as' => 'info' ]);
 
         // routes grouped by /dashboard
         Route::group(['prefix' => 'dashboard'], function () {
@@ -129,67 +120,96 @@ Route::group(['middleware' => 'web'], function () {
                 Route::get('/', [ 'uses' => 'UserController@redirectToDashboard', 'as' => 'vendor.dashboard' ]); 
                 Route::get('/plan', [ 'uses' => 'UserController@redirectToVendorPlan', 'as' => 'vendor.plan' ]);
                 Route::post('/plan', [ 'uses' => 'StripeController@subscriptionPlan', 'as' => 'vendor.subscriptionPlan' ]);
-
                 Route::get('/view-my-subscription', [ 'uses' => 'StripeController@viewMySubscription', 'as'=> 'viewMySubscription']);
-                Route::get('/tools', [ 'uses' => 'UserController@downloadTools', 'as'=>'vendor.tools']);
-                Route::get('/licenses', [ 'uses' => 'UserController@getLicenseKeys', 'as'=>'vendor.licenses']);
             });
         });
 
-        Route::get('/user_my_order', [ 'uses' => 'UserController@usermyorder', 'as' => 'orders' ]);
-        Route::get('/user_product_return', [ 'uses' => 'UserController@userproductreturn', 'as' => 'products.return' ]);
-        Route::get('/user_reward_points', [ 'uses' => 'UserController@userrewardpoints', 'as' => 'reward-points' ]);
-        Route::get('/user_wallet', [ 'uses' => 'UserController@userwallet', 'as' => 'wallet' ]);
-        Route::get('/who-am-i', [ 'uses' => 'UserController@user', 'as' => 'info' ]);
+        // Featured group
+        Route::group(['middleware' => ['feature','subscription'] ], function() {
 
-        // Template Controller
-        Route::get('/templates/gallery', [ 'uses' => 'TemplateController@index', 'as' => 'templates' ]);
-        Route::get('/templates/saved', [ 'uses' => 'TemplateController@showSaved', 'as' => 'templates.saved' ]);
-        
-        Route::get('/templates/info/{template_id}', [ 'uses' => 'TemplateController@info', 'as' => 'templates.info' ]);
-        Route::get('/templates/template/{template_id}', [ 'uses' => 'TemplateController@show', 'as' => 'templates.show' ]);
-        Route::get('/templates/category/{category_name}', [ 'uses' => 'TemplateController@categories', 'as' => 'templates.categories.show' ]);
+            // routes grouped by /vendor
+            // route: /dashboard/vendor/
+            Route::group(['prefix' => 'vendor'], function () {
 
-        Route::get('/editor/{category}/{template}', [ 'uses'=>'TemplateController@browse', 'as'=>'templates.editor.browse' ]);
-        Route::get('/editor/{category}/{template}/{template_id}', [ 'uses'=>'TemplateController@editor', 'as'=>'templates.editor.edit' ]);
+                Route::get('/tools', [ 'uses' => 'UserController@downloadTools', 'as'=>'vendor.tools']);
+                Route::get('/licenses', [ 'uses' => 'UserController@getLicenseKeys', 'as'=>'vendor.licenses']);
+            });
 
-        Route::get('/viewer/{saved_name}/{template_id}', [ 'uses'=>'TemplateController@show', 'as'=>'templates.viewer' ]);
+            // Store controller
+            Route::group(['prefix' => 'stores'], function () {
 
-        Route::post('/templates/create', [ 'uses' => 'TemplateController@create', 'as' => 'templates.create' ]);
-        Route::post('/templates/edit/{template_id}', [ 'uses' => 'TemplateController@edit', 'as' => 'templates.edit' ]);
+                Route::get('/', [ 'uses' => 'StoreController@index', 'as' => 'stores' ]);           
+                Route::get('/redirect/site/{site}', [ 'uses' => 'StoreController@redirectUrl', 'as' => 'stores.redirect' ]);           
+                Route::get('/create/name/{name}/site/{site}/business/{business}', [ 'uses' => 'StoreController@createOnSignUp', 'as' => 'stores.create-on-signup' ]);           
+                Route::post('/create', [ 'uses' => 'StoreController@create', 'as' => 'stores.create' ]);           
+                Route::post('/{store}', [ 'uses' => 'StoreController@postUpdate', 'as' => 'stores.update' ]);           
+                Route::get('/{store}/edit/', [ 'uses' => 'StoreController@update', 'as' => 'stores.edit' ]);           
+                Route::post('/{store}/delete/', [ 'uses' => 'StoreController@delete', 'as' => 'stores.delete' ]); 
+                Route::get('/approvals', [ 'uses' => 'StoreController@approvals', 'as' => 'stores.approvals' ]);
+                Route::post('/approvals/confirm/{id}', [ 'uses' => 'StoreController@confirmApproval', 'as' => 'stores.approvals.confirm' ]);          
+                Route::get('/suggest/input/{input}', [ 'uses' => 'StoreController@suggest', 'as' => 'stores.suggest' ]);          
+            });
 
-        // Product controller
-        Route::get('/products', [ 'uses' => 'ProductController@index', 'as' => 'products' ]);
-        Route::get('/products/search', [ 'uses' => 'ProductController@search', 'as' => 'products.search' ]);
-        Route::get('/products/search/{terms?}', [ 'uses' => 'ProductController@searchTerms', 'as' => 'products.search-terms' ]);
-        Route::post('/products/create', [ 'uses' => 'ProductController@create', 'as' => 'products.create' ]);
-        Route::post('/products/sell-yours/{id}', [ 'uses' => 'ProductController@copy', 'as' => 'products.sell-yours' ]);
-        Route::post('/products/edit/{product_id}', [ 'uses' => 'ProductController@edit', 'as' => 'products.edit' ]);
-        Route::post('/products/delete/{product_id}', [ 'uses' => 'ProductController@delete', 'as' => 'products.delete' ]);
-        Route::get('/products/approvals', [ 'uses' => 'ProductController@approvals', 'as' => 'products.approvals' ]);
-        Route::post('/products/approvals/confirm/{id}', [ 'uses' => 'ProductController@confirmApproval', 'as' => 'products.approvals.confirm' ]);
+            // Template Controller
+            Route::get('/templates/gallery', [ 'uses' => 'TemplateController@index', 'as' => 'templates' ]);
+            Route::get('/templates/saved', [ 'uses' => 'TemplateController@showSaved', 'as' => 'templates.saved' ]);
+            
+            Route::get('/templates/info/{template_id}', [ 'uses' => 'TemplateController@info', 'as' => 'templates.info' ]);
+            Route::get('/templates/template/{template_id}', [ 'uses' => 'TemplateController@show', 'as' => 'templates.show' ]);
+            Route::get('/templates/category/{category_name}', [ 'uses' => 'TemplateController@categories', 'as' => 'templates.categories.show' ]);
 
-        // Category controller
-        Route::get('/categories', [ 'uses' => 'CategoryController@index', 'as' => 'categories' ]);
-        Route::post('/categories/create', [ 'uses' => 'CategoryController@create', 'as' => 'categories.create' ]);
-        Route::get('/categories/edit/{category_id}', [ 'uses' => 'CategoryController@edit', 'as' => 'categories.edit' ]);
-        Route::post('/categories/edit/{category_id}', [ 'uses' => 'CategoryController@postEdit', 'as' => 'categories.update' ]);
-        Route::post('/categories/delete/{category_id}', [ 'uses' => 'CategoryController@delete', 'as' => 'categories.delete' ]);
-        Route::get('/categories/approvals', [ 'uses' => 'CategoryController@approvals', 'as' => 'categories.approvals' ]);
-        Route::post('/categories/approvals/confirm/{id}', [ 'uses' => 'CategoryController@confirmApproval', 'as' => 'categories.approvals.confirm' ]);
+            Route::get('/editor/{category}/{template}', [ 'uses'=>'TemplateController@browse', 'as'=>'templates.editor.browse' ]);
+            Route::get('/editor/{category}/{template}/{template_id}', [ 'uses'=>'TemplateController@editor', 'as'=>'templates.editor.edit' ]);
 
-        // HTML view menu controller
-        Route::post('/html-view-menus/{template_id}', [ 'uses' => 'HtmlViewMenuController@contents', 'as' => 'menus.contents' ]);
-        Route::post('/html-view-menus/content-default/{template_id}', [ 'uses' => 'HtmlViewMenuController@baseContent', 'as' => 'menus.content.default' ]);
-        Route::post('/html-view-menus/create/{template_id}', [ 'uses' => 'HtmlViewMenuController@create', 'as' => 'menus.create' ]);
+            Route::get('/viewer/{saved_name}/{template_id}', [ 'uses'=>'TemplateController@show', 'as'=>'templates.viewer' ]);
 
-        // HTML view content controller
-        Route::post('/html-view-contents/create', [ 'uses' => 'HtmlViewContentController@create', 'as' => 'html-view-contents.create' ]);
+            Route::post('/templates/create', [ 'uses' => 'TemplateController@create', 'as' => 'templates.create' ]);
+            Route::post('/templates/edit/{template_id}', [ 'uses' => 'TemplateController@edit', 'as' => 'templates.edit' ]);
 
-        // Media Archive Controller
-        Route::post('/medias/save', [ 'uses' => 'MediaController@save', 'as' => 'medias.save' ]);
-        Route::get('/medias/template/{template_id}', [ 'uses' => 'MediaController@reload', 'as' => 'medias.reload' ]);
-        Route::get('/medias/images/{filename}', [ 'uses' => 'MediaController@image', 'as' => 'medias.image' ]);
+            // Product controller
+            Route::get('/products', [ 'uses' => 'ProductController@index', 'as' => 'products' ]);
+            Route::get('/products/search', [ 'uses' => 'ProductController@search', 'as' => 'products.search' ]);
+            Route::get('/products/search/{terms?}', [ 'uses' => 'ProductController@searchTerms', 'as' => 'products.search-terms' ]);
+            Route::post('/products/create', [ 'uses' => 'ProductController@create', 'as' => 'products.create' ]);
+            Route::post('/products/sell-yours/{id}', [ 'uses' => 'ProductController@copy', 'as' => 'products.sell-yours' ]);
+            Route::post('/products/edit/{product_id}', [ 'uses' => 'ProductController@edit', 'as' => 'products.edit' ]);
+            Route::post('/products/delete/{product_id}', [ 'uses' => 'ProductController@delete', 'as' => 'products.delete' ]);
+            Route::get('/products/approvals', [ 'uses' => 'ProductController@approvals', 'as' => 'products.approvals' ]);
+            Route::post('/products/approvals/confirm/{id}', [ 'uses' => 'ProductController@confirmApproval', 'as' => 'products.approvals.confirm' ]);
+            Route::get('/products/import/csv/raw/records', function() {
+                //$pi('product_inzaana_asset.csv')->getRaw()
+                try
+                {
+                    $pi = new Inzaana\BulkExportImport\ProductImporter('product_inzaana_asset.csv');
+                    return $pi->getProductsCount();
+                }
+                catch(\Exception $e)
+                {
+                    return $e->getMessage();
+                }
+            });
 
+            // Category controller
+            Route::get('/categories', [ 'uses' => 'CategoryController@index', 'as' => 'categories' ]);
+            Route::post('/categories/create', [ 'uses' => 'CategoryController@create', 'as' => 'categories.create' ]);
+            Route::get('/categories/edit/{category_id}', [ 'uses' => 'CategoryController@edit', 'as' => 'categories.edit' ]);
+            Route::post('/categories/edit/{category_id}', [ 'uses' => 'CategoryController@postEdit', 'as' => 'categories.update' ]);
+            Route::post('/categories/delete/{category_id}', [ 'uses' => 'CategoryController@delete', 'as' => 'categories.delete' ]);
+            Route::get('/categories/approvals', [ 'uses' => 'CategoryController@approvals', 'as' => 'categories.approvals' ]);
+            Route::post('/categories/approvals/confirm/{id}', [ 'uses' => 'CategoryController@confirmApproval', 'as' => 'categories.approvals.confirm' ]);
+
+            // HTML view menu controller
+            Route::post('/html-view-menus/{template_id}', [ 'uses' => 'HtmlViewMenuController@contents', 'as' => 'menus.contents' ]);
+            Route::post('/html-view-menus/content-default/{template_id}', [ 'uses' => 'HtmlViewMenuController@baseContent', 'as' => 'menus.content.default' ]);
+            Route::post('/html-view-menus/create/{template_id}', [ 'uses' => 'HtmlViewMenuController@create', 'as' => 'menus.create' ]);
+
+            // HTML view content controller
+            Route::post('/html-view-contents/create', [ 'uses' => 'HtmlViewContentController@create', 'as' => 'html-view-contents.create' ]);
+
+            // Media Archive Controller
+            Route::post('/medias/save', [ 'uses' => 'MediaController@save', 'as' => 'medias.save' ]);
+            Route::get('/medias/template/{template_id}', [ 'uses' => 'MediaController@reload', 'as' => 'medias.reload' ]);
+            Route::get('/medias/images/{filename}', [ 'uses' => 'MediaController@image', 'as' => 'medias.image' ]);
+        });
     });
 });

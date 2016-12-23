@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a1f111fffc55fbe2e52fd9ee6af7f37d",
-    "content-hash": "8c4fa67f7dfc9227a5fdf166c4afa349",
+    "hash": "01f67f881de2628c39382dabf61e623e",
+    "content-hash": "73f3ff4d05a6962c14c8064ba593ae71",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -60,6 +60,57 @@
                 "preload"
             ],
             "time": "2015-11-09 22:51:51"
+        },
+        {
+            "name": "darrylkuhn/dialect",
+            "version": "1.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/darrylkuhn/dialect.git",
+                "reference": "d749cdc26bf8a52ccfe93a0433f47b78f0748458"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/darrylkuhn/dialect/zipball/d749cdc26bf8a52ccfe93a0433f47b78f0748458",
+                "reference": "d749cdc26bf8a52ccfe93a0433f47b78f0748458",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "4.*|5.*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "codeclimate/php-test-reporter": "dev-master",
+                "illuminate/database": "4.*|5.*",
+                "phpunit/phpunit": "4.*",
+                "symfony/process": "~2.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Eloquent\\Dialect\\": "src/Dialect/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Darryl Kuhn",
+                    "email": "darryl.kuhn@gmail.com"
+                }
+            ],
+            "description": "Provides JSON datatype support for the Eloquent ORM",
+            "keywords": [
+                "eloquent",
+                "illuminate",
+                "json",
+                "laravel",
+                "schema-free",
+                "schemaless"
+            ],
+            "time": "2016-06-17 00:11:13"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
