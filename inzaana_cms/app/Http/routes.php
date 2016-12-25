@@ -28,6 +28,11 @@ Route::group([ 'as' => 'guest::' ], function() {
     });
 });
 
+Route::get('/robi', function(){
+
+    return view('robi');
+});
+
 Route::group(['middleware' => 'web'], function () {
 
     Route::get('/swap-plan', [ 'uses' => 'StripeController@swapPlan', 'as' => 'swap' ]); // Plan swaping
@@ -181,7 +186,7 @@ Route::group(['middleware' => 'web'], function () {
                 try
                 {
                     $pi = new Inzaana\BulkExportImport\ProductImporter('product_inzaana_asset.csv');
-                    return $pi->getProductsCount();
+                    return $pi->getProducts()['raw'];
                 }
                 catch(\Exception $e)
                 {

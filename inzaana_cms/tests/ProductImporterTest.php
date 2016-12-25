@@ -10,6 +10,10 @@ class ProductImporterTest extends TestCase
 {
 	const ROUTING_PREFIX = '/products/import';
 	const EXPECTED_CSV_FILE = 'product_inzaana_asset.csv';
+    const HEADERS = [
+        ["product_title","manufacturer_name","product_description","price","product_status","created_at","updated_at","store_product_title","qty","discount","category","media","","spec","",""],
+        ["","","","","","","","","","","","type","resources","spec_label","values","view_type"]
+    ];
 
 	private $__importer;
 
@@ -45,7 +49,7 @@ class ProductImporterTest extends TestCase
      */
     public function testGetHeaders()
     {
-        $this->assertEquals(ProductImporter::HEADERS, $this->__importer->getHeaders());
+        $this->assertEquals(self::HEADERS, $this->__importer->getHeaders());
     }
 
     /**
@@ -75,11 +79,28 @@ class ProductImporterTest extends TestCase
         $this->__importer->getData('abc');
     }
 
+    /**
+     * A raw csv parsed product count test.
+     * //expectedException Exception
+     * @return void
+     */
     public function testGetProductsCount()
     {
     	$this->assertEquals(1, $this->__importer->getProductsCount());
     	$this->assertNotEquals(2, $this->__importer->getProductsCount());
     	$this->assertNotEquals(0, $this->__importer->getProductsCount());
+    }
+
+    /**
+     * A raw csv parsed product row index test.
+     * //expectedException Exception
+     * @return void
+     */
+    public function testGetProductRowIndex()
+    {
+        $this->assertEquals(0, $this->__importer->getProductRowIndex(1));
+        $this->assertEquals(-1, $this->__importer->getProductRowIndex(2));
+        $this->assertNotEquals(0, $this->__importer->getProductRowIndex(-1));
     }
 
     /**
