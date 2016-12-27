@@ -2,7 +2,8 @@
 @section('title', 'Add Product')
 
 @section('header-style')
- <link href="{{ URL::asset('css/select2.min.css') }}" rel="stylesheet" type="text/css">  
+ <link href="{{ URL::asset('css/select2.min.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ URL::asset('css/dragdrop.css') }}" rel="stylesheet" type="text/css">
 @endsection
 
 @section('breadcumb')
@@ -105,154 +106,196 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Add Product Details</h4>
+        <h4 class="modal-title"></h4>
+          <div class="custom_tab">
+              <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-edit" data-toggle="tab">Add Product Details</a></li>
+                <li><a href="#tab-messages" data-toggle="tab">Upload Products</a></li>
+              </ul>
+          </div>
       </div>
-      <!-- form start -->
-      <form id="product-create-form" class="form-horizontal" action="{{ route('user::products.create') }}" method="POST">
+        
+        <!--Custom tab content start from here-->
+        <div id="generalTabContent" class="tab-content">
+            <div id="tab-edit" class="tab-pane fade in active">
+                 <!-- form start -->
+                  <form id="product-create-form" class="form-horizontal" action="{{ route('user::products.create') }}" method="POST">
 
-        {!! csrf_field() !!}
+                    {!! csrf_field() !!}
 
-        @include('errors')
+                    @include('errors')
 
-        <div class="modal-body";>
-            <div class="form-group">
-              <label  class="col-sm-3 control-label">Product Category:</label>
-              <div class="col-sm-7">
-                <select name="category" class="form-control select2" multiple="multiple" data-placeholder="Select a Category" style="width: 100%;">
+                    <div class="modal-body";>
+                        <div class="form-group">
+                          <label  class="col-sm-3 control-label">Product Category:</label>
+                          <div class="col-sm-7">
+                            <select name="category" class="form-control select2" multiple="multiple" data-placeholder="Select a Category" style="width: 100%;">
 
-                @if(isset($categories))
-                  @foreach( $categories as $category )
-                  <option>{{ $category->category_name or 'Uncategorized' }}</option>
-                  @endforeach
-                @endif
-                </select>
-              </div>
-              <div class="col-sm-2">
-                  <button formmethod="GET" formaction="{{ route('user::categories') }}" class="btn btn-info btn-flat"><i class="fa fa-plus"></i> </button>
-              </div>
-            </div>
-            <div class="form-group">
-                <label  class="col-sm-3 control-label">Product Sub Category:</label>
-                <div class="col-sm-7">
-                    <select name="subcategory" class="form-control select2" multiple="multiple" data-placeholder="Select a sub Category" style="width: 100%;">
+                            @if(isset($categories))
+                              @foreach( $categories as $category )
+                              <option>{{ $category->category_name or 'Uncategorized' }}</option>
+                              @endforeach
+                            @endif
+                            </select>
+                          </div>
+                          <div class="col-sm-2">
+                              <button formmethod="GET" formaction="{{ route('user::categories') }}" class="btn btn-info btn-flat"><i class="fa fa-plus"></i> </button>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-3 control-label">Product Sub Category:</label>
+                            <div class="col-sm-7">
+                                <select name="subcategory" class="form-control select2" multiple="multiple" data-placeholder="Select a sub Category" style="width: 100%;">
 
-                        {{--@if(isset($categories))--}}
-                            {{--@foreach( $categories as $category )--}}
-                                {{--<option>{{ $category->category_name or 'Uncategorized' }}</option>--}}
-                            {{--@endforeach--}}
-                        {{--@endif--}}
-                    </select>
-                </div>
-                {{--<div class="col-sm-2">--}}
-                    {{--<button formmethod="GET" formaction="{{ route('user::categories') }}" class="btn btn-info btn-flat"><i class="fa fa-plus"></i> </button>--}}
-                {{--</div>--}}
-            </div>
-            <div class="form-group{{ $errors->has('product_title') ? ' has-error' : '' }}">
-              <label for="product-title" class="col-sm-3 control-label">Product Title:</label>
-              <div class="col-sm-9">
-                <input type="text" class="form-control" id="product-title" name="product-title" placeholder="ex: kitka 5RS">
-                @if ($errors->has('product_title'))
-                      <span class="help-block">
-                          <strong>{{ $errors->first('product_title') }}</strong>
-                      </span>
-                @endif
-              </div>
-            </div>
-            <div class="form-group{{ $errors->has('manufacturer') ? ' has-error' : '' }}">
-              <label for="Manufacturer" class="col-sm-3 control-label">Manufacturer</label>
-              <div class="col-sm-9">
-                <input type="text" class="form-control" id="manufacturer" name="manufacturer" placeholder="ex: dairy milk">
-                @if ($errors->has('manufacturer'))
-                      <span class="help-block">
-                          <strong>{{ $errors->first('manufacturer') }}</strong>
-                      </span>
-                @endif
-              </div>
-            </div>
-            <div class="form-group{{ $errors->has('mrp') ? ' has-error' : '' }}">
-              <label for="mrp" class="col-sm-3 control-label">MRP:</label>
-              <div class="col-sm-2">
-                <input type="text" class="form-control" id="mrp" name="mrp" placeholder="ex: 3₹">
-                @if ($errors->has('mrp'))
-                      <span class="help-block">
-                          <strong>{{ $errors->first('mrp') }}</strong>
-                      </span>
-                @endif
-              </div>
-                {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
-            </div>
-            <div class="form-group{{ $errors->has('discount') ? ' has-error' : '' }}">
-              <label for="discount" class="col-sm-3 control-label">Discount:</label>
-              <div class="col-sm-2">
-                <input type="text" class="form-control" id="discount" name="discount" placeholder="ex: 30%">
-                @if ($errors->has('discount'))
-                      <span class="help-block">
-                          <strong>{{ $errors->first('discount') }}</strong>
-                      </span>
-                @endif
-              </div>
-                {{--<div class="col-sm-7 padT5"><b>%</b></div>--}}
-            </div>
-            <div class="form-group{{ $errors->has('selling-price') ? ' has-error' : '' }}">
-              <label for="selling-price" class="col-sm-3 control-label">Selling Price:</label>
-              <div class="col-sm-2">
-                <input type="text" class="form-control" id="selling-price" name="selling-price" placeholder="ex: 3₹">
-                @if ($errors->has('selling-price'))
-                      <span class="help-block">
-                          <strong>{{ $errors->first('selling-price') }}</strong>
-                      </span>
-                @endif
-              </div>
-                {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
-            </div>
-            <div class="form-group{{ $errors->has('upload-image') ? ' has-error' : '' }}">
-              <label for="upload-image" class="col-sm-3 control-label">Upload Image:</label>
-              <div class="col-sm-9">
-                <input type="file" class="form-control" id="upload-image" name="upload-image">
-                @if ($errors->has('upload-image'))
-                      <span class="help-block">
-                          <strong>{{ $errors->first('upload-image') }}</strong>
-                      </span>
-                @endif
-              </div>
-            </div>
+                                    {{--@if(isset($categories))--}}
+                                        {{--@foreach( $categories as $category )--}}
+                                            {{--<option>{{ $category->category_name or 'Uncategorized' }}</option>--}}
+                                        {{--@endforeach--}}
+                                    {{--@endif--}}
+                                </select>
+                            </div>
+                            {{--<div class="col-sm-2">--}}
+                                {{--<button formmethod="GET" formaction="{{ route('user::categories') }}" class="btn btn-info btn-flat"><i class="fa fa-plus"></i> </button>--}}
+                            {{--</div>--}}
+                        </div>
+                        <div class="form-group{{ $errors->has('product_title') ? ' has-error' : '' }}">
+                          <label for="product-title" class="col-sm-3 control-label">Product Title:</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" id="product-title" name="product-title" placeholder="ex: kitka 5RS">
+                            @if ($errors->has('product_title'))
+                                  <span class="help-block">
+                                      <strong>{{ $errors->first('product_title') }}</strong>
+                                  </span>
+                            @endif
+                          </div>
+                        </div>
+                        <div class="form-group{{ $errors->has('manufacturer') ? ' has-error' : '' }}">
+                          <label for="Manufacturer" class="col-sm-3 control-label">Manufacturer</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" id="manufacturer" name="manufacturer" placeholder="ex: dairy milk">
+                            @if ($errors->has('manufacturer'))
+                                  <span class="help-block">
+                                      <strong>{{ $errors->first('manufacturer') }}</strong>
+                                  </span>
+                            @endif
+                          </div>
+                        </div>
+                        <div class="form-group{{ $errors->has('mrp') ? ' has-error' : '' }}">
+                          <label for="mrp" class="col-sm-3 control-label">MRP:</label>
+                          <div class="col-sm-2">
+                            <input type="text" class="form-control" id="mrp" name="mrp" placeholder="ex: 3₹">
+                            @if ($errors->has('mrp'))
+                                  <span class="help-block">
+                                      <strong>{{ $errors->first('mrp') }}</strong>
+                                  </span>
+                            @endif
+                          </div>
+                            {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
+                        </div>
+                        <div class="form-group{{ $errors->has('discount') ? ' has-error' : '' }}">
+                          <label for="discount" class="col-sm-3 control-label">Discount:</label>
+                          <div class="col-sm-2">
+                            <input type="text" class="form-control" id="discount" name="discount" placeholder="ex: 30%">
+                            @if ($errors->has('discount'))
+                                  <span class="help-block">
+                                      <strong>{{ $errors->first('discount') }}</strong>
+                                  </span>
+                            @endif
+                          </div>
+                            {{--<div class="col-sm-7 padT5"><b>%</b></div>--}}
+                        </div>
+                        <div class="form-group{{ $errors->has('selling-price') ? ' has-error' : '' }}">
+                          <label for="selling-price" class="col-sm-3 control-label">Selling Price:</label>
+                          <div class="col-sm-2">
+                            <input type="text" class="form-control" id="selling-price" name="selling-price" placeholder="ex: 3₹">
+                            @if ($errors->has('selling-price'))
+                                  <span class="help-block">
+                                      <strong>{{ $errors->first('selling-price') }}</strong>
+                                  </span>
+                            @endif
+                          </div>
+                            {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
+                        </div>
+                        <div class="form-group{{ $errors->has('upload-image') ? ' has-error' : '' }}">
+                          <label for="upload-image" class="col-sm-3 control-label">Upload Image:</label>
+                          <div class="col-sm-9">
+                            <input type="file" class="form-control" id="upload-image" name="upload-image">
+                            @if ($errors->has('upload-image'))
+                                  <span class="help-block">
+                                      <strong>{{ $errors->first('upload-image') }}</strong>
+                                  </span>
+                            @endif
+                          </div>
+                        </div>
 
-            <div class="form-group{{ $errors->has('available_quantity') ? ' has-error' : '' }}">
-                <label for="available_quantity" class="col-sm-3 control-label">Available Quantity</label>
-                <div class="col-sm-2">
-                    <input type="text" class="form-control" id="available_quantity" name="available_quantity" placeholder="1">
-                    @if ($errors->has('available_quantity'))
-                      <span class="help-block">
-                        <strong>{{ $errors->first('available_quantity') }}</strong>
-                      </span>
-                    @endif
-                </div>
-                {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
-            </div>
+                        <div class="form-group{{ $errors->has('available_quantity') ? ' has-error' : '' }}">
+                            <label for="available_quantity" class="col-sm-3 control-label">Available Quantity</label>
+                            <div class="col-sm-2">
+                                <input type="text" class="form-control" id="available_quantity" name="available_quantity" placeholder="1">
+                                @if ($errors->has('available_quantity'))
+                                  <span class="help-block">
+                                    <strong>{{ $errors->first('available_quantity') }}</strong>
+                                  </span>
+                                @endif
+                            </div>
+                            {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
+                        </div>
 
-            <div class="form-group{{ $errors->has('return_time_limit') ? ' has-error' : '' }}">
-                <label for="return_time_limit" class="col-sm-3 control-label">Time limit For Return (in days)</label>
-                <div class="col-sm-2">
-                    <input type="text" class="form-control" id="return_time_limit" name="return_time_limit" placeholder="2 days">
-                    @if ($errors->has('return_time_limit'))
-                      <span class="help-block">
-                        <strong>{{ $errors->first('return_time_limit') }}</strong>
-                      </span>
-                    @endif
-                </div>
-                {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
-            </div>
+                        <div class="form-group{{ $errors->has('return_time_limit') ? ' has-error' : '' }}">
+                            <label for="return_time_limit" class="col-sm-3 control-label">Time limit For Return (in days)</label>
+                            <div class="col-sm-2">
+                                <input type="text" class="form-control" id="return_time_limit" name="return_time_limit" placeholder="2 days">
+                                @if ($errors->has('return_time_limit'))
+                                  <span class="help-block">
+                                    <strong>{{ $errors->first('return_time_limit') }}</strong>
+                                  </span>
+                                @endif
+                            </div>
+                            {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
+                        </div>
 
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary btn-flat">Save</button>
+                    </div>
+
+                  </form>
+                  <!-- form ends -->
+            </div>
+            
+            <div id="tab-messages" class="tab-pane fade in">
+                    <div class=" form-horizontal">
+                        
+                        <div class="text-center">
+                             <!-- Standar Form -->
+                          <h3>Select files from your computer</h3>
+                          <form action="" method="post" enctype="multipart/form-data" id="js-upload-form">
+                            <div class="form-inline">
+                              <div class="form-group">
+                                <input type="file" name="files[]" id="js-upload-files" multiple>
+                              </div>
+                              
+                            </div>
+                          </form>
+
+                          <!-- Drop Zone -->
+                          <h4>Or drag and drop files below</h4>
+                          <div class="upload-drop-zone" id="drop-zone">
+                            Just drag and drop files here
+                          </div>
+                        </div>
+                        
+                        <div class="modal-footer">
+                      <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary btn-flat">Upload Files</button>
+                    </div>
+                      
+                    </div>
+            </div>
         </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary btn-flat">Save</button>
-        </div>
-
-      </form>
-      <!-- form ends -->
-
+      
     </div>
   </div>
     
@@ -384,5 +427,46 @@
   <script type="text/javascript">
       $('#addProduct').modal({ 'show' : {{ session()->has('errors') }}  });
   </script>
+
+    <script>
+                + function($) {
+            'use strict';
+
+            // UPLOAD CLASS DEFINITION
+            // ======================
+
+            var dropZone = document.getElementById('drop-zone');
+            var uploadForm = document.getElementById('js-upload-form');
+
+            var startUpload = function(files) {
+                console.log(files)
+            }
+
+            uploadForm.addEventListener('submit', function(e) {
+                var uploadFiles = document.getElementById('js-upload-files').files;
+                e.preventDefault()
+
+                startUpload(uploadFiles)
+            })
+
+            dropZone.ondrop = function(e) {
+                e.preventDefault();
+                this.className = 'upload-drop-zone';
+
+                startUpload(e.dataTransfer.files)
+            }
+
+            dropZone.ondragover = function() {
+                this.className = 'upload-drop-zone drop';
+                return false;
+            }
+
+            dropZone.ondragleave = function() {
+                this.className = 'upload-drop-zone';
+                return false;
+            }
+
+                    }(jQuery);
+    </script>
 
 @endsection
