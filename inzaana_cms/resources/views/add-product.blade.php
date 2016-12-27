@@ -128,7 +128,7 @@
                     <div class="modal-body";>
                         <div class="form-group">
                           <label  class="col-sm-3 control-label">Product Category:</label>
-                          <div class="col-sm-7">
+                          <div class="col-sm-2">
                             <select name="category" class="form-control select2" multiple="multiple" data-placeholder="Select a Category" style="width: 100%;">
 
                             @if(isset($categories))
@@ -267,7 +267,15 @@
             
             <div id="tab-messages" class="tab-pane fade in">
                     <div class=" form-horizontal">
-                        
+                        <div>
+                          <label  class="col-sm-3 control-label">Select store</label>
+                            <div class="col-sm-7">
+                              <select name="stores" class="form-control select2" multiple="multiple" data-placeholder="Select Store" style="width: 100%;">
+                                        <option>store.inzaana.com</option>                                    
+                              </select>
+                            </div>
+                        </div>
+                        <br>
                         <div class="text-center">
                              <!-- Standar Form -->
                           <h3>Select files from your computer</h3>
