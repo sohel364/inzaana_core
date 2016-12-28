@@ -3,8 +3,18 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+use Inzaana\Database\Helper;
+
 class CreateHtmlViewContentsTable extends Migration
 {
+    use Helper;
+
+    const TABLE_NAME = 'html_view_contents';
+
+    public function __construct()
+    {
+        $this->table = self::TABLE_NAME;
+    }
     /**
      * Run the migrations.
      *
@@ -13,8 +23,7 @@ class CreateHtmlViewContentsTable extends Migration
     public function up()
     {
         //
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
-        Schema::create('html_view_contents', function (Blueprint $table) {
+        Schema::create(self::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             
             $table->bigInteger('html_view_menu_id')->unsigned();
@@ -28,6 +37,8 @@ class CreateHtmlViewContentsTable extends Migration
                     ->references('id')->on('html_view_menus')
                     ->onDelete('cascade');
         });
+
+        $this->EnableForeignKeyChecks();
     }
 
     /**
@@ -38,7 +49,8 @@ class CreateHtmlViewContentsTable extends Migration
     public function down()
     {
         //
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
-        Schema::dropIfExists('html_view_contents');
+        $this->DisableForeignKeyChecks();
+        
+        Schema::dropIfExists(self::TABLE_NAME);
     }
 }

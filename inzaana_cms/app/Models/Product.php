@@ -13,11 +13,29 @@ class Product extends Model
      *
      * @var array
      */
-    protected $guarded = ['has_sub_category_id'];
+    // protected $guarded = ['has_sub_category_id'];
 	 
-	public function user()
+    public function user()
     {
         return $this->belongsTo('Inzaana\User');
+    }
+
+    public function store()
+    {
+        return $this->belongsTo('Inzaana\Store');
+    }
+
+    public function marketproduct()
+    {
+        return $this->hasOne('Inzaana\MarketProduct');
+    }
+
+    /**
+     * Get all of the products' product medias.
+     */
+    public function medias()
+    {
+        return $this->morphMany(Inzaana\ProductMedia::class, 'mediable');
     }
 
 	public function sendApprovals()
@@ -25,9 +43,25 @@ class Product extends Model
 		return $this->hasMany('Inzaana\SendApproval');
 	}
 
-    public function category()
+    public function approved()
     {
-        return $this->belongsTo('Inzaana\Category', 'category_subcategory_id');
+        return $this->status == 'APPROVED';
+    }
+
+    public function approve()
+    {
+        $this->status = 'APPROVED';
+        $this->marketproduct->status = $this->status;
+        return  $this->save() && $this->marketproduct->save();
+    }
+    
+    /**
+     * Calculates selling price
+     */
+    protected function saveDiscountedPrice()
+    {
+        $this->mrp = $this->marketproduct->price * ( 1 -  ( $this->discount / 100.0) );
+        return $this->save();
     }
 
     public function getStatus()
@@ -40,10 +74,5 @@ class Product extends Model
             case 'REJECTED':        return 'Rejected';
         }
         return 'Unknown';
-    }
-
-    public function getProductTitleAttribute($value)
-    {
-        return $value;
     }
 }

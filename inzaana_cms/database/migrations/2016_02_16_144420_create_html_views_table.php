@@ -3,8 +3,19 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+use Inzaana\Database\Helper;
+
 class CreateHtmlViewsTable extends Migration
 {
+    use Helper;
+
+    const TABLE_NAME = 'html_views';
+
+    public function __construct()
+    {
+        $this->table = self::TABLE_NAME;
+    }
+
     /**
      * Run the migrations.
      *
@@ -13,9 +24,7 @@ class CreateHtmlViewsTable extends Migration
     public function up()
     {
         //
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
-
-        Schema::create('html_views', function (Blueprint $table) {
+        Schema::create(self::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             // If you don't put [->unsigned()] below in user_id it will mismatches 
             // the storage size and will fail to apply command of forign key reference for deletion at the
@@ -34,6 +43,8 @@ class CreateHtmlViewsTable extends Migration
                     ->references('id')->on('users')
                     ->onDelete('cascade');
         });
+
+        $this->EnableForeignKeyChecks();
     }
 
     /**
@@ -43,8 +54,8 @@ class CreateHtmlViewsTable extends Migration
      */
     public function down()
     {
-        //
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
-        Schema::dropIfExists('html_views');
+        $this->DisableForeignKeyChecks();
+
+        Schema::dropIfExists(self::TABLE_NAME);
     }
 }

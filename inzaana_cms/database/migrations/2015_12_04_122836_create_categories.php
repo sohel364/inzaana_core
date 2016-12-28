@@ -14,12 +14,12 @@ class CreateCategories extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('sup_category_id');
-            $table->string('category_name', 50);
+            $table->bigInteger('parent_category_id')->default(0);
+            $table->string('name', 50);
             $table->string('category_slug',100);
-            $table->string('description', 255);
+            $table->mediumText('description', 255);
             $table->enum('status', [
-                'REMOVED', 'ON_APPROVAL', 'APPROVED', 'REJECTED'
+                'ON_APPROVAL', 'APPROVED', 'REJECTED', 'REMOVED'
             ]);
             $table->timestamps();        
         });  //

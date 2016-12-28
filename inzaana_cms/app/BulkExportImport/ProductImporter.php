@@ -10,7 +10,6 @@ class ProductImporter
 	const CSV_STORAGE_PATH = 'app/csv/';
 	const HEADER_COUNT = 2;	//Top row count that csv file uses for header titles
     const OUT_OF_RANGE_INDEX = -1;
-    const JSON_GROUP_TITLES = [ 'media', 'spec' ];
     const JSON_DATA_TITLES = [ 'media' => [ 'type', 'resources' ], 'spec' => [ 'spec_label', 'values', 'view_type' ] ];
 
 	private $__parser;

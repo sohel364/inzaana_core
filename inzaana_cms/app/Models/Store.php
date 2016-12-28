@@ -26,6 +26,11 @@ class Store extends Model
         return $this->belongsTo('Inzaana\User');
     }
 
+    public function products()
+    {
+        return $this->hasMany('Inzaana\Product');
+    }
+
     public static function types()
     {
         return collect([

@@ -40,26 +40,23 @@ class CategoryController extends Controller
     {
         $categoryName = $request->input('category-name');
         $category = Category::create([
-        	'sup_category_id' => 0,
-        	'category_name' => $request->input('category-name'),
+        	'parent_category_id' => Category::ROOT_ID,
+        	'name' => $request->input('category-name'),
         	'category_slug' => str_slug($categoryName),
         	'description' => $request->input('description'),
             'status' => 'ON_APPROVAL',
         ]);
-        if($category)
+        if(!$category)
         {
-            flash('Your category (' . $category->category_name . ') is submitted for admin approval. Will be added when approved.');
+            flash('Your category (' . $category->name . ') is failed to submit for admin approval.');
+            return redirect()->back();
         }
-        else
-        {
-            flash('Your category (' . $category->category_name . ') is failed to submit for admin approval.');            
-        }
+        flash('Your category (' . $category->name . ') is submitted for admin approval. Will be added when approved.');
         return redirect()->route('user::categories');
     }
 
     public function edit($category_id)
     {
-        # code...
         $categoryEdit = Category::find($category_id);
         $categories = Category::all();
         return view('add-category', compact('categories', 'categoryEdit'))->withUser(Auth::user());
@@ -70,16 +67,16 @@ class CategoryController extends Controller
         $categories = Category::all();
         $categoryName = $request->input('category-name');
         $categoryEdit = Category::find($category_id);
-        $categoryEdit->category_name = $categoryName;
+        $categoryEdit->name = $categoryName;
         $categoryEdit->category_slug = str_slug($categoryName);
         $categoryEdit->description = $request->input('description');
         if($categoryEdit->update())
         {
-            flash('Your category (' . $categoryEdit->category_name . ') is submitted for admin approval. Will be updated when approved.');
+            flash('Your category (' . $categoryEdit->name . ') is submitted for admin approval. Will be updated when approved.');
         }
         else
         {
-            flash('Your category (' . $category->category_name . ') is failed to submit for admin approval.');            
+            flash('Your category (' . $category->name . ') is failed to submit for admin approval.');            
         }
         return redirect()->route('user::categories');
     }
@@ -91,19 +88,19 @@ class CategoryController extends Controller
         $category = $categories->find($category_id);
         if($category)
         {
-            flash('Your category (' . $category->category_name . ') is will be removed when your administrator will approve.');
+            flash('Your category (' . $category->name . ') is will be removed when your administrator will approve.');
             $category->delete();
         }
         else
         {            
-            flash('Your category (' . $category->category_name . ') is already removed or not in your list. Please contact your administrator to know category removal policy');
+            flash('Your category (' . $category->name . ') is already removed or not in your list. Please contact your administrator to know category removal policy');
         }
         return redirect()->route('user::categories');
     }
 
     public function approvals()
     {
-        $categories = collect(Category::whereStatus('ON_APPROVAL')->orWhere('status', 'REJECTED')->orWhere('status', 'APPROVED')->get())->pluck( 'id', 'category_name' );
+        $categories = collect(Category::whereStatus('ON_APPROVAL')->orWhere('status', 'REJECTED')->orWhere('status', 'APPROVED')->get())->pluck( 'id', 'name' );
         $approvals = [
             'categories' => [
                 'type' => Category::class,
@@ -130,19 +127,14 @@ class CategoryController extends Controller
             case 'remove':
                 $category->status = 'REMOVED';
         }
-
-        // if($request->input('confirmation-select') == 'approve')
-        //     $category->status = 'APPROVED';
-        // if($request->input('confirmation-select') == 'reject')
-        //     $category->status = 'REJECTED';
         
         if(!$category->save())
             return redirect()->back()->withErrors(['Failed to confirm category approval!']);
-        flash()->success('Your have ' . strtolower($category->getStatus()) . ' category (' . $category->category_name . ').');
+        flash()->success('Your have ' . strtolower($category->getStatus()) . ' category (' . $category->name . ').');
         // Sends approval mail to users has a single product
         $data['type'] = Category::class;
         $data['status'] = $category->getStatus();
-        $data['item_name'] = $category->category_name;
+        $data['item_name'] = $category->name;
         $data['created_at'] = $category->created_at;
         foreach ($category->products->unique('user_id') as $product)
         {

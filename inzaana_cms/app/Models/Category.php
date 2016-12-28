@@ -12,21 +12,63 @@ class Category extends Model
      * @var string
      */
     protected $table = 'categories';
-    protected $guarded = ['sup_category_id'];
+
+    const ROOT_ID = 0;
 
     public function user()
     {
         return $this->belongsTo('Inzaana\User');
     }
 
-    public function superCategories()
+    public function marketproducts()
     {
-        return $this->hasMany('Inzaana\SuperCategory');
+        return $this->hasOne('Inzaana\MarketProduct');
     }
 
-    public function products()
+    /**
+     * Get all of the Market Product's specrules.
+     */
+    public function specrules()
     {
-        return $this->hasMany('Inzaana\Product', 'category_subcategory_id');
+        return $this->morphMany(Inzaana\SpecRule::class, 'specificable');
+    }
+
+    public function subCategory()
+    {
+        return Inzaana\Category::whereParentCategoryId($this->id)->first();
+    }
+
+    public function hasSubCategory()
+    {
+        return Inzaana\Category::whereParentCategoryId($this->id)->count() > 0;
+    }
+
+    public function parent()
+    {
+        return ($this->parent_category_id == self::ROOT_ID) ? null : Inzaana\Category::find($this->parent_category_id);
+    }
+
+    public function isRoot()
+    {
+        return $this->parent_category_id == 0;
+    }
+
+    public function approved()
+    {
+        return $category->status == 'APPROVED';
+    }
+
+    public function approve()
+    {
+        $category->status = 'APPROVED';
+        return $this->save();
+    }
+
+    public function approvable()
+    {
+        if($this->parent() && !$this->parent()->approved())
+            return $this->parent()->approvable();
+        return $this->approved();
     }
     
     public function getStatus()

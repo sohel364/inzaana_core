@@ -3,8 +3,19 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+use Inzaana\Database\Helper;
+
 class CreateStripePlanFeatures extends Migration
 {
+    use Helper;
+
+    const TABLE_NAME = 'stripe_plan_features';
+
+    public function __construct()
+    {
+        $this->table = self::TABLE_NAME;
+    }
+
     /**
      * Run the migrations.
      *
@@ -12,8 +23,7 @@ class CreateStripePlanFeatures extends Migration
      */
     public function up()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
-        Schema::create('stripe_plan_features', function (Blueprint $table) {
+        Schema::create(self::TABLE_NAME, function (Blueprint $table) {
             $table->increments('feature_id');
             $table->string('feature_name');
         });
@@ -23,8 +33,10 @@ class CreateStripePlanFeatures extends Migration
         });
         Schema::table('stripe_plan_has_features', function(Blueprint $table){
             $table->foreign('plan_id')->references('id')->on('stripe_plans')->onDelete('cascade');
-            $table->foreign('feature_id')->references('feature_id')->on('stripe_plan_features')->onDelete('cascade');
+            $table->foreign('feature_id')->references('feature_id')->on(self::TABLE_NAME)->onDelete('cascade');
         });
+
+        $this->EnableForeignKeyChecks();
     }
 
     /**
@@ -34,7 +46,8 @@ class CreateStripePlanFeatures extends Migration
      */
     public function down()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        $this->DisableForeignKeyChecks();
+        
         Schema::drop("stripe_plan_features");
         Schema::drop("stripe_plan_has_features");
     }

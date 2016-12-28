@@ -3,8 +3,19 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+use Inzaana\Database\Helper;
+
 class CreateHtmlViewSubmenusTable extends Migration
 {
+    use Helper;
+
+    const TABLE_NAME = 'html_view_submenus';
+
+    public function __construct()
+    {
+        $this->table = self::TABLE_NAME;
+    }
+
     /**
      * Run the migrations.
      *
@@ -13,9 +24,7 @@ class CreateHtmlViewSubmenusTable extends Migration
     public function up()
     {
         //
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
-
-        Schema::create('html_view_submenus', function (Blueprint $table) {
+        Schema::create(self::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
 
             // If you don't put [->unsigned()] below in html_view_menu_id it will mismatches 
@@ -32,6 +41,8 @@ class CreateHtmlViewSubmenusTable extends Migration
                     ->references('id')->on('html_view_menus')
                     ->onDelete('cascade');
         });
+
+        $this->EnableForeignKeyChecks();
     }
 
     /**
@@ -42,8 +53,8 @@ class CreateHtmlViewSubmenusTable extends Migration
     public function down()
     {
         //
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        $this->DisableForeignKeyChecks();
         
-        Schema::dropIfExists('html_view_submenus');
+        Schema::dropIfExists(self::TABLE_NAME);
     }
 }

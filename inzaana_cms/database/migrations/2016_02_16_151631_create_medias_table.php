@@ -3,8 +3,18 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+use Inzaana\Database\Helper;
+
 class CreateMediasTable extends Migration
 {
+    use Helper;
+
+    const TABLE_NAME = 'medias';
+
+    public function __construct()
+    {
+        $this->table = self::TABLE_NAME;
+    }
     /**
      * Run the migrations.
      *
@@ -13,8 +23,7 @@ class CreateMediasTable extends Migration
     public function up()
     {
         //
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
-        Schema::create('medias', function (Blueprint $table) {
+        Schema::create(self::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             
             $table->bigInteger('template_id')->unsigned();
@@ -30,6 +39,8 @@ class CreateMediasTable extends Migration
                     ->references('id')->on('templates')
                     ->onDelete('cascade');
         });
+
+        $this->EnableForeignKeyChecks();
     }
 
     /**
@@ -40,7 +51,8 @@ class CreateMediasTable extends Migration
     public function down()
     {
         //
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
-        Schema::dropIfExists('medias');
+        $this->DisableForeignKeyChecks();
+        
+        Schema::dropIfExists(self::TABLE_NAME);
     }
 }
