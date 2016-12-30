@@ -8,7 +8,6 @@ class SpecRule extends Model
 {
     //
     protected $table = 'spec_rules';
-
     /**
      * Get all of the owning specificable models.
      */

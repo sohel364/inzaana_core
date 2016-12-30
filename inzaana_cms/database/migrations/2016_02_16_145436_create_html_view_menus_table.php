@@ -57,6 +57,8 @@ class CreateHtmlViewMenusTable extends Migration
         //
         $this->DisableForeignKeyChecks();
         
+        Schema::dropIfExists(CreateHtmlViewContentsTable::TABLE_NAME);
+        Schema::dropIfExists(CreateHtmlViewSubmenusTable::TABLE_NAME);
         Schema::dropIfExists(self::TABLE_NAME);
     }
 }

@@ -3,6 +3,8 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+use Inzaana\Product;
+
 class CreateProducts extends Migration
 {
     /**
@@ -18,16 +20,15 @@ class CreateProducts extends Migration
             $table->bigInteger('store_id');
             $table->bigInteger('market_product_id');
             $table->boolean('is_public')->default(false);
-            $table->string('title', 200);
+            $table->string('title', 200)->comment('Stored product title - can be RENAMED by store owner');
             $table->float('mrp')->default(0.0);
             $table->float('discount')->default(0.0);
             $table->json('special_specs')->nullable()->comment('JSON serialization of product specifications defined by store product specifications.');
             $table->bigInteger('available_quantity')->default(0);
             $table->integer('return_time_limit')->default(0);
-            $table->enum('status', [
-                'OUT_OF_STOCK', 'AVAILABLE', 'NOT_AVAILABLE', 'ON_SHIPPING', 'REMOVED', 'COMING_SOON', 'SOLD', 'ORDERED', 'ON_APPROVAL', 'APPROVED', 'REJECTED'
-            ]);
-            $table->timestamps();        
+            $table->enum('status', Product::STATUS_FLOWS)->default('ON_APPROVAL');
+            $table->timestamps();  
+            $table->softDeletes();
         });
     }
 

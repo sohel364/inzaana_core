@@ -43,8 +43,6 @@ class CreateHtmlViewsTable extends Migration
                     ->references('id')->on('users')
                     ->onDelete('cascade');
         });
-
-        $this->EnableForeignKeyChecks();
     }
 
     /**
@@ -56,6 +54,9 @@ class CreateHtmlViewsTable extends Migration
     {
         $this->DisableForeignKeyChecks();
 
+        Schema::dropIfExists(CreateHtmlViewSubmenusTable::TABLE_NAME);
         Schema::dropIfExists(self::TABLE_NAME);
+
+        $this->EnableForeignKeyChecks();
     }
 }

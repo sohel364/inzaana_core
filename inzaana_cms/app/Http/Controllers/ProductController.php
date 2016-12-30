@@ -2,6 +2,7 @@
 
 namespace Inzaana\Http\Controllers;
 
+use DB;
 use Auth;
 use Validator;
 use Illuminate\Http\Request as ProductRequest;
@@ -12,6 +13,7 @@ use Inzaana\Product;
 use Inzaana\MarketProduct;
 use Inzaana\Category;
 use Inzaana\Mailers\AppMailer;
+use Inzaana\BulkExportImport\ProductImporter;
 
 class ProductController extends Controller
 {
@@ -252,5 +254,56 @@ class ProductController extends Controller
         $data['created_at'] = $product->created_at;
         $mailer->sendEmailForApprovalNotificationTo($product->user, $data);
         return redirect()->back();
+    }
+
+    public function uploadCSV(ProductRequest $request)
+    {        
+        try
+        {
+            $pi = new ProductImporter('product_inzaana_asset.csv');
+            $csv = $pi->getProducts()['raw'];
+            foreach($csv as $value)
+            {
+                $categories = collect(Category::whereName($value['category_name'])->get());
+                $category_id = $categories->count() == 0 ? 0 : $categories->first()->id;
+                $store_id = $request->has('store') ? $request->input('store') : 0;
+
+                $marketProduct = new MarketProduct();
+                $marketProduct->category_id = $category_id;
+                $marketProduct->title = $value['title'];
+                $marketProduct->manufacturer_name = $value['manufacturer_name'];
+                $marketProduct->price = $value['price'];
+
+                if(!$marketProduct->save())
+                {
+                    return 'Market failed';
+                }
+                $product = new Product();
+                $product->user_id = Auth::user()->id;
+                $product->store_id = $store_id;
+                $product->market_product_id = $marketProduct->id;
+                $product->is_public = $value['is_public'];
+                $product->title = $marketProduct->title;
+                $product->discount = $value['discount'];
+                $product->mrp = $product->discountedPrice();
+                $product->special_specs = collect($value['spec'])->toJson();
+                $product->available_quantity = $value['available_quantity'];
+                $product->return_time_limit = $value['return_time_limit'];
+                if(!$product->save())
+                {
+                    $marketProduct->forceDelete();
+                    return 'Product NOT uploaded';
+                }
+                if(!$product->saveDiscountedPrice())
+                {
+                    return 'MRP not saved';
+                }
+            }
+            return Product::where('special_specs->camera->values', 10)->get();
+        }
+        catch(\Exception $e)
+        {
+            return redirect()->back()->withErrors([$e->getMessage()]);
+        }
     }
 }

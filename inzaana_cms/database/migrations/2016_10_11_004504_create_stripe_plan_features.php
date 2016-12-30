@@ -48,7 +48,7 @@ class CreateStripePlanFeatures extends Migration
     {
         $this->DisableForeignKeyChecks();
         
-        Schema::drop("stripe_plan_features");
         Schema::drop("stripe_plan_has_features");
+        Schema::drop(self::TABLE_NAME);
     }
 }

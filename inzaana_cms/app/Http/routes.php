@@ -181,22 +181,7 @@ Route::group(['middleware' => 'web'], function () {
             Route::post('/products/delete/{product_id}', [ 'uses' => 'ProductController@delete', 'as' => 'products.delete' ]);
             Route::get('/products/approvals', [ 'uses' => 'ProductController@approvals', 'as' => 'products.approvals' ]);
             Route::post('/products/approvals/confirm/{id}', [ 'uses' => 'ProductController@confirmApproval', 'as' => 'products.approvals.confirm' ]);
-            Route::get('/products/import/csv/raw/records', function() {
-                try
-                {
-                    $pi = new Inzaana\BulkExportImport\ProductImporter('product_inzaana_asset.csv');
-                    $csv = $pi->getProducts()['raw'];
-                    // foreach($csv as $value)
-                    // {
-                    //     // Inzaana\Product::create()
-                    // }
-                    return $csv;
-                }
-                catch(\Exception $e)
-                {
-                    return $e->getMessage();
-                }
-            });
+            Route::get('/products/import/csv/raw/records', [ 'uses' => 'ProductController@uploadCSV', 'as' => 'products.upload.csv' ]);
 
             // Category controller
             Route::get('/categories', [ 'uses' => 'CategoryController@index', 'as' => 'categories' ]);

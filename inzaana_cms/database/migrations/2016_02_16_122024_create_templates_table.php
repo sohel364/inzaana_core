@@ -57,6 +57,8 @@ class CreateTemplatesTable extends Migration
         //
         $this->DisableForeignKeyChecks();
 
+        Schema::dropIfExists(CreateMediasTable::TABLE_NAME);
+        Schema::dropIfExists(CreateHtmlViewMenusTable::TABLE_NAME);
         Schema::dropIfExists(self::TABLE_NAME);
     }
 }

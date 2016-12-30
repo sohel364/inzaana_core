@@ -30,22 +30,22 @@ class Category extends Model
      */
     public function specrules()
     {
-        return $this->morphMany(Inzaana\SpecRule::class, 'specificable');
+        return $this->morphMany(SpecRule::class, 'specificable');
     }
 
     public function subCategory()
     {
-        return Inzaana\Category::whereParentCategoryId($this->id)->first();
+        return Category::whereParentCategoryId($this->id)->first();
     }
 
     public function hasSubCategory()
     {
-        return Inzaana\Category::whereParentCategoryId($this->id)->count() > 0;
+        return Category::whereParentCategoryId($this->id)->count() > 0;
     }
 
     public function parent()
     {
-        return ($this->parent_category_id == self::ROOT_ID) ? null : Inzaana\Category::find($this->parent_category_id);
+        return ($this->parent_category_id == self::ROOT_ID) ? null : Category::find($this->parent_category_id);
     }
 
     public function isRoot()

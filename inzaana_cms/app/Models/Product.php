@@ -3,17 +3,35 @@
 namespace Inzaana;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'products';
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that should be mutated to dates.
      *
      * @var array
      */
-    // protected $guarded = ['has_sub_category_id'];
+    protected $dates = ['deleted_at'];
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = ['mrp', 'status'];
+
+    const STATUS_FLOWS = [
+        'ON_APPROVAL', 'UPLOAD_FAILED', 'APPROVED', 'REJECTED', 'OUT_OF_STOCK', 'AVAILABLE', 'NOT_AVAILABLE', 'ON_SHIPPING', 'REMOVED', 'COMING_SOON', 'SOLD', 'ORDERED'
+    ];
+
+    const VIEW_TYPES = [ 
+        'group' => [ 'dropdown', 'checkboxes', 'options', 'scroller_vert', 'scroller_horiz' ],
+        'single' => [ 'checkbox', 'label' ]
+    ];
 	 
     public function user()
     {
@@ -25,17 +43,22 @@ class Product extends Model
         return $this->belongsTo('Inzaana\Store');
     }
 
-    public function marketproduct()
-    {
-        return $this->hasOne('Inzaana\MarketProduct');
-    }
-
     /**
      * Get all of the products' product medias.
      */
     public function medias()
     {
-        return $this->morphMany(Inzaana\ProductMedia::class, 'mediable');
+        return $this->morphMany(ProductMedia::class, 'mediable');
+    }
+
+    public function marketProduct()
+    {
+        return MarketProduct::find($this->market_product_id);
+    }
+
+    public function publicMarketProduct()
+    {
+        return $this->is_public ? $this->marketProduct() : null;
     }
 
 	public function sendApprovals()
@@ -51,17 +74,44 @@ class Product extends Model
     public function approve()
     {
         $this->status = 'APPROVED';
-        $this->marketproduct->status = $this->status;
-        return  $this->save() && $this->marketproduct->save();
+        if($this->marketProduct())
+        {
+            $this->marketProduct()->status = $this->status;
+            $this->marketProduct()->save();
+        }
+        return $this->save();
     }
     
     /**
-     * Calculates selling price
+     * Saves discount calculated MRP
      */
-    protected function saveDiscountedPrice()
+    public function saveDiscountedPrice()
     {
-        $this->mrp = $this->marketproduct->price * ( 1 -  ( $this->discount / 100.0) );
+        $this->mrp = $this->discountedPrice();
         return $this->save();
+    } 
+    
+    /**
+     * Calculates discounted MRP
+     */
+    public function discountedPrice()
+    {
+        return $this->marketProduct()->price * ( 1 -  ( $this->discount / 100.0) );
+    } 
+
+    public function isViewDropdown()
+    {
+        return ($this->special_specs->view_type == 'dropdown');
+    }
+
+    public function isViewOptions()
+    {
+        return ($this->special_specs->view_type == 'options');
+    }
+
+    public function isViewTypeGroup()
+    {
+        return array_has(array_flatten(ScanRule::VIEW_TYPES['group']), $this->special_specs->view_type);
     }
 
     public function getStatus()
