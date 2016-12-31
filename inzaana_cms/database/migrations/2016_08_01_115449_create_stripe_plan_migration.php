@@ -21,7 +21,7 @@ class CreateStripePlanMigration extends Migration
             $table->string('currency');
             $table->string('interval');
             $table->integer('interval_count');
-            $table->tinyInteger('active');
+            $table->tinyInteger('active')->default(0);
             $table->tinyInteger('auto_renewal');
             $table->string('trial_period_days');
             $table->string('statement_descriptor');

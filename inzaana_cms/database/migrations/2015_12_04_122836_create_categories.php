@@ -20,7 +20,7 @@ class CreateCategories extends Migration
             $table->mediumText('description', 255);
             $table->enum('status', [
                 'ON_APPROVAL', 'APPROVED', 'REJECTED', 'REMOVED'
-            ]);
+            ])->default('ON_APPROVAL');
             $table->timestamps();        
         });  //
     }

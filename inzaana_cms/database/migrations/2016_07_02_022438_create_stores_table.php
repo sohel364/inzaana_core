@@ -28,7 +28,7 @@ class CreateStoresTable extends Migration
             $table->string('description', 1000)->nullable();
             $table->enum('status', [
                 'ON_APPROVAL', 'APPROVED', 'REJECTED', 'REMOVED', 'COMING_SOON', 'SOLD'
-            ]);
+            ])->default('ON_APPROVAL');
             $table->timestamps();
         });
     }
