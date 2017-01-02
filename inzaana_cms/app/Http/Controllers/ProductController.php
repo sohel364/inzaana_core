@@ -4,12 +4,15 @@ namespace Inzaana\Http\Controllers;
 
 use DB;
 use Auth;
+use Log;
 use Validator;
+use Exception;
 use Illuminate\Http\Request as ProductRequest;
 
 use Inzaana\Http\Requests;
 use Inzaana\Http\Controllers\Controller;
 use Inzaana\Product;
+use Inzaana\Store;
 use Inzaana\MarketProduct;
 use Inzaana\Category;
 use Inzaana\Mailers\AppMailer;
@@ -17,6 +20,9 @@ use Inzaana\BulkExportImport\ProductImporter;
 
 class ProductController extends Controller
 {
+    const PRODUCT_ENTRY_TABS = [ 'single_product_entry_tab', 'bulk_product_entry_tab' ];
+
+
     /**
      * Create a new controller instance.
      *
@@ -39,7 +45,12 @@ class ProductController extends Controller
         $productsCount = 0;
         $products = Auth::user()->products;
         $categories = Category::all();
-        return view('add-product', compact('productsCount', 'products', 'categories'))->with('user', Auth::user());
+        $tab = !session()->has('selected_tab') ? self::PRODUCT_ENTRY_TABS[0] : session('selected_tab');
+        session()->forget('selected_tab');
+        return view('add-product', compact('productsCount', 'products', 'categories'))
+            ->with('user', Auth::user())
+            ->withStores(Auth::user()->stores->pluck('name', 'name_as_url'))
+            ->withTab($tab);
     }
 
     /**
@@ -256,17 +267,105 @@ class ProductController extends Controller
         return redirect()->back();
     }
 
+    private function getUploadedFileName(ProductRequest $request)
+    {
+        $errors = [];
+        if (!$request->hasFile('csv'))
+        {
+            $errors['has_input'] = 'No file is uploaded';
+            flash()->error($errors['has_input']);
+            return $errors;
+        }
+        $uploadingFile = $request->file('csv');
+        if (!$uploadingFile->isValid())
+        {
+            $errors['corrupted_file'] = 'Upladed file is corrupted';
+            flash()->error($errors['corrupted_file']);
+            return $errors;
+        }
+
+        if($uploadingFile->getSize() >= $uploadingFile->getMaxFilesize())
+        {
+            $errors['size_limit_exits'] = 'Please keep your file size below ' . ($uploadingFile->getMaxFilesize() / 1000);
+            flash()->warning($errors['size_limit_exits']);
+            return $errors;
+        }
+        if(!ProductImporter::isSupportedExtension($uploadingFile->getClientOriginalExtension()))
+        {
+            $errors['ext_not_supported'] = 'Upladed file (*.' . $uploadingFile->getClientOriginalExtension() . ') is not supported!';
+            flash()->warning($errors['ext_not_supported']);
+            return $errors;
+        }
+
+        //Display File Name
+        $out = 'File Name: '.$uploadingFile->getClientOriginalName();
+        Log::info('[Inzaana][' . $out . ']');
+        //Display File Extension
+        $out = ', File Extension: '. $uploadingFile->getClientOriginalExtension();
+        Log::info('[Inzaana][' . $out . ']');
+        //Display File Real Path
+        $out = ', File Real Path: '.$uploadingFile->getRealPath();
+        Log::info('[Inzaana][' . $out . ']');
+        //Display File Size
+        $out = ', File Size: '.$uploadingFile->getSize();
+        Log::info('[Inzaana][' . $out . ']');
+        //Display File Mime Type
+        $out = ', File Mime Type: '.$uploadingFile->getMimeType();        
+        Log::info('[Inzaana][' . $out . ']');
+        try
+        {
+            //Move Uploaded File
+            $serverFile = $uploadingFile->move(ProductImporter::getStoragePath(), $uploadingFile->getClientOriginalName());
+            if(!$serverFile)
+            {
+                $errors['file_move_error'] = 'Upladed file did not move!';
+                flash()->error('Something went wrong during upload. We have already logged the problems. Please contact Inzaana help line for further assistance.');
+                return $errors;
+            }      
+            Log::info('[Inzaana][ Upload success to ' . $serverFile->getRealPath() . ']');
+            return $serverFile->getBasename();
+        }
+        catch(\Symfony\Component\HttpFoundation\File\Exception\FileException $fe)
+        {
+            $errors['unknown_file_error'] = '[Inzaana][ Upload failed: ' . $fe->getMessage() . ']';
+            Log::critical($errors['unknown_file_error']);
+        }
+        return $errors;
+    }
+
     public function uploadCSV(ProductRequest $request)
     {        
         try
         {
-            $pi = new ProductImporter('product_inzaana_asset.csv');
+            $result = $this->getUploadedFileName($request);
+            if(is_array($result) && count($result) > 0)
+            {
+                session(['selected_tab' => self::PRODUCT_ENTRY_TABS[1]]);
+                return redirect()->back()->withErrors($result);
+            }
+
+            if(!$request->has('stores'))
+            {
+                session(['selected_tab' => self::PRODUCT_ENTRY_TABS[1]]);
+                return redirect()->back()
+                                 ->withErrors(['Please give a store name to upload your products.']);
+            }     
+                
+            $store_name_as_url = $request->input('stores');
+            $store = Store::whereNameAsUrl($store_name_as_url)->get()->first();
+            if(!$store)
+            {
+                session(['selected_tab' => self::PRODUCT_ENTRY_TABS[1]]);
+                return redirect()->back()
+                                 ->withErrors(['We did not find any store name of yours named ' . $store_name_as_url . '.inzaana.com.']);
+            }
+
+            $pi = new ProductImporter($result);
             $csv = $pi->getProducts()['raw'];
             foreach($csv as $value)
             {
                 $categories = collect(Category::whereName($value['category_name'])->get());
                 $category_id = $categories->count() == 0 ? 0 : $categories->first()->id;
-                $store_id = $request->has('store') ? $request->input('store') : 0;
 
                 $marketProduct = new MarketProduct();
                 $marketProduct->category_id = $category_id;
@@ -276,11 +375,11 @@ class ProductController extends Controller
 
                 if(!$marketProduct->save())
                 {
-                    return 'Market failed';
+                    Log::info('[Inzaana][User:: ' . Auth::user() . '][error:: Market product (' . $value['title'] . ') not added.]');
                 }
                 $product = new Product();
                 $product->user_id = Auth::user()->id;
-                $product->store_id = $store_id;
+                $product->store_id = $store->id;
                 $product->market_product_id = $marketProduct->id;
                 $product->is_public = $value['is_public'];
                 $product->title = $marketProduct->title;
@@ -292,17 +391,20 @@ class ProductController extends Controller
                 if(!$product->save())
                 {
                     $marketProduct->forceDelete();
-                    return 'Product NOT uploaded';
+                    Log::info('[Inzaana][User:: ' . Auth::user() . '][error:: Product (' . $value['title'] . ') not added.]');
                 }
                 if(!$product->saveDiscountedPrice())
                 {
                     return 'MRP not saved';
+                    Log::info('[Inzaana][User:: ' . Auth::user() . '][error:: Product (' . $value['title'] . ') MRP not saved.]');
                 }
             }
-            return Product::where('special_specs->camera->values', 10)->get();
+            flash()->success('Successfully uploaded all products.');
+            return redirect()->back();//Product::where('special_specs->camera->values', 10)->get();
         }
         catch(\Exception $e)
         {
+            session(['selected_tab' => self::PRODUCT_ENTRY_TABS[1]]);
             return redirect()->back()->withErrors([$e->getMessage()]);
         }
     }

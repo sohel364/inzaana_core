@@ -52,20 +52,22 @@ var ElementDataManager = {
             hideSavingIcon();
     },
     onError: function(xhr, textStatus) {
-        ElementDataManager.data = { "id": 0, "value" : "-- Select --" };
+        ElementDataManager.data = { "id": 0, "value" : "-- Select --", "error": (textStatus + ": " + xhr.responseText) };
         ElementDataManager.ready(ElementDataManager.context, ElementDataManager.data);
+        hideSavingIcon();
     },
-    request: function(context, data) {
+    request: function(req_type, context, data) {
 
-        var routing_url = '/dashboard/' + context + '/country/' + data;
+        var routing_url = '/' + context;
 
         showSavingIcon(this.timeout);
         
         var req = $.ajax({
 
-            type: "GET",
+            type: req_type,
             url: routing_url,
             dataType: 'json',
+            data: data,
             statusCode: {
                 404: function() {
                     ElementDataManager.data = { "id": 0, "value" : "-- Select --" };
@@ -83,9 +85,25 @@ var ElementDataManager = {
 
             $.each(ElementDataManager.context, function( index, value ) {
 
-                ElementDataManager.request(value, data);
+                ElementDataManager.request('GET', value, data);
             });
         });
     },
-    isCompleted: function() { return false; }
+    submit: function(data, onReady) {
+
+        var form = document.getElementById(this.element);
+        form.addEventListener('submit', function(e) {
+            var uploadFiles = document.getElementById('js-upload-files').files;
+            e.preventDefault();
+
+            ElementDataManager.ready = onReady;
+
+            $.each(ElementDataManager.context, function( index, value ) {
+
+                ElementDataManager.request('POST', value, data);
+            });
+        });
+
+    },
+    isCompleted: function() { return true; }
 }

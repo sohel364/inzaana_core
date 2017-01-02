@@ -28,9 +28,9 @@ Route::group([ 'as' => 'guest::' ], function() {
     });
 });
 
-Route::get('/robi', function(){
+Route::get('/robi', function() {
 
-    return view('robi');
+    return view('welcome');
 });
 
 Route::group(['middleware' => 'web'], function () {
@@ -181,7 +181,8 @@ Route::group(['middleware' => 'web'], function () {
             Route::post('/products/delete/{product_id}', [ 'uses' => 'ProductController@delete', 'as' => 'products.delete' ]);
             Route::get('/products/approvals', [ 'uses' => 'ProductController@approvals', 'as' => 'products.approvals' ]);
             Route::post('/products/approvals/confirm/{id}', [ 'uses' => 'ProductController@confirmApproval', 'as' => 'products.approvals.confirm' ]);
-            Route::get('/products/import/csv/raw/records', [ 'uses' => 'ProductController@uploadCSV', 'as' => 'products.upload.csv' ]);
+            // Route::get('/products/import/csv/raw/records', [ 'uses' => 'ProductController@uploadCSV', 'as' => 'products.upload.csv' ]);
+            Route::post('/products/import/csv', [ 'uses' => 'ProductController@uploadCSV' ] );
 
             // Category controller
             Route::get('/categories', [ 'uses' => 'CategoryController@index', 'as' => 'categories' ]);
