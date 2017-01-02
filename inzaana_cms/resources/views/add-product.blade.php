@@ -2,8 +2,14 @@
 @section('title', 'Add Product')
 
 @section('header-style')
- <link href="{{ URL::asset('css/select2.min.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ URL::asset('css/select2.min.css') }}" rel="stylesheet" type="text/css">
 <link href="{{ URL::asset('css/dragdrop.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ URL::asset('css/newStyle.css') }}" rel="stylesheet" type="text/css">
+
+<!--for date picker only-->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
+<!--end of date picker css-->
 @endsection
 
 @section('breadcumb')
@@ -118,7 +124,10 @@
         <!--Custom tab content start from here-->
         <div id="generalTabContent" class="tab-content">
             <div id="tab-edit" class="tab-pane fade in active">
-                 <!-- form start -->
+                
+                <h4 class="block-title">Product Summary</h4>
+                <div class="block-of-block">
+                    <!-- form start -->
                   <form id="product-create-form" class="form-horizontal" action="{{ route('user::products.create') }}" method="POST">
 
                     {!! csrf_field() !!}
@@ -142,7 +151,7 @@
                               <button formmethod="GET" formaction="{{ route('user::categories') }}" class="btn btn-info btn-flat"><i class="fa fa-plus"></i> </button>
                           </div>
                         </div>
-                        <div class="form-group">
+                       <!-- <div class="form-group">
                             <label  class="col-sm-3 control-label">Product Sub Category:</label>
                             <div class="col-sm-7">
                                 <select name="subcategory" class="form-control select2" multiple="multiple" data-placeholder="Select a sub Category" style="width: 100%;">
@@ -157,7 +166,7 @@
                             {{--<div class="col-sm-2">--}}
                                 {{--<button formmethod="GET" formaction="{{ route('user::categories') }}" class="btn btn-info btn-flat"><i class="fa fa-plus"></i> </button>--}}
                             {{--</div>--}}
-                        </div>
+                        </div>-->
                         <div class="form-group{{ $errors->has('product_title') ? ' has-error' : '' }}">
                           <label for="product-title" class="col-sm-3 control-label">Product Title:</label>
                           <div class="col-sm-9">
@@ -170,7 +179,7 @@
                           </div>
                         </div>
                         <div class="form-group{{ $errors->has('manufacturer') ? ' has-error' : '' }}">
-                          <label for="Manufacturer" class="col-sm-3 control-label">Manufacturer</label>
+                          <label for="Manufacturer" class="col-sm-3 control-label">Manufacturer:</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" id="manufacturer" name="manufacturer" placeholder="ex: dairy milk">
                             @if ($errors->has('manufacturer'))
@@ -180,7 +189,16 @@
                             @endif
                           </div>
                         </div>
-                        <div class="form-group{{ $errors->has('mrp') ? ' has-error' : '' }}">
+                        <div class="form-group">
+                          <label  class="col-sm-3 control-label">Product Type:</label>
+                          <div class="col-sm-3">
+                            <select name="category" class="form-control select2" multiple="multiple" data-placeholder="Select a Category" style="width: 100%;">
+                              <option>Physical Product</option>
+                              <option>Downloadable Product</option>
+                            </select>
+                          </div>
+                        </div>
+                        <!--<div class="form-group{{ $errors->has('mrp') ? ' has-error' : '' }}">
                           <label for="mrp" class="col-sm-3 control-label">MRP:</label>
                           <div class="col-sm-2">
                             <input type="text" class="form-control" id="mrp" name="mrp" placeholder="ex: 3₹">
@@ -191,8 +209,8 @@
                             @endif
                           </div>
                             {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
-                        </div>
-                        <div class="form-group{{ $errors->has('discount') ? ' has-error' : '' }}">
+                        </div>-->
+                        <!--<div class="form-group{{ $errors->has('discount') ? ' has-error' : '' }}">
                           <label for="discount" class="col-sm-3 control-label">Discount:</label>
                           <div class="col-sm-2">
                             <input type="text" class="form-control" id="discount" name="discount" placeholder="ex: 30%">
@@ -203,9 +221,10 @@
                             @endif
                           </div>
                             {{--<div class="col-sm-7 padT5"><b>%</b></div>--}}
-                        </div>
+                        </div>-->
+                        
                         <div class="form-group{{ $errors->has('selling-price') ? ' has-error' : '' }}">
-                          <label for="selling-price" class="col-sm-3 control-label">Selling Price:</label>
+                          <label for="selling-price" class="col-sm-3 control-label">Price:</label>
                           <div class="col-sm-2">
                             <input type="text" class="form-control" id="selling-price" name="selling-price" placeholder="ex: 3₹">
                             @if ($errors->has('selling-price'))
@@ -216,7 +235,29 @@
                           </div>
                             {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
                         </div>
-                        <div class="form-group{{ $errors->has('upload-image') ? ' has-error' : '' }}">
+                         <div class="form-group">
+                          <label for="selling-price" class="col-sm-3 control-label">Status:</label>
+                          <div class="col-sm-2">
+                            <input type="text" class="form-control" id="selling-price" name="selling-price" placeholder="">
+                            
+                                  <span class="help-block">
+                                      <strong></strong>
+                                  </span>
+                           
+                          </div>
+                            {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-3 control-label">Created Date:</label>
+                            <div class="col-sm-2 date">
+                                <div class="input-group input-append date" id="dateRangePicker">
+                                    <input type="text" class="form-control" name="date" />
+                                    <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                       <!-- <div class="form-group{{ $errors->has('upload-image') ? ' has-error' : '' }}">
                           <label for="upload-image" class="col-sm-3 control-label">Upload Image:</label>
                           <div class="col-sm-9">
                             <input type="file" class="form-control" id="upload-image" name="upload-image">
@@ -226,10 +267,10 @@
                                   </span>
                             @endif
                           </div>
-                        </div>
+                        </div>-->
 
                         <div class="form-group{{ $errors->has('available_quantity') ? ' has-error' : '' }}">
-                            <label for="available_quantity" class="col-sm-3 control-label">Available Quantity</label>
+                            <label for="available_quantity" class="col-sm-3 control-label">Available Quantity:</label>
                             <div class="col-sm-2">
                                 <input type="text" class="form-control" id="available_quantity" name="available_quantity" placeholder="1">
                                 @if ($errors->has('available_quantity'))
@@ -241,7 +282,7 @@
                             {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
                         </div>
 
-                        <div class="form-group{{ $errors->has('return_time_limit') ? ' has-error' : '' }}">
+                        <!--<div class="form-group{{ $errors->has('return_time_limit') ? ' has-error' : '' }}">
                             <label for="return_time_limit" class="col-sm-3 control-label">Time limit For Return (in days)</label>
                             <div class="col-sm-2">
                                 <input type="text" class="form-control" id="return_time_limit" name="return_time_limit" placeholder="2 days">
@@ -252,17 +293,59 @@
                                 @endif
                             </div>
                             {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
-                        </div>
+                        </div>-->
 
-                    </div>
-
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-primary btn-flat">Save</button>
                     </div>
 
                   </form>
                   <!-- form ends -->
+                </div>
+                
+                        <h4 class="block-title">Upload Media</h4>
+                        <div class="block-of-block">
+                            <form id="product-create-form" class="form-horizontal" action="{{ route('user::products.create') }}" method="POST">
+                                <div class="form-group{{ $errors->has('upload-image') ? ' has-error' : '' }}">
+                                  <label for="upload-image" class="col-sm-3 control-label">Upload Image:</label>
+                                      <div class="col-sm-9">
+                                        <input id="inputIncludeFile" type="file" style="margin-top: 7px" placeholder="Inlcude some file">
+                                        @if ($errors->has('upload-image'))
+                                              <span class="help-block">
+                                                  <strong>{{ $errors->first('upload-image') }}</strong>
+                                              </span>
+                                        @endif
+                                      </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                  <label for="product-title" class="col-sm-3 control-label">Embed Video:</label>
+                                      <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="" name="" placeholder="<iframe> url </iframe>">
+                                        @if ($errors->has('embed-code'))
+                                              <span class="help-block">
+                                                  <strong>{{ $errors->first('embed-code') }}</strong>
+                                              </span>
+                                        @endif
+                                      </div>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <h4 class="block-title">Description</h4>
+                        <div class="block-of-block">
+                            <div class="box-body">
+                                <form action="#" method="post">
+                                    <div>
+                                        <textarea class="textarea" placeholder="Product Description" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="modal-footer">
+                      <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary btn-flat">Save</button>
+                    </div>
+                
             </div>
             
             <div id="tab-messages" class="tab-pane fade in">
@@ -416,6 +499,7 @@
 @section('footer-scripts')
   <script src="{{ asset('js/product-search-events.js') }}" type="text/javascript"></script>
   <script src="{{ asset('js/select2.full.min.js') }}" type="text/javascript"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
   <script>
     function matchStart (term, text) {
       if (text.toUpperCase().indexOf(term.toUpperCase()) == 0) {
@@ -476,5 +560,42 @@
 
                     }(jQuery);
     </script>
+    <script>
+$(document).ready(function() {
+    $('#dateRangePicker')
+        .datepicker({
+            format: 'mm/dd/yyyy',
+            startDate: '01/01/2010',
+            endDate: '12/30/2020'
+        })
+        .on('changeDate', function(e) {
+            // Revalidate the date field
+            $('#dateRangeForm').formValidation('revalidateField', 'date');
+        });
 
+    $('#dateRangeForm').formValidation({
+        framework: 'bootstrap',
+        icon: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            date: {
+                validators: {
+                    notEmpty: {
+                        message: 'The date is required'
+                    },
+                    date: {
+                        format: 'MM/DD/YYYY',
+                        min: '01/01/2010',
+                        max: '12/30/2020',
+                        message: 'The date is not a valid'
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
 @endsection
