@@ -48,8 +48,8 @@
                     </div>
                     <div class="box-footer box-comments{{ $productsCount == 0 ? '' : ' hidden' }}">
                         <div class="box-comment">
-                            <div class="col-lg-6">
-                                <h4 class="C-header">If it is not in Inaana's catalog:</h4>
+                            <div class="col-lg-6">                                
+                                <h4 class="C-header">If it is not in Inzaana's catalog:</h4>
                             </div>
                            <div class="col-lg-6 text-right">
                                <button id="product-form-open-button" class="btn btn-info btn-flat laravel-bootstrap-modal-form-open" data-toggle="modal" data-target="#addProduct" type="button"><i class="fa fa-lg fa-plus-square"></i>&ensp; Add Product</button>
@@ -106,6 +106,8 @@
         
     <!--add product modal-->
 <div id="addProduct" class="modal fade laravel-bootstrap-modal-form" role="dialog">
+
+  <div id="has_error" class="hidden{{ count($errors) > 0 ? ' has-error' : '' }}"></div>
     
   <div class="modal-dialog">
     <!-- Modal content-->
@@ -114,16 +116,18 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title"></h4>
           <div class="custom_tab">
-              <ul class="nav nav-tabs">
-                <li class="active"><a href="#tab-edit" data-toggle="tab">Add Product Details</a></li>
-                <li><a href="#tab-messages" data-toggle="tab">Upload Products</a></li>
+              <ul class="nav nav-tabs">                
+                <li class="{{ ($tab == 'single_product_entry_tab') ? 'active' : '' }}"><a href="#tab-edit" data-toggle="tab">Add Product Details</a></li>
+                <li class="{{ ($tab == 'bulk_product_entry_tab') ? 'active' : '' }}"><a href="#tab-messages" data-toggle="tab">Upload Products</a></li>
               </ul>
           </div>
       </div>
         
         <!--Custom tab content start from here-->
-        <div id="generalTabContent" class="tab-content">
-            <div id="tab-edit" class="tab-pane fade in active">
+        <div id="generalTabContent" class="tab-content">            
+
+            @include('errors')
+            <div id="tab-edit" class="tab-pane fade in{{ ($tab == 'single_product_entry_tab') ? ' active' : '' }}">
                 
                 <h4 class="block-title">Product Summary</h4>
                 <div class="block-of-block">
@@ -132,7 +136,6 @@
 
                     {!! csrf_field() !!}
 
-                    @include('errors')
 
                     <div class="modal-body";>
                         <div class="form-group">
@@ -179,6 +182,7 @@
                           </div>
                         </div>
                         <div class="form-group{{ $errors->has('manufacturer') ? ' has-error' : '' }}">
+                          
                           <label for="Manufacturer" class="col-sm-3 control-label">Manufacturer:</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" id="manufacturer" name="manufacturer" placeholder="ex: dairy milk">
@@ -348,28 +352,39 @@
                 
             </div>
             
-            <div id="tab-messages" class="tab-pane fade in">
-                    <div class=" form-horizontal">
+
+            <div id="tab-messages" class="tab-pane fade in{{ ($tab == 'bulk_product_entry_tab') ? ' active' : '' }}">
+                <div class=" form-horizontal">
+
+                      <form action="/products/import/csv" method="POST" enctype="multipart/form-data" id="js-upload-form">
+                        
+                        {!! csrf_field() !!}
+
                         <div>
                           <label  class="col-sm-3 control-label">Select store</label>
                             <div class="col-sm-7">
-                              <select name="stores" class="form-control select2" multiple="multiple" data-placeholder="Select Store" style="width: 100%;">
-                                        <option>store.inzaana.com</option>                                    
+                                    
+                              <select name="stores" id="stores" class="form-control select2" multiple="multiple" data-placeholder="Select Store" style="width: 100%;">
+                                @foreach($stores as $name_as_url => $name)
+                                    <option value="{{ $name_as_url }}"> {{ $name_as_url }}.inzaana.com ( {{ $name }} ) </option>                                    
+                                @endforeach
                               </select>
                             </div>
                         </div>
+                        
                         <br>
+
                         <div class="text-center">
-                             <!-- Standar Form -->
+                             
+                          <!-- Standard Form -->
                           <h3>Select files from your computer</h3>
-                          <form action="" method="post" enctype="multipart/form-data" id="js-upload-form">
-                            <div class="form-inline">
-                              <div class="form-group">
-                                <input type="file" name="files[]" id="js-upload-files" multiple>
-                              </div>
-                              
-                            </div>
-                          </form>
+
+
+                          <div class="form-inline">
+                            <div class="form-group">
+                              <input type="file" name="csv" id="js-upload-files" multiple>
+                            </div>                              
+                          </div>
 
                           <!-- Drop Zone -->
                           <h4>Or drag and drop files below</h4>
@@ -379,11 +394,15 @@
                         </div>
                         
                         <div class="modal-footer">
-                      <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-primary btn-flat">Upload Files</button>
-                    </div>
+
+                          <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary btn-flat">Upload Files</button>
+                        </div>
+
+                      </form>
                       
-                    </div>
+
+                </div>
             </div>
         </div>
       
@@ -429,13 +448,13 @@
                     @foreach( $products as $product )
                     <tr>
                       <!-- <td id="child"><a href="">001</a> </td> -->
-                      <td id="child"><a href="">{{ $product->product_title }}</a></td>
+                      <td id="child"><a href="">{{ $product->title }}</a></td>
                       <td id="child"><a href="">{{ $product->category ? $product->category->category_name : 'Uncategorized' }}</a></td>
                       <td id="child"><a href=""></a></td> <!-- sub category-->
-                      <td id="child"><a href="">{{ $product->product_mrp }}</a></td>
-                      <td id="child"><a href="">{{ $product->product_discount }} %</a></td>
-                      <td id="child"><a href="">$ {{ $product->selling_price }}</a></td>
-                      <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ $product->photo_name }}" height="60px" width="90px"/></a></td>
+                      <td id="child"><a href="">{{ $product->mrp }}</a></td>
+                      <td id="child"><a href="">{{ $product->discount }} %</a></td>
+                      <td id="child"><a href="">$ {{ $product->marketProduct()->price }}</a></td>
+                      <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ $product->photo_name or 'http://lorempixel.com/400/200/sports/' }}" height="60px" width="90px"/></a></td>
                       <td id="child"><a href="">{{ $product->available_quantity }}</a></td> <!-- Available quantity-->
                       <td id="child"><a href="">{{ $product->return_time_limit }}</a></td> <!-- Time limit for return-->
                       <td id="child">@include('includes.approval-label', [ 'status' => $product->status, 'labelText' => $product->getStatus() ])</td>
@@ -497,7 +516,12 @@
 @endsection
 
 @section('footer-scripts')
+  
+<!-- 
+  <script src="{{ asset('data-requests/element-data-manager.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('data-requests/products-data-provider.js') }}" type="text/javascript"></script>
   <script src="{{ asset('js/product-search-events.js') }}" type="text/javascript"></script>
+   -->
   <script src="{{ asset('js/select2.full.min.js') }}" type="text/javascript"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
   <script>
@@ -517,11 +541,13 @@
   </script>
 
   <script type="text/javascript">
-      $('#addProduct').modal({ 'show' : {{ session()->has('errors') }}  });
+      
+      $('#addProduct').modal({ 'show' : ($('div.has-error').length > 0) });
   </script>
 
     <script>
-                + function($) {
+                
+      + function($) {
             'use strict';
 
             // UPLOAD CLASS DEFINITION
@@ -532,14 +558,22 @@
 
             var startUpload = function(files) {
                 console.log(files)
+                // var fileView = '<ul>';
+                // $.each(files, function(index, item){
+                //     fileView += '<li>' + item.name + '</li>';
+                // });
+                // fileView += '<ul>';
+                // $('#drop-zone').html(fileView);
             }
 
-            uploadForm.addEventListener('submit', function(e) {
-                var uploadFiles = document.getElementById('js-upload-files').files;
-                e.preventDefault()
 
-                startUpload(uploadFiles)
-            })
+            // uploadForm.addEventListener('submit', function(e) {
+            //     var uploadFiles = document.getElementById('js-upload-files').files;
+            //     e.preventDefault()
+
+
+            //     startUpload(uploadFiles)
+            // });
 
             dropZone.ondrop = function(e) {
                 e.preventDefault();
@@ -558,7 +592,8 @@
                 return false;
             }
 
-                    }(jQuery);
+
+        }(jQuery);
     </script>
     <script>
 $(document).ready(function() {
