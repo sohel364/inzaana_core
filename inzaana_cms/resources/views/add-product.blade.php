@@ -396,12 +396,62 @@
                                   
                                 </div>
                             </form>
+                            
+                            <div class="panel">
+                            <div class="panel-body">
+                                <table class="table table-hover table-condensed text-center">
+                                    <thead>
+                                    <tr>
+                                        <th>Spec Title</th>
+                                        <th>Option Type</th>
+                                        <th>Values</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>Color</td>
+                                        <td>Select box</td>
+                                        <td>Red, Color</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Size</td>
+                                        <td>Select box</td>
+                                        <td>Large, XL, LL</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Storage</td>
+                                        <td>Label</td>
+                                        <td>10 GB</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                         </div>
                         
+                        <h4 class="block-title">Availability</h4>
+                        <div class="block-of-block">
+                            <form id="product-create-form" class="form-horizontal" action="" method="POST">
+                                <div class="form-group">
+                                    <label for="" class="col-sm-3 control-label">Availability:</label>
+                                    <div class="col-sm-3" >
+                                    <select name="" class="form-control"  data-placeholder="" style="width: 100%;">
+                                      <option>Private</option>
+                                      <option>Public</option>
+                                    </select>
+                                  </div>
+                                </div>
+                            </form>
+                        </div>                    
+                         
+                         
+                            
+                                        
+                        
                         <div class="modal-footer">
-                      <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-primary btn-flat">Save</button>
-                    </div>
+                          <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary btn-flat">Save</button>
+                        </div>
                 
             </div>
             

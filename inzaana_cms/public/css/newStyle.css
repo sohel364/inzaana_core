@@ -19,5 +19,14 @@
     line-height: 1.3334;
     padding: 0!important;
 }
-
+.availablity{
+     background: 0 0;
+    border: 0!important;
+    color: #34313f;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.3334;
+    margin-left: 50px;
+    margin-bottom: 50px;
+}
 
