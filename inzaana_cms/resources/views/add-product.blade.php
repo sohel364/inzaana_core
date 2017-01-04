@@ -242,16 +242,11 @@
                          <div class="form-group">
                           <label for="selling-price" class="col-sm-3 control-label">Status:</label>
                           <div class="col-sm-2">
-                            <input type="text" class="form-control" id="selling-price" name="selling-price" placeholder="">
-                            
-                                  <span class="help-block">
-                                      <strong></strong>
-                                  </span>
-                           
+                            <input type="text" class="form-control" id="selling-price" name="selling-price" placeholder="">               
                           </div>
                             {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
                         </div>
-                        <div class="form-group">
+                        <!--<div class="form-group">
                             <label class="col-xs-3 control-label">Created Date:</label>
                             <div class="col-sm-2 date">
                                 <div class="input-group input-append date" id="dateRangePicker">
@@ -259,7 +254,7 @@
                                     <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                         
                        <!-- <div class="form-group{{ $errors->has('upload-image') ? ' has-error' : '' }}">
                           <label for="upload-image" class="col-sm-3 control-label">Upload Image:</label>
@@ -356,6 +351,7 @@
                                                   <strong></strong>
                                               </span>-->
                                       </div>
+                                           
                                         <!--<div class="col-sm-7 padT5"><b></b></div>-->
                                 </div>
                                 <div class="form-group">
@@ -363,8 +359,11 @@
                                   <div class="col-sm-3">
                                     <select name="control-type" class="form-control"  data-placeholder="Control Type" style="width: 100%;">
                                       <option>Label</option>
-                                      <option>Radio Button Set</option>
+                                      <option>Radio Controlers</option>
                                       <option>Select Box</option>
+                                      <option>Input box</option>
+                                      <option>Spinner</option>
+                                      <option>Check Box</option>
                                     </select>
                                   </div>
                                 </div>
@@ -393,13 +392,16 @@
                                       <option>Option-3</option>
                                     </select>
                                   </div>
+                                  <div class="col-sm-2">
+                                              <button formmethod="GET" formaction="" class="btn btn-info btn-flat"><i class="fa fa-plus"></i> </button>
+                                          </div>
                                   
                                 </div>
                             </form>
                             
                             <div class="panel">
                             <div class="panel-body">
-                                <table class="table table-hover table-condensed text-center">
+                                <table class="table table-hover table-condensed table-bordered text-center">
                                     <thead>
                                     <tr>
                                         <th>Spec Title</th>
