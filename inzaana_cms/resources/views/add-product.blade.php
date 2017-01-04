@@ -345,6 +345,32 @@
                             </div>
                         </div>
                         
+                        <h4 class="block-title">Product Spec</h4>
+                        <div class="block-of-block">
+                            <form id="product-create-form" class="form-horizontal" action="" method="POST">
+                                <div class="form-group">
+                                      <label for="Spec-titile" class="col-sm-3 control-label">Spec Title:</label>
+                                      <div class="col-sm-2">
+                                        <input type="text" class="form-control" id="" name="spec-title" placeholder="">
+                                              <span class="help-block">
+                                                  <strong></strong>
+                                              </span>
+                                      </div>
+                                        <div class="col-sm-7 padT5"><b></b></div>
+                                </div>
+                                <div class="form-group">
+                                  <label  class="col-sm-3 control-label">Control Type:</label>
+                                  <div class="col-sm-3">
+                                    <select name="control-type" class="form-control"  data-placeholder="Control Type" style="width: 100%;">
+                                      <option>Label</option>
+                                      <option>Radio Button Set</option>
+                                      <option>Select Box</option>
+                                    </select>
+                                  </div>
+                                </div>
+                            </form>
+                        </div>
+                        
                         <div class="modal-footer">
                       <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
                       <button type="submit" class="btn btn-primary btn-flat">Save</button>
