@@ -350,13 +350,13 @@
                             <form id="product-create-form" class="form-horizontal" action="" method="POST">
                                 <div class="form-group">
                                       <label for="Spec-titile" class="col-sm-3 control-label">Spec Title:</label>
-                                      <div class="col-sm-2">
+                                      <div class="col-sm-3">
                                         <input type="text" class="form-control" id="" name="spec-title" placeholder="">
-                                              <span class="help-block">
+                                              <!--<span class="help-block">
                                                   <strong></strong>
-                                              </span>
+                                              </span>-->
                                       </div>
-                                        <div class="col-sm-7 padT5"><b></b></div>
+                                        <!--<div class="col-sm-7 padT5"><b></b></div>-->
                                 </div>
                                 <div class="form-group">
                                   <label  class="col-sm-3 control-label">Control Type:</label>
@@ -367,6 +367,33 @@
                                       <option>Select Box</option>
                                     </select>
                                   </div>
+                                </div>
+                                <div class="form-group">
+                                  <label  class="col-sm-3 control-label">Value:</label>
+                                  <div class="col-sm-3">
+                                    <input type="text" class="form-control" id="" name="" placeholder="">
+                                  </div>
+                                  
+                                  <div class="col-sm-3" hidden="">
+                                    <div class="radio">
+                                          <label><input type="radio" name="optradio">Option 1</label>
+                                    </div>
+                                    <div class="radio">
+                                          <label><input type="radio" name="optradio">Option 2</label>
+                                    </div>
+                                    <div class="radio disabled">
+                                          <label><input type="radio" name="optradio" disabled>Option 3</label>
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="col-sm-3" hidden="">
+                                    <select name="" class="form-control"  data-placeholder="" style="width: 100%;">
+                                      <option>Option-1</option>
+                                      <option>Option-2</option>
+                                      <option>Option-3</option>
+                                    </select>
+                                  </div>
+                                  
                                 </div>
                             </form>
                         </div>
