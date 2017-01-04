@@ -369,7 +369,7 @@
                                 </div>
                                 <div class="form-group">
                                   <label  class="col-sm-3 control-label">Value:</label>
-                                  <div class="col-sm-3">
+                                  <div class="col-sm-3" hidden="">
                                     <input type="text" class="form-control" id="" name="" placeholder="">
                                   </div>
                                   
@@ -380,9 +380,6 @@
                                     <div class="radio">
                                           <label><input type="radio" name="optradio">Option 2</label>
                                     </div>
-                                    <div class="radio disabled">
-                                          <label><input type="radio" name="optradio" disabled>Option 3</label>
-                                    </div>
                                   </div>
                                   
                                   <div class="col-sm-3" hidden="">
@@ -392,10 +389,41 @@
                                       <option>Option-3</option>
                                     </select>
                                   </div>
+                                  
+                                  <div class="">
+                                      <div class="col-sm-1">
+                                    <div class="input-group spinner">
+                                        <input type="text" class="form-control" value="10" min="5" max="15">
+                                        <div class="input-group-btn-vertical">
+                                          <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
+                                          <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
+                                        </div>
+                                      </div>
+                                  </div>
+                                    <div class="col-sm-1">
+                                        <label  class="col-sm-1 control-label">To</label>
+                                    </div>
+                                  <div class="col-sm-1">
+                                    <div class="input-group spinner">
+                                        <input type="text" class="form-control" value="10" min="5" max="15">
+                                        <div class="input-group-btn-vertical">
+                                          <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
+                                          <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
+                                        </div>
+                                      </div>
+                                  </div>
+                                  </div>
+                                  
                                   <div class="col-sm-2">
-                                              <button formmethod="GET" formaction="" class="btn btn-info btn-flat"><i class="fa fa-plus"></i> </button>
+                                              <button formmethod="GET" formaction="" class="btn btn-default btn-flat"><i class="fa fa-plus"></i> </button>
                                           </div>
                                   
+                                </div>
+                                <div class="form-group">
+                                  <label  class="col-sm-3 control-label"></label>
+                                  <div class="col-sm-3">
+                                    <button formmethod="GET" formaction="" class="btn btn-default btn-flat">Apply </button>
+                                  </div>
                                 </div>
                             </form>
                             
@@ -437,10 +465,9 @@
                                 <div class="form-group">
                                     <label for="" class="col-sm-3 control-label">Availability:</label>
                                     <div class="col-sm-3" >
-                                    <select name="" class="form-control"  data-placeholder="" style="width: 100%;">
-                                      <option>Private</option>
-                                      <option>Public</option>
-                                    </select>
+                                        <div class="checkbox">
+                                          <label><input type="checkbox" value="">Make this product public.</label>
+                                        </div>
                                   </div>
                                 </div>
                             </form>
@@ -737,5 +764,30 @@ $(document).ready(function() {
         }
     });
 });
+</script>
+
+<script> /*for spinner*/
+$(function(){
+
+    $('.spinner .btn:first-of-type').on('click', function() {
+      var btn = $(this);
+      var input = btn.closest('.spinner').find('input');
+      if (input.attr('max') == undefined || parseInt(input.val()) < parseInt(input.attr('max'))) {    
+        input.val(parseInt(input.val(), 10) + 1);
+      } else {
+        btn.next("disabled", true);
+      }
+    });
+    $('.spinner .btn:last-of-type').on('click', function() {
+      var btn = $(this);
+      var input = btn.closest('.spinner').find('input');
+      if (input.attr('min') == undefined || parseInt(input.val()) > parseInt(input.attr('min'))) {    
+        input.val(parseInt(input.val(), 10) - 1);
+      } else {
+        btn.prev("disabled", true);
+      }
+    });
+
+})
 </script>
 @endsection
