@@ -151,7 +151,7 @@
                             </select>
                           </div>
                           <div class="col-sm-2">
-                              <button formmethod="GET" formaction="{{ route('user::categories') }}" class="btn btn-info btn-flat"><i class="fa fa-plus"></i> </button>
+                              <button formmethod="GET" formaction="{{ route('user::categories') }}" class="btn btn-default btn-flat"><i class="fa fa-plus"></i> </button>
                           </div>
                         </div>
                        <!-- <div class="form-group">
@@ -242,7 +242,7 @@
                          <div class="form-group">
                           <label for="selling-price" class="col-sm-3 control-label">Status:</label>
                           <div class="col-sm-2">
-                            <input type="text" class="form-control" id="selling-price" name="selling-price" placeholder="">               
+                            <input type="text" class="form-control" id="" name="" placeholder="">               
                           </div>
                             {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
                         </div>
@@ -271,15 +271,23 @@
                         <div class="form-group{{ $errors->has('available_quantity') ? ' has-error' : '' }}">
                             <label for="available_quantity" class="col-sm-3 control-label">Available Quantity:</label>
                             <div class="col-sm-2">
-                                <input type="text" class="form-control" id="available_quantity" name="available_quantity" placeholder="1">
+                               <div class="input-group spinner">
+                                        <input type="text" class="form-control" value="10" min="5" max="15">
+                                        <div class="input-group-btn-vertical">
+                                          <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
+                                          <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
+                                        </div>
+                                      </div>
+                                <!--<input type="text" class="form-control" id="available_quantity" name="available_quantity" placeholder="1">
                                 @if ($errors->has('available_quantity'))
                                   <span class="help-block">
                                     <strong>{{ $errors->first('available_quantity') }}</strong>
                                   </span>
                                 @endif
                             </div>
-                            {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
+                            {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}-->
                         </div>
+                        
 
                         <!--<div class="form-group{{ $errors->has('return_time_limit') ? ' has-error' : '' }}">
                             <label for="return_time_limit" class="col-sm-3 control-label">Time limit For Return (in days)</label>
@@ -299,13 +307,15 @@
                   </form>
                   <!-- form ends -->
                 </div>
+                </div>
+                
                 
                         <h4 class="block-title">Upload Media</h4>
                         <div class="block-of-block">
                             <form id="product-create-form" class="form-horizontal" action="{{ route('user::products.create') }}" method="POST">
                                 <div class="form-group{{ $errors->has('upload-image') ? ' has-error' : '' }}">
                                   <label for="upload-image" class="col-sm-3 control-label">Upload Image:</label>
-                                      <div class="col-sm-9">
+                                      <div class="col-sm-3">
                                         <input id="inputIncludeFile" type="file" style="margin-top: 7px" placeholder="Inlcude some file">
                                         @if ($errors->has('upload-image'))
                                               <span class="help-block">
@@ -313,11 +323,69 @@
                                               </span>
                                         @endif
                                       </div>
+                                     
+                                      
+                                </div>
+                                <div class="from-group">
+                                    <div class="row">
+                                       <label for="" class="col-sm-3 control-label"></label>
+                                        <div class="col-md-2">
+                                          <div class="thumbnail">
+                                            <a href="" target="_blank">
+                                              <img src="http://lorempixel.com/400/200/sports/">
+                                            </a>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                          <div class="thumbnail">
+                                            <a href="" target="_blank">
+                                              <img src="http://lorempixel.com/400/200/sports/">
+                                            </a>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                          <div class="thumbnail">
+                                            <a href="" target="_blank">
+                                              <img src="http://lorempixel.com/400/200/sports/">
+                                            </a>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                          <div class="thumbnail">
+                                            <a href="" target="_blank">
+                                              <img src="http://lorempixel.com/400/200/sports/">
+                                            </a>
+                                          </div>
+                                        </div>
+                                     </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                  <label for="upload-image" class="col-sm-3 control-label">Upload Video:</label>
+                                      <div class="col-sm-3">
+                                        <input id="inputIncludeFile" type="file" style="margin-top: 7px" placeholder="Inlcude some file">
+                                        <span class="help-block">
+                                                  <strong>
+                                                  <div class="checkbox">
+                                          <label><input type="checkbox" value="">Or Embed a Video.</label>
+                                                  </div>
+                                                 </strong>
+                                        </span>
+                                      </div>
+                                      
+                                </div>
+                                <div class="form-group">
+                                   <label for="" class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-8">
+                                        <div class="embed-responsive embed-responsive-4by3">
+                                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/5ixc2E7W-ec"></iframe>
+                                    </div>
+                                    </div>
                                 </div>
                                 
                                 <div class="form-group">
                                   <label for="product-title" class="col-sm-3 control-label">Embed Video:</label>
-                                      <div class="col-sm-9">
+                                      <div class="col-sm-8">
                                         <input type="text" class="form-control" id="" name="" placeholder="<iframe> url </iframe>">
                                         @if ($errors->has('embed-code'))
                                               <span class="help-block">
@@ -393,23 +461,15 @@
                                   <div class="">
                                       <div class="col-sm-1">
                                     <div class="input-group spinner">
-                                        <input type="text" class="form-control" value="10" min="5" max="15">
-                                        <div class="input-group-btn-vertical">
-                                          <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                          <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                        </div>
+                                        <input type="text" class="form-control" id="" name="" placeholder=""> 
                                       </div>
                                   </div>
                                     <div class="col-sm-1">
                                         <label  class="col-sm-1 control-label">To</label>
                                     </div>
                                   <div class="col-sm-1">
-                                    <div class="input-group spinner">
-                                        <input type="text" class="form-control" value="10" min="5" max="15">
-                                        <div class="input-group-btn-vertical">
-                                          <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                          <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                        </div>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="" name="" placeholder=""> 
                                       </div>
                                   </div>
                                   </div>
@@ -463,7 +523,7 @@
                         <div class="block-of-block">
                             <form id="product-create-form" class="form-horizontal" action="" method="POST">
                                 <div class="form-group">
-                                    <label for="" class="col-sm-3 control-label">Availability:</label>
+                                    <label for="" class="col-sm-3 control-label"></label>
                                     <div class="col-sm-3" >
                                         <div class="checkbox">
                                           <label><input type="checkbox" value="">Make this product public.</label>
