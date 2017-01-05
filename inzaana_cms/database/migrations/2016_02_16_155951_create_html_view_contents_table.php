@@ -7,14 +7,8 @@ use Inzaana\Database\Helper;
 
 class CreateHtmlViewContentsTable extends Migration
 {
-    use Helper;
-
     const TABLE_NAME = 'html_view_contents';
 
-    public function __construct()
-    {
-        $this->table = self::TABLE_NAME;
-    }
     /**
      * Run the migrations.
      *
@@ -37,8 +31,6 @@ class CreateHtmlViewContentsTable extends Migration
                     ->references('id')->on('html_view_menus')
                     ->onDelete('cascade');
         });
-
-        $this->EnableForeignKeyChecks();
     }
 
     /**
@@ -48,9 +40,10 @@ class CreateHtmlViewContentsTable extends Migration
      */
     public function down()
     {
-        //
-        $this->DisableForeignKeyChecks();
+        Schema::disableForeignKeyConstraints();
         
         Schema::dropIfExists(self::TABLE_NAME);
+
+        Schema::enableForeignKeyConstraints();
     }
 }

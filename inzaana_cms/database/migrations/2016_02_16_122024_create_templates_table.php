@@ -7,15 +7,7 @@ use Inzaana\Database\Helper;
 
 class CreateTemplatesTable extends Migration
 {
-    use Helper;
-
     const TABLE_NAME = 'templates';
-
-    public function __construct()
-    {
-        $this->table = self::TABLE_NAME;
-    }
-
     /**
      * Run the migrations.
      *
@@ -43,8 +35,6 @@ class CreateTemplatesTable extends Migration
                     ->references('id')->on('users')
                     ->onDelete('cascade');
         });
-
-        $this->EnableForeignKeyChecks();
     }
 
     /**
@@ -54,11 +44,12 @@ class CreateTemplatesTable extends Migration
      */
     public function down()
     {
-        //
-        $this->DisableForeignKeyChecks();
+        Schema::disableForeignKeyConstraints();
 
         Schema::dropIfExists(CreateMediasTable::TABLE_NAME);
         Schema::dropIfExists(CreateHtmlViewMenusTable::TABLE_NAME);
         Schema::dropIfExists(self::TABLE_NAME);
+
+        Schema::enableForeignKeyConstraints();
     }
 }

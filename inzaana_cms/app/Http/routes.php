@@ -174,14 +174,14 @@ Route::group(['middleware' => 'web'], function () {
             // Product controller
             Route::get('/products', [ 'uses' => 'ProductController@index', 'as' => 'products' ]);
             Route::get('/products/search', [ 'uses' => 'ProductController@search', 'as' => 'products.search' ]);
-            Route::get('/products/search/{terms?}', [ 'uses' => 'ProductController@searchTerms', 'as' => 'products.search-terms' ]);
             Route::post('/products/create', [ 'uses' => 'ProductController@create', 'as' => 'products.create' ]);
-            Route::post('/products/sell-yours/{id}', [ 'uses' => 'ProductController@copy', 'as' => 'products.sell-yours' ]);
-            Route::post('/products/edit/{product_id}', [ 'uses' => 'ProductController@edit', 'as' => 'products.edit' ]);
-            Route::post('/products/delete/{product_id}', [ 'uses' => 'ProductController@delete', 'as' => 'products.delete' ]);
+            Route::post('/products/{product}/sell-yours', [ 'uses' => 'ProductController@copy', 'as' => 'products.sell-yours' ]);
+            Route::post('/products/{product}/edit', [ 'uses' => 'ProductController@edit', 'as' => 'products.edit' ]);
+            Route::post('/products/{product}/update', [ 'uses' => 'ProductController@update', 'as' => 'products.update' ]);
+            Route::post('/products/{product}/delete', [ 'uses' => 'ProductController@delete', 'as' => 'products.delete' ]);
             Route::get('/products/approvals', [ 'uses' => 'ProductController@approvals', 'as' => 'products.approvals' ]);
             Route::post('/products/approvals/confirm/{id}', [ 'uses' => 'ProductController@confirmApproval', 'as' => 'products.approvals.confirm' ]);
-            Route::get('/products/import/csv/raw/records', [ 'uses' => 'ProductController@uploadCSV', 'as' => 'products.upload.csv' ]);
+            Route::post('/products/import/csv', [ 'uses' => 'ProductController@uploadCSV', 'as' => 'products.upload.csv' ]);
 
             // Category controller
             Route::get('/categories', [ 'uses' => 'CategoryController@index', 'as' => 'categories' ]);

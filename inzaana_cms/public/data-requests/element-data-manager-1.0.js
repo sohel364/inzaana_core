@@ -52,6 +52,7 @@ var ElementDataManager = {
             hideSavingIcon();
     },
     onError: function(xhr, textStatus) {
+        hideSavingIcon();
         ElementDataManager.data = { "id": 0, "value" : "-- Select --" };
         ElementDataManager.ready(ElementDataManager.context, ElementDataManager.data);
     },
@@ -68,6 +69,7 @@ var ElementDataManager = {
             dataType: 'json',
             statusCode: {
                 404: function() {
+                    hideSavingIcon();
                     ElementDataManager.data = { "id": 0, "value" : "-- Select --" };
                     ElementDataManager.ready(ElementDataManager.context, ElementDataManager.data);
                 }

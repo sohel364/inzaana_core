@@ -7,15 +7,7 @@ use Inzaana\Database\Helper;
 
 class CreateHtmlViewsTable extends Migration
 {
-    use Helper;
-
     const TABLE_NAME = 'html_views';
-
-    public function __construct()
-    {
-        $this->table = self::TABLE_NAME;
-    }
-
     /**
      * Run the migrations.
      *
@@ -52,11 +44,11 @@ class CreateHtmlViewsTable extends Migration
      */
     public function down()
     {
-        $this->DisableForeignKeyChecks();
+        Schema::disableForeignKeyConstraints();
 
         Schema::dropIfExists(CreateHtmlViewSubmenusTable::TABLE_NAME);
         Schema::dropIfExists(self::TABLE_NAME);
 
-        $this->EnableForeignKeyChecks();
+        Schema::enableForeignKeyConstraints();
     }
 }

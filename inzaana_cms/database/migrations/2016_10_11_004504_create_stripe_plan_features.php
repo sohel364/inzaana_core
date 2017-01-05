@@ -7,14 +7,7 @@ use Inzaana\Database\Helper;
 
 class CreateStripePlanFeatures extends Migration
 {
-    use Helper;
-
     const TABLE_NAME = 'stripe_plan_features';
-
-    public function __construct()
-    {
-        $this->table = self::TABLE_NAME;
-    }
 
     /**
      * Run the migrations.
@@ -35,8 +28,6 @@ class CreateStripePlanFeatures extends Migration
             $table->foreign('plan_id')->references('id')->on('stripe_plans')->onDelete('cascade');
             $table->foreign('feature_id')->references('feature_id')->on(self::TABLE_NAME)->onDelete('cascade');
         });
-
-        $this->EnableForeignKeyChecks();
     }
 
     /**
@@ -46,9 +37,11 @@ class CreateStripePlanFeatures extends Migration
      */
     public function down()
     {
-        $this->DisableForeignKeyChecks();
+        Schema::disableForeignKeyConstraints();
         
         Schema::drop("stripe_plan_has_features");
         Schema::drop(self::TABLE_NAME);
+        
+        Schema::enableForeignKeyConstraints();
     }
 }

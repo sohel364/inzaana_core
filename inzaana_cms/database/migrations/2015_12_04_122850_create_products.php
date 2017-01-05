@@ -28,6 +28,10 @@ class CreateProducts extends Migration
             $table->integer('return_time_limit')->default(0);
             $table->enum('status', Product::STATUS_FLOWS)->default('ON_APPROVAL');
             $table->timestamps();  
+            $table->index(['id', 'store_id', 'market_product_id', 'created_at'], 'products_index');
+            $table->foreign('market_product_id')
+                    ->references('id')->on('market_products')
+                    ->onDelete('cascade');  
             $table->softDeletes();
         });
     }

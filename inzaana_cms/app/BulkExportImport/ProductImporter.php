@@ -6,11 +6,11 @@ use KzykHys\CsvParser\CsvParser;
 
 class ProductImporter
 {
-
 	const CSV_STORAGE_PATH = 'app/csv/';
 	const HEADER_COUNT = 2;	//Top row count that csv file uses for header titles
     const OUT_OF_RANGE_INDEX = -1;
     const JSON_DATA_TITLES = [ 'media' => [ 'type', 'resources' ], 'spec' => [ 'spec_label', 'values', 'view_type' ] ];
+    const SUPPORTED_FILE_EXTENSIONS = [ 'csv' ];
 
 	private $__parser;
     private $__productCount = 0;
@@ -191,5 +191,20 @@ class ProductImporter
             $products []= $product;
         }
         return [ 'json' => collect($products)->toJson(), 'raw' => $products ];
+    }
+
+    public static function isSupportedExtension($extension)
+    {
+        foreach(self::SUPPORTED_FILE_EXTENSIONS as $ext)
+        {
+            if($ext == $extension)
+                return true;
+        }
+        return false;
+    }
+
+    public static function getStoragePath()
+    {
+        return str_replace('\\', '\\\\', storage_path(self::CSV_STORAGE_PATH));
     }
 }

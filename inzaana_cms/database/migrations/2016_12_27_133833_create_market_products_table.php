@@ -23,7 +23,7 @@ class CreateMarketProductsTable extends Migration
             $table->float('price')->default(0.0);
             $table->json('category_specs')->nullable()->comment('JSON serialization of product specifications defined by category specifications.');
             $table->enum('status', Product::STATUS_FLOWS)->default('ON_APPROVAL');
-            $table->timestamps();     
+            $table->timestamps();   
             $table->softDeletes();     
         });
     }

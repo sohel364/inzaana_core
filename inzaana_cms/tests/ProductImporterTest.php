@@ -108,10 +108,10 @@ class ProductImporterTest extends TestCase
      * 
      * @return void
      */
-    public function testResponseGetRawRecordsExceptHeaders()
-    {
-        $this->withoutMiddleware();
-    	$this->visit( self::ROUTING_PREFIX . '/csv/raw/records')
-    		 ->assertResponseOk();
-    }
+    // public function testResponseGetRawRecordsExceptHeaders()
+    // {
+    //     $this->withoutMiddleware();
+    // 	$this->visit( self::ROUTING_PREFIX . '/csv/raw/records')
+    // 		 ->assertResponseOk();
+    // }
 }

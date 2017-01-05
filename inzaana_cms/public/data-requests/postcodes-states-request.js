@@ -1,5 +1,6 @@
 
-  ElementDataManager.timeout = 0;
+  // definition: element-data-manager-1.0.js
+
   ElementDataManager.isCompleted = function() { return $('select#state option').length > 0 && $('select#postcode option').length > 0; };
   ElementDataManager.load('INDIA', function(context, data) {
       var options = '';

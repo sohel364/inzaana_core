@@ -48,7 +48,7 @@
                     </div>
                     <div class="box-footer box-comments{{ $productsCount == 0 ? '' : ' hidden' }}">
                         <div class="box-comment">
-                            <div class="col-lg-6">                                
+                            <div class="col-lg-6">
                                 <h4 class="C-header">If it is not in Inzaana's catalog:</h4>
                             </div>
                            <div class="col-lg-6 text-right">
@@ -62,9 +62,9 @@
             <!--end of form-->
             
             <div class="col-lg-6 col-lg-offset-3 boxPadTop">
-                <div class="box box-down box-info">
+                <div class="box box-down box-info{{ $productsCount == 0 ? ' hidden' : '' }}">
                     <div class="boxed-header">
-                        <h5>Results on Inzaana.com &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<b>1</b> to <b>5</b> of <b>{{ $productsCount }}</b> results.</h5>
+                        <h5>Results on Inzaana.com &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<b>1</b> to <b>{{ $productsCount < 5 ? $productsCount : 5 }}</b> of <b>{{ $productsCount }}</b> results.</h5>
                     </div>
                 <div class="box-body no-padding">
                   <table id="parent" class="table table-hover">
@@ -75,15 +75,15 @@
                       <th>Action</th>
                     </tr>
                     @if(isset($productsBySearch))
-                      @foreach($productsBySearch as $product)
+                      @foreach($productsBySearch as $productFromSearch)
                       <tr>
-                          <td id="photo"><a data-toggle="modal" data-target="#viewImage"><img src="{{ $product->photo_name }}" height="50px" width="80px"/></a></td>
-                          <td id="product">{{ $product->product_title }}</td>
-                          <td id="category">{{ $product->category->category_name or 'Uncategorized' }}</td>
+                          <td id="photo"><a data-toggle="modal" data-target="#viewImage"><img src="{{ $productFromSearch->photo_name or 'http://lorempixel.com/400/200/food/' }}" height="50px" width="80px"/></a></td>
+                          <td id="product">{{ $productFromSearch->title }}</td>
+                          <td id="category">{{ $productFromSearch->category->name or 'Uncategorized' }}</td>
                           <td id="sellyours">
                             <form method="POST">
                               {!! csrf_field() !!}
-                              <input formaction="{{ route('user::products.sell-yours', [$product->id]) }}" class="btn btn-info btn-flat btn-sm" type="submit" value="Sell yours"></input>
+                              <input formaction="{{ route('user::products.sell-yours', [$productFromSearch]) }}" class="btn btn-info btn-flat btn-sm" type="submit" value="Sell yours"></input>
                             </form>
                           </td>
                       </tr>
@@ -108,6 +108,7 @@
 <div id="addProduct" class="modal fade laravel-bootstrap-modal-form" role="dialog">
 
   <div id="has_error" class="hidden{{ count($errors) > 0 ? ' has-error' : '' }}"></div>
+  <div id="is_edit" class="hidden{{ isset($product) ? ' is-edit' : '' }}"></div>
     
   <div class="modal-dialog">
     <!-- Modal content-->
@@ -116,7 +117,7 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title"></h4>
           <div class="custom_tab">
-              <ul class="nav nav-tabs">                
+              <ul class="nav nav-tabs">
                 <li class="{{ ($tab == 'single_product_entry_tab') ? 'active' : '' }}"><a href="#tab-edit" data-toggle="tab">Add Product Details</a></li>
                 <li class="{{ ($tab == 'bulk_product_entry_tab') ? 'active' : '' }}"><a href="#tab-messages" data-toggle="tab">Upload Products</a></li>
               </ul>
@@ -124,18 +125,18 @@
       </div>
         
         <!--Custom tab content start from here-->
-        <div id="generalTabContent" class="tab-content">            
+        <div id="generalTabContent" class="tab-content">
 
             @include('errors')
             <div id="tab-edit" class="tab-pane fade in{{ ($tab == 'single_product_entry_tab') ? ' active' : '' }}">
-                
+
+             <!-- form start -->
+              <form id="product-create-form" class="form-horizontal" action="{{ isset($product) ? route('user::products.update', [$product]) : route('user::products.create') }}" method="POST">
+
+                {!! csrf_field() !!}
+
                 <h4 class="block-title">Product Summary</h4>
                 <div class="block-of-block">
-                    <!-- form start -->
-                  <form id="product-create-form" class="form-horizontal" action="{{ route('user::products.create') }}" method="POST">
-
-                    {!! csrf_field() !!}
-
 
                     <div class="modal-body";>
                         <div class="form-group">
@@ -145,8 +146,10 @@
 
                             @if(isset($categories))
                               @foreach( $categories as $category )
-                              <option>{{ $category->category_name or 'Uncategorized' }}</option>
+                                <option value="{{ $category->id }}"{{ (isset($product) && $product->category->id) ? ' selected' : '' }}>{{ $category->name or 'Uncategorized' }}</option>
                               @endforeach
+                            @else                              
+                              <option>{{ 'Uncategorized' }}</option>
                             @endif
                             </select>
                           </div>
@@ -170,20 +173,19 @@
                                 {{--<button formmethod="GET" formaction="{{ route('user::categories') }}" class="btn btn-info btn-flat"><i class="fa fa-plus"></i> </button>--}}
                             {{--</div>--}}
                         </div>-->
-                        <div class="form-group{{ $errors->has('product_title') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
                           <label for="product-title" class="col-sm-3 control-label">Product Title:</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" id="product-title" name="product-title" placeholder="ex: kitka 5RS">
-                            @if ($errors->has('product_title'))
+                            <input type="text" class="form-control" id="product-title" name="product-title" placeholder="ex: kitkat 5RS" value="{{ isset($product) ? $product->title : '' }}">
+                            @if ($errors->has('title'))
                                   <span class="help-block">
-                                      <strong>{{ $errors->first('product_title') }}</strong>
+                                      <strong>{{ $errors->first('title') }}</strong>
                                   </span>
                             @endif
                           </div>
                         </div>
                         <div class="form-group{{ $errors->has('manufacturer') ? ' has-error' : '' }}">
-                          
-                          <label for="Manufacturer" class="col-sm-3 control-label">Manufacturer:</label>
+                          <label for="Manufacturer" class="col-sm-3 control-label">Manufacturer</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" id="manufacturer" name="manufacturer" placeholder="ex: dairy milk">
                             @if ($errors->has('manufacturer'))
@@ -217,7 +219,7 @@
                         <!--<div class="form-group{{ $errors->has('discount') ? ' has-error' : '' }}">
                           <label for="discount" class="col-sm-3 control-label">Discount:</label>
                           <div class="col-sm-2">
-                            <input type="text" class="form-control" id="discount" name="discount" placeholder="ex: 30%">
+                            <input type="text" class="form-control" id="discount" name="discount" value="{{ isset($product) ? $product->discount : '' }}" placeholder="ex: 30%">
                             @if ($errors->has('discount'))
                                   <span class="help-block">
                                       <strong>{{ $errors->first('discount') }}</strong>
@@ -272,7 +274,7 @@
                             <label for="available_quantity" class="col-sm-3 control-label">Available Quantity:</label>
                             <div class="col-sm-2">
                                <div class="input-group spinner">
-                                        <input type="text" class="form-control" value="10" min="5" max="15">
+                                        <input type="text" class="form-control" value="0" min="5" max="15">
                                         <div class="input-group-btn-vertical">
                                           <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
                                           <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
@@ -303,257 +305,251 @@
                         </div>-->
 
                     </div>
+                </div>
+                </div>
+                
+                
+                <h4 class="block-title">Upload Media</h4>
+                <div class="block-of-block">
+                    <div id="product-create-form" class="form-horizontal">
+                        <div class="form-group{{ $errors->has('upload-image') ? ' has-error' : '' }}">
+                          <label for="upload-image" class="col-sm-3 control-label">Upload Image:</label>
+                          <div class="col-sm-3">
+                            <input id="upload-image" name="upload-image" type="file" style="margin-top: 7px" placeholder="Inlcude some file">
+                            @if ($errors->has('upload-image'))
+                                  <span class="help-block">
+                                      <strong>{{ $errors->first('upload-image') }}</strong>
+                                  </span>
+                            @endif
+                          </div>                                    
+                              
+                        </div>
+                        <div class="from-group">
+                            <div class="row">
+                               <label for="" class="col-sm-3 control-label"></label>
+                                <div class="col-md-2">
+                                  <div class="thumbnail">
+                                    <a href="" target="_blank">
+                                      <img id="preview-image-1" src="http://lorempixel.com/400/200/sports/">
+                                    </a>
+                                  </div>
+                                </div>
+                                <div class="col-md-2">
+                                  <div class="thumbnail">
+                                    <a href="" target="_blank">
+                                      <img id="preview-image-2" src="http://lorempixel.com/400/200/sports/">
+                                    </a>
+                                  </div>
+                                </div>
+                                <div class="col-md-2">
+                                  <div class="thumbnail">
+                                    <a href="" target="_blank">
+                                      <img id="preview-image-3" src="http://lorempixel.com/400/200/sports/">
+                                    </a>
+                                  </div>
+                                </div>
+                                <div class="col-md-2">
+                                  <div class="thumbnail">
+                                    <a href="" target="_blank">
+                                      <img id="preview-image-4" src="http://lorempixel.com/400/200/sports/">
+                                    </a>
+                                  </div>
+                                </div>
+                             </div>
+                        </div>
+                        
+                        <div class="form-group">
+                          <label for="upload-image" class="col-sm-3 control-label">Upload Video:</label>
+                              <div class="col-sm-3">
+                                <input id="inputIncludeFile" type="file" style="margin-top: 7px" placeholder="Inlcude some file">
+                                <span class="help-block">
+                                          <strong>
+                                          <div class="checkbox">
+                                  <label><input type="checkbox" value="">Or Embed a Video.</label>
+                                          </div>
+                                         </strong>
+                                </span>
+                              </div>
+                              
+                        </div>
+                        <div class="form-group">
+                           <label for="" class="col-sm-3 control-label"></label>
+                            <div class="col-sm-8">
+                                <div class="embed-responsive embed-responsive-4by3">
+                                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/5ixc2E7W-ec"></iframe>
+                            </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                          <label for="product-title" class="col-sm-3 control-label">Embed Video:</label>
+                              <div class="col-sm-8">
+                                <input type="text" class="form-control" id="" name="" placeholder="<iframe> url </iframe>">
+                                @if ($errors->has('embed-code'))
+                                      <span class="help-block">
+                                          <strong>{{ $errors->first('embed-code') }}</strong>
+                                      </span>
+                                @endif
+                              </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h4 class="block-title">Description</h4>
+                <div class="block-of-block">
+                    <div class="box-body">
+                        <div>
+                            <textarea class="textarea" placeholder="Product Description" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                        </div>
+                    </div>
+                </div>
+                        
+                <h4 class="block-title">Product Spec</h4>
+                <div class="block-of-block">
+                    <div id="product-create-form" class="form-horizontal">
+                        <div class="form-group">
+                              <label for="Spec-titile" class="col-sm-3 control-label">Spec Title:</label>
+                              <div class="col-sm-3">
+                                <input type="text" class="form-control" id="" name="spec-title" placeholder="">
+                                      <!--<span class="help-block">
+                                          <strong></strong>
+                                      </span>-->
+                              </div>
+                                   
+                                <!--<div class="col-sm-7 padT5"><b></b></div>-->
+                        </div>
+                        <div class="form-group">
+                          <label  class="col-sm-3 control-label">Control Type:</label>
+                          <div class="col-sm-3">
+                            <select name="control-type" class="form-control"  data-placeholder="Control Type" style="width: 100%;">
+                              <option>Label</option>
+                              <option>Radio Controlers</option>
+                              <option>Select Box</option>
+                              <option>Input box</option>
+                              <option>Spinner</option>
+                              <option>Check Box</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label  class="col-sm-3 control-label">Value:</label>
+                          <div class="col-sm-3" hidden="">
+                            <input type="text" class="form-control" id="" name="" placeholder="">
+                          </div>
+                          
+                          <div class="col-sm-3" hidden="">
+                            <div class="radio">
+                                  <label><input type="radio" name="optradio">Option 1</label>
+                            </div>
+                            <div class="radio">
+                                  <label><input type="radio" name="optradio">Option 2</label>
+                            </div>
+                          </div>
+                          
+                          <div class="col-sm-3" hidden="">
+                            <select name="" class="form-control"  data-placeholder="" style="width: 100%;">
+                              <option>Option-1</option>
+                              <option>Option-2</option>
+                              <option>Option-3</option>
+                            </select>
+                          </div>
+                          
+                          <div class="">
+                              <div class="col-sm-1">
+                            <div class="input-group spinner">
+                                <input type="text" class="form-control" id="" name="" placeholder=""> 
+                              </div>
+                          </div>
+                            <div class="col-sm-1">
+                                <label  class="col-sm-1 control-label">To</label>
+                            </div>
+                          <div class="col-sm-1">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="" name="" placeholder=""> 
+                              </div>
+                          </div>
+                          </div>
+                          
+                          <div class="col-sm-2">
+                              <button formmethod="GET" formaction="" class="btn btn-default btn-flat"><i class="fa fa-plus"></i> </button>
+                          </div>
+                          
+                        </div>
+                        <div class="form-group">
+                          <label  class="col-sm-3 control-label"></label>
+                          <div class="col-sm-3">
+                            <button formmethod="GET" formaction="" class="btn btn-default btn-flat">Apply </button>
+                          </div>
+                        </div>
+                    </div>
+                    
+                    <div class="panel">
+                    <div class="panel-body">
+                        <table class="table table-hover table-condensed table-bordered text-center">
+                            <thead>
+                            <tr>
+                                <th>Spec Title</th>
+                                <th>Option Type</th>
+                                <th>Values</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Color</td>
+                                <td>Select box</td>
+                                <td>Red, Color</td>
+                            </tr>
+                            <tr>
+                                <td>Size</td>
+                                <td>Select box</td>
+                                <td>Large, XL, LL</td>
+                            </tr>
+                            <tr>
+                                <td>Storage</td>
+                                <td>Label</td>
+                                <td>10 GB</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                </div>
+                        
+                <h4 class="block-title">Availability</h4>
+                <div class="block-of-block">
+                    <div id="product-create-form" class="form-horizontal">
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label"></label>
+                            <div class="col-sm-3" >
+                                <div class="checkbox">
+                                  <label><input type="checkbox" value="">Make this product public.</label>
+                                </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>        
+                                
+                
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary btn-flat">Save</button>
+                </div>
 
-                  </form>
-                  <!-- form ends -->
-                </div>
-                </div>
-                
-                
-                        <h4 class="block-title">Upload Media</h4>
-                        <div class="block-of-block">
-                            <form id="product-create-form" class="form-horizontal" action="{{ route('user::products.create') }}" method="POST">
-                                <div class="form-group{{ $errors->has('upload-image') ? ' has-error' : '' }}">
-                                  <label for="upload-image" class="col-sm-3 control-label">Upload Image:</label>
-                                      <div class="col-sm-3">
-                                        <input id="inputIncludeFile" type="file" style="margin-top: 7px" placeholder="Inlcude some file">
-                                        @if ($errors->has('upload-image'))
-                                              <span class="help-block">
-                                                  <strong>{{ $errors->first('upload-image') }}</strong>
-                                              </span>
-                                        @endif
-                                      </div>
-                                     
-                                      
-                                </div>
-                                <div class="from-group">
-                                    <div class="row">
-                                       <label for="" class="col-sm-3 control-label"></label>
-                                        <div class="col-md-2">
-                                          <div class="thumbnail">
-                                            <a href="" target="_blank">
-                                              <img src="http://lorempixel.com/400/200/sports/">
-                                            </a>
-                                          </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                          <div class="thumbnail">
-                                            <a href="" target="_blank">
-                                              <img src="http://lorempixel.com/400/200/sports/">
-                                            </a>
-                                          </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                          <div class="thumbnail">
-                                            <a href="" target="_blank">
-                                              <img src="http://lorempixel.com/400/200/sports/">
-                                            </a>
-                                          </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                          <div class="thumbnail">
-                                            <a href="" target="_blank">
-                                              <img src="http://lorempixel.com/400/200/sports/">
-                                            </a>
-                                          </div>
-                                        </div>
-                                     </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                  <label for="upload-image" class="col-sm-3 control-label">Upload Video:</label>
-                                      <div class="col-sm-3">
-                                        <input id="inputIncludeFile" type="file" style="margin-top: 7px" placeholder="Inlcude some file">
-                                        <span class="help-block">
-                                                  <strong>
-                                                  <div class="checkbox">
-                                          <label><input type="checkbox" value="">Or Embed a Video.</label>
-                                                  </div>
-                                                 </strong>
-                                        </span>
-                                      </div>
-                                      
-                                </div>
-                                <div class="form-group">
-                                   <label for="" class="col-sm-3 control-label"></label>
-                                    <div class="col-sm-8">
-                                        <div class="embed-responsive embed-responsive-4by3">
-                                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/5ixc2E7W-ec"></iframe>
-                                    </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                  <label for="product-title" class="col-sm-3 control-label">Embed Video:</label>
-                                      <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="" name="" placeholder="<iframe> url </iframe>">
-                                        @if ($errors->has('embed-code'))
-                                              <span class="help-block">
-                                                  <strong>{{ $errors->first('embed-code') }}</strong>
-                                              </span>
-                                        @endif
-                                      </div>
-                                </div>
-                            </form>
-                        </div>
-                        
-                        <h4 class="block-title">Description</h4>
-                        <div class="block-of-block">
-                            <div class="box-body">
-                                <form action="#" method="post">
-                                    <div>
-                                        <textarea class="textarea" placeholder="Product Description" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        
-                        <h4 class="block-title">Product Spec</h4>
-                        <div class="block-of-block">
-                            <form id="product-create-form" class="form-horizontal" action="" method="POST">
-                                <div class="form-group">
-                                      <label for="Spec-titile" class="col-sm-3 control-label">Spec Title:</label>
-                                      <div class="col-sm-3">
-                                        <input type="text" class="form-control" id="" name="spec-title" placeholder="">
-                                              <!--<span class="help-block">
-                                                  <strong></strong>
-                                              </span>-->
-                                      </div>
-                                           
-                                        <!--<div class="col-sm-7 padT5"><b></b></div>-->
-                                </div>
-                                <div class="form-group">
-                                  <label  class="col-sm-3 control-label">Control Type:</label>
-                                  <div class="col-sm-3">
-                                    <select name="control-type" class="form-control"  data-placeholder="Control Type" style="width: 100%;">
-                                      <option>Label</option>
-                                      <option>Radio Controlers</option>
-                                      <option>Select Box</option>
-                                      <option>Input box</option>
-                                      <option>Spinner</option>
-                                      <option>Check Box</option>
-                                    </select>
-                                  </div>
-                                </div>
-                                <div class="form-group">
-                                  <label  class="col-sm-3 control-label">Value:</label>
-                                  <div class="col-sm-3" hidden="">
-                                    <input type="text" class="form-control" id="" name="" placeholder="">
-                                  </div>
-                                  
-                                  <div class="col-sm-3" hidden="">
-                                    <div class="radio">
-                                          <label><input type="radio" name="optradio">Option 1</label>
-                                    </div>
-                                    <div class="radio">
-                                          <label><input type="radio" name="optradio">Option 2</label>
-                                    </div>
-                                  </div>
-                                  
-                                  <div class="col-sm-3" hidden="">
-                                    <select name="" class="form-control"  data-placeholder="" style="width: 100%;">
-                                      <option>Option-1</option>
-                                      <option>Option-2</option>
-                                      <option>Option-3</option>
-                                    </select>
-                                  </div>
-                                  
-                                  <div class="">
-                                      <div class="col-sm-1">
-                                    <div class="input-group spinner">
-                                        <input type="text" class="form-control" id="" name="" placeholder=""> 
-                                      </div>
-                                  </div>
-                                    <div class="col-sm-1">
-                                        <label  class="col-sm-1 control-label">To</label>
-                                    </div>
-                                  <div class="col-sm-1">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="" name="" placeholder=""> 
-                                      </div>
-                                  </div>
-                                  </div>
-                                  
-                                  <div class="col-sm-2">
-                                              <button formmethod="GET" formaction="" class="btn btn-default btn-flat"><i class="fa fa-plus"></i> </button>
-                                          </div>
-                                  
-                                </div>
-                                <div class="form-group">
-                                  <label  class="col-sm-3 control-label"></label>
-                                  <div class="col-sm-3">
-                                    <button formmethod="GET" formaction="" class="btn btn-default btn-flat">Apply </button>
-                                  </div>
-                                </div>
-                            </form>
-                            
-                            <div class="panel">
-                            <div class="panel-body">
-                                <table class="table table-hover table-condensed table-bordered text-center">
-                                    <thead>
-                                    <tr>
-                                        <th>Spec Title</th>
-                                        <th>Option Type</th>
-                                        <th>Values</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>Color</td>
-                                        <td>Select box</td>
-                                        <td>Red, Color</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Size</td>
-                                        <td>Select box</td>
-                                        <td>Large, XL, LL</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Storage</td>
-                                        <td>Label</td>
-                                        <td>10 GB</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        </div>
-                        
-                        <h4 class="block-title">Availability</h4>
-                        <div class="block-of-block">
-                            <form id="product-create-form" class="form-horizontal" action="" method="POST">
-                                <div class="form-group">
-                                    <label for="" class="col-sm-3 control-label"></label>
-                                    <div class="col-sm-3" >
-                                        <div class="checkbox">
-                                          <label><input type="checkbox" value="">Make this product public.</label>
-                                        </div>
-                                  </div>
-                                </div>
-                            </form>
-                        </div>                    
-                         
-                         
-                            
-                                        
-                        
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary btn-flat">Save</button>
-                        </div>
-                
+              </form>
+              <!-- form ends -->
+
             </div>
             
 
             <div id="tab-messages" class="tab-pane fade in{{ ($tab == 'bulk_product_entry_tab') ? ' active' : '' }}">
                 <div class=" form-horizontal">
 
-                      <form action="/products/import/csv" method="POST" enctype="multipart/form-data" id="js-upload-form">
+                      <form action="{{ route('user::products.upload.csv') }}" method="POST" enctype="multipart/form-data" id="js-upload-form">
                         
                         {!! csrf_field() !!}
 
                         <div>
-                          <label  class="col-sm-3 control-label">Select store</label>
+                          <label class="col-sm-3 control-label">Select store</label>
                             <div class="col-sm-7">
                                     
                               <select name="stores" id="stores" class="form-control select2" multiple="multiple" data-placeholder="Select Store" style="width: 100%;">
@@ -574,7 +570,7 @@
 
                           <div class="form-inline">
                             <div class="form-group">
-                              <input type="file" name="csv" id="js-upload-files" multiple>
+                              <input type="file" name="csv" id="csv" multiple>
                             </div>                              
                           </div>
 
@@ -638,34 +634,38 @@
 
                   @if(isset($products))
                     @foreach( $products as $product )
-                    <tr>
-                      <!-- <td id="child"><a href="">001</a> </td> -->
-                      <td id="child"><a href="">{{ $product->title }}</a></td>
-                      <td id="child"><a href="">{{ $product->category ? $product->category->category_name : 'Uncategorized' }}</a></td>
-                      <td id="child"><a href=""></a></td> <!-- sub category-->
-                      <td id="child"><a href="">{{ $product->mrp }}</a></td>
-                      <td id="child"><a href="">{{ $product->discount }} %</a></td>
-                      <td id="child"><a href="">$ {{ $product->marketProduct()->price }}</a></td>
-                      <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ $product->photo_name or 'http://lorempixel.com/400/200/sports/' }}" height="60px" width="90px"/></a></td>
-                      <td id="child"><a href="">{{ $product->available_quantity }}</a></td> <!-- Available quantity-->
-                      <td id="child"><a href="">{{ $product->return_time_limit }}</a></td> <!-- Time limit for return-->
-                      <td id="child">@include('includes.approval-label', [ 'status' => $product->status, 'labelText' => $product->getStatus() ])</td>
-                      <td class="text-center" id="child">
-                        <form id="product-modification-form" class="form-horizontal" method="POST" >
-                          {!! csrf_field() !!}
-                          <!-- <button data-toggle="modal" data-target="#addProduct" type="button"><i class="fa fa-lg fa-plus-square"></i>&ensp; Add Product</button> -->
-                          <!-- <input formaction="{{ route('user::products.edit', [$product->id]) }}" id="product-edit-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Edit"></input> -->
-                          <input formaction="{{ route('user::products.delete', [$product->id]) }}" id="product-delete-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Delete"></input>
-                        </form>
-                      </td>
-                    </tr>
+
+                      @if($product->marketProduct())
+                        <tr>
+                          <!-- <td id="child"><a href="">001</a> </td> -->
+                          <td id="child"><a href="">{{ $product->title }}</a></td>
+                          <td id="child"><a href="">{{ $product->category ? $product->category->name : 'Uncategorized' }}</a></td>
+                          <td id="child"><a href=""></a></td> <!-- sub category-->
+                          <td id="child"><a href="">{{ $product->mrp }}</a></td>
+                          <td id="child"><a href="">{{ $product->discount }} %</a></td>
+                          <td id="child"><a href="">$ {{ $product->marketProduct()->price }}</a></td>
+                          <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ 'http://lorempixel.com/400/200/sports/' }}" height="60px" width="90px"/></a></td>
+                          <td id="child"><a href="">{{ $product->available_quantity }}</a></td> <!-- Available quantity-->
+                          <td id="child"><a href="">{{ $product->return_time_limit }}</a></td> <!-- Time limit for return-->
+                          <td id="child">@include('includes.approval-label', [ 'status' => $product->status, 'labelText' => $product->getStatus() ])</td>
+                          <td class="text-center" id="child">
+                            <form id="product-modification-form" class="form-horizontal" method="POST" >
+                              {!! csrf_field() !!}
+                              <input formaction="{{ route('user::products.edit', [$product]) }}" id="product-edit-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Edit"></input>
+                              <input formaction="{{ route('user::products.delete', [$product]) }}" id="product-delete-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Delete"></input>
+                            </form>
+                          </td>
+                        </tr>
+                      @endif
+
                     @endforeach
                   @endif
                   </table>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
             </div>
-          </div>
+    </div>
+
     <!--end of recently added product-->
 
 <!--View product modal-->
@@ -733,8 +733,10 @@
   </script>
 
   <script type="text/javascript">
-      
-      $('#addProduct').modal({ 'show' : ($('div.has-error').length > 0) });
+      $('#generalTabContent').ready(function() {
+          var showModal = ($('div.has-error').length > 0 || $('div.is-edit').length > 0);
+          $('#addProduct').modal({ 'show' : showModal });
+      });
   </script>
 
     <script>
@@ -760,7 +762,7 @@
 
 
             // uploadForm.addEventListener('submit', function(e) {
-            //     var uploadFiles = document.getElementById('js-upload-files').files;
+            //     var uploadFiles = document.getElementById('csv').files;
             //     e.preventDefault()
 
 
@@ -788,42 +790,41 @@
         }(jQuery);
     </script>
     <script>
-$(document).ready(function() {
-    $('#dateRangePicker')
-        .datepicker({
-            format: 'mm/dd/yyyy',
-            startDate: '01/01/2010',
-            endDate: '12/30/2020'
-        })
-        .on('changeDate', function(e) {
-            // Revalidate the date field
-            $('#dateRangeForm').formValidation('revalidateField', 'date');
-        });
+    $(document).ready(function() {
+        $('#dateRangePicker').datepicker({
+              format: 'mm/dd/yyyy',
+              startDate: '01/01/2010',
+              endDate: '12/30/2020'
+          })
+          .on('changeDate', function(e) {
+              // Revalidate the date field
+              $('#dateRangeForm').formValidation('revalidateField', 'date');
+          });
 
-    $('#dateRangeForm').formValidation({
-        framework: 'bootstrap',
-        icon: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        },
-        fields: {
-            date: {
-                validators: {
-                    notEmpty: {
-                        message: 'The date is required'
-                    },
-                    date: {
-                        format: 'MM/DD/YYYY',
-                        min: '01/01/2010',
-                        max: '12/30/2020',
-                        message: 'The date is not a valid'
-                    }
-                }
-            }
-        }
+          $('#dateRangeForm').formValidation({
+              framework: 'bootstrap',
+              icon: {
+                  valid: 'glyphicon glyphicon-ok',
+                  invalid: 'glyphicon glyphicon-remove',
+                  validating: 'glyphicon glyphicon-refresh'
+              },
+              fields: {
+                  date: {
+                      validators: {
+                          notEmpty: {
+                              message: 'The date is required'
+                          },
+                          date: {
+                              format: 'MM/DD/YYYY',
+                              min: '01/01/2010',
+                              max: '12/30/2020',
+                              message: 'The date is not a valid'
+                          }
+                      }
+                  }
+              }
+          });
     });
-});
 </script>
 
 <script> /*for spinner*/
@@ -849,5 +850,33 @@ $(function(){
     });
 
 })
+</script>
+
+<!-- background image loader on browse -->
+<script type="text/javascript">
+
+  var totalMediaLoaded = 0;
+  function setBackgroundImage(control, image_url){
+    // console.log("[DEBUG] Setting BG Image : " + control.attr("id") + " : " + image_url );
+    // control.css("background-image", "url(" + image_url + ")");
+    control.attr("src", image_url);
+    // console.log("[DEBUG] BG Image URL : " + control.css("background-image"));
+    // console.log("[DEBUG] BG Image URL : " + control.attr("src"));
+  }
+
+  $('#upload-image').change(function(event){
+      // var fileName = $(this).val();
+      // console.log(fileName);
+      var file    = event.target.files[0];
+      var reader  = new FileReader();
+      reader.addEventListener("load", function () {
+         setBackgroundImage( $('#preview-image-' + (++totalMediaLoaded)) , reader.result); 
+      }, false);
+
+      if (file) {
+         reader.readAsDataURL(file);
+      }
+
+  });
 </script>
 @endsection

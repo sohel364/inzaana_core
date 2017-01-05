@@ -7,15 +7,8 @@ use Inzaana\Database\Helper;
 
 class CreateHtmlViewMenusTable extends Migration
 {
-    use Helper;
-
     const TABLE_NAME = 'html_view_menus';
-
-    public function __construct()
-    {
-        $this->table = self::TABLE_NAME;
-    }
-
+    
     /**
      * Run the migrations.
      *
@@ -43,8 +36,6 @@ class CreateHtmlViewMenusTable extends Migration
                     ->references('id')->on('templates')
                     ->onDelete('cascade');
         });
-
-        $this->EnableForeignKeyChecks();
     }
 
     /**
@@ -54,11 +45,12 @@ class CreateHtmlViewMenusTable extends Migration
      */
     public function down()
     {
-        //
-        $this->DisableForeignKeyChecks();
+        Schema::disableForeignKeyConstraints();
         
         Schema::dropIfExists(CreateHtmlViewContentsTable::TABLE_NAME);
         Schema::dropIfExists(CreateHtmlViewSubmenusTable::TABLE_NAME);
         Schema::dropIfExists(self::TABLE_NAME);
+
+        Schema::enableForeignKeyConstraints();
     }
 }
