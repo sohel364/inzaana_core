@@ -46,7 +46,6 @@ class CreateHtmlViewsTable extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::dropIfExists(CreateHtmlViewSubmenusTable::TABLE_NAME);
         Schema::dropIfExists(self::TABLE_NAME);
 
         Schema::enableForeignKeyConstraints();

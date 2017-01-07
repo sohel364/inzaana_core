@@ -17,6 +17,8 @@ use Inzaana\MarketProduct;
 use Inzaana\Category;
 use Inzaana\Mailers\AppMailer;
 use Inzaana\BulkExportImport\ProductImporter;
+use Inzaana\MediaUploader;
+use Inzaana\ImageUploader;
 
 class ProductController extends Controller
 {
@@ -68,10 +70,39 @@ class ProductController extends Controller
      */
     public function create(ProductRequest $request)
     {
-        $products = Auth::user()->products;
-        $categories = Category::all();
+        /** @var \Illuminate\Contracts\Validation\Validator $validation */
+        $validation = Validator::make(
+            $request->all(),
+            [
+                'store_name' => 'bail|required',
+                'category' => 'bail|required',
+                'title' => 'bail|required|unique:market_products|alpha_dash|max:200',
+                'price' => 'required|numeric|regex:^[0-9]*\.?[0-9]{2}$',
+                'manufacturer_name' => 'required|unique:market_products|alpha_dash|max:200',
+                'discount' => 'numeric|max:100|min:0',
+                'category_specs' => 'present|json',
+            ]
+        );
 
-        $viewData = compact('products', 'categories');
+        if ($validation->fails()) {
+            // dd($validation->getMessageBag()->all());
+            return redirect()->back()->withErrors($validation->errors());
+        }
+
+        $store_name_as_url = $request->input('stores');
+        $data = [
+            'category_id' => $categories->count() == 0 ? 0 : $categories->first()->id,
+            'store_id' => $store->id,
+            'manufacturer_name' => $value['manufacturer_name'],
+            'title' => $value['title'],
+            'price' => $value['price'],
+            'is_public' => $value['is_public'],
+            'discount' => $value['discount'],
+            'spec' => $value['spec'],
+            'available_quantity' => $value['available_quantity'],
+            'return_time_limit' => $value['return_time_limit']
+        ];
+        $store = Store::whereNameAsUrl($store_name_as_url)->get()->first();
         //
         // $validator = Validator::make($request->all(),[
         //     'title' => 'required|unique:products,title,manufacture_name,product_mrp,selling_price,photo_name|max:100',
@@ -137,7 +168,7 @@ class ProductController extends Controller
         {
             flash('Your product (' . $product->title . ') is failed to add. Please contact your administrator for assistance.');
         }
-        return redirect()->route('user::products')->with($viewData);
+        return redirect()->route('user::products');
     }
 
     public function search(ProductRequest $request)
@@ -338,6 +369,43 @@ class ProductController extends Controller
         return $errors;
     }
 
+    private static function createProduct(array $data)
+    {
+        $marketProduct = new MarketProduct();
+        $marketProduct->category_id = $data['category_id'];
+        $marketProduct->title = $data['title'];
+        $marketProduct->manufacturer_name = $data['manufacturer_name'];
+        $marketProduct->price = $data['price'];
+
+        if(!$marketProduct->save())
+        {
+            Log::error('[Inzaana][User:: ' . Auth::user() . '][error:: Market product (' . $data['title'] . ') not added.]');
+            return false;
+        }
+        $product = new Product();
+        $product->user_id = Auth::user()->id;
+        $product->store_id = $data['store_id'];
+        $product->market_product_id = $marketProduct->id;
+        $product->is_public = $data['is_public'];
+        $product->title = $marketProduct->title;
+        $product->discount = $data['discount'];
+        $product->mrp = $product->discountedPrice();
+        $product->special_specs = collect($data['spec'])->toJson();
+        $product->available_quantity = $data['available_quantity'];
+        $product->return_time_limit = $data['return_time_limit'];
+        if(!$product->save())
+        {
+            $marketProduct->forceDelete();
+            Log::error('[Inzaana][User:: ' . Auth::user() . '][error:: Product (' . $data['title'] . ') not added.]');
+            return false;
+        }
+        if(!$product->saveDiscountedPrice())
+        {
+            Log::info('[Inzaana][User:: ' . Auth::user() . '][error:: Product (' . $data['title'] . ') MRP not saved.]');
+        }
+        return false;
+    }
+
     public function uploadCSV(ProductRequest $request)
     {        
         try
@@ -370,39 +438,23 @@ class ProductController extends Controller
             foreach($csv as $value)
             {
                 $categories = collect(Category::whereName($value['category_name'])->get());
-                $category_id = $categories->count() == 0 ? 0 : $categories->first()->id;
-                $store_id = $request->has('store') ? $request->input('store') : 0;
 
-                $marketProduct = new MarketProduct();
-                $marketProduct->category_id = $category_id;
-                $marketProduct->title = $value['title'];
-                $marketProduct->manufacturer_name = $value['manufacturer_name'];
-                $marketProduct->price = $value['price'];
+                $data = [
+                    'category_id' => $categories->count() == 0 ? 0 : $categories->first()->id,
+                    'store_id' => $store->id,
+                    'manufacturer_name' => $value['manufacturer_name'],
+                    'title' => $value['title'],
+                    'price' => $value['price'],
+                    'is_public' => $value['is_public'],
+                    'discount' => $value['discount'],
+                    'spec' => $value['spec'],
+                    'available_quantity' => $value['available_quantity'],
+                    'return_time_limit' => $value['return_time_limit']
+                ];
 
-                if(!$marketProduct->save())
+                if(!self::createProduct($data))
                 {
-                    Log::info('[Inzaana][User:: ' . Auth::user() . '][error:: Market product (' . $value['title'] . ') not added.]');
-                }
-                $product = new Product();
-                $product->user_id = Auth::user()->id;
-                $product->store_id = $store->id;
-                $product->market_product_id = $marketProduct->id;
-                $product->is_public = $value['is_public'];
-                $product->title = $marketProduct->title;
-                $product->discount = $value['discount'];
-                $product->mrp = $product->discountedPrice();
-                $product->special_specs = collect($value['spec'])->toJson();
-                $product->available_quantity = $value['available_quantity'];
-                $product->return_time_limit = $value['return_time_limit'];
-                if(!$product->save())
-                {
-                    $marketProduct->forceDelete();
-                    Log::info('[Inzaana][User:: ' . Auth::user() . '][error:: Product (' . $value['title'] . ') not added.]');
-                }
-                if(!$product->saveDiscountedPrice())
-                {
-                    //return 'MRP not saved';
-                    Log::info('[Inzaana][User:: ' . Auth::user() . '][error:: Product (' . $value['title'] . ') MRP not saved.]');
+                    flash()->error(ProductImporter::BULK_UPLOAD_ERRORS['unknown']);
                 }
             }
             flash()->success('Successfully uploaded all products.');

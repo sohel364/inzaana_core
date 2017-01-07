@@ -37,11 +37,9 @@ class CreateStripePlanFeatures extends Migration
      */
     public function down()
     {
-        Schema::disableForeignKeyConstraints();
-        
+        Schema::disableForeignKeyConstraints();        
         Schema::drop("stripe_plan_has_features");
-        Schema::drop(self::TABLE_NAME);
-        
+        Schema::drop(self::TABLE_NAME);        
         Schema::enableForeignKeyConstraints();
     }
 }

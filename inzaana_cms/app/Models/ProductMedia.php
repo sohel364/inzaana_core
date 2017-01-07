@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProductMedia extends Model
 {
 	const MEDIA_TYPES = ['UNKNOWN', 'IMAGE', 'AUDIO', 'VIDEO'];
-    const SUPPORTED_MEDIA_EXTENSIONS = [ 'jpg', 'jpeg', 'gif' ];
+    const SUPPORTED_MEDIA_EXTENSIONS = [ self::MEDIA_TYPES[1] => [ 'jpg', 'jpeg', 'gif' ] ];
 
     protected $table = 'product_medias';
 
@@ -19,10 +19,10 @@ class ProductMedia extends Model
         return $this->morphTo();
     }
 
-    public function getTitleAttribute($value)
+    public static function uuid()
     {
-    	$faker = new Faker\Generator();
-		$faker->addProvider(new Faker\Provider\Uuid($faker));
-    	return $faker->unique()->uuid;
+        $faker = new Faker\Generator();
+        $faker->addProvider(new Faker\Provider\Uuid($faker));
+        return $faker->unique()->uuid;
     }
 }

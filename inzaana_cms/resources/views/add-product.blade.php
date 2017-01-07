@@ -131,18 +131,40 @@
             <div id="tab-edit" class="tab-pane fade in{{ ($tab == 'single_product_entry_tab') ? ' active' : '' }}">
 
              <!-- form start -->
-              <form id="product-create-form" class="form-horizontal" action="{{ isset($product) ? route('user::products.update', [$product]) : route('user::products.create') }}" method="POST">
+             <!-- route('user::products.create') -->
+             <!-- enctype="multipart/form-data" -->
+              <form id="product-create-form" class="form-horizontal"
+                    action="{{ isset($product) ? route('user::products.update', [$product]) : route('user::products.create') }}"
+                    enctype="multipart/form-data"
+                    method="POST">
 
                 {!! csrf_field() !!}
 
                 <h4 class="block-title">Product Summary</h4>
                 <div class="block-of-block">
 
-                    <div class="modal-body";>
+                    <div class="modal-body">
+
                         <div class="form-group">
+                          <label class="col-sm-3 control-label">Select store</label>
+                            <div class="col-sm-7">
+                                    
+                              <select name="store_name" id="store_name" class="form-control select2" data-placeholder="Select Store" style="width: 100%;">
+                                @foreach($stores as $name_as_url => $name)
+                                    <option value="{{ $name_as_url }}"> {{ $name_as_url }}.inzaana.com ( {{ $name }} ) </option>                                    
+                                @endforeach
+                              </select>
+                              @if ($errors->has('store_name'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('store_name') }}</strong>
+                                    </span>
+                              @endif
+                            </div>
+                        </div>
+                        <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
                           <label  class="col-sm-3 control-label">Product Category:</label>
                           <div class="col-sm-2">
-                            <select name="category" class="form-control select2" multiple="multiple" data-placeholder="Select a Category" style="width: 100%;">
+                            <select name="category" id="category" class="form-control select2" multiple="multiple" data-placeholder="Select a Category" style="width: 100%;">
 
                             @if(isset($categories))
                               @foreach( $categories as $category )
@@ -152,6 +174,11 @@
                               <option>{{ 'Uncategorized' }}</option>
                             @endif
                             </select>
+                            @if ($errors->has('category'))
+                                  <span class="help-block">
+                                      <strong>{{ $errors->first('category') }}</strong>
+                                  </span>
+                            @endif
                           </div>
                           <div class="col-sm-2">
                               <button formmethod="GET" formaction="{{ route('user::categories') }}" class="btn btn-default btn-flat"><i class="fa fa-plus"></i> </button>
@@ -174,9 +201,9 @@
                             {{--</div>--}}
                         </div>-->
                         <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
-                          <label for="product-title" class="col-sm-3 control-label">Product Title:</label>
+                          <label for="title" class="col-sm-3 control-label">Product Title:</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" id="product-title" name="product-title" placeholder="ex: kitkat 5RS" value="{{ isset($product) ? $product->title : '' }}">
+                            <input type="text" class="form-control" id="title" name="title" placeholder="ex: kitkat 5RS" value="{{ isset($product) ? $product->title : '' }}">
                             @if ($errors->has('title'))
                                   <span class="help-block">
                                       <strong>{{ $errors->first('title') }}</strong>
@@ -184,13 +211,13 @@
                             @endif
                           </div>
                         </div>
-                        <div class="form-group{{ $errors->has('manufacturer') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('manufacturer_name') ? ' has-error' : '' }}">
                           <label for="Manufacturer" class="col-sm-3 control-label">Manufacturer</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" id="manufacturer" name="manufacturer" placeholder="ex: dairy milk">
-                            @if ($errors->has('manufacturer'))
+                            <input type="text" class="form-control" id="manufacturer_name" name="manufacturer_name" placeholder="ex: dairy milk">
+                            @if ($errors->has('manufacturer_name'))
                                   <span class="help-block">
-                                      <strong>{{ $errors->first('manufacturer') }}</strong>
+                                      <strong>{{ $errors->first('manufacturer_name') }}</strong>
                                   </span>
                             @endif
                           </div>
@@ -229,25 +256,29 @@
                             {{--<div class="col-sm-7 padT5"><b>%</b></div>--}}
                         </div>-->
                         
-                        <div class="form-group{{ $errors->has('selling-price') ? ' has-error' : '' }}">
-                          <label for="selling-price" class="col-sm-3 control-label">Price:</label>
+                        <div class="form-group{{ $errors->has('price') ? ' has-error' : '' }}">
+                          <label for="price" class="col-sm-3 control-label">Price:</label>
                           <div class="col-sm-2">
-                            <input type="text" class="form-control" id="selling-price" name="selling-price" placeholder="ex: 3₹">
-                            @if ($errors->has('selling-price'))
+                            <input type="text" class="form-control" id="price" name="price" placeholder="ex: 3₹">
+                            @if ($errors->has('price'))
                                   <span class="help-block">
-                                      <strong>{{ $errors->first('selling-price') }}</strong>
+                                      <strong>{{ $errors->first('price') }}</strong>
                                   </span>
                             @endif
                           </div>
-                            {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
                         </div>
+                        @if(isset($product))
                          <div class="form-group">
                           <label for="selling-price" class="col-sm-3 control-label">Status:</label>
                           <div class="col-sm-2">
-                            <input type="text" class="form-control" id="" name="" placeholder="">               
+                              <select name="status" id="status" class="form-control select2" data-placeholder="Select Store" style="width: 100%;">
+                                @foreach(Inzaana\Product::STATUS_FLOWS as $status)
+                                    <option {{ $status == $product->status ? ' selected' : '' }}> {{ $status }} </option>                                    
+                                @endforeach
+                              </select>             
                           </div>
-                            {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}
                         </div>
+                        @endif
                         <!--<div class="form-group">
                             <label class="col-xs-3 control-label">Created Date:</label>
                             <div class="col-sm-2 date">
@@ -274,20 +305,18 @@
                             <label for="available_quantity" class="col-sm-3 control-label">Available Quantity:</label>
                             <div class="col-sm-2">
                                <div class="input-group spinner">
-                                        <input type="text" class="form-control" value="0" min="5" max="15">
-                                        <div class="input-group-btn-vertical">
-                                          <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                          <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                        </div>
-                                      </div>
-                                <!--<input type="text" class="form-control" id="available_quantity" name="available_quantity" placeholder="1">
+                                  <input type="text" class="form-control" value="0" min="5" max="15">
+                                  <div class="input-group-btn-vertical">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
+                                  </div>
+                                </div>
                                 @if ($errors->has('available_quantity'))
                                   <span class="help-block">
                                     <strong>{{ $errors->first('available_quantity') }}</strong>
                                   </span>
                                 @endif
                             </div>
-                            {{--<div class="col-sm-7 padT5"><b>$</b></div>--}}-->
                         </div>
                         
 
@@ -306,19 +335,18 @@
 
                     </div>
                 </div>
-                </div>
                 
                 
                 <h4 class="block-title">Upload Media</h4>
                 <div class="block-of-block">
                     <div id="product-create-form" class="form-horizontal">
-                        <div class="form-group{{ $errors->has('upload-image') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('upload_image') ? ' has-error' : '' }}">
                           <label for="upload-image" class="col-sm-3 control-label">Upload Image:</label>
                           <div class="col-sm-3">
-                            <input id="upload-image" name="upload-image" type="file" style="margin-top: 7px" placeholder="Inlcude some file">
-                            @if ($errors->has('upload-image'))
+                            <input id="upload_image" name="upload_image" type="file" style="margin-top: 7px" placeholder="Inlcude some file">
+                            @if ($errors->has('upload_image'))
                                   <span class="help-block">
-                                      <strong>{{ $errors->first('upload-image') }}</strong>
+                                      <strong>{{ $errors->first('upload_image') }}</strong>
                                   </span>
                             @endif
                           </div>                                    
@@ -361,14 +389,14 @@
                         <div class="form-group">
                           <label for="upload-image" class="col-sm-3 control-label">Upload Video:</label>
                               <div class="col-sm-3">
-                                <input id="inputIncludeFile" type="file" style="margin-top: 7px" placeholder="Inlcude some file">
+                                <input id="upload-video" type="file" style="margin-top: 7px" placeholder="Include some file">
                                 <span class="help-block">
-                                          <strong>
-                                          <div class="checkbox">
-                                  <label><input type="checkbox" value="">Or Embed a Video.</label>
-                                          </div>
-                                         </strong>
                                 </span>
+                                <strong>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" value="">Or Embed a Video.</label>
+                                </div>
+                               </strong>
                               </div>
                               
                         </div>
@@ -381,13 +409,13 @@
                             </div>
                         </div>
                         
-                        <div class="form-group">
-                          <label for="product-title" class="col-sm-3 control-label">Embed Video:</label>
+                        <div class="form-group{{ $errors->has('embed_video') ? ' has-error' : '' }}">
+                          <label for="embed_video" class="col-sm-3 control-label">Embed Video:</label>
                               <div class="col-sm-8">
                                 <input type="text" class="form-control" id="" name="" placeholder="<iframe> url </iframe>">
-                                @if ($errors->has('embed-code'))
+                                @if ($errors->has('embed_video'))
                                       <span class="help-block">
-                                          <strong>{{ $errors->first('embed-code') }}</strong>
+                                          <strong>{{ $errors->first('embed_video') }}</strong>
                                       </span>
                                 @endif
                               </div>
@@ -709,9 +737,9 @@
 
 @section('footer-scripts')
   
-<!-- 
-  <script src="{{ asset('data-requests/element-data-manager.js') }}" type="text/javascript"></script>
-  <script src="{{ asset('data-requests/products-data-provider.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('data-requests/element-data-manager-1.1.js') }}" type="text/javascript"></script>
+  
+<!-- <script src="{{ asset('data-requests/products-data-provider.js') }}" type="text/javascript"></script>
   <script src="{{ asset('js/product-search-events.js') }}" type="text/javascript"></script>
    -->
   <script src="{{ asset('js/select2.full.min.js') }}" type="text/javascript"></script>
@@ -856,7 +884,15 @@ $(function(){
 <script type="text/javascript">
 
   var totalMediaLoaded = 0;
-  function setBackgroundImage(control, image_url){
+  var fileLimit = 5;
+  var selectedFileDataURLs = [];
+  var reader = new FileReader();
+  reader.addEventListener("load", function() {
+     selectedFileDataURLs[totalMediaLoaded] = reader.result;
+     setBackgroundImage( $('#preview-image-' + (++totalMediaLoaded)) , reader.result);
+  }, false);
+
+  function setBackgroundImage(control, image_url) {
     // console.log("[DEBUG] Setting BG Image : " + control.attr("id") + " : " + image_url );
     // control.css("background-image", "url(" + image_url + ")");
     control.attr("src", image_url);
@@ -864,19 +900,47 @@ $(function(){
     // console.log("[DEBUG] BG Image URL : " + control.attr("src"));
   }
 
-  $('#upload-image').change(function(event){
+  $('#upload_image').change( function(event) {
       // var fileName = $(this).val();
       // console.log(fileName);
-      var file    = event.target.files[0];
-      var reader  = new FileReader();
-      reader.addEventListener("load", function () {
-         setBackgroundImage( $('#preview-image-' + (++totalMediaLoaded)) , reader.result); 
-      }, false);
-
-      if (file) {
-         reader.readAsDataURL(file);
+      // var file = event.target.files[0];
+      for(var i = 0; i < event.target.files.length; ++i)
+      {
+          var file = event.target.files[i];
+          if (file && totalMediaLoaded <= fileLimit)
+          {
+             reader.readAsDataURL(file);
+          }
       }
-
   });
+</script>
+<script type="text/javascript">
+  // $('#product-create-form').ready( function() {
+
+  //     alert('Form');
+
+  //     var contexts = [{ prefix: 'products', route: '/create' }];
+  //     ElementDataManager.contexts = contexts;
+  //     ElementDataManager.element = '#product-create-form';
+  //     alert(ElementDataManager.element);
+  //     ElementDataManager.send(null, function(data) {
+
+  //         if(isEmpty(data) || isEmpty(data.context))
+  //         {
+  //             return;
+  //         }
+  //         if(data.context == 'products')
+  //         {
+  //             if(!data.success)
+  //             {
+  //                 return;
+  //             }
+
+  //             hideSavingIcon();
+
+  //             alert(data.test);
+  //         }
+  //     });
+  // });
 </script>
 @endsection

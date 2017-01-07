@@ -11,6 +11,9 @@ class ProductImporter
     const OUT_OF_RANGE_INDEX = -1;
     const JSON_DATA_TITLES = [ 'media' => [ 'type', 'resources' ], 'spec' => [ 'spec_label', 'values', 'view_type' ] ];
     const SUPPORTED_FILE_EXTENSIONS = [ 'csv' ];
+    const BULK_UPLOAD_ERRORS = [
+        'unknown' => 'Something went wrong during upload. We have already logged the problems. Please contact Inzaana help line for further assistance.'
+    ];
 
 	private $__parser;
     private $__productCount = 0;

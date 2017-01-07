@@ -172,16 +172,24 @@ Route::group(['middleware' => 'web'], function () {
             Route::post('/templates/edit/{template_id}', [ 'uses' => 'TemplateController@edit', 'as' => 'templates.edit' ]);
 
             // Product controller
-            Route::get('/products', [ 'uses' => 'ProductController@index', 'as' => 'products' ]);
-            Route::get('/products/search', [ 'uses' => 'ProductController@search', 'as' => 'products.search' ]);
-            Route::post('/products/create', [ 'uses' => 'ProductController@create', 'as' => 'products.create' ]);
-            Route::post('/products/{product}/sell-yours', [ 'uses' => 'ProductController@copy', 'as' => 'products.sell-yours' ]);
-            Route::post('/products/{product}/edit', [ 'uses' => 'ProductController@edit', 'as' => 'products.edit' ]);
-            Route::post('/products/{product}/update', [ 'uses' => 'ProductController@update', 'as' => 'products.update' ]);
-            Route::post('/products/{product}/delete', [ 'uses' => 'ProductController@delete', 'as' => 'products.delete' ]);
-            Route::get('/products/approvals', [ 'uses' => 'ProductController@approvals', 'as' => 'products.approvals' ]);
-            Route::post('/products/approvals/confirm/{id}', [ 'uses' => 'ProductController@confirmApproval', 'as' => 'products.approvals.confirm' ]);
-            Route::post('/products/import/csv', [ 'uses' => 'ProductController@uploadCSV', 'as' => 'products.upload.csv' ]);
+            Route::group([ 'prefix' => 'products' ], function () {
+
+                Route::get('/', [ 'uses' => 'ProductController@index', 'as' => 'products' ]);
+                Route::post('/create', [ 'uses' => 'ProductController@create', 'as' => 'products.create' ]);
+                Route::get('/search', [ 'uses' => 'ProductController@search', 'as' => 'products.search' ]);
+                Route::post('/{product}/sell-yours', [ 'uses' => 'ProductController@copy', 'as' => 'products.sell-yours' ]);
+                Route::post('/{product}/edit', [ 'uses' => 'ProductController@edit', 'as' => 'products.edit' ]);
+                Route::post('/{product}/update', [ 'uses' => 'ProductController@update', 'as' => 'products.update' ]);
+                Route::post('/{product}/delete', [ 'uses' => 'ProductController@delete', 'as' => 'products.delete' ]);
+                Route::get('/approvals', [ 'uses' => 'ProductController@approvals', 'as' => 'products.approvals' ]);
+                Route::post('/approvals/confirm/{id}', [ 'uses' => 'ProductController@confirmApproval', 'as' => 'products.approvals.confirm' ]);
+                Route::post('/import/csv', [ 'uses' => 'ProductController@uploadCSV', 'as' => 'products.upload.csv' ]);
+
+                // Route::group( [ 'middleware' => ['JsonValidation'] ], function () {
+
+                //     Route::post('/create', [ 'uses' => 'ProductController@create', 'as' => 'products.create' ]);
+                // });
+            });
 
             // Category controller
             Route::get('/categories', [ 'uses' => 'CategoryController@index', 'as' => 'categories' ]);

@@ -42,10 +42,8 @@ class CreateMediasTable extends Migration
      */
     public function down()
     {
-        Schema::disableForeignKeyConstraints();
-        
-        Schema::dropIfExists(self::TABLE_NAME);
-        
+        Schema::disableForeignKeyConstraints();        
+        Schema::dropIfExists(self::TABLE_NAME);        
         Schema::enableForeignKeyConstraints();
     }
 }

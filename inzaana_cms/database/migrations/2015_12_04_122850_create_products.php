@@ -28,10 +28,8 @@ class CreateProducts extends Migration
             $table->integer('return_time_limit')->default(0);
             $table->enum('status', Product::STATUS_FLOWS)->default('ON_APPROVAL');
             $table->timestamps();  
-            $table->index(['id', 'store_id', 'market_product_id', 'created_at'], 'products_index');
-            $table->foreign('market_product_id')
-                    ->references('id')->on('market_products')
-                    ->onDelete('cascade');  
+            $table->index(['id', 'user_id', 'store_id', 'market_product_id', 'created_at'], 'products_index');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');  
             $table->softDeletes();
         });
     }
@@ -43,6 +41,8 @@ class CreateProducts extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::drop('products');
+        Schema::enableForeignKeyConstraints();
     }
 }

@@ -45,11 +45,7 @@ class CreateTemplatesTable extends Migration
     public function down()
     {
         Schema::disableForeignKeyConstraints();
-
-        Schema::dropIfExists(CreateMediasTable::TABLE_NAME);
-        Schema::dropIfExists(CreateHtmlViewMenusTable::TABLE_NAME);
         Schema::dropIfExists(self::TABLE_NAME);
-
         Schema::enableForeignKeyConstraints();
     }
 }

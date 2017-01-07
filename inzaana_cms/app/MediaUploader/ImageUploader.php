@@ -12,79 +12,72 @@ class ImageUploader extends MediaUploader
 
 	public function __construct($context = 'products')
 	{
-		$__mediaType = ProductMedia::MEDIA_TYPES[0];
-		$__storagePath = MediaUploader::STORAGE_PATH . self::IMAGE_STORAGE_PATH . '/' . $context;
+		$this->__mediaType = ProductMedia::MEDIA_TYPES[0];
+		$this->__storagePath = MediaUploader::STORAGE_PATH . self::IMAGE_STORAGE_PATH . '/' . $context . '/';
 	}
 
 	public function fails()
 	{
-		return !collect($__errors)->isEmpty();
+		return !collect($this->__errors)->isEmpty();
 	}
+
+    public function errors()
+    {
+        return $this->__errors;
+    }
 
 	public function validate(UploadedFile $uploadedFile)
 	{
-		$__uploadedFile = $uploadedFile;
-
+        $this->__uploadedFile = $uploadedFile;
         if (!$__uploadedFile->isValid())
         {
-            $__errors['corrupted_media_file'] = 'Upladed image file is corrupted';
-            flash()->error($__errors['corrupted_media_file']);
-            return $__errors;
+            $this->__errors []= MediaUploader::MEDIA_UPLOAD_ERRORS['corrupted_media_file'];
         }
-
-        if($__uploadedFile->getSize() >= $__uploadedFile->getMaxFilesize())
+        if(!self::isSupportedExtension($this->__uploadedFile->getClientOriginalExtension()))
         {
-            $__errors['size_limit_exits'] = 'Please keep your image file size below ' . ($__uploadedFile->getMaxFilesize() / 1000) . ' KB';
-            flash()->warning($__errors['size_limit_exits']);
-            return $__errors;
+            $this->__errors []= MediaUploader::MEDIA_UPLOAD_ERRORS['ext_not_supported'];
         }
-        if(!self::isSupportedExtension($__uploadedFile->getClientOriginalExtension()))
+        if($this->__uploadedFile->getSize() >= UploadedFile::getMaxFilesize())
         {
-            $__errors['ext_not_supported'] = 'Upladed image file (*.' . $__uploadedFile->getClientOriginalExtension() . ') is not supported!';
-            flash()->warning($__errors['ext_not_supported']);
-            return $__errors;
+            $this->__errors []= MediaUploader::MEDIA_UPLOAD_ERRORS['size_limit_exits'];
         }
-
         $this->log();
-        return $__errors;
 	}
 
-	public function upload($fileName)
+    // returns Symfony\Component\HttpFoundation\File\File or null
+	public function upload($fileName = null)
 	{
         try
         {
-        	$destinationDir = str_replace('\\', '\\\\', $__storagePath);
-            if(File::makeDirectory($destinationPath . '/' . $fileName, 0775, true))
+        	$destinationDir = str_replace('\\', '\\\\', $this->__storagePath);
+            if(File::makeDirectory($destinationPath, 0775, true))
             {
-                $errors['directory_create_error'] = 'Upladed file destination directory not created!';
-                Log::error(MediaUploader::LOG_PREFIX . '[' . $errors['directory_create_error'] . ']');
-                flash()->error('Something went wrong during upload. We have already logged the problems. Please contact Inzaana help line for further assistance.');
-                return $errors;
+                Log::error(MediaUploader::LOG_PREFIX . '[' . MediaUploader::MEDIA_UPLOAD_ERRORS['directory_create_error'] . ']');
+                $__errors []= MediaUploader::MEDIA_UPLOAD_ERRORS['unknown'];
+                return null;
             }  
             //Move Uploaded File
-            $serverFile = $__uploadedFile->move($destinationPath, $__uploadedFile->getClientOriginalName());
+            $serverFile = $this->__uploadedFile->move($destinationPath, $fileName ? $fileName : ProductMedia::uuid() . '.' . $this->__uploadedFile->getClientOriginalExtension());
             if(!$serverFile)
             {
-                $errors['file_move_error'] = 'Upladed file did not move!';
-                Log::error(MediaUploader::LOG_PREFIX . '[' . $errors['file_move_error'] . ']');
-                flash()->error('Something went wrong during upload. We have already logged the problems. Please contact Inzaana help line for further assistance.');
-                return $errors;
+                Log::critical(MediaUploader::LOG_PREFIX . '[' . MediaUploader::MEDIA_UPLOAD_ERRORS['file_move_error'] . ']');
+                $__errors []= MediaUploader::MEDIA_UPLOAD_ERRORS['unknown'];
+                return null;
             }      
             Log::info(MediaUploader::LOG_PREFIX . '[ Uploading image success to ' . $serverFile->getRealPath() . ']');
-            return $serverFile->getBasename();
+            return $serverFile;
         }
         catch(FileException $fe)
         {
-            $errors['unknown_file_error'] = MediaUploader::LOG_PREFIX . '[ Upload failed: ' . $fe->getMessage() . ']';
-            Log::critical($errors['unknown_file_error']);
-            return $errors;
+            Log::critical(MediaUploader::LOG_PREFIX . '[ Upload failed: ' . $fe->getMessage() . ']');
+            $__errors []= MediaUploader::MEDIA_UPLOAD_ERRORS['unknown'];
         }
-        return [];
+        return null;
 	}	
 
     public static function isSupportedExtention($extension)
     {
-        foreach(ProductMedia::SUPPORTED_MEDIA_EXTENSIONS as $ext)
+        foreach(ProductMedia::SUPPORTED_MEDIA_EXTENSIONS[ProductMedia::MEDIA_TYPES[1]] as $ext)
         {
             if($ext == $extension)
                 return true;

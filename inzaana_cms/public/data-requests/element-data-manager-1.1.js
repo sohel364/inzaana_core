@@ -1,10 +1,10 @@
 /*
  * Shows waiting icons while requesting data operation is ongoing
  */
-function showSavingIcon(itemCount) {
+function showSavingIcon(itemCount, message) {
     var sweetAlertWithTimout = {
         title: "Please wait!",
-        text: 'Loading form information ...',
+        text: message,
         timer: 1000 * itemCount,
         imageUrl: '/dist/img/loading40.gif',
         imageSize: '220x20',
@@ -13,7 +13,7 @@ function showSavingIcon(itemCount) {
     };
     var sweetAlert = {
         title: "Please wait!",
-        text: 'Loading form information ...',
+        text: message,
         imageUrl: '/dist/img/loading40.gif',
         imageSize: '220x20',
         type: 'info',
@@ -36,67 +36,93 @@ function isEmpty(value) {
 var ElementDataManager = {
     timeout: 0,
     element: 'form',
-    context: ['postcodes', 'states'],
-    data: {},
-    ready: function(context, data) {},
+    contexts: [{ prefix: 'products', route: '/create' }],
+    ready: function(data) {},
     onSuccess: function(data) {
 
-        if(isEmpty(data))
-            ElementDataManager.data = { "id": 0, "value" : "-- Select --" };
-        else
-            ElementDataManager.data = data;
-
-        ElementDataManager.ready(ElementDataManager.context, ElementDataManager.data);
+        ElementDataManager.ready(data);
         
-        if(ElementDataManager.isCompleted())
+        if(isEmpty(data) || ElementDataManager.isCompleted())
             hideSavingIcon();
     },
     onError: function(xhr, textStatus) {
         hideSavingIcon();
-        ElementDataManager.data = { "id": 0, "value" : "-- Select --" };
-        ElementDataManager.ready(ElementDataManager.context, ElementDataManager.data);
+        ElementDataManager.ready(null);
     },
-    request: function(req_type, context, data) {
+    request: function(req_type, context, _data) {
 
-        var routing_url = '/' + context + '/' + data[context];
+        var routing_url = '/' + context.prefix + context.route;
 
-        showSavingIcon(this.timeout);
-        
-        var req = $.ajax({
+        alert(routing_url);
+
+        showSavingIcon(this.timeout, (req_type == 'GET') ? 'We are preparing your contents ...' : 'We are sending your request ...');
+
+        var ajaxProperties = {
 
             type: req_type,
             url: routing_url,
             dataType: 'json',
+            data: _data,
             statusCode: {
                 404: function() {
                     hideSavingIcon();
-                    ElementDataManager.data = { "id": 0, "value" : "-- Select --" };
-                    ElementDataManager.ready(ElementDataManager.context, ElementDataManager.data);
+                    ElementDataManager.ready(null);
                 }
             }
-        });
+        };
+        if(req_type == "POST")
+        {    
+            ajaxProperties = {
+                url: routing_url,
+                type: req_type,
+                data: _data,
+                cache: false,
+                contentType: false,
+                enctype: 'multipart/form-data',
+                processData: false,
+                statusCode: {
+                    404: function() {
+                        hideSavingIcon();
+                        ElementDataManager.ready(null);
+                    }
+                }
+            }
+        };
+        
+        var req = $.ajax(ajaxProperties);
 
         req.done(this.onSuccess).fail(this.onError);
     },
-    load: function(data, onReady) {
+    load: function(onReady) {
 
         $(this.element).ready(function() {
+
             ElementDataManager.ready = onReady;
 
-            $.each(ElementDataManager.context, function( index, value ) {
+            $.each(ElementDataManager.contexts, function( index, value ) {
 
-                ElementDataManager.request("GET", value, data);
+                ElementDataManager.request("GET", value, {});
             });
         });
     },
     send: function(data, onReady) {
 
-        $(this.element).ready(function() {
+        alert(this.element);
+        var theForm = document.getElementById(this.element);
+        $(this.element).submit( function(e) {
+
+            e.preventDefault();
+            
+            alert(this.element);
+
+            var clientData = isEmpty(data) ? new FormData($(this)[0]) : data;
+
             ElementDataManager.ready = onReady;
 
-            $.each(ElementDataManager.context, function( index, value ) {
+            $.each(ElementDataManager.contexts, function( index, value ) {
 
-                ElementDataManager.request("POST", value, data);
+
+                ElementDataManager.request("POST", value, clientData);
             });
         });
     },
