@@ -151,7 +151,7 @@
                                     
                               <select name="store_name" id="store_name" class="form-control select2" data-placeholder="Select Store" style="width: 100%;">
                                 @foreach($stores as $name_as_url => $name)
-                                    <option value="{{ $name_as_url }}"> {{ $name_as_url }}.inzaana.com ( {{ $name }} ) </option>                                    
+                                    <option value="{{ $name_as_url }}"{{ (isset($product) && $product->store) && ($product->store->name_as_url == $name_as_url || old('store_name') == $name_as_url) ? ' selected' : '' }}> {{ $name_as_url }}.inzaana.com ( {{ $name }} ) </option>                                    
                                 @endforeach
                               </select>
                               @if ($errors->has('store_name'))
@@ -164,11 +164,11 @@
                         <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
                           <label  class="col-sm-3 control-label">Product Category:</label>
                           <div class="col-sm-2">
-                            <select name="category" id="category" class="form-control select2" multiple="multiple" data-placeholder="Select a Category" style="width: 100%;">
+                            <select name="category" id="category" class="form-control select2" data-placeholder="Select a Category" style="width: 100%;">
 
                             @if(isset($categories))
                               @foreach( $categories as $category )
-                                <option value="{{ $category->id }}"{{ (isset($product) && $product->category->id) ? ' selected' : '' }}>{{ $category->name or 'Uncategorized' }}</option>
+                                <option value="{{ $category->id }}"{{ (isset($product) && $product->category) && ($product->category->id == $category->id || old('category') == $category->id) ? ' selected' : '' }}>{{ $category->name or 'Uncategorized' }}</option>
                               @endforeach
                             @else                              
                               <option>{{ 'Uncategorized' }}</option>
@@ -203,7 +203,7 @@
                         <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
                           <label for="title" class="col-sm-3 control-label">Product Title:</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" id="title" name="title" placeholder="ex: kitkat 5RS" value="{{ isset($product) ? $product->title : '' }}">
+                            <input type="text" class="form-control" id="title" name="title" placeholder="ex: kitkat 5RS" value="{{ isset($product) ? $product->title : old('title') }}">
                             @if ($errors->has('title'))
                                   <span class="help-block">
                                       <strong>{{ $errors->first('title') }}</strong>
@@ -225,7 +225,7 @@
                         <div class="form-group">
                           <label  class="col-sm-3 control-label">Product Type:</label>
                           <div class="col-sm-3">
-                            <select name="category" class="form-control select2" multiple="multiple" data-placeholder="Select a Category" style="width: 100%;">
+                            <select name="product_type" class="form-control select2" multiple="multiple" data-placeholder="Select a Category" style="width: 100%;">
                               <option>Physical Product</option>
                               <option>Downloadable Product</option>
                             </select>
@@ -269,9 +269,9 @@
                         </div>
                         @if(isset($product))
                          <div class="form-group">
-                          <label for="selling-price" class="col-sm-3 control-label">Status:</label>
+                          <label for="status" class="col-sm-3 control-label">Status:</label>
                           <div class="col-sm-2">
-                              <select name="status" id="status" class="form-control select2" data-placeholder="Select Store" style="width: 100%;">
+                              <select name="status" id="status" class="form-control select2" style="width: 100%;">
                                 @foreach(Inzaana\Product::STATUS_FLOWS as $status)
                                     <option {{ $status == $product->status ? ' selected' : '' }}> {{ $status }} </option>                                    
                                 @endforeach
@@ -305,7 +305,7 @@
                             <label for="available_quantity" class="col-sm-3 control-label">Available Quantity:</label>
                             <div class="col-sm-2">
                                <div class="input-group spinner">
-                                  <input type="text" class="form-control" value="0" min="5" max="15">
+                                  <input type="text" name="available_quantity" class="form-control" value="0" min="5" max="15">
                                   <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
@@ -339,19 +339,26 @@
                 
                 <h4 class="block-title">Upload Media</h4>
                 <div class="block-of-block">
-                    <div id="product-create-form" class="form-horizontal">
-                        <div class="form-group{{ $errors->has('upload_image') ? ' has-error' : '' }}">
-                          <label for="upload-image" class="col-sm-3 control-label">Upload Image:</label>
-                          <div class="col-sm-3">
-                            <input id="upload_image" name="upload_image" type="file" style="margin-top: 7px" placeholder="Inlcude some file">
-                            @if ($errors->has('upload_image'))
-                                  <span class="help-block">
-                                      <strong>{{ $errors->first('upload_image') }}</strong>
-                                  </span>
+                    <div id="product-create-upload-image" class="form-horizontal">
+
+                        @for($i = 1; $i <= 4; ++$i)
+                          <div class="form-group{{ ($errors->has('upload_image_' . $i)) ? ' has-error' : '' }}">
+                            @if($i == 1)
+                              <label for="upload_image" class="col-sm-3 control-label">Upload Image:</label>
+                            @else
+                              <label for="upload_image" class="col-sm-3 control-label"></label>                            
                             @endif
-                          </div>                                    
-                              
-                        </div>
+                            <div class="col-sm-3">
+                              <input id="upload_image_{{ $i }}" name="upload_image_{{ $i }}" type="file" style="margin-top: 7px" placeholder="Include some file">
+                              @if ($errors->has('upload_image_' . $i))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('upload_image_' . $i) }}</strong>
+                                    </span>
+                              @endif
+                            </div>
+                          </div>
+                        @endfor
+
                         <div class="from-group">
                             <div class="row">
                                <label for="" class="col-sm-3 control-label"></label>
@@ -387,9 +394,9 @@
                         </div>
                         
                         <div class="form-group">
-                          <label for="upload-image" class="col-sm-3 control-label">Upload Video:</label>
+                          <label for="upload_video" class="col-sm-3 control-label">Upload Video:</label>
                               <div class="col-sm-3">
-                                <input id="upload-video" type="file" style="margin-top: 7px" placeholder="Include some file">
+                                <input id="upload_video" name="upload_video" type="file" style="margin-top: 7px" placeholder="Include some file">
                                 <span class="help-block">
                                 </span>
                                 <strong>
@@ -434,11 +441,11 @@
                         
                 <h4 class="block-title">Product Spec</h4>
                 <div class="block-of-block">
-                    <div id="product-create-form" class="form-horizontal">
+                    <div id="product-create-spec" class="form-horizontal">
                         <div class="form-group">
-                              <label for="Spec-titile" class="col-sm-3 control-label">Spec Title:</label>
+                              <label for="spec_title" class="col-sm-3 control-label">Spec Title:</label>
                               <div class="col-sm-3">
-                                <input type="text" class="form-control" id="" name="spec-title" placeholder="">
+                                <input type="text" class="form-control" id="spec_title" name="spec_title" placeholder="">
                                       <!--<span class="help-block">
                                           <strong></strong>
                                       </span>-->
@@ -449,7 +456,7 @@
                         <div class="form-group">
                           <label  class="col-sm-3 control-label">Control Type:</label>
                           <div class="col-sm-3">
-                            <select name="control-type" class="form-control"  data-placeholder="Control Type" style="width: 100%;">
+                            <select name="control_type" class="form-control"  data-placeholder="Control Type" style="width: 100%;">
                               <option>Label</option>
                               <option>Radio Controlers</option>
                               <option>Select Box</option>
@@ -545,12 +552,12 @@
                         
                 <h4 class="block-title">Availability</h4>
                 <div class="block-of-block">
-                    <div id="product-create-form" class="form-horizontal">
+                    <div id="product-create-privacy" class="form-horizontal">
                         <div class="form-group">
                             <label for="" class="col-sm-3 control-label"></label>
                             <div class="col-sm-3" >
                                 <div class="checkbox">
-                                  <label><input type="checkbox" value="">Make this product public.</label>
+                                  <label><input id="is_public" name="is_public" type="checkbox" value="checked">Make this product public.</label>
                                 </div>
                           </div>
                         </div>
@@ -885,10 +892,8 @@ $(function(){
 
   var totalMediaLoaded = 0;
   var fileLimit = 5;
-  var selectedFileDataURLs = [];
   var reader = new FileReader();
   reader.addEventListener("load", function() {
-     selectedFileDataURLs[totalMediaLoaded] = reader.result;
      setBackgroundImage( $('#preview-image-' + (++totalMediaLoaded)) , reader.result);
   }, false);
 
@@ -899,20 +904,19 @@ $(function(){
     // console.log("[DEBUG] BG Image URL : " + control.css("background-image"));
     // console.log("[DEBUG] BG Image URL : " + control.attr("src"));
   }
-
-  $('#upload_image').change( function(event) {
+  function onBrowseFile(event) {
       // var fileName = $(this).val();
       // console.log(fileName);
-      // var file = event.target.files[0];
-      for(var i = 0; i < event.target.files.length; ++i)
+      var file = event.target.files[0];
+      if (file && totalMediaLoaded < fileLimit)
       {
-          var file = event.target.files[i];
-          if (file && totalMediaLoaded <= fileLimit)
-          {
-             reader.readAsDataURL(file);
-          }
+          reader.readAsDataURL(file);
       }
-  });
+  }
+
+  for(var i = 1; i < fileLimit; ++i)
+    $('#upload_image_' + i).change( onBrowseFile );
+  
 </script>
 <script type="text/javascript">
   // $('#product-create-form').ready( function() {

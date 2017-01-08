@@ -39,14 +39,12 @@ class CategoryController extends Controller
     public function create(CategoryRequest $request)
     {
         $categoryName = $request->input('category-name');
-        $category = Category::create([
-        	'parent_category_id' => Category::ROOT_ID,
-        	'name' => $request->input('category-name'),
-        	'category_slug' => str_slug($categoryName),
-        	'description' => $request->input('description'),
-            'status' => 'ON_APPROVAL',
-        ]);
-        if(!$category)
+        $category = new Category();
+        $category->parent_category_id = Category::ROOT_ID;
+        $category->name = $request->input('category-name');
+        $category->category_slug = str_slug($categoryName);
+        $category->description = $request->input('description');
+        if(!$category->save())
         {
             flash('Your category (' . $category->name . ') is failed to submit for admin approval.');
             return redirect()->back();
@@ -63,8 +61,7 @@ class CategoryController extends Controller
     }
 
     public function postEdit(CategoryRequest $request, $category_id)
-    {        
-        $categories = Category::all();
+    {
         $categoryName = $request->input('category-name');
         $categoryEdit = Category::find($category_id);
         $categoryEdit->name = $categoryName;

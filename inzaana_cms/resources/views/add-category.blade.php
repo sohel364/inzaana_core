@@ -35,7 +35,7 @@
                 <div class="box-body">
                   <div class="form-group">
                     <label for="category-name">Category</label>
-                    <input type="text" class="form-control" value="{{ isset($categoryEdit) ? $categoryEdit->category_name : '' }}" id="category-name" name="category-name" placeholder="Add your category name here...">
+                    <input type="text" class="form-control" value="{{ isset($categoryEdit) ? $categoryEdit->name : '' }}" id="category-name" name="category-name" placeholder="Add your category name here...">
                   </div>
                   <div class="form-group">
                     <label for="sub-category-name">Sub Category</label>
@@ -86,7 +86,7 @@
                     @foreach($categories as $category)
                     <tr>
                       <!-- <td class="text-center" id="child"><a href="">001</a> </td> -->
-                      <td class="text-center" id="child"><a href="">{{ $category->category_name or 'Chocolate'}}</a></td>
+                      <td class="text-center" id="child"><a href="">{{ $category->name or 'Chocolate'}}</a></td>
                       <td class="text-center" id="child"><a href="">{{ $category->description or 'This is a description'}}</a></td>
                       <td class="text-center" id="child"><a href="">subcat-1, subcat-2, subcat-3</a></td>
                       <td class="text-center" id="child"><a href=""> @include('includes.approval-label', [ 'status' => $category->status, 'labelText' => $category->getStatus() ]) </a></td>

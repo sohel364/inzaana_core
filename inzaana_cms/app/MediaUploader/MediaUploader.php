@@ -3,27 +3,22 @@
 namespace Inzaana\MediaUploader;
 
 use Log;
-use Inzaana\ProductMedia;
-
 use \Symfony\Component\HttpFoundation\File\UploadedFile;
-use \Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 abstract class MediaUploader
 {
-	protected $__mediaName = '';
-	protected $__mediaSize = 0;
-	protected $__mediaType = ProductMedia::MEDIA_TYPES[0];
+	protected $__mediaType = null;
 	protected $__storagePath = '/';
-	protected UploadedFile $__uploadedFile;
+	protected $__uploadedFile;
 
 	const STORAGE_PATH = 'app/media-archive';
 	const LOG_PREFIX = '[Inzaana]';
 	const MEDIA_UPLOAD_ERRORS = [ 
-		'corrupted_media_file' => 'Upladed media file is corrupted.',
-		'size_limit_exits', => 'Please keep your media file size below ' . (UploadedFile::getMaxFilesize() / 1000) . ' KB.',
-		'ext_not_supported' => 'Upladed media file is not supported!',
-		'directory_create_error' => 'Upladed file destination directory not created!',
-		'file_move_error' => 'Upladed file did not move!',
+		'corrupted_media_file' => 'Uploaded media file is corrupted.',
+		'size_limit_exits' => 'Please keep your media to the recommended file size',
+		'ext_not_supported' => 'Uploaded media file is not supported!',
+		'directory_create_error' => 'Uploaded file destination directory not created!',
+		'file_move_error' => 'Uploaded file did not move!',
 		'unknown' => 'Something went wrong during upload. We have already logged the problems. Please contact Inzaana help line for further assistance.'
 	];
 
@@ -32,9 +27,9 @@ abstract class MediaUploader
 
 	protected function log()
 	{
-		Log::info(self::LOG_PREFIX . '[Media name: ' . $__mediaName . ']');
-		Log::info(self::LOG_PREFIX . '[Media size: ' . $__mediaSize . ']');
-		Log::info(self::LOG_PREFIX . '[Media type: ' . $__mediaType . ']');
+		Log::info(self::LOG_PREFIX . '[Media name: ' . $this->__uploadedFile->getClientOriginalName() . ']');
+		Log::info(self::LOG_PREFIX . '[Media size: ' . ($this->__uploadedFile->getSize()/ 1000) . ' KB]');
+		Log::info(self::LOG_PREFIX . '[Media type: ' . $this->__mediaType . ']');
 	}
 }
 

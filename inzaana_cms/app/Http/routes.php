@@ -28,11 +28,6 @@ Route::group([ 'as' => 'guest::' ], function() {
     });
 });
 
-Route::get('/robi', function(){
-
-    return view('robi');
-});
-
 Route::group(['middleware' => 'web'], function () {
 
     Route::get('/swap-plan', [ 'uses' => 'StripeController@swapPlan', 'as' => 'swap' ]); // Plan swaping

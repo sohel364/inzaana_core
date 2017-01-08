@@ -11,14 +11,17 @@ use Illuminate\Http\Request as ProductRequest;
 
 use Inzaana\Http\Requests;
 use Inzaana\Http\Controllers\Controller;
+
 use Inzaana\Product;
 use Inzaana\Store;
 use Inzaana\MarketProduct;
+use Inzaana\ProductMedia;
 use Inzaana\Category;
 use Inzaana\Mailers\AppMailer;
 use Inzaana\BulkExportImport\ProductImporter;
-use Inzaana\MediaUploader;
-use Inzaana\ImageUploader;
+
+use \Symfony\Component\HttpFoundation\File\UploadedFile;
+use \Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class ProductController extends Controller
 {
@@ -70,103 +73,80 @@ class ProductController extends Controller
      */
     public function create(ProductRequest $request)
     {
+        // dd($request);
         /** @var \Illuminate\Contracts\Validation\Validator $validation */
+        // $image_file_rule = 'image|mimes:png,jpeg,gif' . '|max:' . (UploadedFile::getMaxFilesize()/ 1000);
         $validation = Validator::make(
             $request->all(),
             [
                 'store_name' => 'bail|required',
                 'category' => 'bail|required',
                 'title' => 'bail|required|unique:market_products|alpha_dash|max:200',
-                'price' => 'required|numeric|regex:^[0-9]*\.?[0-9]{2}$',
+                'price' => 'bail|required|numeric',
                 'manufacturer_name' => 'required|unique:market_products|alpha_dash|max:200',
-                'discount' => 'numeric|max:100|min:0',
-                'category_specs' => 'present|json',
+                'upload_image_1' => 'image|mimes:png,jpeg,gif',
+                'upload_image_2' => 'image|mimes:png,jpeg,gif',
+                'upload_image_3' => 'image|mimes:png,jpeg,gif',
+                'upload_image_4' => 'image|mimes:png,jpeg,gif',
             ]
         );
 
-        if ($validation->fails()) {
+        if ($validation->fails())
+        {
             // dd($validation->getMessageBag()->all());
             return redirect()->back()->withErrors($validation->errors());
         }
+        $uploadedFiles = [];
+        for($i=1; $i<=4; ++$i)
+        {
+            if($request->hasFile('upload_image_' . $i))
+                $uploadedFiles []= $request->file('upload_image_' . $i);
+        }
+        if (!collect($uploadedFiles)->isEmpty())
+        {
+            try
+            {
+                $uploadResponse = ProductMedia::upload($uploadedFiles);
+                $errors = $uploadResponse['errors'];
+                if(!collect($errors)->isEmpty())
+                {
+                    return redirect()->back()->withErrors(array_collapse($errors));
+                }
+            }
+            catch(\Exception $e)
+            {
+                Log::error($e->getMessage());
+                return redirect()->back()->withErrors([ 'upload_image_1' => $e->getMessage()]);
+            }
+        }
 
-        $store_name_as_url = $request->input('stores');
-        $data = [
-            'category_id' => $categories->count() == 0 ? 0 : $categories->first()->id,
-            'store_id' => $store->id,
-            'manufacturer_name' => $value['manufacturer_name'],
-            'title' => $value['title'],
-            'price' => $value['price'],
-            'is_public' => $value['is_public'],
-            'discount' => $value['discount'],
-            'spec' => $value['spec'],
-            'available_quantity' => $value['available_quantity'],
-            'return_time_limit' => $value['return_time_limit']
+        $specs = [ 
+            [ 'spec_label' => '', 'values' => '', 'view_type' => '' ],
+            [ 'spec_label' => '', 'values' => '', 'view_type' => '' ],
+            [ 'spec_label' => '', 'values' => '', 'view_type' => '' ],
+            [ 'spec_label' => '', 'values' => '', 'view_type' => '' ],
         ];
+
+        $store_name_as_url = $request->input('store_name');
         $store = Store::whereNameAsUrl($store_name_as_url)->get()->first();
-        //
-        // $validator = Validator::make($request->all(),[
-        //     'title' => 'required|unique:products,title,manufacture_name,product_mrp,selling_price,photo_name|max:100',
-        //     'product_mrp' => 'required|numeric',
-        //     'manufacture_name' => 'required|max:200',
-        //     'product_discount' => 'numeric|max:100',
-        //     'selling_price' => 'numeric',
-        //     'photo_name' => 'required|url|active_url|image',
-        // ]);
-        // $this->validate($request, [
-        //     'title' => 'required|unique:products|max:100',
-        //     'product_mrp' => 'required|numeric',
-        //     'manufacture_name' => 'required|max:200',
-        //     'product_discount' => 'numeric|max:100',
-        //     'selling_price' => 'numeric',
-        //     'photo_name' => 'required|url|active_url|image',
-        // ]);
-
-        // if($validator->fails())
-        // {
-        //     return redirect()->route('user::products')
-        //                     ->withErrors($validator)
-        //                     ->withInput();
-        // }
-        // session()->forget('errors');
-
-        $mrp = $request->input('mrp');
-        $discount = $request->input('discount');
-        $category_name = $request->input('category');
-        $is_public = $request->has('is_public') ? $request->input('is_public') : false;
-        $store_id = $request->has('store') ? $request->input('store') : "";
-        $category_id = $categories->where('category_name', $category_name)->first()->id;
-
-        $marketProduct = MarketProduct::create([
-            'category_id' => $category_id,
-            'title' => $request->input('product-title'),
-            'manufacturer_name' => $request->input('manufacturer'),
-            'price' => $mrp,
-            'status' => 'ON_APPROVAL',
-        ]);
-        if(!$marketProduct)
-        {
-            return redirect()->back()->with($viewData);
-        }
-        $product = Product::create([
-            'user_id' => Auth::user()->id,
-            'store_id' => $store_id,
-            'market_product_id' => $marketProduct->id,
-            'is_public' => $is_public,
-            'title' => $marketProduct->title,
-            'discount' => $discount,
+        $data = [
+            'category_id' => $request->input('category'),
+            'store_id' => $store->id,
+            'manufacturer_name' => $request->input('manufacturer_name'),
+            'title' => $request->input('title'),
+            'price' => $request->input('price'),
+            'is_public' => ($request->input('is_public') == 'checked'),
+            'discount' => 0,
+            'spec' => collect($specs)->toJson(),
             'available_quantity' => $request->input('available_quantity'),
-            'return_time_limit' => $request->input('return_time_limit'),
-            'status' => $marketProduct->status,
-        ]);
-        if($product)
-        {
-            $product->mrp = $product->discountedPrice();
+            'return_time_limit' => 1,
+        ]; 
 
-            flash('Your product (' . $product->title . ') is successfully added.');
-        }
-        else
+        // dd($data);       
+
+        if(!self::createProduct($data))
         {
-            flash('Your product (' . $product->title . ') is failed to add. Please contact your administrator for assistance.');
+            flash()->error(ProductImporter::BULK_UPLOAD_ERRORS['unknown']);
         }
         return redirect()->route('user::products');
     }
@@ -361,7 +341,7 @@ class ProductController extends Controller
             Log::info('[Inzaana][ Upload success to ' . $serverFile->getRealPath() . ']');
             return $serverFile->getBasename();
         }
-        catch(\Symfony\Component\HttpFoundation\File\Exception\FileException $fe)
+        catch(FileException $fe)
         {
             $errors['unknown_file_error'] = '[Inzaana][ Upload failed: ' . $fe->getMessage() . ']';
             Log::critical($errors['unknown_file_error']);
@@ -402,8 +382,9 @@ class ProductController extends Controller
         if(!$product->saveDiscountedPrice())
         {
             Log::info('[Inzaana][User:: ' . Auth::user() . '][error:: Product (' . $data['title'] . ') MRP not saved.]');
+            return false;
         }
-        return false;
+        return true;
     }
 
     public function uploadCSV(ProductRequest $request)

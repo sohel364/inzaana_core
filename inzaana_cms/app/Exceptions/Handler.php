@@ -60,10 +60,12 @@ class Handler extends ExceptionHandler
             $errorMessage['42S22'] = 'Your information contains data that has no property in database. Please contact Inzaana for help.';
             $errorMessage['HY000'] = 'Database access denied';
             $errorMessage['23502'] = 'You have skipped providing some data that database schema designed to expect.'
-            $errorCode = !array_has($errorMessage, $e->getCode()) ? 'DEFAULT' : $e->getCode();
+            // $errorCode = !array_has($errorMessage, $e->getCode()) ? 'DEFAULT' : $e->getCode();
 
-            Log::critical('[Inzaana][' . $e->getMessage() . "] " . $errorMessage[$errorCode] . ".");
-            flash()->error($errorMessage[$errorCode]);
+            // Log::critical('[Inzaana][' . $e->getMessage() . '] ' . $errorMessage[$errorCode] . '.'  );
+            Log::critical('[Inzaana][' . $e->getMessage() . '] ');
+            // flash()->error($errorMessage[$errorCode]);
+            flash()->error($e->getMessage());
             return redirect('/login');
         }
         if ($e instanceof QueryException) {
