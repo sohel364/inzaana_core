@@ -343,11 +343,9 @@
 
                         @for($i = 1; $i <= 4; ++$i)
                           <div class="form-group{{ ($errors->has('upload_image_' . $i)) ? ' has-error' : '' }}">
-                            @if($i == 1)
-                              <label for="upload_image" class="col-sm-3 control-label">Upload Image:</label>
-                            @else
-                              <label for="upload_image" class="col-sm-3 control-label"></label>                            
-                            @endif
+                            
+                            <label for="upload_image" class="col-sm-3 control-label"> {{ $i == 1 ? 'Upload Image:' : '' }} </label>
+                            
                             <div class="col-sm-3">
                               <input id="upload_image_{{ $i }}" name="upload_image_{{ $i }}" type="file" style="margin-top: 7px" placeholder="Include some file">
                               @if ($errors->has('upload_image_' . $i))
@@ -393,21 +391,26 @@
                              </div>
                         </div>
                         
-                        <div class="form-group">
+                        <div class="form-group{{ $errors->has('upload_video') ? ' has-error' : '' }}">
                           <label for="upload_video" class="col-sm-3 control-label">Upload Video:</label>
                               <div class="col-sm-3">
                                 <input id="upload_video" name="upload_video" type="file" style="margin-top: 7px" placeholder="Include some file">
-                                <span class="help-block">
-                                </span>
-                                <strong>
-                                <div class="checkbox">
-                                  <label><input type="checkbox" value="">Or Embed a Video.</label>
-                                </div>
-                               </strong>
-                              </div>
-                              
+
+                                @if ($errors->has('upload_video'))
+                                      <span class="help-block">
+                                          <strong>{{ $errors->first('upload_video') }}</strong>
+                                      </span>
+                                @endif
+                              </div>                              
                         </div>
                         <div class="form-group">
+                          <label for="" class="col-sm-3 control-label"></label>
+                          <div class="checkbox col-sm-8">
+                            <label><input id="has_embed_video" name="has_embed_video" type="checkbox" value="{{ isset($product_video_url) ? 'checked' : '' }}">Or Embed a Video.</label>
+                          </div>
+                        </div>
+
+                        <div class="form-group{{ (isset($product) && isset($product_video_url)) ? '' : ' hidden' }}">
                            <label for="" class="col-sm-3 control-label"></label>
                             <div class="col-sm-8">
                                 <div class="embed-responsive embed-responsive-4by3">
@@ -416,13 +419,13 @@
                             </div>
                         </div>
                         
-                        <div class="form-group{{ $errors->has('embed_video') ? ' has-error' : '' }}">
+                        <div class="form-group embed_video{{ $errors->has('embed_video_url') ? ' has-error' : '' }}">
                           <label for="embed_video" class="col-sm-3 control-label">Embed Video:</label>
                               <div class="col-sm-8">
-                                <input type="text" class="form-control" id="" name="" placeholder="<iframe> url </iframe>">
-                                @if ($errors->has('embed_video'))
+                                <input type="text" class="form-control" id="embed_video_url" name="embed_video_url" placeholder="<iframe> url </iframe>">
+                                @if ($errors->has('embed_video_url'))
                                       <span class="help-block">
-                                          <strong>{{ $errors->first('embed_video') }}</strong>
+                                          <strong>{{ $errors->first('embed_video_url') }}</strong>
                                       </span>
                                 @endif
                               </div>
@@ -771,7 +774,33 @@
       $('#generalTabContent').ready(function() {
           var showModal = ($('div.has-error').length > 0 || $('div.is-edit').length > 0);
           $('#addProduct').modal({ 'show' : showModal });
+          
+          onChangeEmbedVideoCheck();
+          $( "#has_embed_video" ).change(onChangeEmbedVideoCheck);
       });
+      function onChangeEmbedVideoCheck() {
+         
+          if($('.embed_video').is(':hidden'))
+          {
+              $( ".embed_video" ).hide( "fast", function() {});
+          }
+          if($('#has_embed_video').is(':checked'))
+          {
+              $( ".embed_video" ).show( 1000 );
+          }
+          else
+          {
+              $( ".embed_video" ).hide( "fast", function() {});
+          }
+          if( $( ".embed_video" ).hasClass( "has-error" ) )
+          {
+              $( ".embed_video" ).show( 1000 );
+              if(!$('#has_embed_video').is(':checked'))
+              {
+                  $( "#has_embed_video" ).prop('checked', 'checked');
+              }
+          }
+      }
   </script>
 
     <script>
@@ -946,5 +975,7 @@ $(function(){
   //         }
   //     });
   // });
+</script>
+<script type="text/javascript">
 </script>
 @endsection

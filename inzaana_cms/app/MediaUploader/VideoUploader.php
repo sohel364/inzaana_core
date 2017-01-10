@@ -10,16 +10,16 @@ use Inzaana\MediaUploader\MediaUploader;
 use \Symfony\Component\HttpFoundation\File\UploadedFile;
 use \Symfony\Component\HttpFoundation\File\Exception\FileException;
 
-class ImageUploader extends MediaUploader
+class VideoUploader extends MediaUploader
 {
-	const IMAGE_STORAGE_PATH = '/images';
+	const VIDEO_STORAGE_PATH = '/videos';
 
 	private $__errors = [];
 
 	public function __construct($context)
 	{
-		$this->__mediaType = ProductMedia::MEDIA_TYPES[1];
-		$this->__storagePath = storage_path(MediaUploader::STORAGE_PATH . self::IMAGE_STORAGE_PATH . '/' . $context . '/');
+		$this->__mediaType = ProductMedia::MEDIA_TYPES[2];
+		$this->__storagePath = storage_path(MediaUploader::STORAGE_PATH . self::VIDEO_STORAGE_PATH . '/' . $context . '/');
 	}
 
 	public function fails()
@@ -67,7 +67,6 @@ class ImageUploader extends MediaUploader
             }
             //Move Uploaded File
             $serverFileName = $fileName ?: ProductMedia::uuid() . '.' . $this->__uploadedFile->getClientOriginalExtension();
-            // dd($serverFileName);
             $beforeMoveFileSize = $this->__uploadedFile->getSize();
             $serverFile = $this->__uploadedFile->move($destinationDir, $serverFileName);
             if(!$serverFile || ($serverFile->getSize() != $beforeMoveFileSize))    

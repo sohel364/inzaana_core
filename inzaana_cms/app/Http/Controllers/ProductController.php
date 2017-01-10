@@ -73,9 +73,8 @@ class ProductController extends Controller
      */
     public function create(ProductRequest $request)
     {
-        // dd($request);
-        /** @var \Illuminate\Contracts\Validation\Validator $validation */
-        // $image_file_rule = 'image|mimes:png,jpeg,gif' . '|max:' . (UploadedFile::getMaxFilesize()/ 1000);
+        $image_file_rule = ProductMedia::getMediaRule('IMAGE');
+        // dd($video_file_rule);
         $validation = Validator::make(
             $request->all(),
             [
@@ -84,16 +83,17 @@ class ProductController extends Controller
                 'title' => 'bail|required|unique:market_products|alpha_dash|max:200',
                 'price' => 'bail|required|numeric',
                 'manufacturer_name' => 'required|unique:market_products|alpha_dash|max:200',
-                'upload_image_1' => 'image|mimes:png,jpeg,gif',
-                'upload_image_2' => 'image|mimes:png,jpeg,gif',
-                'upload_image_3' => 'image|mimes:png,jpeg,gif',
-                'upload_image_4' => 'image|mimes:png,jpeg,gif',
+                'upload_image_1' => $image_file_rule,
+                'upload_image_2' => $image_file_rule,
+                'upload_image_3' => $image_file_rule,
+                'upload_image_4' => $image_file_rule,
+                'upload_video'   => ProductMedia::getMediaRule('VIDEO'),
+                'embed_video_url' => 'required_unless:has_embed_video,checked|url'
             ]
         );
 
         if ($validation->fails())
         {
-            // dd($validation->getMessageBag()->all());
             return redirect()->back()->withErrors($validation->errors());
         }
         $uploadedFiles = [];
@@ -142,7 +142,7 @@ class ProductController extends Controller
             'return_time_limit' => 1,
         ]; 
 
-        // dd($data);       
+        dd($data);       
 
         if(!self::createProduct($data))
         {
