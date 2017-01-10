@@ -74,21 +74,21 @@ class ProductController extends Controller
     public function create(ProductRequest $request)
     {
         $image_file_rule = ProductMedia::getMediaRule('IMAGE');
-        // dd($video_file_rule);
+        // dd($image_file_rule);
         $validation = Validator::make(
             $request->all(),
             [
-                'store_name' => 'bail|required',
-                'category' => 'bail|required',
-                'title' => 'bail|required|unique:market_products|alpha_dash|max:200',
-                'price' => 'bail|required|numeric',
-                'manufacturer_name' => 'required|unique:market_products|alpha_dash|max:200',
-                'upload_image_1' => $image_file_rule,
-                'upload_image_2' => $image_file_rule,
-                'upload_image_3' => $image_file_rule,
-                'upload_image_4' => $image_file_rule,
+                // 'store_name' => 'bail|required',
+                // 'category' => 'bail|required',
+                // 'title' => 'bail|required|unique:market_products|alpha_dash|max:200',
+                // 'price' => 'bail|required|numeric',
+                // 'manufacturer_name' => 'required|unique:market_products|alpha_dash|max:200',
+                // 'upload_image_1' => $image_file_rule,
+                // 'upload_image_2' => $image_file_rule,
+                // 'upload_image_3' => $image_file_rule,
+                // 'upload_image_4' => $image_file_rule,
                 'upload_video'   => ProductMedia::getMediaRule('VIDEO'),
-                'embed_video_url' => 'required_unless:has_embed_video,checked|url'
+                // 'embed_video_url' => 'required_unless:has_embed_video,checked|url',
             ]
         );
 
@@ -97,11 +97,14 @@ class ProductController extends Controller
             return redirect()->back()->withErrors($validation->errors());
         }
         $uploadedFiles = [];
-        for($i=1; $i<=4; ++$i)
+        if($request->hasFile('upload_video'))
+            $uploadedFiles []= $request->file('upload_video');
+        for($i = 1; $i <= ProductMedia::MAX_ALLOWED_IMAGE; ++$i)
         {
             if($request->hasFile('upload_image_' . $i))
                 $uploadedFiles []= $request->file('upload_image_' . $i);
         }
+        $uploadedFiles = [];
         if (!collect($uploadedFiles)->isEmpty())
         {
             try
@@ -112,11 +115,12 @@ class ProductController extends Controller
                 {
                     return redirect()->back()->withErrors(array_collapse($errors));
                 }
+                $uploadedFiles = $uploadResponse['server_files'];                
             }
             catch(\Exception $e)
             {
                 Log::error($e->getMessage());
-                return redirect()->back()->withErrors([ 'upload_image_1' => $e->getMessage()]);
+                return redirect()->back()->withErrors([ 'Something went wrong during media upload! ' . $e->getMessage()]);
             }
         }
 
@@ -140,21 +144,28 @@ class ProductController extends Controller
             'spec' => collect($specs)->toJson(),
             'available_quantity' => $request->input('available_quantity'),
             'return_time_limit' => 1,
+            'uploaded_files' => $uploadedFiles,
+            'embed_url' => $request->input('embed_video_url'),
         ]; 
 
-        dd($data);       
+        // dd($data);       
 
-        if(!self::createProduct($data))
+        try
         {
-            flash()->error(ProductImporter::BULK_UPLOAD_ERRORS['unknown']);
+            if(!self::createProduct($data))
+            {
+                return redirect()->back()->withErrors([ ProductImporter::BULK_UPLOAD_ERRORS['unknown'] ]);
+            }
+        }
+        catch(\Exception $e)
+        {
+            return redirect()->back()->withErrors([ 'Something went wrong during bulk upload! ' . $e->getMessage() ]);
         }
         return redirect()->route('user::products');
     }
 
     public function search(ProductRequest $request)
     {   
-        $products = Auth::user()->products;
-        $categories = Category::all();   
         if($request->exists('search-box') && $request->has('search-box'))
         {
             $search_terms = $request->query('search-box');
@@ -165,6 +176,9 @@ class ProductController extends Controller
 
             // NOTE: ilike -> seaches case insensitive
             $productsBySearch = Product::where('title', $search_terms)->orWhere('title', 'ilike', '%' . $search_terms . '%')->get();
+            $productsBySearch = $productsBySearch->reject(function ($product) {
+                return $product->trashed() || $product->is_public === false;
+            });
             $productsCount = $productsBySearch->count();
 
             return redirect()->route('user::products')
@@ -187,7 +201,7 @@ class ProductController extends Controller
     public function delete(Product $product)
     {
         //delete the product
-        if($product)// && $product->marketProduct() && $product->marketProduct()->delete()
+        if($product)
         {
             $message = 'Your product (' . $product->title . ') is removed from your product list.';
             $product->delete();
@@ -205,9 +219,7 @@ class ProductController extends Controller
 
     public function copy(Product $product)
     {
-        // $products = Auth::user()->products;
         $productExists = Auth::user()->products()->find($product->id);
-        // $product = Product::find($id); 
         if($productExists)
         {
             flash()->warning('Your selected product (' . $productExists->title . ') is from YOUR product list.');
@@ -216,7 +228,11 @@ class ProductController extends Controller
         {
             if(!$product)
             {
-                return redirect()->back()->withErrors(['Your selected product is invalid. Please conatct your administrator.']);
+                return redirect()->back()->withErrors(['Your selected product is invalid. Please contact your administrator.']);
+            }
+            if(!$product->is_public)
+            {
+                return redirect()->back()->withErrors(['You can not own this product to your stores due to it\'s original owner\' privacy.']);
             }
             $product->user_id = Auth::user()->id;
             $productSerialized = collect($product->toArray());
@@ -373,6 +389,7 @@ class ProductController extends Controller
         $product->special_specs = collect($data['spec'])->toJson();
         $product->available_quantity = $data['available_quantity'];
         $product->return_time_limit = $data['return_time_limit'];
+
         if(!$product->save())
         {
             $marketProduct->forceDelete();
@@ -383,6 +400,20 @@ class ProductController extends Controller
         {
             Log::info('[Inzaana][User:: ' . Auth::user() . '][error:: Product (' . $data['title'] . ') MRP not saved.]');
             return false;
+        }
+        // Media entry
+        if(!collect($data['uploaded_files'])->isEmpty())
+        {
+            $productMedia = new ProductMedia();
+            $productMedia->mediable = $product;
+            $productMedia->is_public = $productMedia->mediable->is_public;
+            $productMedia->is_embed = ProductMedia::isValidURL($data['embed_url']);
+            if(!$productMedia->store($uploadResponse['server_files']))
+            {
+                // You may revert all files by deleting and undoing stored media entry
+                // Right here
+                throw new \Exception("Some files did not store but has uploaded.");
+            }   
         }
         return true;
     }
@@ -435,7 +466,7 @@ class ProductController extends Controller
 
                 if(!self::createProduct($data))
                 {
-                    flash()->error(ProductImporter::BULK_UPLOAD_ERRORS['unknown']);
+                    return redirect()->back()->withErrors([ ProductImporter::BULK_UPLOAD_ERRORS['unknown'] ]);
                 }
             }
             flash()->success('Successfully uploaded all products.');
@@ -444,7 +475,7 @@ class ProductController extends Controller
         catch(\Exception $e)
         {
             session(['selected_tab' => self::PRODUCT_ENTRY_TABS[1]]);
-            return redirect()->back()->withErrors([$e->getMessage()]);
+            return redirect()->back()->withErrors([ 'Something went wrong during bulk upload! ' . $e->getMessage()]);
         }
     }
 }

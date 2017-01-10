@@ -18,7 +18,7 @@ class ImageUploader extends MediaUploader
 
 	public function __construct($context)
 	{
-		$this->__mediaType = ProductMedia::MEDIA_TYPES[1];
+		$this->__mediaType = 'IMAGE';
 		$this->__storagePath = storage_path(MediaUploader::STORAGE_PATH . self::IMAGE_STORAGE_PATH . '/' . $context . '/');
 	}
 

@@ -18,8 +18,9 @@ class VideoUploader extends MediaUploader
 
 	public function __construct($context)
 	{
-		$this->__mediaType = ProductMedia::MEDIA_TYPES[2];
+		$this->__mediaType = 'VIDEO';
 		$this->__storagePath = storage_path(MediaUploader::STORAGE_PATH . self::VIDEO_STORAGE_PATH . '/' . $context . '/');
+        // dd($this->__storagePath);
 	}
 
 	public function fails()
@@ -75,7 +76,7 @@ class VideoUploader extends MediaUploader
                 $this->__errors []= MediaUploader::MEDIA_UPLOAD_ERRORS['unknown'];
                 return null;
             }      
-            Log::info(MediaUploader::LOG_PREFIX . '[ Uploading image success to ' . $serverFile->getRealPath() . ']');
+            Log::info(MediaUploader::LOG_PREFIX . '[ Uploading video success to ' . $serverFile->getRealPath() . ']');
             return $serverFile;
         }
         catch(FileException $fe)
@@ -88,9 +89,9 @@ class VideoUploader extends MediaUploader
 
     private function isSupportedExtension()
     {
-        foreach(ProductMedia::SUPPORTED_MEDIA_MIMES[$this->__mediaType] as $ext)
+        foreach(ProductMedia::SUPPORTED_MEDIA_MIMES[$this->__mediaType] as $mime)
         {
-            if($ext == $this->__uploadedFile->getClientOriginalExtension())
+            if($mime == $this->__uploadedFile->getClientMimeType())
                 return true;
         }
         return false;

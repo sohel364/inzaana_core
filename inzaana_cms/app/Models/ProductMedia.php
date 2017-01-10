@@ -6,15 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 use Inzaana\MediaUploader\MediaUploader;
 use Inzaana\MediaUploader\ImageUploader;
+use Inzaana\MediaUploader\VideoUploader;
 
 use \Symfony\Component\HttpFoundation\File\UploadedFile;
 
 use Inzaana\Log;
+use Inzaana\Exception;
 
 class ProductMedia extends Model
 {
-	const MEDIA_TYPES = ['UNKNOWN', 'IMAGE', 'AUDIO', 'VIDEO'];
-    const SUPPORTED_MEDIA_MIMES = [ 'IMAGE' => [ 'png', 'jpeg', 'gif' ], 'VIDEO' => [ 'video/avi', 'video/mpeg', 'video/quicktime' ] ];
+	const MEDIA_TYPES = ['UNKNOWN', 'IMAGE', 'VIDEO', 'AUDIO'];
+    const SUPPORTED_MEDIA_MIMES = [
+        'IMAGE' => [ 'png', 'jpeg', 'gif' ],
+        'VIDEO' => [ 'video/avi', 'video/mpeg', 'video/quicktime', 'video/mp4' ],
+        'AUDIO' => []
+    ];
+    const MAX_ALLOWED_IMAGE = 4;
 
     protected $table = 'product_medias';
 
@@ -26,22 +33,36 @@ class ProductMedia extends Model
         return $this->morphTo();
     }
 
+    public function store(array $serverFiles)
+    {
+        $success = true;
+        foreach($serverFiles as $file)
+        {
+            $this->media_type = self::isMedia($file->getMimeType(), 'VIDEO') ? 'VIDEO' : 'IMAGE';
+            $this->title = $file->getBasename();
+            $this->url = $file->getRealPath();
+            if(!$this->save())
+            {
+                $success = false;
+            }
+        }
+        return $success;
+    }
+
     public static function uuid()
     {
         $faker = \Faker\Factory::create('en_GB');
         $faker->addProvider(new \Faker\Provider\Uuid($faker));
         return $faker->unique()->uuid;
     }
-    
-    public function store(array $serverFiles)
-    {
 
-    }
-
-    private static function uploadImage($requestedFile)
+    private static function uploadSingle($requestedFile)
     {
-        $mediaUploader = new ImageUploader("products");
+        $context = "products";
+        // dd($requestedFile->getClientMimeType());
+        $mediaUploader = self::isMedia($requestedFile->getClientMimeType(), 'VIDEO') ? new VideoUploader($context) : new ImageUploader($context);
         $mediaUploader->validate($requestedFile);
+        // dd($mediaUploader->errors());
         if($mediaUploader->fails())
         {
             return $mediaUploader->errors();
@@ -61,7 +82,7 @@ class ProductMedia extends Model
         foreach($requestedFiles as $requestedFile)
         {
             $requestedFileName = $requestedFile->getClientOriginalName();
-            $serverEntity = self::uploadImage($requestedFile);
+            $serverEntity = self::uploadSingle($requestedFile);
             if(!is_array($serverEntity))
             {
                 $serverFiles []= $serverEntity;
@@ -90,5 +111,30 @@ class ProductMedia extends Model
         if($mediaType == 'IMAGE')
             return 'image|mimes:' . self::tidyMimes('IMAGE') . $size_limit_rule;
         return 'mimetypes:' . self::tidyMimes('VIDEO') . $size_limit_rule;
+    }
+
+    /**
+     * @param $mediaMime        the media MIME
+     * @param $queryMediaType   the query of a type
+     */
+    private static function isMedia($mediaMime, $queryMediaType)
+    {
+        foreach(ProductMedia::SUPPORTED_MEDIA_MIMES as $mediaType => $mimes)
+        {
+            if($mediaType == $queryMediaType)
+            {
+                foreach($mimes as $mime)
+                {
+                    if($mime == $mediaMime)
+                        return true;
+                }   
+            }
+        }
+        return false;
+    }
+
+    public static function isValidURL($url)
+    {
+        return (bool)parse_url($url);
     }
 }
