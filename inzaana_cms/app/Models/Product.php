@@ -51,6 +51,67 @@ class Product extends Model
         return $this->morphMany(ProductMedia::class, 'mediable');
     }
 
+    public function delete()
+    {
+        foreach($this->medias as $media)
+        {
+            $media->delete(); // call the ProductMedia delete()
+        }
+        
+        parent::delete();
+    }
+
+    public function saveMedias(array $data)
+    {
+        $success = true;
+        foreach($data['uploaded_files'] as $file)
+        {
+            $isVideo = ProductMedia::isMedia($file->getMimeType(), 'VIDEO');
+            $productMedia = new ProductMedia();
+            $productMedia->is_public = $data['is_public'];
+            $productMedia->url = $file->getRealPath();
+            $productMedia->media_type = $isVideo ? 'VIDEO' : 'IMAGE';
+            $productMedia->title = $file->getBasename();
+
+            if(!$this->medias()->save($productMedia))
+            {
+                $success = false;
+            }
+        }
+        $hasEmbed = $data['has_embed_video'] && ProductMedia::isValidURL($data['embed_url']);
+        if($hasEmbed)
+        {
+            $productMedia = new ProductMedia();
+            $productMedia->is_public = $data['is_public'];
+            $productMedia->url = $data['embed_url'];
+            $productMedia->media_type = 'VIDEO';
+            $productMedia->title = ProductMedia::uuid();
+
+            if(!$this->medias()->save($productMedia))
+            {
+                $success = false;
+            }
+        }
+        return $success;
+    }
+
+    private function thumbnailMediaUrl()
+    {
+        foreach($this->medias as $media)
+        {
+            if($media->media_type == 'IMAGE')
+                return [ 'is_default' => false, 'title' => $media->title ];
+        }
+        return [ 'is_default' => true, 'title' => (ProductMedia::IMAGES_PATH_PUBLIC . ProductMedia::DEFAUL_IMAGE) ];
+    }
+
+    public function thumbnail()
+    {
+        $title = $this->thumbnailMediaUrl()['title'];
+        $isDefaulImage = $this->thumbnailMediaUrl()['is_default'];
+        return $isDefaulImage ? $title : route('user::products.medias.image', [ 'file_name' => $title ] );
+    }
+
     public function marketProduct()
     {
         return MarketProduct::find($this->market_product_id);

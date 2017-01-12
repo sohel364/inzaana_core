@@ -10,6 +10,7 @@ use Inzaana\MediaUploader\VideoUploader;
 
 use \Symfony\Component\HttpFoundation\File\UploadedFile;
 
+use File;
 use Inzaana\Log;
 use Inzaana\Exception;
 
@@ -22,6 +23,9 @@ class ProductMedia extends Model
         'AUDIO' => []
     ];
     const MAX_ALLOWED_IMAGE = 4;
+    const MEDIA_CONTEXT = "products";
+    const DEFAUL_IMAGE = 'default_product.jpg';
+    const IMAGES_PATH_PUBLIC = '/images/products/';
 
     protected $table = 'product_medias';
 
@@ -31,22 +35,15 @@ class ProductMedia extends Model
     public function mediable()
     {
         return $this->morphTo();
-    }
+    }    
 
-    public function store(array $serverFiles)
+    public function delete()
     {
-        $success = true;
-        foreach($serverFiles as $file)
-        {
-            $this->media_type = self::isMedia($file->getMimeType(), 'VIDEO') ? 'VIDEO' : 'IMAGE';
-            $this->title = $file->getBasename();
-            $this->url = $file->getRealPath();
-            if(!$this->save())
-            {
-                $success = false;
-            }
-        }
-        return $success;
+        if(!$this->is_embed)
+            File::delete($this->url);
+        if(File::exists($this->url))
+            return false;
+        parent::delete();
     }
 
     public static function uuid()
@@ -58,11 +55,8 @@ class ProductMedia extends Model
 
     private static function uploadSingle($requestedFile)
     {
-        $context = "products";
-        // dd($requestedFile->getClientMimeType());
-        $mediaUploader = self::isMedia($requestedFile->getClientMimeType(), 'VIDEO') ? new VideoUploader($context) : new ImageUploader($context);
+        $mediaUploader = self::isMedia($requestedFile->getClientMimeType(), 'VIDEO') ? new VideoUploader(self::MEDIA_CONTEXT) : new ImageUploader(self::MEDIA_CONTEXT);
         $mediaUploader->validate($requestedFile);
-        // dd($mediaUploader->errors());
         if($mediaUploader->fails())
         {
             return $mediaUploader->errors();
@@ -117,7 +111,7 @@ class ProductMedia extends Model
      * @param $mediaMime        the media MIME
      * @param $queryMediaType   the query of a type
      */
-    private static function isMedia($mediaMime, $queryMediaType)
+    public static function isMedia($mediaMime, $queryMediaType)
     {
         foreach(ProductMedia::SUPPORTED_MEDIA_MIMES as $mediaType => $mimes)
         {
@@ -135,6 +129,11 @@ class ProductMedia extends Model
 
     public static function isValidURL($url)
     {
-        return (bool)parse_url($url);
+        return collect(parse_url($url))->toArray()['path'] == "" ? false : true;
+    }
+
+    public static function getStoragePath($mediaType)
+    {
+        return storage_path(MediaUploader::STORAGE_PATH . ($mediaType == 'IMAGE' ? ImageUploader::IMAGE_STORAGE_PATH : VideoUploader::IMAGE_STORAGE_PATH) . '/' . self::MEDIA_CONTEXT . '/');
     }
 }

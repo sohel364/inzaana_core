@@ -43,7 +43,7 @@ class MediaController extends Controller
         // return Storage::disk('local')->get('media-archive/'. Auth::user()->id  .  '/' . $filename );
         $manager = new ImageManager();
         return $manager->make($mediaArchivePath  . $filename)->response();
-    }
+    }    
 
     public function reload($template_id)
     {

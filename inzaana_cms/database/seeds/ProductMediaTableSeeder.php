@@ -30,7 +30,7 @@ class ProductMediaTableSeeder extends Seeder
     				echo 'Seeding :[' . $mediaDirectory . "][status:" . (File::exists($mediaDirectory) ? 'EXIST' : 'NOT-EXIST') . "]\n";
 		            if(File::exists($mediaDirectory))
 		            	continue;
-		            if(!File::makeDirectory($mediaDirectory, 0775, true))
+		            if(!File::makeDirectory($mediaDirectory, 0777, true))
 		            {
 		                Log::error(MediaUploader::LOG_PREFIX . '[' . MediaUploader::MEDIA_UPLOAD_ERRORS['directory_create_error'] . ']');
 		                continue;

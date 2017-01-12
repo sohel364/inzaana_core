@@ -23,6 +23,10 @@ use Inzaana\BulkExportImport\ProductImporter;
 use \Symfony\Component\HttpFoundation\File\UploadedFile;
 use \Symfony\Component\HttpFoundation\File\Exception\FileException;
 
+// import the Intervention Image Manager Class
+use Intervention\Image\Image;
+use Intervention\Image\ImageManager;
+
 class ProductController extends Controller
 {
     const PRODUCT_ENTRY_TABS = [ 'single_product_entry_tab', 'bulk_product_entry_tab' ];
@@ -46,7 +50,6 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
         $productsCount = 0;
         $products = Auth::user()->products;
         $categories = Category::all();
@@ -104,7 +107,6 @@ class ProductController extends Controller
             if($request->hasFile('upload_image_' . $i))
                 $uploadedFiles []= $request->file('upload_image_' . $i);
         }
-        $uploadedFiles = [];
         if (!collect($uploadedFiles)->isEmpty())
         {
             try
@@ -146,6 +148,7 @@ class ProductController extends Controller
             'return_time_limit' => 1,
             'uploaded_files' => $uploadedFiles,
             'embed_url' => $request->input('embed_video_url'),
+            'has_embed_video' => $request->input('has_embed_video'),
         ]; 
 
         // dd($data);       
@@ -159,7 +162,8 @@ class ProductController extends Controller
         }
         catch(\Exception $e)
         {
-            return redirect()->back()->withErrors([ 'Something went wrong during bulk upload! ' . $e->getMessage() ]);
+            Log::error('[Inzaana][Product saving error: ' . $e->getMessage() . ' ]');
+            return redirect()->back()->withErrors([ 'Something went wrong during saving your product! We have alread yknow the reason. Try again or please contact Inzaana admnistrator.' ]);
         }
         return redirect()->route('user::products');
     }
@@ -396,24 +400,22 @@ class ProductController extends Controller
             Log::error('[Inzaana][User:: ' . Auth::user() . '][error:: Product (' . $data['title'] . ') not added.]');
             return false;
         }
+
+        // Media entry
+        if(!collect($data['uploaded_files'])->isEmpty())
+        {
+            if(!$product->saveMedias($data))
+            {
+                // You may revert all files by deleting and undoing stored media entry
+                // Right here
+                throw new \Exception("Some uploaded files did not store.");
+            }   
+        }
+
         if(!$product->saveDiscountedPrice())
         {
             Log::info('[Inzaana][User:: ' . Auth::user() . '][error:: Product (' . $data['title'] . ') MRP not saved.]');
             return false;
-        }
-        // Media entry
-        if(!collect($data['uploaded_files'])->isEmpty())
-        {
-            $productMedia = new ProductMedia();
-            $productMedia->mediable = $product;
-            $productMedia->is_public = $productMedia->mediable->is_public;
-            $productMedia->is_embed = ProductMedia::isValidURL($data['embed_url']);
-            if(!$productMedia->store($uploadResponse['server_files']))
-            {
-                // You may revert all files by deleting and undoing stored media entry
-                // Right here
-                throw new \Exception("Some files did not store but has uploaded.");
-            }   
         }
         return true;
     }
@@ -477,5 +479,15 @@ class ProductController extends Controller
             session(['selected_tab' => self::PRODUCT_ENTRY_TABS[1]]);
             return redirect()->back()->withErrors([ 'Something went wrong during bulk upload! ' . $e->getMessage()]);
         }
+    }
+
+    // 1_51_Home_container_section-2_img-2_b995a302bc6ffe2d463d69f016a78042.jpeg
+    // sources:
+    // http://stackoverflow.com/questions/30191330/laravel-5-how-to-access-image-uploaded-in-storage-within-view
+    // http://image.intervention.io/api/response
+    public function image($file_name)
+    {
+        $manager = new ImageManager();
+        return ($file_name == null) ? $defaultImage : $manager->make(ProductMedia::getStoragePath('IMAGE') . $file_name)->response();
     }
 }

@@ -79,7 +79,7 @@
                       <tr>
                           <td id="photo"><a data-toggle="modal" data-target="#viewImage"><img src="{{ $productFromSearch->photo_name or 'http://lorempixel.com/400/200/food/' }}" height="50px" width="80px"/></a></td>
                           <td id="product">{{ $productFromSearch->title }}</td>
-                          <td id="category">{{ $productFromSearch->category->name or 'Uncategorized' }}</td>
+                          <td id="category">{{ $productFromSearch->marketProduct()->category->name or 'Uncategorized' }}</td>
                           <td id="sellyours">
                             <form method="POST">
                               {!! csrf_field() !!}
@@ -363,28 +363,28 @@
                                 <div class="col-md-2">
                                   <div class="thumbnail">
                                     <a href="" target="_blank">
-                                      <img id="preview-image-1" src="http://lorempixel.com/400/200/sports/">
+                                      <img id="preview-image-1" src="{{ isset($product) ? $product->thumbnail() : 'http://lorempixel.com/400/200/sports/' }}">
                                     </a>
                                   </div>
                                 </div>
                                 <div class="col-md-2">
                                   <div class="thumbnail">
                                     <a href="" target="_blank">
-                                      <img id="preview-image-2" src="http://lorempixel.com/400/200/sports/">
+                                      <img id="preview-image-2" src="{{ isset($product) ? $product->thumbnail() : 'http://lorempixel.com/400/200/sports/' }}">
                                     </a>
                                   </div>
                                 </div>
                                 <div class="col-md-2">
                                   <div class="thumbnail">
                                     <a href="" target="_blank">
-                                      <img id="preview-image-3" src="http://lorempixel.com/400/200/sports/">
+                                      <img id="preview-image-3" src="{{ isset($product) ? $product->thumbnail() : 'http://lorempixel.com/400/200/sports/' }}">
                                     </a>
                                   </div>
                                 </div>
                                 <div class="col-md-2">
                                   <div class="thumbnail">
                                     <a href="" target="_blank">
-                                      <img id="preview-image-4" src="http://lorempixel.com/400/200/sports/">
+                                      <img id="preview-image-4" src="{{ isset($product) ? $product->thumbnail() : 'http://lorempixel.com/400/200/sports/' }}">
                                     </a>
                                   </div>
                                 </div>
@@ -682,7 +682,11 @@
                           <td id="child"><a href="">{{ $product->mrp }}</a></td>
                           <td id="child"><a href="">{{ $product->discount }} %</a></td>
                           <td id="child"><a href="">$ {{ $product->marketProduct()->price }}</a></td>
-                          <td id="child"><a data-toggle="modal" data-target="#viewImage"><img src="{{ 'http://lorempixel.com/400/200/sports/' }}" height="60px" width="90px"/></a></td>
+                          <td id="child">
+                            <a data-toggle="modal" data-target="#viewImage">
+                              <img src="{{ $product->thumbnail() }}" height="60px" width="90px"/>
+                            </a>
+                          </td>
                           <td id="child"><a href="">{{ $product->available_quantity }}</a></td> <!-- Available quantity-->
                           <td id="child"><a href="">{{ $product->return_time_limit }}</a></td> <!-- Time limit for return-->
                           <td id="child">@include('includes.approval-label', [ 'status' => $product->status, 'labelText' => $product->getStatus() ])</td>

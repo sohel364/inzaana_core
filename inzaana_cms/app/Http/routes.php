@@ -179,6 +179,7 @@ Route::group(['middleware' => 'web'], function () {
                 Route::get('/approvals', [ 'uses' => 'ProductController@approvals', 'as' => 'products.approvals' ]);
                 Route::post('/approvals/confirm/{id}', [ 'uses' => 'ProductController@confirmApproval', 'as' => 'products.approvals.confirm' ]);
                 Route::post('/import/csv', [ 'uses' => 'ProductController@uploadCSV', 'as' => 'products.upload.csv' ]);
+                Route::get('/medias/image/{file_name}', [ 'uses' => 'ProductController@image', 'as' => 'products.medias.image' ]);
 
                 // Route::group( [ 'middleware' => ['JsonValidation'] ], function () {
 
