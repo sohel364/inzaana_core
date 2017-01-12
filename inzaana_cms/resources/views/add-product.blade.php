@@ -305,7 +305,11 @@
                             <label for="available_quantity" class="col-sm-3 control-label">Available Quantity:</label>
                             <div class="col-sm-2">
                                <div class="input-group spinner">
-                                  <input type="text" name="available_quantity" class="form-control" value="0" min="5" max="15">
+                                  <input type="text" name="available_quantity" class="form-control"
+                                         value="{{ isset($product) ? $product->available_quantity : Inzaana\Product::MIN_AVAILABLE_QUANTITY }}"
+                                         min="{{ Inzaana\Product::MIN_AVAILABLE_QUANTITY }}"
+                                         max="{{ Inzaana\Product::MAX_AVAILABLE_QUANTITY }}">
+
                                   <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
@@ -459,23 +463,25 @@
                         <div class="form-group">
                           <label  class="col-sm-3 control-label">Control Type:</label>
                           <div class="col-sm-3">
-                            <select name="control_type" class="form-control"  data-placeholder="Control Type" style="width: 100%;">
-                              <option>Label</option>
-                              <option>Radio Controlers</option>
-                              <option>Select Box</option>
-                              <option>Input box</option>
-                              <option>Spinner</option>
-                              <option>Check Box</option>
+                            <select id="control_type" name="control_type" class="form-control"  data-placeholder="Control Type" style="width: 100%;">
+                              @foreach(Inzaana\Product::VIEW_TYPES['group'] as $id => $control)
+                                <option value="{{ $id }}">{{ $control }}</option>
+                              @endforeach
+                              @foreach(Inzaana\Product::VIEW_TYPES['single'] as $id => $control)
+                                <option value="{{ $id }}">{{ $control }}</option>
+                              @endforeach
                             </select>
                           </div>
                         </div>
                         <div class="form-group">
-                          <label  class="col-sm-3 control-label">Value:</label>
-                          <div class="col-sm-3" hidden="">
+
+                          <label class="col-sm-3 control-label">Value:</label>
+
+                          <div id="input" class="col-sm-3 spec-controls" hidden="">
                             <input type="text" class="form-control" id="" name="" placeholder="">
                           </div>
                           
-                          <div class="col-sm-3" hidden="">
+                          <div id="options" class="col-sm-3 spec-controls" hidden="">
                             <div class="radio">
                                   <label><input type="radio" name="optradio">Option 1</label>
                             </div>
@@ -484,7 +490,7 @@
                             </div>
                           </div>
                           
-                          <div class="col-sm-3" hidden="">
+                          <div id="dropdown" class="col-sm-3 spec-controls" hidden="">
                             <select name="" class="form-control"  data-placeholder="" style="width: 100%;">
                               <option>Option-1</option>
                               <option>Option-2</option>
@@ -492,26 +498,35 @@
                             </select>
                           </div>
                           
-                          <div class="">
+                          <div id="spinner" class="spec-controls" hidden="">
                               <div class="col-sm-1">
-                            <div class="input-group spinner">
-                                <input type="text" class="form-control" id="" name="" placeholder=""> 
+                                <div class="input-group spinner">
+                                    <input type="text" class="form-control" id="" name="" placeholder=""> 
+                                  </div>
+                              </div>
+                              <div class="col-sm-1">
+                                  <label  class="col-sm-1 control-label">To</label>
+                              </div>
+                              <div class="col-sm-1">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="" name="" placeholder=""> 
+                                  </div>
                               </div>
                           </div>
-                            <div class="col-sm-1">
-                                <label  class="col-sm-1 control-label">To</label>
-                            </div>
-                          <div class="col-sm-1">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="" name="" placeholder=""> 
-                              </div>
-                          </div>
+                          
+                          <div class="col-sm-2 add-option" hidden="">
+                              <button id="add-option-btn" class="btn btn-default btn-flat"><i class="fa fa-plus"></i> </button>
                           </div>
                           
-                          <div class="col-sm-2">
-                              <button formmethod="GET" formaction="" class="btn btn-default btn-flat"><i class="fa fa-plus"></i> </button>
+                        </div>
+                        <div class="form-group">
+
+                          <label class="col-sm-3 control-label"></label>
+
+                          <div class="col-sm-3 add-option">
+                            <input type="text" class="form-control" id="option_input" name="option_input" placeholder="Type new value to add above">
                           </div>
-                          
+
                         </div>
                         <div class="form-group">
                           <label  class="col-sm-3 control-label"></label>
@@ -677,13 +692,14 @@
                         <tr>
                           <!-- <td id="child"><a href="">001</a> </td> -->
                           <td id="child"><a href="">{{ $product->title }}</a></td>
-                          <td id="child"><a href="">{{ $product->category ? $product->category->name : 'Uncategorized' }}</a></td>
+                          <td id="child"><a href="">{{ $product->categoryName() }}</a></td>
                           <td id="child"><a href=""></a></td> <!-- sub category-->
                           <td id="child"><a href="">{{ $product->mrp }}</a></td>
                           <td id="child"><a href="">{{ $product->discount }} %</a></td>
                           <td id="child"><a href="">$ {{ $product->marketProduct()->price }}</a></td>
                           <td id="child">
-                            <a data-toggle="modal" data-target="#viewImage">
+                            <!-- <a data-toggle="modal" data-target="#viewImage"> -->
+                            <a data-toggle="modal" data-target="">
                               <img src="{{ $product->thumbnail() }}" height="60px" width="90px"/>
                             </a>
                           </td>
@@ -775,36 +791,96 @@
   </script>
 
   <script type="text/javascript">
-      $('#generalTabContent').ready(function() {
-          var showModal = ($('div.has-error').length > 0 || $('div.is-edit').length > 0);
-          $('#addProduct').modal({ 'show' : showModal });
-          
-          onChangeEmbedVideoCheck();
-          $( "#has_embed_video" ).change(onChangeEmbedVideoCheck);
-      });
-      function onChangeEmbedVideoCheck() {
-         
-          if($('.embed_video').is(':hidden'))
-          {
-              $( ".embed_video" ).hide( "fast", function() {});
-          }
-          if($('#has_embed_video').is(':checked'))
-          {
-              $( ".embed_video" ).show( 1000 );
-          }
-          else
-          {
-              $( ".embed_video" ).hide( "fast", function() {});
-          }
-          if( $( ".embed_video" ).hasClass( "has-error" ) )
-          {
-              $( ".embed_video" ).show( 1000 );
-              if(!$('#has_embed_video').is(':checked'))
-              {
-                  $( "#has_embed_video" ).prop('checked', 'checked');
-              }
-          }
-      }
+
+    function specControlEvents()
+    {
+        $('#input').prop("hidden", "");
+        $('.add-option').prop("hidden", "hidden");
+
+        $('#control_type').change( function(event) {
+
+            var controlId = this.value;
+            var showDefault = false;
+
+            if(this.value == 'dropdown' || this.value == 'options')
+            {
+                $('#' + this.value).prop("hidden", "");
+                $('.add-option').prop("hidden", "");
+            }
+            else if(this.value == 'spinner')
+            {
+                $('#' + this.value).prop("hidden", "");
+            }
+            else
+            {
+                showDefault = true;
+            }
+            $.each($('.spec-controls'), function(index, value) {
+
+                if(value.id != controlId)
+                {
+                    $('#' + value.id).prop("hidden", "hidden");
+                }
+            });
+            if(showDefault)
+            {
+                $('#input').prop("hidden", "");
+                $('.add-option').prop("hidden", "hidden");
+            }
+        });
+
+        $('#add-option-btn').click(function(e) {
+
+            e.preventDefault();
+
+            $.each($('.spec-controls'), function(index, value) {
+
+                  if(value.id == 'dropdown')
+                  {
+                      
+                  }
+                  if(value.id == 'options')
+                  {
+                      
+                  }
+            });
+        });
+    }
+  
+    $('#generalTabContent').ready(function() {
+        var showModal = ($('div.has-error').length > 0 || $('div.is-edit').length > 0);
+        $('#addProduct').modal({ 'show' : showModal });
+        
+        onChangeEmbedVideoCheck();
+        $( "#has_embed_video" ).change(onChangeEmbedVideoCheck);
+
+        spinnerEvents();
+        specControlEvents();
+    });
+
+    function onChangeEmbedVideoCheck() {
+       
+        if($('.embed_video').is(':hidden'))
+        {
+            $( ".embed_video" ).hide( "fast", function() {});
+        }
+        if($('#has_embed_video').is(':checked'))
+        {
+            $( ".embed_video" ).show( 1000 );
+        }
+        else
+        {
+            $( ".embed_video" ).hide( "fast", function() {});
+        }
+        if( $( ".embed_video" ).hasClass( "has-error" ) )
+        {
+            $( ".embed_video" ).show( 1000 );
+            if(!$('#has_embed_video').is(':checked'))
+            {
+                $( "#has_embed_video" ).prop('checked', 'checked');
+            }
+        }
+    }
   </script>
 
     <script>
@@ -896,28 +972,28 @@
 </script>
 
 <script> /*for spinner*/
-$(function(){
+  function spinnerEvents()
+  {
+      $('.spinner .btn:first-of-type').on('click', function() {
+          var btn = $(this);
+          var input = btn.closest('.spinner').find('input');
+          if (input.attr('max') == undefined || parseInt(input.val()) < parseInt(input.attr('max'))) {    
+            input.val(parseInt(input.val(), 10) + 1);
+          } else {
+            btn.next("disabled", true);
+          }
+      });
+      $('.spinner .btn:last-of-type').on('click', function() {
+          var btn = $(this);
+          var input = btn.closest('.spinner').find('input');
+          if (input.attr('min') == undefined || parseInt(input.val()) > parseInt(input.attr('min'))) {    
+            input.val(parseInt(input.val(), 10) - 1);
+          } else {
+            btn.prev("disabled", true);
+          }
+      });
+  }
 
-    $('.spinner .btn:first-of-type').on('click', function() {
-      var btn = $(this);
-      var input = btn.closest('.spinner').find('input');
-      if (input.attr('max') == undefined || parseInt(input.val()) < parseInt(input.attr('max'))) {    
-        input.val(parseInt(input.val(), 10) + 1);
-      } else {
-        btn.next("disabled", true);
-      }
-    });
-    $('.spinner .btn:last-of-type').on('click', function() {
-      var btn = $(this);
-      var input = btn.closest('.spinner').find('input');
-      if (input.attr('min') == undefined || parseInt(input.val()) > parseInt(input.attr('min'))) {    
-        input.val(parseInt(input.val(), 10) - 1);
-      } else {
-        btn.prev("disabled", true);
-      }
-    });
-
-})
 </script>
 
 <!-- background image loader on browse -->
@@ -979,7 +1055,5 @@ $(function(){
   //         }
   //     });
   // });
-</script>
-<script type="text/javascript">
 </script>
 @endsection

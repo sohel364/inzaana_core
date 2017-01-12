@@ -163,7 +163,7 @@ class ProductController extends Controller
         catch(\Exception $e)
         {
             Log::error('[Inzaana][Product saving error: ' . $e->getMessage() . ' ]');
-            return redirect()->back()->withErrors([ 'Something went wrong during saving your product! We have alread yknow the reason. Try again or please contact Inzaana admnistrator.' ]);
+            return redirect()->back()->withErrors([ 'Something went wrong during saving your product! We have already know the reason. Try again or please contact Inzaana admnistrator.' ]);
         }
         return redirect()->route('user::products');
     }
@@ -488,6 +488,6 @@ class ProductController extends Controller
     public function image($file_name)
     {
         $manager = new ImageManager();
-        return ($file_name == null) ? $defaultImage : $manager->make(ProductMedia::getStoragePath('IMAGE') . $file_name)->response();
+        return $manager->make(ProductMedia::getStoragePath('IMAGE') . $file_name)->response();
     }
 }

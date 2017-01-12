@@ -29,9 +29,21 @@ class Product extends Model
     ];
 
     const VIEW_TYPES = [ 
-        'group' => [ 'dropdown', 'checkboxes', 'options', 'scroller_vert', 'scroller_horiz' ],
-        'single' => [ 'checkbox', 'label' ]
+        'group' => [
+            'dropdown' => 'Dropdown',
+            'checkboxes' => 'Checkboxes',
+            'options' => 'Radio Controllers',
+            'spinner' => 'Spinners'
+        ],
+        'single' => [
+            'selectbox' => 'Selectbox',
+            'label' => 'Label',
+            'input' => 'Input Box'
+        ]
     ];
+
+    const MAX_AVAILABLE_QUANTITY = 15;
+    const MIN_AVAILABLE_QUANTITY = 1;
 	 
     public function user()
     {
@@ -122,6 +134,11 @@ class Product extends Model
         return $this->is_public ? $this->marketProduct() : null;
     }
 
+    public function categoryName()
+    {
+        return  ($this->marketProduct() && $this->marketProduct()->category) ? $this->marketProduct()->category->name : 'Uncategorized';
+    }
+
 	public function sendApprovals()
 	{
 		return $this->hasMany('Inzaana\SendApproval');
@@ -158,22 +175,22 @@ class Product extends Model
     public function discountedPrice()
     {
         return $this->marketProduct()->price * ( 1 -  ( $this->discount / 100.0) );
-    } 
-
-    public function isViewDropdown()
-    {
-        return ($this->special_specs->view_type == 'dropdown');
     }
 
-    public function isViewOptions()
-    {
-        return ($this->special_specs->view_type == 'options');
-    }
+    // public function isViewDropdown()
+    // {
+    //     return ($this->special_specs->view_type == 'dropdown');
+    // }
 
-    public function isViewTypeGroup()
-    {
-        return array_has(array_flatten(ScanRule::VIEW_TYPES['group']), $this->special_specs->view_type);
-    }
+    // public function isViewOptions()
+    // {
+    //     return ($this->special_specs->view_type == 'options');
+    // }
+
+    // public function isViewTypeGroup()
+    // {
+    //     return array_has(array_flatten(ScanRule::VIEW_TYPES['group']), $this->special_specs->view_type);
+    // }
 
     public function getStatus()
     {
