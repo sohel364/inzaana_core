@@ -126,12 +126,14 @@ class ProductController extends Controller
             }
         }
 
-        $specs = [ 
-            [ 'spec_label' => '', 'values' => '', 'view_type' => '' ],
-            [ 'spec_label' => '', 'values' => '', 'view_type' => '' ],
-            [ 'spec_label' => '', 'values' => '', 'view_type' => '' ],
-            [ 'spec_label' => '', 'values' => '', 'view_type' => '' ],
-        ];
+        $specs = [];
+
+        for($specCount = 1; $specCount <= ($request->has('spec_count') ? $request->input('spec_count') : 1); ++$specCount)
+        {
+            $specs []= [ $request->input('title_' . $specCount) => [ 'values' => $request->input('values_' . $specCount), 'view_type' => $request->input('option_' . $specCount) ] ];
+        }
+
+        // dd($specs);
 
         $store_name_as_url = $request->input('store_name');
         $store = Store::whereNameAsUrl($store_name_as_url)->get()->first();
@@ -143,7 +145,7 @@ class ProductController extends Controller
             'price' => $request->input('price'),
             'is_public' => ($request->input('is_public') == 'checked'),
             'discount' => 0,
-            'spec' => collect($specs)->toJson(),
+            'spec' => $specs,
             'available_quantity' => $request->input('available_quantity'),
             'return_time_limit' => 1,
             'uploaded_files' => $uploadedFiles,

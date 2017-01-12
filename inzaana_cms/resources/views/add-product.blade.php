@@ -478,7 +478,7 @@
                           <label class="col-sm-3 control-label">Value:</label>
 
                           <div id="input" class="col-sm-3 spec-controls" hidden="">
-                            <input type="text" class="form-control" id="" name="" placeholder="">
+                            <input type="text" class="form-control" id="single_spec" name="single_spec" placeholder="">
                           </div>
                           
                           <div id="options" class="col-sm-3 spec-controls" hidden="">
@@ -531,14 +531,15 @@
                         <div class="form-group">
                           <label  class="col-sm-3 control-label"></label>
                           <div class="col-sm-3">
-                            <button formmethod="GET" formaction="" class="btn btn-default btn-flat">Apply </button>
+                            <button id="apply_spec" name="apply_spec" class="btn btn-default btn-flat">Apply</button>
                           </div>
                         </div>
                     </div>
                     
                     <div class="panel">
                     <div class="panel-body">
-                        <table class="table table-hover table-condensed table-bordered text-center">
+                        <input name="spec_count" id="spec_count" type="text" value="0" hidden>
+                        <table class="table table-hover table-condensed table-bordered text-center spec-table">
                             <thead>
                             <tr>
                                 <th>Spec Title</th>
@@ -548,19 +549,9 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <td>Color</td>
-                                <td>Select box</td>
-                                <td>Red, Color</td>
-                            </tr>
-                            <tr>
-                                <td>Size</td>
-                                <td>Select box</td>
-                                <td>Large, XL, LL</td>
-                            </tr>
-                            <tr>
-                                <td>Storage</td>
-                                <td>Label</td>
-                                <td>10 GB</td>
+                                <td>Color <input name="title_1" type="text" value="" hidden></td>
+                                <td>Select box <input name="option_1" type="text" value="" hidden></td>
+                                <td>Red, Color <input name="values_1" type="text" value="" hidden></td>
                             </tr>
                             </tbody>
                         </table>
@@ -827,6 +818,28 @@
                 $('#input').prop("hidden", "");
                 $('.add-option').prop("hidden", "hidden");
             }
+        });
+
+        var specs = '';
+        var spec_count = 0;
+
+        $('#apply_spec').click( function(e) {
+
+            e.preventDefault();
+            ;
+            $('#spec_count').val(++spec_count);
+
+            specs += '<tr>';
+            specs += '<td>' + $('#spec_title').val() + ' <input name="title_' + spec_count + '" type="text" value="' + $('#spec_title').val() + '" hidden></td>';
+            specs += '<td>' +  $('#control_type').val() + ' <input name="option_' + spec_count + '" type="text" value="' +  $('#control_type').val() + '" hidden></td>';
+            specs += '<td>' + $('#single_spec').val() + ' <input name="values_' + spec_count + '" type="text" value="' + $('#single_spec').val() + '" hidden></td>';
+            specs += '</tr>';
+
+            $('table.spec-table tbody').html(specs);
+
+            $('#single_spec').reset();
+            $('#control_type').reset();
+            $('#single_spec').reset();
         });
 
         $('#add-option-btn').click(function(e) {
