@@ -81,17 +81,17 @@ class ProductController extends Controller
         $validation = Validator::make(
             $request->all(),
             [
-                // 'store_name' => 'bail|required',
-                // 'category' => 'bail|required',
-                // 'title' => 'bail|required|unique:market_products|alpha_dash|max:200',
-                // 'price' => 'bail|required|numeric',
-                // 'manufacturer_name' => 'required|unique:market_products|alpha_dash|max:200',
-                // 'upload_image_1' => $image_file_rule,
-                // 'upload_image_2' => $image_file_rule,
-                // 'upload_image_3' => $image_file_rule,
-                // 'upload_image_4' => $image_file_rule,
+                'store_name' => 'bail|required',
+                'category' => 'bail|required',
+                'title' => 'bail|required|unique:market_products|alpha_dash|max:200',
+                'price' => 'bail|required|numeric',
+                'manufacturer_name' => 'required|unique:market_products|alpha_dash|max:200',
+                'upload_image_1' => $image_file_rule,
+                'upload_image_2' => $image_file_rule,
+                'upload_image_3' => $image_file_rule,
+                'upload_image_4' => $image_file_rule,
                 'upload_video'   => ProductMedia::getMediaRule('VIDEO'),
-                // 'embed_video_url' => 'required_unless:has_embed_video,checked|url',
+                'embed_video_url' => 'required_unless:has_embed_video,checked|url',
             ]
         );
 
