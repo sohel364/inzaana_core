@@ -404,7 +404,7 @@ class ProductController extends Controller
         }
 
         // Media entry
-        if(!collect($data['uploaded_files'])->isEmpty())
+        if(collect($data)->has('uploaded_files') && !collect($data['uploaded_files'])->isEmpty())
         {
             if(!$product->saveMedias($data))
             {
