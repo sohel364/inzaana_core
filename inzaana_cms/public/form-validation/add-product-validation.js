@@ -8,10 +8,19 @@ function onUrlPaste(event) {
         $(this).next().find("strong").html("Please check your url.");
         return;
     }
+    
     $('.embed_video_form_group').removeClass("hidden");
-    $('#has_embed_video').prop("checked", "checked");
+
+    if( $('#has_embed_video').is(":checked"))
+    {
+        $(this).next().removeClass("hidden");
+    }
+    else
+    {
+        $('#has_embed_video').prop("checked", "checked");
+        $(this).next().addClass("hidden");
+    }
     console.log($('.embed_video_form_group').is(":hidden"));
-    $(this).next().addClass("hidden");
 }
 
 function validateURL(url) {

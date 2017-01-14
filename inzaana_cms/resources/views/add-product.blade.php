@@ -863,7 +863,6 @@
             {
                 specValues[charIndex] = '';
             }
-            specValues = specValues.replace('/^[a-z].*[,\s]{2}$', '');
             console.log(specValues);
 
             specs += '<tr>';
@@ -934,13 +933,19 @@
         {
             $( ".embed_video" ).hide( "fast", function() {});
         }
-        if( $( ".embed_video" ).hasClass( "has-error" ) )
+        if($('#has_embed_video').is(':checked') && $( ".embed_video" ).hasClass( "has-error" ) )
         {
             $( ".embed_video" ).show( 1000 );
+
             if(!$('#has_embed_video').is(':checked'))
             {
                 $( "#has_embed_video" ).prop('checked', 'checked');
             }
+        }
+        else
+        {
+            $( ".embed_video" ).removeClass( "has-error" );
+            $( ".embed_video" ).find("strong").html("");
         }
     }
   </script>
