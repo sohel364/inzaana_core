@@ -11,7 +11,7 @@ use Inzaana\MediaUploader\VideoUploader;
 use \Symfony\Component\HttpFoundation\File\UploadedFile;
 
 use File;
-use Inzaana\Log;
+use Log;
 use Inzaana\Exception;
 
 class ProductMedia extends Model
