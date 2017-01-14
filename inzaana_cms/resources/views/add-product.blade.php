@@ -214,7 +214,7 @@
                         <div class="form-group{{ $errors->has('manufacturer_name') ? ' has-error' : '' }}">
                           <label for="Manufacturer" class="col-sm-3 control-label">Manufacturer</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" id="manufacturer_name" name="manufacturer_name" placeholder="ex: dairy milk">
+                            <input type="text" class="form-control" id="manufacturer_name" name="manufacturer_name" placeholder="ex: dairy milk" value="{{ isset($product) ? $product->marketManufacturer() : old('manufacturer_name') }}">
                             @if ($errors->has('manufacturer_name'))
                                   <span class="help-block">
                                       <strong>{{ $errors->first('manufacturer_name') }}</strong>
@@ -259,7 +259,7 @@
                         <div class="form-group{{ $errors->has('price') ? ' has-error' : '' }}">
                           <label for="price" class="col-sm-3 control-label">Price:</label>
                           <div class="col-sm-2">
-                            <input type="text" class="form-control" id="price" name="price" placeholder="ex: 3₹">
+                            <input type="text" class="form-control" id="price" name="price" placeholder="ex: 3₹" value="{{ isset($product) ? $product->marketPrice() : old('price') }}">
                             @if ($errors->has('price'))
                                   <span class="help-block">
                                       <strong>{{ $errors->first('price') }}</strong>
@@ -485,25 +485,20 @@
                           
                           <div id="options" class="col-sm-3 spec-controls" hidden="">
                             <div class="radio">
-                                  <label><input type="radio" name="optradio">Option 1</label>
-                            </div>
-                            <div class="radio">
-                                  <label><input type="radio" name="optradio">Option 2</label>
+                                  <label><input type="radio" id="optradio" name="optradio">---</label>
                             </div>
                           </div>
                           
                           <div id="dropdown" class="col-sm-3 spec-controls" hidden="">
-                            <select name="" class="form-control"  data-placeholder="" style="width: 100%;">
-                              <option>Option-1</option>
-                              <option>Option-2</option>
-                              <option>Option-3</option>
+                            <select id="optdropdown" name="optdropdown" class="form-control"  data-placeholder="" style="width: 100%;">
+                              <option>---</option>
                             </select>
                           </div>
                           
                           <div id="spinner" class="spec-controls" hidden="">
                               <div class="col-sm-1">
                                 <div class="input-group spinner">
-                                    <input type="text" class="form-control" id="" name="" placeholder=""> 
+                                    <input type="text" class="form-control" id="optspinner_min" name="optspinner_min" placeholder=""> 
                                   </div>
                               </div>
                               <div class="col-sm-1">
@@ -511,7 +506,7 @@
                               </div>
                               <div class="col-sm-1">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="" name="" placeholder=""> 
+                                    <input type="text" class="form-control" id="optspinner_max" name="optspinner_max" placeholder=""> 
                                   </div>
                               </div>
                           </div>
@@ -849,6 +844,8 @@
 
         var specs = '';
         var spec_count = 0;
+        var options = '';
+        var optionCount = 0;
 
         $('#apply_spec').click( function(e) {
 
@@ -865,6 +862,10 @@
             $('table.spec-table tbody').html(specs);
 
             $( "input[type='button']" ).bind( "click", specResetOnly );
+
+            // IMPORTANT to reset options entered last time
+            options = '';
+            optionCount = 0;
         });
 
         $('#add-option-btn').click(function(e) {
@@ -873,13 +874,23 @@
 
             $.each($('.spec-controls'), function(index, value) {
 
+                  console.log(value.id);
+                  var optionInput = $('#option_input').val();
                   if(value.id == 'dropdown')
                   {
-                      
+                      ++optionCount;
+                      options += '<option>' + optionInput + '</option>';
+                      $('#optdropdown').html(options);
+                      return;
                   }
                   if(value.id == 'options')
                   {
-                      
+                      ++optionCount;
+                      options += '<div class="radio">';
+                      options += '<label><input type="radio" id="optradio_' + optionCount + '" name="optradio_' + optionCount + '">' + optionInput + '</label>';
+                      options += '</div>';
+                      $('#options').html(options);
+                      return;
                   }
             });
         });

@@ -148,6 +148,17 @@ class Product extends Model
         return  ($this->marketProduct() && $this->marketProduct()->category) ? $this->marketProduct()->category->name : 'Uncategorized';
     }
 
+    public function marketPrice()
+    {
+        return  ($this->marketProduct()) ? $this->marketProduct()->price : 0.0;
+    }
+
+    public function marketManufacturer()
+    {
+        return  ($this->marketProduct()) ? $this->marketProduct()->manufacturer_name : 'Unknown';
+    }
+
+
 	public function sendApprovals()
 	{
 		return $this->hasMany('Inzaana\SendApproval');

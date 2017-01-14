@@ -195,6 +195,14 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
+        // $specs = json_decode($product->special_specs);
+        // // Product::where('special_specs->camera->values', 10)->get()
+        // foreach ($specs as $key => $value) {
+        //     # code...
+        //       return $value['storage'];
+        // }
+        // return $specs;
+
         return redirect()->route('user::products')->withProduct($product)->withProductVideoUrl($product->videoEmbedUrl()['url']);
     }
 
