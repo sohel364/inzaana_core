@@ -8,6 +8,10 @@ function onUrlPaste(event) {
         $(this).next().find("strong").html("Please check your url.");
         return;
     }
+
+    var url = $('#embed_video_url').val();
+
+    $('.form-group iframe').attr('src', url);
     
     $('.embed_video_form_group').removeClass("hidden");
 
