@@ -269,18 +269,18 @@
                           </div>
                         </div>
 
-                        @if(isset($product))
                         <div class="form-group">
                           <label for="status" class="col-sm-3 control-label">Status:</label>
                           <div class="col-sm-2">
-                              <select name="status" id="status" class="form-control select2" style="width: 100%;"{{ isset($product) ? '' : ' hidden' }}>
-                                @foreach(Inzaana\Product::STATUS_FLOWS as $status)
-                                    <option {{ $status == $product->status ? ' selected' : '' }}> {{ $status }} </option>                                    
-                                @endforeach
+                              <select name="status" id="status" class="form-control select2{{ isset($product) ? '' : ' hidden' }}" style="width: 100%;">
+                                @if(isset($product))
+                                    @foreach(Inzaana\Product::STATUS_FLOWS as $status)
+                                        <option {{ $status == $product->status ? ' selected' : '' }}> {{ $status }} </option>                                    
+                                    @endforeach
+                                @endif
                               </select>             
                           </div>
                         </div>
-                        @endif
                         <!--<div class="form-group">
                             <label class="col-xs-3 control-label">Created Date:</label>
                             <div class="col-sm-2 date">
@@ -412,7 +412,7 @@
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label"></label>
                           <div class="checkbox col-sm-8">
-                            <label><input id="has_embed_video" name="has_embed_video" type="checkbox" value="{{ isset($product) && !$product->hasEmbedVideo() ? 'checked' : '' }}">Or Embed a Video.</label>
+                            <label><input id="has_embed_video" name="has_embed_video" type="checkbox" value="{{ isset($product) && !$product->hasEmbedVideo() ? 'checked' : '' }}"{{ isset($product) && !$product->hasEmbedVideo() ? ' checked' : '' }}>Or Embed a Video.</label>
                           </div>
                         </div>
 
@@ -557,11 +557,39 @@
                             </tr>
                             </thead>
                             <tbody>
+                            @if(isset($product))
+
+                                  @foreach($product->special_specs as $key => $properties)
+                                  
+                                      <tr>
+                                      
+                                      <td>{{ $key }}<input name="title_1" type="text" value="{{ $key }}" hidden></td>
+
+                                      @foreach($properties as $name => $property)
+
+                                          
+                                          @if($name == 'view_type' )
+                                            
+                                            <td>{{ $property }}<input name="option_1" type="text" value="{{ $property }}" hidden></td>
+
+                                          @else
+
+                                            <td>{{ $property }}<input name="values_1" type="text" value="{{ $property }}" hidden></td>
+
+                                          @endif
+
+                                      @endforeach
+
+                                      </tr>
+
+                                  @endforeach
+                            @else
                             <tr>
                                 <td>---- <input name="title_1" type="text" value="" hidden></td>
                                 <td>---- <input name="option_1" type="text" value="" hidden></td>
                                 <td>---- <input name="values_1" type="text" value="" hidden></td>
                             </tr>
+                            @endif
                             </tbody>
                         </table>
                     </div>
@@ -575,7 +603,7 @@
                             <label for="" class="col-sm-3 control-label"></label>
                             <div class="col-sm-3" >
                                 <div class="checkbox">
-                                  <label><input id="is_public" name="is_public" type="checkbox" value="{{ (isset($product) && $product->is_public) ? 'checked' : '' }}">Make this product public.</label>
+                                  <label><input id="is_public" name="is_public" type="checkbox" value="{{ (isset($product) && $product->is_public) ? 'checked' : '' }}"{{ (isset($product) && $product->is_public) ? ' checked' : '' }}>Make this product public.</label>
                                 </div>
                           </div>
                         </div>
@@ -800,10 +828,16 @@
 
               console.log($('#product-create-form').attr("action"));
               $('#product-create-form').attr("action", "{{ route('user::products.create') }}");
-              $('#btn-reset-product-form').click();
-              $("select[id='status']").addClass("hidden");
-              console.log($("select[id='status']").is(":hidden"));
               console.log('Changed action to:' + $('#product-create-form').attr("action"));
+
+              var defaultSetter = function(index, input) {
+
+                    $(this).val("");
+              };
+              $('#product-create-form').find("select").each(defaultSetter);
+              $('#product-create-form').find("input").each(defaultSetter);
+              $("select#status").addClass("hidden");
+              console.log($("select#status").is(":hidden"));
         });
 
         $('#embed_video_url').focusout(onUrlPaste);
@@ -821,6 +855,8 @@
         $('#input').prop("hidden", "");
         $('.add-option').prop("hidden", "hidden");
         $( "input[type='button']" ).bind( "click", specResetOnly );
+
+        $('#control_type').val("spinner");
 
         $('#control_type').change( function(event) {
 
@@ -882,6 +918,10 @@
                                   return this.value;
                               }).get().join(",");
             }
+            if(selectedControlType == 'spinner')
+            {
+                specValues = $('#optspinner_min').val() + ' ~ ' + $('#optspinner_max').val();
+            }
 
             specs += '<tr>';
             specs += '<td>' + $('#spec_title').val() + ' <input name="title_' + spec_count + '" type="text" value="' + $('#spec_title').val() + '" hidden></td>';
@@ -897,6 +937,7 @@
 
             $('#option_input').val("");
             $('#spec_title').val("");
+            $('#single_spec').val("");
 
             // IMPORTANT to reset options entered last time
             options = '';

@@ -31,15 +31,19 @@ class Product extends Model
     const VIEW_TYPES = [ 
         'group' => [
             'dropdown' => 'Dropdown',
-            'checkboxes' => 'Checkboxes',
+            // 'checkboxes' => 'Checkboxes',
             'options' => 'Radio Controllers',
             'spinner' => 'Spinners'
         ],
         'single' => [
-            'selectbox' => 'Selectbox',
+            // 'selectbox' => 'Selectbox',
             'label' => 'Label',
             'input' => 'Input Box'
         ]
+    ];
+    
+    protected $casts = [
+        'special_specs' => 'json'
     ];
 
     const MAX_AVAILABLE_QUANTITY = 15;

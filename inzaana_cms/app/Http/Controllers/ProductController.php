@@ -205,14 +205,6 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        // $specs = json_decode($product->special_specs);
-        // // Product::where('special_specs->camera->values', 10)->get()
-        // foreach ($specs as $key => $value) {
-        //     # code...
-        //       return $value['storage'];
-        // }
-        // return $specs;
-
         return redirect()->route('user::products')->withProduct($product)->withEmbedUrl($product->videoEmbedUrl()['url']);
     }
 
@@ -590,7 +582,8 @@ class ProductController extends Controller
         catch(\Exception $e)
         {
             session(['selected_tab' => self::PRODUCT_ENTRY_TABS[1]]);
-            return redirect()->back()->withErrors([ 'Something went wrong during bulk upload! ' . $e->getMessage()]);
+            Log::critical('[Inzaana][' . $e->getMessage() . ']');
+            return redirect()->back()->withErrors([ 'Something went wrong during bulk upload! We already know the reason. Please contact your administrator.']);
         }
     }
 
