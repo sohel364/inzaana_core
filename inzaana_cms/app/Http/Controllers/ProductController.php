@@ -92,6 +92,7 @@ class ProductController extends Controller
                 'upload_image_4' => $image_file_rule,
                 'upload_video'   => ProductMedia::getMediaRule('VIDEO'),
                 // 'embed_video_url' => 'required_unless:has_embed_video,checked|url',
+                'embed_video_url' => 'url',
             ]
         );
 
