@@ -100,7 +100,7 @@ class Product extends Model
             }
         }
         // $hasEmbed = $data['has_embed_video'];
-        if($data['embed_url'])
+        if(collect($data)->has('embed_url') && $data['embed_url'])
         {   
             $productMedia = $this->hasEmbedVideo() ? $this->videoEmbedUrl()['media'] : new ProductMedia();
             $productMedia->is_embed = true;

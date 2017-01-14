@@ -575,7 +575,7 @@
                             <label for="" class="col-sm-3 control-label"></label>
                             <div class="col-sm-3" >
                                 <div class="checkbox">
-                                  <label><input id="is_public" name="is_public" type="checkbox" value="checked">Make this product public.</label>
+                                  <label><input id="is_public" name="is_public" type="checkbox" value="{{ (isset($product) && $product->is_public) ? 'checked' : '' }}">Make this product public.</label>
                                 </div>
                           </div>
                         </div>
