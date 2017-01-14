@@ -1,27 +1,29 @@
 
 function onUrlPaste(event) {
     // 3. Set the click event or instant to do the validation
-    if (!validateURL($(this).val()))
-    {
-        $('.embed_video_form_group').addClass("hidden");
-        console.log($('.embed_video_form_group').is(":hidden"));
-        $(this).next().find("strong").html("Please check your url.");
-        return;
-    }
+    // if (!validateURL($(this).val()))
+    // {
+    //     $('.embed_video_form_group').addClass("hidden");
+    //     console.log($('.embed_video_form_group').is(":hidden"));
+    //     $(this).next().find("strong").html("Please check your url.");
+    //     return;
+    // }
 
     var url = $('#embed_video_url').val();
 
-    $('.form-group iframe').attr('src', url);
-    
-    $('.embed_video_form_group').removeClass("hidden");
+    if(url.length == 0)
+        return;
+
+    $('.form-group #embed_iframe').html(url);    
 
     if( $('#has_embed_video').is(":checked"))
     {
         $(this).next().removeClass("hidden");
+        $('.embed_video_form_group').removeClass("hidden");
     }
     else
     {
-        $('#has_embed_video').prop("checked", "checked");
+        $('.embed_video_form_group').addClass("hidden");
         $(this).next().addClass("hidden");
     }
     console.log($('.embed_video_form_group').is(":hidden"));
@@ -38,4 +40,4 @@ function validateURL(url) {
         return false;
     }
 }
-//https://www.youtube.com/watch?v=LbGyCedMtbY
+//<iframe width="560" height="315" src="https://www.youtube.com/embed/I_va5PTYGzM" frameborder="0" allowfullscreen></iframe>

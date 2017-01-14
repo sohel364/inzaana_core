@@ -69,21 +69,16 @@ class ProductController extends Controller
                                              ->withTab($tab);
     }
 
-    /**
-     * Show the form for creating a new product. post method
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(ProductRequest $request)
+    private function validateProduct(ProductRequest $request)
     {
         $image_file_rule = ProductMedia::getMediaRule('IMAGE');
         // dd($image_file_rule);
-        $validation = Validator::make(
+        return Validator::make(
             $request->all(),
             [
                 'store_name' => 'bail|required',
                 'category' => 'bail|required',
-                'title' => 'bail|required|unique:market_products|max:200',
+                'title' => 'bail|required|unique:products,title,NULL,id,deleted_at,NULL|max:200',
                 'price' => 'bail|required|numeric',
                 'manufacturer_name' => 'required|max:200',
                 'upload_image_1' => $image_file_rule,
@@ -92,9 +87,19 @@ class ProductController extends Controller
                 'upload_image_4' => $image_file_rule,
                 'upload_video'   => ProductMedia::getMediaRule('VIDEO'),
                 // 'embed_video_url' => 'required_unless:has_embed_video,checked|url',
-                'embed_video_url' => 'url',
+                // 'embed_video_url' => 'url',
             ]
         );
+    }
+
+    /**
+     * Show the form for creating a new product. post method
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create(ProductRequest $request)
+    {
+        $validation = $this->validateProduct($request);
 
         if ($validation->fails())
         {
@@ -151,7 +156,7 @@ class ProductController extends Controller
             'return_time_limit' => 1,
             'uploaded_files' => $uploadedFiles,
             'embed_url' => $request->input('embed_video_url'),
-            'has_embed_video' => $request->input('has_embed_video'),
+            'has_embed_video' => $request->input('has_embed_video') == 'checked' ? true : false,
         ]; 
 
         // dd($data);       
@@ -204,12 +209,103 @@ class ProductController extends Controller
         // }
         // return $specs;
 
-        return redirect()->route('user::products')->withProduct($product)->withProductVideoUrl($product->videoEmbedUrl()['url']);
+        return redirect()->route('user::products')->withProduct($product)->withEmbedUrl($product->videoEmbedUrl()['url']);
     }
 
     public function update(ProductRequest $request, Product $product)
     {
-        return response($product, 200);
+        $validation = $this->validateProduct($request);
+
+        if ($validation->fails())
+        {
+            return redirect()->back()->withErrors($validation->errors());
+        }
+        $uploadedFiles = [];
+        if($request->hasFile('upload_video'))
+            $uploadedFiles []= $request->file('upload_video');
+        for($i = 1; $i <= ProductMedia::MAX_ALLOWED_IMAGE; ++$i)
+        {
+            if($request->hasFile('upload_image_' . $i))
+                $uploadedFiles []= $request->file('upload_image_' . $i);
+        }
+        if (!collect($uploadedFiles)->isEmpty())
+        {
+            try
+            {
+                $uploadResponse = ProductMedia::upload($uploadedFiles);
+                $errors = $uploadResponse['errors'];
+                if(!collect($errors)->isEmpty())
+                {
+                    return redirect()->back()->withErrors(array_collapse($errors));
+                }
+                $uploadedFiles = $uploadResponse['server_files'];                
+            }
+            catch(\Exception $e)
+            {
+                Log::error($e->getMessage());
+                return redirect()->back()->withErrors([ 'Something went wrong during media upload! ' . $e->getMessage()]);
+            }
+        }
+
+        $specs = [];
+
+        for($specCount = 1; $specCount <= ($request->has('spec_count') ? $request->input('spec_count') : 1); ++$specCount)
+        {
+            $specs []= [ $request->input('title_' . $specCount) => [ 'values' => $request->input('values_' . $specCount), 'view_type' => $request->input('option_' . $specCount) ] ];
+        }
+
+        // dd($specs);
+
+        $store_name_as_url = $request->input('store_name');
+        $store = Store::whereNameAsUrl($store_name_as_url)->get()->first();
+        $data = [
+            'category_id' => $request->input('category'),
+            'store_id' => $store->id,
+            'manufacturer_name' => $request->input('manufacturer_name'),
+            'title' => $request->input('title'),
+            'price' => $request->input('price'),
+            'is_public' => ($request->input('is_public') == 'checked'),
+            'discount' => 0,
+            'spec' => $specs,
+            'available_quantity' => $request->input('available_quantity'),
+            'return_time_limit' => 1,
+            'uploaded_files' => $uploadedFiles,
+            'embed_url' => $request->input('embed_video_url'),
+            'has_embed_video' => $request->input('has_embed_video') == 'checked' ? true : false,
+        ];
+
+        // save product
+
+        $product->category_id = $data['category_id'];
+        $product->store_id = $data['store_id'];
+        $product->manufacturer_name = $data['manufacturer_name'];
+        $product->title = $data['title'];
+        $product->price = $data['price'];
+        $product->is_public = $data['is_public'];
+        $product->spec = $data['spec'];
+        $product->available_quantity = $data['available_quantity'];
+        $product->embed_url = $data['embed_url'];
+
+        try
+        {
+            // Media update        
+            if(!$product->saveMedias($data))
+            {
+                // You may revert all files by deleting and undoing stored media entry
+                // Right here
+                throw new \Exception("Some uploaded files did not store.");
+            } 
+
+            if(!$product->saveDiscountedPrice())
+            {
+                Log::info('[Inzaana][User:: ' . Auth::user() . '][error:: Product (' . $data['title'] . ') MRP not saved.]');
+            }
+        }
+        catch(\Exception $e)
+        {
+            Log::error('[Inzaana][Product update error: ' . $e->getMessage() . ' ]');
+            return redirect()->back()->withErrors([ 'Something went wrong during saving your product! We have already know the reason. Try again or please contact Inzaana admnistrator.' ]);
+        }
     }
 
     public function delete(Product $product)
@@ -411,16 +507,13 @@ class ProductController extends Controller
             return false;
         }
 
-        // Media entry
-        if(collect($data)->has('uploaded_files') && !collect($data['uploaded_files'])->isEmpty())
+        // Media entry        
+        if(!$product->saveMedias($data))
         {
-            if(!$product->saveMedias($data))
-            {
-                // You may revert all files by deleting and undoing stored media entry
-                // Right here
-                throw new \Exception("Some uploaded files did not store.");
-            }   
-        }
+            // You may revert all files by deleting and undoing stored media entry
+            // Right here
+            throw new \Exception("Some uploaded files did not store.");
+        } 
 
         if(!$product->saveDiscountedPrice())
         {

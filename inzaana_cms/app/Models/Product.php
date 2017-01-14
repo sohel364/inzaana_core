@@ -76,24 +76,33 @@ class Product extends Model
     public function saveMedias(array $data)
     {
         $success = true;
-        foreach($data['uploaded_files'] as $file)
-        {
-            $isVideo = ProductMedia::isMedia($file->getMimeType(), 'VIDEO');
-            $productMedia = new ProductMedia();
-            $productMedia->is_public = $data['is_public'];
-            $productMedia->url = $file->getRealPath();
-            $productMedia->media_type = $isVideo ? 'VIDEO' : 'IMAGE';
-            $productMedia->title = $file->getBasename();
-
-            if(!$this->medias()->save($productMedia))
+        if(collect($data)->has('uploaded_files') && !collect($data['uploaded_files'])->isEmpty())
+        {            
+            // removes all previous media if any
+            foreach($this->medias as $media)
             {
-                $success = false;
+                if(!$media->is_embed)
+                    $media->delete(); // call the ProductMedia delete()
+            }
+            foreach($data['uploaded_files'] as $file)
+            {
+                $isVideo = ProductMedia::isMedia($file->getMimeType(), 'VIDEO');
+                $productMedia = new ProductMedia();
+                $productMedia->is_public = $data['is_public'];
+                $productMedia->url = $file->getRealPath();
+                $productMedia->media_type = $isVideo ? 'VIDEO' : 'IMAGE';
+                $productMedia->title = $file->getBasename();
+
+                if(!$this->medias()->save($productMedia))
+                {
+                    $success = false;
+                }
             }
         }
-        $hasEmbed = $data['has_embed_video'] && ProductMedia::isValidURL($data['embed_url']);
-        if($hasEmbed)
-        {
-            $productMedia = new ProductMedia();
+        // $hasEmbed = $data['has_embed_video'];
+        if($data['embed_url'])
+        {   
+            $productMedia = $this->hasEmbedVideo() ? $this->videoEmbedUrl()['media'] : new ProductMedia();
             $productMedia->is_embed = true;
             $productMedia->is_public = $data['is_public'];
             $productMedia->url = $data['embed_url'];
@@ -118,11 +127,17 @@ class Product extends Model
         return [ 'is_default' => true, 'title' => (ProductMedia::IMAGES_PATH_PUBLIC . ProductMedia::DEFAUL_IMAGE) ];
     }
 
+    public function hasEmbedVideo()
+    {
+        return !$this->videoEmbedUrl()['is_default'];
+    }
+
     public function videoEmbedUrl()
     {
         $embedMedia = $this->medias->where('is_embed', true)->where('media_type', 'VIDEO')->first();
+        
         if($embedMedia)
-            return [ 'is_default' => false, 'url' => $embedMedia->url ];
+            return [ 'is_default' => false, 'url' => $embedMedia->url, 'media' => $embedMedia ];
         return [ 'is_default' => true, 'url' => '' ];
     }
 

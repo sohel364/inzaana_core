@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
 
-header('X-Frame-Options: https://www.youtube.com/watch?v=LbGyCedMtbY'); 
 <!--end of date picker css-->
 @endsection
 
@@ -413,23 +412,30 @@ header('X-Frame-Options: https://www.youtube.com/watch?v=LbGyCedMtbY');
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label"></label>
                           <div class="checkbox col-sm-8">
-                            <label><input id="has_embed_video" name="has_embed_video" type="checkbox" value="{{ isset($product_video_url) ? 'checked' : '' }}">Or Embed a Video.</label>
+                            <label><input id="has_embed_video" name="has_embed_video" type="checkbox" value="{{ isset($product) && !$product->hasEmbedVideo() ? 'checked' : '' }}">Or Embed a Video.</label>
                           </div>
                         </div>
 
-                        <div class="form-group{{ (isset($product) && isset($product_video_url)) ? '' : ' hidden' }} embed_video_form_group">
+                        <div class="form-group{{ (isset($product) && $product->hasEmbedVideo()) ? '' : ' hidden' }} embed_video_form_group">
                            <label for="" class="col-sm-3 control-label"></label>
                             <div class="col-sm-8">
                                 <div class="embed-responsive embed-responsive-4by3">
-                                <iframe class="embed-responsive-item" src="{{ isset($product_video_url) ? $product_video_url : 'https://www.youtube.com/embed/5ixc2E7W-ec' }}"></iframe>
-                            </div>
+                                  <div id="embed_iframe">
+                                    
+                                      {!! $product->videoEmbedUrl()['url'] !!}
+
+                                  </div>
+                                </div>
                             </div>
                         </div>
                         
                         <div class="form-group embed_video{{ $errors->has('embed_video_url') ? ' has-error' : '' }}">
                           <label for="embed_video" class="col-sm-3 control-label">Embed Video:</label>
                               <div class="col-sm-8">
-                                <input type="text" class="form-control" id="embed_video_url" name="embed_video_url" placeholder="<iframe> url </iframe>">
+                                <input type="text" class="form-control"
+                                       id="embed_video_url" name="embed_video_url" placeholder="<iframe> url </iframe>"
+                                       value="{{ isset($product) ? $product->videoEmbedUrl()['url'] : '' }}">
+                                       
                                 <span class="help-block{{ $errors->has('embed_video_url') ? '' : ' hidden' }}">
                                     <strong>{{ $errors->first('embed_video_url') }}</strong>
                                 </span>
@@ -937,26 +943,19 @@ header('X-Frame-Options: https://www.youtube.com/watch?v=LbGyCedMtbY');
         if($('.embed_video').is(':hidden'))
         {
             $( ".embed_video" ).hide( "fast", function() {});
-        }
-        if($('#has_embed_video').is(':checked'))
-        {
-            $( ".embed_video" ).show( 1000 );
-        }
-        else
-        {
-            $( ".embed_video" ).hide( "fast", function() {});
-        }
-        if($('#has_embed_video').is(':checked') && $( ".embed_video" ).hasClass( "has-error" ) )
-        {
-            $( ".embed_video" ).show( 1000 );
 
             if(!$('#has_embed_video').is(':checked'))
             {
                 $( "#has_embed_video" ).prop('checked', 'checked');
             }
         }
+        if($('#has_embed_video').is(':checked') || $( ".embed_video" ).hasClass( "has-error" ))
+        {
+            $( ".embed_video" ).show( 1000 );
+        }
         else
         {
+            $( ".embed_video" ).hide( "fast", function() {});
             $( ".embed_video" ).removeClass( "has-error" );
             $( ".embed_video" ).find("strong").html("");
         }
