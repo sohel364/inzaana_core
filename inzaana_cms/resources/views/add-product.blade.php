@@ -870,7 +870,7 @@
                                   return this.value;
                               }).get().join(",");
             }
-            
+
             specs += '<tr>';
             specs += '<td>' + $('#spec_title').val() + ' <input name="title_' + spec_count + '" type="text" value="' + $('#spec_title').val() + '" hidden></td>';
             specs += '<td>' +  $('#control_type').val() + ' <input name="option_' + spec_count + '" type="text" value="' +  $('#control_type').val() + '" hidden></td>';
@@ -882,6 +882,9 @@
             $('table.spec-table tbody').html(specs);
 
             $( "input[type='button']" ).bind( "click", specResetOnly );
+
+            $('#option_input').val("");
+            $('#spec_title').val("");
 
             // IMPORTANT to reset options entered last time
             options = '';
