@@ -267,11 +267,12 @@
                             @endif
                           </div>
                         </div>
+
                         @if(isset($product))
-                         <div class="form-group">
+                        <div class="form-group">
                           <label for="status" class="col-sm-3 control-label">Status:</label>
                           <div class="col-sm-2">
-                              <select name="status" id="status" class="form-control select2" style="width: 100%;">
+                              <select name="status" id="status" class="form-control select2" style="width: 100%;"{{ isset($product) ? '' : ' hidden' }}>
                                 @foreach(Inzaana\Product::STATUS_FLOWS as $status)
                                     <option {{ $status == $product->status ? ' selected' : '' }}> {{ $status }} </option>                                    
                                 @endforeach
@@ -414,11 +415,11 @@
                           </div>
                         </div>
 
-                        <div class="form-group{{ (isset($product) && isset($product_video_url)) ? '' : ' hidden' }}">
+                        <div class="form-group{{ (isset($product) && isset($product_video_url)) ? '' : ' hidden' }} embed_video_form_group">
                            <label for="" class="col-sm-3 control-label"></label>
                             <div class="col-sm-8">
                                 <div class="embed-responsive embed-responsive-4by3">
-                                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/5ixc2E7W-ec"></iframe>
+                                <iframe class="embed-responsive-item" src="{{ isset($product_video_url) ? $product_video_url : 'https://www.youtube.com/embed/5ixc2E7W-ec' }}"></iframe>
                             </div>
                             </div>
                         </div>
@@ -427,11 +428,9 @@
                           <label for="embed_video" class="col-sm-3 control-label">Embed Video:</label>
                               <div class="col-sm-8">
                                 <input type="text" class="form-control" id="embed_video_url" name="embed_video_url" placeholder="<iframe> url </iframe>">
-                                @if ($errors->has('embed_video_url'))
-                                      <span class="help-block">
-                                          <strong>{{ $errors->first('embed_video_url') }}</strong>
-                                      </span>
-                                @endif
+                                <span class="help-block{{ $errors->has('embed_video_url') ? '' : ' hidden' }}">
+                                    <strong>{{ $errors->first('embed_video_url') }}</strong>
+                                </span>
                               </div>
                         </div>
                     </div>
@@ -453,6 +452,7 @@
                               <label for="spec_title" class="col-sm-3 control-label">Spec Title:</label>
                               <div class="col-sm-3">
                                 <input type="text" class="form-control" id="spec_title" name="spec_title" placeholder="">
+                                <input type="button" hidden>
                                       <!--<span class="help-block">
                                           <strong></strong>
                                       </span>-->
@@ -471,6 +471,7 @@
                                 <option value="{{ $id }}">{{ $control }}</option>
                               @endforeach
                             </select>
+                            <input type="button" hidden>
                           </div>
                         </div>
                         <div class="form-group">
@@ -479,6 +480,7 @@
 
                           <div id="input" class="col-sm-3 spec-controls" hidden="">
                             <input type="text" class="form-control" id="single_spec" name="single_spec" placeholder="">
+                            <input type="button" hidden>
                           </div>
                           
                           <div id="options" class="col-sm-3 spec-controls" hidden="">
@@ -531,7 +533,7 @@
                         <div class="form-group">
                           <label  class="col-sm-3 control-label"></label>
                           <div class="col-sm-3">
-                            <button id="apply_spec" name="apply_spec" class="btn btn-default btn-flat">Apply</button>
+                            <button id="apply_spec" name="apply_spec" class="btn btn-default btn-flat">Apply</button>                            
                           </div>
                         </div>
                     </div>
@@ -549,9 +551,9 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <td>Color <input name="title_1" type="text" value="" hidden></td>
-                                <td>Select box <input name="option_1" type="text" value="" hidden></td>
-                                <td>Red, Color <input name="values_1" type="text" value="" hidden></td>
+                                <td>---- <input name="title_1" type="text" value="" hidden></td>
+                                <td>---- <input name="option_1" type="text" value="" hidden></td>
+                                <td>---- <input name="values_1" type="text" value="" hidden></td>
                             </tr>
                             </tbody>
                         </table>
@@ -577,6 +579,7 @@
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
                   <button type="submit" class="btn btn-primary btn-flat">Save</button>
+                  <input id="btn-reset-product-form" type="reset" value="Reset" hidden>
                 </div>
 
               </form>
@@ -757,8 +760,9 @@
 @endsection
 
 @section('footer-scripts')
-  
+
   <script src="{{ asset('data-requests/element-data-manager-1.1.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('form-validation/add-product-validation.js') }}" type="text/javascript"></script>
   
 <!-- <script src="{{ asset('data-requests/products-data-provider.js') }}" type="text/javascript"></script>
   <script src="{{ asset('js/product-search-events.js') }}" type="text/javascript"></script>
@@ -783,10 +787,33 @@
 
   <script type="text/javascript">
 
+    function productFormEvents()
+    {
+        $('#product-form-open-button').click(function(){
+
+              console.log($('#product-create-form').attr("action"));
+              $('#product-create-form').attr("action", "{{ route('user::products.create') }}");
+              $('#btn-reset-product-form').click();
+              $("select[id='status']").addClass("hidden");
+              console.log($("select[id='status']").is(":hidden"));
+              console.log('Changed action to:' + $('#product-create-form').attr("action"));
+        });
+
+        $('#embed_video_url').focusout(onUrlPaste);
+    }
+
+    function specResetOnly() {
+
+        $(this.previousSibling).val(function() {
+            return this.defaultValue;
+        });
+    }
+
     function specControlEvents()
     {
         $('#input').prop("hidden", "");
         $('.add-option').prop("hidden", "hidden");
+        $( "input[type='button']" ).bind( "click", specResetOnly );
 
         $('#control_type').change( function(event) {
 
@@ -837,9 +864,7 @@
 
             $('table.spec-table tbody').html(specs);
 
-            $('#single_spec').reset();
-            $('#control_type').reset();
-            $('#single_spec').reset();
+            $( "input[type='button']" ).bind( "click", specResetOnly );
         });
 
         $('#add-option-btn').click(function(e) {
@@ -869,6 +894,7 @@
 
         spinnerEvents();
         specControlEvents();
+        productFormEvents();
     });
 
     function onChangeEmbedVideoCheck() {
@@ -896,92 +922,94 @@
     }
   </script>
 
-    <script>
-                
-      + function($) {
-            'use strict';
+  <script>
+              
+    // + function($) {
+    //       'use strict';
 
-            // UPLOAD CLASS DEFINITION
-            // ======================
+    //       // UPLOAD CLASS DEFINITION
+    //       // ======================
 
-            var dropZone = document.getElementById('drop-zone');
-            var uploadForm = document.getElementById('js-upload-form');
+    //       var dropZone = document.getElementById('drop-zone');
+    //       var uploadForm = document.getElementById('js-upload-form');
 
-            var startUpload = function(files) {
-                console.log(files)
-                // var fileView = '<ul>';
-                // $.each(files, function(index, item){
-                //     fileView += '<li>' + item.name + '</li>';
-                // });
-                // fileView += '<ul>';
-                // $('#drop-zone').html(fileView);
-            }
-
-
-            // uploadForm.addEventListener('submit', function(e) {
-            //     var uploadFiles = document.getElementById('csv').files;
-            //     e.preventDefault()
+    //       var startUpload = function(files) {
+    //           console.log(files)
+    //           // var fileView = '<ul>';
+    //           // $.each(files, function(index, item){
+    //           //     fileView += '<li>' + item.name + '</li>';
+    //           // });
+    //           // fileView += '<ul>';
+    //           // $('#drop-zone').html(fileView);
+    //       }
 
 
-            //     startUpload(uploadFiles)
-            // });
-
-            dropZone.ondrop = function(e) {
-                e.preventDefault();
-                this.className = 'upload-drop-zone';
-
-                startUpload(e.dataTransfer.files)
-            }
-
-            dropZone.ondragover = function() {
-                this.className = 'upload-drop-zone drop';
-                return false;
-            }
-
-            dropZone.ondragleave = function() {
-                this.className = 'upload-drop-zone';
-                return false;
-            }
+    //       // uploadForm.addEventListener('submit', function(e) {
+    //       //     var uploadFiles = document.getElementById('csv').files;
+    //       //     e.preventDefault()
 
 
-        }(jQuery);
-    </script>
-    <script>
-    $(document).ready(function() {
-        $('#dateRangePicker').datepicker({
-              format: 'mm/dd/yyyy',
-              startDate: '01/01/2010',
-              endDate: '12/30/2020'
-          })
-          .on('changeDate', function(e) {
-              // Revalidate the date field
-              $('#dateRangeForm').formValidation('revalidateField', 'date');
-          });
+    //       //     startUpload(uploadFiles)
+    //       // });
 
-          $('#dateRangeForm').formValidation({
-              framework: 'bootstrap',
-              icon: {
-                  valid: 'glyphicon glyphicon-ok',
-                  invalid: 'glyphicon glyphicon-remove',
-                  validating: 'glyphicon glyphicon-refresh'
-              },
-              fields: {
-                  date: {
-                      validators: {
-                          notEmpty: {
-                              message: 'The date is required'
-                          },
-                          date: {
-                              format: 'MM/DD/YYYY',
-                              min: '01/01/2010',
-                              max: '12/30/2020',
-                              message: 'The date is not a valid'
-                          }
-                      }
-                  }
-              }
-          });
-    });
+    //       dropZone.ondrop = function(e) {
+    //           e.preventDefault();
+    //           this.className = 'upload-drop-zone';
+
+    //           startUpload(e.dataTransfer.files)
+    //       }
+
+    //       dropZone.ondragover = function() {
+    //           this.className = 'upload-drop-zone drop';
+    //           return false;
+    //       }
+
+    //       dropZone.ondragleave = function() {
+    //           this.className = 'upload-drop-zone';
+    //           return false;
+    //       }
+
+
+    //   }(jQuery);
+
+  </script>
+
+<script>
+    // $(document).ready(function() {
+    //     $('#dateRangePicker').datepicker({
+    //           format: 'mm/dd/yyyy',
+    //           startDate: '01/01/2010',
+    //           endDate: '12/30/2020'
+    //       })
+    //       .on('changeDate', function(e) {
+    //           // Revalidate the date field
+    //           $('#dateRangeForm').formValidation('revalidateField', 'date');
+    //       });
+
+    //       $('#dateRangeForm').formValidation({
+    //           framework: 'bootstrap',
+    //           icon: {
+    //               valid: 'glyphicon glyphicon-ok',
+    //               invalid: 'glyphicon glyphicon-remove',
+    //               validating: 'glyphicon glyphicon-refresh'
+    //           },
+    //           fields: {
+    //               date: {
+    //                   validators: {
+    //                       notEmpty: {
+    //                           message: 'The date is required'
+    //                       },
+    //                       date: {
+    //                           format: 'MM/DD/YYYY',
+    //                           min: '01/01/2010',
+    //                           max: '12/30/2020',
+    //                           message: 'The date is not a valid'
+    //                       }
+    //                   }
+    //               }
+    //           }
+    //       });
+    // });
 </script>
 
 <script> /*for spinner*/

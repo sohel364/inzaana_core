@@ -94,6 +94,7 @@ class Product extends Model
         if($hasEmbed)
         {
             $productMedia = new ProductMedia();
+            $productMedia->is_embed = true;
             $productMedia->is_public = $data['is_public'];
             $productMedia->url = $data['embed_url'];
             $productMedia->media_type = 'VIDEO';
@@ -115,6 +116,14 @@ class Product extends Model
                 return [ 'is_default' => false, 'title' => $media->title ];
         }
         return [ 'is_default' => true, 'title' => (ProductMedia::IMAGES_PATH_PUBLIC . ProductMedia::DEFAUL_IMAGE) ];
+    }
+
+    public function videoEmbedUrl()
+    {
+        $embedMedia = $this->medias->where('is_embed', true)->where('media_type', 'VIDEO')->first();
+        if($embedMedia)
+            return [ 'is_default' => false, 'url' => $embedMedia->url ];
+        return [ 'is_default' => true, 'url' => '' ];
     }
 
     public function thumbnail()

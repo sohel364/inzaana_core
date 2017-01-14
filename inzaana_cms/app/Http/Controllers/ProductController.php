@@ -195,8 +195,7 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        //edit the product
-        return redirect()->route('user::products')->withProduct($product);
+        return redirect()->route('user::products')->withProduct($product)->withProductVideoUrl($product->videoEmbedUrl()['url']);
     }
 
     public function update(ProductRequest $request, Product $product)
