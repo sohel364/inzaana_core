@@ -853,10 +853,23 @@
             ;
             $('#spec_count').val(++spec_count);
 
+            var specValues = optionCount > 0 ? '' : $('#single_spec').val();
+
+            $('select#optdropdown option').each(function(index, option) {
+
+                  specValues += $(option).val() + ', ';  
+            });
+            for(var charIndex = specValues.length - 1, charCount = 0; charCount < 2; --charIndex)
+            {
+                specValues[charIndex] = '';
+            }
+            specValues = specValues.replace('/^[a-z].*[,\s]{2}$', '');
+            console.log(specValues);
+
             specs += '<tr>';
             specs += '<td>' + $('#spec_title').val() + ' <input name="title_' + spec_count + '" type="text" value="' + $('#spec_title').val() + '" hidden></td>';
             specs += '<td>' +  $('#control_type').val() + ' <input name="option_' + spec_count + '" type="text" value="' +  $('#control_type').val() + '" hidden></td>';
-            specs += '<td>' + $('#single_spec').val() + ' <input name="values_' + spec_count + '" type="text" value="' + $('#single_spec').val() + '" hidden></td>';
+            specs += '<td>' + $('#single_spec').val() + ' <input name="values_' + spec_count + '" type="text" value="' + specValues + '" hidden></td>';
             specs += '</tr>';
 
             $('table.spec-table tbody').html(specs);
@@ -872,27 +885,26 @@
 
             e.preventDefault();
 
-            $.each($('.spec-controls'), function(index, value) {
+            var selectedControlType = $('#control_type').val();
+            console.log(selectedControlType);
 
-                  console.log(value.id);
-                  var optionInput = $('#option_input').val();
-                  if(value.id == 'dropdown')
-                  {
-                      ++optionCount;
-                      options += '<option>' + optionInput + '</option>';
-                      $('#optdropdown').html(options);
-                      return;
-                  }
-                  if(value.id == 'options')
-                  {
-                      ++optionCount;
-                      options += '<div class="radio">';
-                      options += '<label><input type="radio" id="optradio_' + optionCount + '" name="optradio_' + optionCount + '">' + optionInput + '</label>';
-                      options += '</div>';
-                      $('#options').html(options);
-                      return;
-                  }
-            });
+            var optionInput = $('#option_input').val();
+            if(selectedControlType == 'dropdown')
+            {
+                ++optionCount;
+                options += '<option>' + optionInput + '</option>';
+                $('#optdropdown').html(options);
+                return;
+            }
+            if(selectedControlType == 'options')
+            {
+                ++optionCount;
+                options += '<div class="radio">';
+                options += '<label><input type="radio" id="optradio_' + optionCount + '" name="optradio_' + optionCount + '">' + optionInput + '</label>';
+                options += '</div>';
+                $('#options').html(options);
+                return;
+            }
         });
     }
   

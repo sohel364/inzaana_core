@@ -83,9 +83,9 @@ class ProductController extends Controller
             [
                 'store_name' => 'bail|required',
                 'category' => 'bail|required',
-                'title' => 'bail|required|unique:market_products|alpha_dash|max:200',
+                'title' => 'bail|required|unique:market_products|max:200',
                 'price' => 'bail|required|numeric',
-                'manufacturer_name' => 'required|unique:market_products|alpha_dash|max:200',
+                'manufacturer_name' => 'required|max:200',
                 'upload_image_1' => $image_file_rule,
                 'upload_image_2' => $image_file_rule,
                 'upload_image_3' => $image_file_rule,
