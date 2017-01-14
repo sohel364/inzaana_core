@@ -422,7 +422,11 @@
                                 <div class="embed-responsive embed-responsive-4by3">
                                   <div id="embed_iframe">
                                     
+                                    @if(isset($product) && $product->hasEmbedVideo())
+                                      
                                       {!! $product->videoEmbedUrl()['url'] !!}
+
+                                    @endif
 
                                   </div>
                                 </div>
@@ -435,7 +439,7 @@
                                 <input type="text" class="form-control"
                                        id="embed_video_url" name="embed_video_url" placeholder="<iframe> url </iframe>"
                                        value="{{ isset($product) ? $product->videoEmbedUrl()['url'] : '' }}">
-                                       
+
                                 <span class="help-block{{ $errors->has('embed_video_url') ? '' : ' hidden' }}">
                                     <strong>{{ $errors->first('embed_video_url') }}</strong>
                                 </span>

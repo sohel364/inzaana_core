@@ -76,7 +76,7 @@ class Handler extends ExceptionHandler
         }
 
         if ($e instanceof TokenMismatchException) {
-            $errorMessage = 'Something went wrong during form submission! Please try again';
+            $errorMessage = 'Something went wrong during your request! Please try again';
             Log::critical('[Inzaana][' . $e->getMessage() . "] validation error.");
             flash()->error($errorMessage);
             return redirect('/login');

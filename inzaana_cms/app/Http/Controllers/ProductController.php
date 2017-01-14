@@ -69,16 +69,20 @@ class ProductController extends Controller
                                              ->withTab($tab);
     }
 
-    private function validateProduct(ProductRequest $request)
+    private function validateProduct(ProductRequest $request, Product $product = null)
     {
         $image_file_rule = ProductMedia::getMediaRule('IMAGE');
+
+        $title_rule = $product ? 'bail|required|unique:products,title,' . $product->id . ',id,deleted_at,NULL|max:200' : 'bail|required|unique:products,title,NULL,id,deleted_at,NULL|max:200';
+
+        // dd($title_rule);
         // dd($image_file_rule);
         return Validator::make(
             $request->all(),
             [
                 'store_name' => 'bail|required',
                 'category' => 'bail|required',
-                'title' => 'bail|required|unique:products,title,NULL,id,deleted_at,NULL|max:200',
+                'title' => $title_rule,
                 'price' => 'bail|required|numeric',
                 'manufacturer_name' => 'required|max:200',
                 'upload_image_1' => $image_file_rule,
@@ -95,7 +99,7 @@ class ProductController extends Controller
     /**
      * Show the form for creating a new product. post method
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\response
      */
     public function create(ProductRequest $request)
     {
@@ -214,7 +218,7 @@ class ProductController extends Controller
 
     public function update(ProductRequest $request, Product $product)
     {
-        $validation = $this->validateProduct($request);
+        $validation = $this->validateProduct($request, $product);
 
         if ($validation->fails())
         {
@@ -276,15 +280,18 @@ class ProductController extends Controller
 
         // save product
 
-        $product->category_id = $data['category_id'];
         $product->store_id = $data['store_id'];
-        $product->manufacturer_name = $data['manufacturer_name'];
+
+        $product->marketProduct()->category_id = $data['category_id'];
+        $product->marketProduct()->manufacturer_name = $data['manufacturer_name'];
+        $product->marketProduct()->price = $data['price'];
+        $product->marketProduct()->title = $data['title'];
+        $product->marketProduct()->save();
+
         $product->title = $data['title'];
-        $product->price = $data['price'];
         $product->is_public = $data['is_public'];
-        $product->spec = $data['spec'];
+        $product->special_specs = collect($data['spec'])->toJson();
         $product->available_quantity = $data['available_quantity'];
-        $product->embed_url = $data['embed_url'];
 
         try
         {
@@ -298,14 +305,17 @@ class ProductController extends Controller
 
             if(!$product->saveDiscountedPrice())
             {
-                Log::info('[Inzaana][User:: ' . Auth::user() . '][error:: Product (' . $data['title'] . ') MRP not saved.]');
+                Log::info('[Inzaana][User:: ' . Auth::user()->name . '][error:: Product (' . $data['title'] . ') MRP not saved.]');
             }
+
         }
         catch(\Exception $e)
         {
             Log::error('[Inzaana][Product update error: ' . $e->getMessage() . ' ]');
             return redirect()->back()->withErrors([ 'Something went wrong during saving your product! We have already know the reason. Try again or please contact Inzaana admnistrator.' ]);
         }
+        flash()->success('Your product is updated.');
+        return redirect()->route('user::products');        
     }
 
     public function delete(Product $product)

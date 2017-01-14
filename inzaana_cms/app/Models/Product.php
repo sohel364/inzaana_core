@@ -135,7 +135,7 @@ class Product extends Model
     public function videoEmbedUrl()
     {
         $embedMedia = $this->medias->where('is_embed', true)->where('media_type', 'VIDEO')->first();
-        
+
         if($embedMedia)
             return [ 'is_default' => false, 'url' => $embedMedia->url, 'media' => $embedMedia ];
         return [ 'is_default' => true, 'url' => '' ];
