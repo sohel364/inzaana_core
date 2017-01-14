@@ -855,21 +855,29 @@
 
             var specValues = optionCount > 0 ? '' : $('#single_spec').val();
 
-            $('select#optdropdown option').each(function(index, option) {
+            var selectedControlType = $('#control_type').val();
+            console.log(selectedControlType);
 
-                  specValues += $(option).val() + ', ';  
-            });
-            for(var charIndex = specValues.length - 1, charCount = 0; charCount < 2; --charIndex)
+            if(selectedControlType == 'dropdown')
             {
-                specValues[charIndex] = '';
+                specValues = $('select#optdropdown option').map( function() {
+                                  return this.value;
+                              }).get().join(",");
             }
-            console.log(specValues);
-
+            if(selectedControlType == 'options')
+            {
+                specValues = $('#options .radio').find("input").map( function() {
+                                  return this.value;
+                              }).get().join(",");
+            }
+            
             specs += '<tr>';
             specs += '<td>' + $('#spec_title').val() + ' <input name="title_' + spec_count + '" type="text" value="' + $('#spec_title').val() + '" hidden></td>';
             specs += '<td>' +  $('#control_type').val() + ' <input name="option_' + spec_count + '" type="text" value="' +  $('#control_type').val() + '" hidden></td>';
-            specs += '<td>' + $('#single_spec').val() + ' <input name="values_' + spec_count + '" type="text" value="' + specValues + '" hidden></td>';
+            specs += '<td>' + specValues + ' <input name="values_' + spec_count + '" type="text" value="' + specValues + '" hidden></td>';
             specs += '</tr>';
+
+            console.log(specValues);
 
             $('table.spec-table tbody').html(specs);
 
