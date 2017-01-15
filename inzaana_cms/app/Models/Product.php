@@ -83,13 +83,7 @@ class Product extends Model
     {
         $success = true;
         if(collect($data)->has('uploaded_files') && !collect($data['uploaded_files'])->isEmpty())
-        {            
-            // removes all previous media if any
-            foreach($this->medias as $media)
-            {
-                if(!$media->is_embed)
-                    $media->delete(); // call the ProductMedia delete()
-            }
+        {
             foreach($data['uploaded_files'] as $file)
             {
                 $isVideo = ProductMedia::isMedia($file->getMimeType(), 'VIDEO');
@@ -99,10 +93,7 @@ class Product extends Model
                 $productMedia->media_type = $isVideo ? 'VIDEO' : 'IMAGE';
                 $productMedia->title = $file->getBasename();
 
-                if(!$this->medias()->save($productMedia))
-                {
-                    $success = false;
-                }
+                $success = $this->medias()->save($productMedia);
             }
         }
         // $hasEmbed = $data['has_embed_video'];
@@ -115,10 +106,7 @@ class Product extends Model
             $productMedia->media_type = 'VIDEO';
             $productMedia->title = ProductMedia::uuid();
 
-            if(!$this->medias()->save($productMedia))
-            {
-                $success = false;
-            }
+            $success = $this->medias()->save($productMedia);
         }
         return $success;
     }

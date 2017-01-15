@@ -103,6 +103,7 @@ class ProductController extends Controller
      */
     public function create(ProductRequest $request)
     {
+        // dd($request);
         $validation = $this->validateProduct($request);
 
         if ($validation->fails())
@@ -209,7 +210,7 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {        
-        // return $product->images();
+        // return $product->images();   
         return redirect()->route('user::products')->withProduct($product)->withEmbedUrl($product->videoEmbedUrl()['url']);
     }
 
