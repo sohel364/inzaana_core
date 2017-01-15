@@ -865,7 +865,7 @@
             }
             if(selectedControlType == 'options')
             {
-                specValues = $("input[type='radio']:checked").map(function() {
+                specValues = $("input[type='radio']").map(function() {
                     var idVal = $(this).attr("id");
                     return $("label[for='"+idVal+"']").text();
                 }).get().join(",");
