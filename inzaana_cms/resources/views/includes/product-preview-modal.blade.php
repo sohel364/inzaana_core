@@ -24,7 +24,7 @@
         <h5>Product Info</h5>
         <p class="slidePara1">{!! $product->description or '<i>No description is found to this product</i>' !!}</p>
         <h5>Product Spec</h5>
-        <p class="slidePara1">@each('includes.product-delete-confirm-modal', [$product], 'product')</p>
+        <p class="slidePara1">@each('includes.product-special-specs', $product->specialSpecs(), 'properties', 'includes.product-specs-empty')</p>
       </div>
     </div>
       </div>
