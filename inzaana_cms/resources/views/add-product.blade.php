@@ -565,7 +565,7 @@
                             <tbody><!-- $product->specialSpecs() -->
                             @if(isset($product))
                                 
-                                @each('includes.product-special-specs', [], 'properties', 'includes.product-specs-empty')
+                                @each('includes.product-special-specs', $product->specialSpecs(), 'properties', 'includes.product-specs-empty')
 
                             @else
 
@@ -888,7 +888,7 @@
 
             // $('#spec_count').val($('table.spec-table tbody tr').length);
 
-            $( "input[type='button']" ).bind( "click", specResetOnly );
+            // $( "input[type='button']" ).bind( "click", specResetOnly );
 
             $('#option_input').val("");
             $('#spec_title').val("");
@@ -912,7 +912,6 @@
                 ++optionCount;
                 options += '<option>' + optionInput + '</option>';
                 $('#optdropdown').html(options);
-                return;
             }
             if(selectedControlType == 'options')
             {
@@ -921,8 +920,8 @@
                 options += '<label><input type="radio" id="optradio_' + optionCount + '" name="optradio_' + optionCount + '">' + optionInput + '</label>';
                 options += '</div>';
                 $('#options').html(options);
-                return;
             }
+            $('#option_input').val("");
         });
     }
   

@@ -32,7 +32,7 @@ class Product extends Model
         'group' => [
             'dropdown' => 'Dropdown',
             // 'checkboxes' => 'Checkboxes',
-            'options' => 'Radio Controllers',
+            // 'options' => 'Radio Controllers',
             'spinner' => 'Spinners'
         ],
         'single' => [
@@ -158,10 +158,9 @@ class Product extends Model
     {
         $specs = [];
         $id = 1;
-        foreach ($this->special_specs as $key => $value) {
-            $specs[$key] = $value;//collect($value)->merge([ 'id' => $id++ ])->toArray();
+        foreach (json_decode($this->special_specs) as $key => $value) {
+            $specs[$key] = collect($value)->merge([ 'id' => $id++ ])->toArray();
         }
-        // return $this->special_specs;
         return $specs;
     }
 

@@ -119,7 +119,7 @@ class ProductMedia extends Model
             {
                 foreach($mimes as $mime)
                 {
-                    if($mime == $mediaMime)
+                    if($mime == strtolower($mediaMime))
                         return true;
                 }   
             }
