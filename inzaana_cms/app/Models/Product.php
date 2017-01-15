@@ -164,6 +164,17 @@ class Product extends Model
         return $specs;
     }
 
+    public function images()
+    {
+        $images = $this->medias->where('is_embed', false)->where('media_type', 'IMAGE');
+        return $images;
+    }
+
+    public static function defaultImage()
+    {
+        return (ProductMedia::IMAGES_PATH_PUBLIC . ProductMedia::DEFAUL_IMAGE);
+    }
+
     public function marketProduct()
     {
         return MarketProduct::find($this->market_product_id);

@@ -372,28 +372,28 @@
                                 <div class="col-md-2">
                                   <div class="thumbnail">
                                     <a href="" target="_blank">
-                                      <img id="preview-image-1" src="{{ isset($product) ? $product->thumbnail() : 'http://lorempixel.com/400/200/sports/' }}">
+                                      <img id="preview-image-1" src="{{ isset($product) ? $product->thumbnail() : Inzaana\Product::defaultImage() }}">
                                     </a>
                                   </div>
                                 </div>
                                 <div class="col-md-2">
                                   <div class="thumbnail">
                                     <a href="" target="_blank">
-                                      <img id="preview-image-2" src="{{ isset($product) ? $product->thumbnail() : 'http://lorempixel.com/400/200/sports/' }}">
+                                      <img id="preview-image-2" src="{{ isset($product) ? $product->thumbnail() : Inzaana\Product::defaultImage() }}">
                                     </a>
                                   </div>
                                 </div>
                                 <div class="col-md-2">
                                   <div class="thumbnail">
                                     <a href="" target="_blank">
-                                      <img id="preview-image-3" src="{{ isset($product) ? $product->thumbnail() : 'http://lorempixel.com/400/200/sports/' }}">
+                                      <img id="preview-image-3" src="{{ isset($product) ? $product->thumbnail() : Inzaana\Product::defaultImage() }}">
                                     </a>
                                   </div>
                                 </div>
                                 <div class="col-md-2">
                                   <div class="thumbnail">
                                     <a href="" target="_blank">
-                                      <img id="preview-image-4" src="{{ isset($product) ? $product->thumbnail() : 'http://lorempixel.com/400/200/sports/' }}">
+                                      <img id="preview-image-4" src="{{ isset($product) ? $product->thumbnail() : Inzaana\Product::defaultImage() }}">
                                     </a>
                                   </div>
                                 </div>
@@ -456,9 +456,8 @@
                     <div class="box-body">
                         <div>
                             <textarea name="description" class="textarea" placeholder="Product Description"
-                                      style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
-                                {{ isset($product) ? $product->description : old('description') }}
-                            </textarea>
+                                      style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"
+                                      >{{ isset($product) ? $product->description : old('description') }}</textarea>
                         </div>
                     </div>
                 </div>

@@ -107,7 +107,7 @@ class ProductController extends Controller
 
         if ($validation->fails())
         {
-            return redirect()->back()->withErrors($validation->errors());
+            return redirect()->back()->withErrors($validation->errors())->withInput();
         }
         $uploadedFiles = [];
         if($request->hasFile('upload_video'))
@@ -208,8 +208,8 @@ class ProductController extends Controller
     }
 
     public function edit(Product $product)
-    {
-        // return $product->specialSpecs();
+    {        
+        // return $product->images();
         return redirect()->route('user::products')->withProduct($product)->withEmbedUrl($product->videoEmbedUrl()['url']);
     }
 
@@ -220,7 +220,7 @@ class ProductController extends Controller
 
         if ($validation->fails())
         {
-            return redirect()->back()->withErrors($validation->errors());
+            return redirect()->back()->withErrors($validation->errors())->withInput();
         }
         $uploadedFiles = [];
         if($request->hasFile('upload_video'))
@@ -293,13 +293,11 @@ class ProductController extends Controller
         $marketProduct->save();
 
         $product->title = $data['title'];
-        $product->description = $data['description'];
-        $product->product_type = $data['product_type'];
         $product->is_public = $data['is_public'];
         $product->special_specs = collect($data['spec'])->toJson();
         $product->available_quantity = $data['available_quantity'];
-        $product->description = $data['description'];
-        $product->type = $data['product_type'];
+        $product->description = collect($data)->has('description') ? $data['description'] : '';
+        $product->type = collect($data)->has('product_type') ? $data['product_type'] : '';
 
         try
         {
@@ -517,8 +515,8 @@ class ProductController extends Controller
         $product->special_specs = collect($data['spec'])->toJson();
         $product->available_quantity = $data['available_quantity'];
         $product->return_time_limit = $data['return_time_limit'];
-        $product->description = $data['description'];
-        $product->type = $data['product_type'];
+        $product->description = collect($data)->has('description') ? $data['description'] : '';
+        $product->type = collect($data)->has('product_type') ? $data['product_type'] : 'DOWNLOADABLE';
 
         if(!$product->save())
         {

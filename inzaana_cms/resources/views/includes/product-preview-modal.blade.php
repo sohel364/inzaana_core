@@ -22,7 +22,9 @@
           @include('includes.approval-label', [ 'status' => $product->status, 'labelText' => $product->getStatus() ])
         <hr>
         <h5>Product Info</h5>
-        <p class="slidePara1">I'm a product details. Quibusdam minim occaecat, eu fugiat lorem ea cupidatat. Do et enim deserunt nam duis imitarentur occaecat noster eiusmod. Ita iis tamen quorum aliqua e quamquam sunt mandaremus arbitror. Occaecat concursionibus ne doctrina, do hic anim labore noster.</p>
+        <p class="slidePara1">{!! $product->description or '<i>No description is found to this product</i>' !!}</p>
+        <h5>Product Spec</h5>
+        <p class="slidePara1">@each('includes.product-delete-confirm-modal', [$product], 'product')</p>
       </div>
     </div>
       </div>
