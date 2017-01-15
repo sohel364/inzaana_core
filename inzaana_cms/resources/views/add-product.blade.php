@@ -372,28 +372,28 @@
                                 <div class="col-md-2">
                                   <div class="thumbnail">
                                     <a href="" target="_blank">
-                                      <img id="preview-image-1" src="{{ isset($product) ? $product->thumbnail() : Inzaana\Product::defaultImage() }}">
+                                      <img id="preview-image-1" src="{{ isset($product) ? $product->previewImage(0) : Inzaana\Product::defaultImage() }}">
                                     </a>
                                   </div>
                                 </div>
                                 <div class="col-md-2">
                                   <div class="thumbnail">
                                     <a href="" target="_blank">
-                                      <img id="preview-image-2" src="{{ isset($product) ? $product->thumbnail() : Inzaana\Product::defaultImage() }}">
+                                      <img id="preview-image-2" src="{{ isset($product) ? $product->previewImage(1) : Inzaana\Product::defaultImage() }}">
                                     </a>
                                   </div>
                                 </div>
                                 <div class="col-md-2">
                                   <div class="thumbnail">
                                     <a href="" target="_blank">
-                                      <img id="preview-image-3" src="{{ isset($product) ? $product->thumbnail() : Inzaana\Product::defaultImage() }}">
+                                      <img id="preview-image-3" src="{{ isset($product) ? $product->previewImage(2) : Inzaana\Product::defaultImage() }}">
                                     </a>
                                   </div>
                                 </div>
                                 <div class="col-md-2">
                                   <div class="thumbnail">
                                     <a href="" target="_blank">
-                                      <img id="preview-image-4" src="{{ isset($product) ? $product->thumbnail() : Inzaana\Product::defaultImage() }}">
+                                      <img id="preview-image-4" src="{{ isset($product) ? $product->previewImage(3) : Inzaana\Product::defaultImage() }}">
                                     </a>
                                   </div>
                                 </div>
@@ -1086,13 +1086,24 @@
   var fileLimit = 5;
   var reader = new FileReader();
   reader.addEventListener("load", function() {
-     setBackgroundImage( $('#preview-image-' + (++totalMediaLoaded)) , reader.result);
+
+    var imgHTML = $('#preview-image-' + (++totalMediaLoaded));
+    var imageIndexToLoad = totalMediaLoaded;
+    while(imageIndexToLoad++)
+    {
+        if(imgHTML.attr("src").indexOf('default_product.jpg') > -1)
+        {
+            setBackgroundImage( imgHTML , reader.result);
+            break;
+        }
+        imgHTML = $('#preview-image-' + imageIndexToLoad);
+    }
   }, false);
 
   function setBackgroundImage(control, image_url) {
     // console.log("[DEBUG] Setting BG Image : " + control.attr("id") + " : " + image_url );
     // control.css("background-image", "url(" + image_url + ")");
-    control.attr("src", image_url);
+      control.attr("src", image_url);
     // console.log("[DEBUG] BG Image URL : " + control.css("background-image"));
     // console.log("[DEBUG] BG Image URL : " + control.attr("src"));
   }

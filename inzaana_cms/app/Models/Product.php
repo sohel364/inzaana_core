@@ -84,6 +84,7 @@ class Product extends Model
         $success = true;
         if(collect($data)->has('uploaded_files') && !collect($data['uploaded_files'])->isEmpty())
         {
+            $newImageCount = count($data['uploaded_files']);
             foreach($data['uploaded_files'] as $file)
             {
                 $isVideo = ProductMedia::isMedia($file->getMimeType(), 'VIDEO');
@@ -94,6 +95,12 @@ class Product extends Model
                 $productMedia->title = $file->getBasename();
 
                 $success = $this->medias()->save($productMedia);
+
+                $imagesExisting = $this->medias->where('is_embed', false)->where('media_type', 'IMAGE');
+                if($newImageCount-- > 0 && $imagesExisting->first())
+                {
+                    $imagesExisting->first()->delete();
+                }
             }
         }
         // $hasEmbed = $data['has_embed_video'];
@@ -155,7 +162,23 @@ class Product extends Model
     public function images()
     {
         $images = $this->medias->where('is_embed', false)->where('media_type', 'IMAGE');
+        while($images->count() < 4)
+        {
+            $image = new ProductMedia();
+            $image->is_public = true;
+            $image->url = $this->defaultImage();
+            $image->media_type = 'IMAGE';
+            $image->title = ProductMedia::uuid();
+            $image->is_embed = true; // THIS BOOLEAN IS SET TO CHECK IF IT'S A DEFAULT IMAGE OR NOT
+            $images->push($image);
+        }
         return $images;
+    }
+
+    public function previewImage($index)
+    {
+        $image = $this->images()[$index];
+        return $image->is_embed ? $image->url : route('user::products.medias.image', [ 'file_name' => $image->title ]);
     }
 
     public static function defaultImage()
