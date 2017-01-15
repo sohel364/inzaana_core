@@ -841,7 +841,8 @@
             }
         });
 
-        var specs = '';
+        var isEdit = $('div.is-edit').length > 0;
+        var specs = isEdit ? $('table.spec-table tbody').html() : '';
         var spec_count = 0;
         var options = '';
         var optionCount = 0;
@@ -850,7 +851,7 @@
 
             e.preventDefault();
 
-            $('#spec_count').val(++spec_count);
+            $('#spec_count').val($('table.spec-table tbody tr').length);
 
             var specValues = optionCount > 0 ? '' : $('#single_spec').val();
 
@@ -889,7 +890,8 @@
 
             $('table.spec-table tbody').html(specs);
 
-            // $('#spec_count').val($('table.spec-table tbody tr').length);
+            $('#spec_count').val($('table.spec-table tbody tr').length);
+            console.log('applied specs: ' + $('table.spec-table tbody tr').length);
 
             // $( "input[type='button']" ).bind( "click", specResetOnly );
 
