@@ -227,8 +227,9 @@
                           <label  class="col-sm-3 control-label">Product Type:</label>
                           <div class="col-sm-3">
                             <select name="product_type" class="form-control select2" multiple="multiple" data-placeholder="Select a Category" style="width: 100%;">
-                              <option>Physical Product</option>
-                              <option>Downloadable Product</option>
+                                @foreach(Inzaana\Product::EXISTANCE_TYPE as $key => $type)
+                                    <option value="{{ $key }}" {{ (isset($product) && $key == $product->type) ? ' selected' : '' }}> {{ $type }} </option>                                    
+                                @endforeach
                             </select>
                           </div>
                         </div>
@@ -454,7 +455,10 @@
                 <div class="block-of-block">
                     <div class="box-body">
                         <div>
-                            <textarea name="description" class="textarea" placeholder="Product Description" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                            <textarea name="description" class="textarea" placeholder="Product Description"
+                                      style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
+                                {{ isset($product) ? $product->description : old('description') }}
+                            </textarea>
                         </div>
                     </div>
                 </div>
@@ -561,7 +565,7 @@
                             <tbody><!-- $product->specialSpecs() -->
                             @if(isset($product))
                                 
-                                @each('includes.product-special-specs', $product->specialSpecs(), 'properties', 'includes.product-specs-empty')
+                                @each('includes.product-special-specs', [], 'properties', 'includes.product-specs-empty')
 
                             @else
 
@@ -862,7 +866,8 @@
             }
             if(selectedControlType == 'options')
             {
-                specValues = $('#options .radio').find("input").map( function() {
+                console.log($('#options .radio input'));
+                specValues = $('#options .radio input').map( function() {
                                   return this.value;
                               }).get().join(",");
             }

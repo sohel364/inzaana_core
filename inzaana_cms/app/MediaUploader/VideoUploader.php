@@ -42,7 +42,7 @@ class VideoUploader extends MediaUploader
         }
         if(!$this->isSupportedExtension())
         {
-            $this->__errors []= MediaUploader::MEDIA_UPLOAD_ERRORS['ext_not_supported'];
+            $this->__errors []= MediaUploader::MEDIA_UPLOAD_ERRORS['ext_not_supported'] . '(Supported: ' . ProductMedia::tidyMimes($this->__mediaType) . ')';
         }
         if($this->__uploadedFile->getSize() >= UploadedFile::getMaxFilesize())
         {

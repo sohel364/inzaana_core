@@ -41,6 +41,8 @@ class Product extends Model
             'input' => 'Input Box'
         ]
     ];
+
+    const EXISTANCE_TYPE = [ 'PHYSICAL' => 'Physical Product', 'DOWNLOADABLE' => 'Downloadable Product' ];
     
     protected $casts = [
         'special_specs' => 'json'
@@ -157,8 +159,9 @@ class Product extends Model
         $specs = [];
         $id = 1;
         foreach ($this->special_specs as $key => $value) {
-            $specs[$key] = collect($value)->merge([ 'id' => $id++ ])->toArray();
+            $specs[$key] = $value;//collect($value)->merge([ 'id' => $id++ ])->toArray();
         }
+        // return $this->special_specs;
         return $specs;
     }
 

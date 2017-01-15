@@ -133,10 +133,10 @@ class CategoryController extends Controller
         $data['status'] = $category->getStatus();
         $data['item_name'] = $category->name;
         $data['created_at'] = $category->created_at;
-        foreach ($category->products->unique('user_id') as $product)
-        {
-            $mailer->sendEmailForApprovalNotificationTo($product->user, $data);
-        }
+        // foreach ($category->products->unique('user_id') as $product)
+        // {
+        //     $mailer->sendEmailForApprovalNotificationTo($product->user, $data);
+        // }
         return redirect()->back();
     }
 }
