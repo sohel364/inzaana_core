@@ -18,7 +18,7 @@ class ProductMedia extends Model
 {
 	const MEDIA_TYPES = ['UNKNOWN', 'IMAGE', 'VIDEO', 'AUDIO'];
     const SUPPORTED_MEDIA_MIMES = [
-        'IMAGE' => [ 'png', 'jpeg', 'gif' ],
+        'IMAGE' => [ 'png', 'jpeg','jpg', 'gif' ],
         'VIDEO' => [ 'video/avi', 'video/mpeg', 'video/quicktime', 'video/mp4' ],
         'AUDIO' => []
     ];

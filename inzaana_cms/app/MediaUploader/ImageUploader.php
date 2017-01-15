@@ -91,7 +91,7 @@ class ImageUploader extends MediaUploader
     {
         foreach(ProductMedia::SUPPORTED_MEDIA_MIMES[$this->__mediaType] as $ext)
         {
-            if($ext == $this->__uploadedFile->getClientOriginalExtension())
+            if($ext == strtolower($this->__uploadedFile->getClientOriginalExtension()))
                 return true;
         }
         return false;
