@@ -705,10 +705,9 @@
                           <td id="child"><a href=""></a></td> <!-- sub category-->
                           <td id="child"><a href="">{{ $product->mrp }}</a></td>
                           <td id="child"><a href="">{{ $product->discount }} %</a></td>
-                          <td id="child"><a href="">$ {{ $product->marketProduct()->price }}</a></td>
+                          <td id="child"><a href="">₹ {{ $product->marketProduct()->price }}</a></td>
                           <td id="child">
-                            <!-- <a data-toggle="modal" data-target="#viewImage"> -->
-                            <a data-toggle="modal" data-target="">
+                            <a data-toggle="modal" data-target="#viewImage">
                               <img src="{{ $product->thumbnail() }}" height="60px" width="90px"/>
                             </a>
                           </td>
@@ -737,43 +736,7 @@
     <!--end of recently added product-->
 
 @each('includes.product-delete-confirm-modal', $products, 'product')
-
-<!--View product modal-->
-<div id="viewImage" class="modal fade" role="dialog">
-    
-  <div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Product Details - Quick View</h4>
-      </div>
-      <div class="modal-body">
-          <div class="row">
-      <div class="col-md-6  padT10">
-        <img class="img-responsive imgborder" data-toggle="magnify" src="{{ URL::asset('images/kitkat-300x300.jpg') }}" />
-      </div>
-      <div class="col-md-6">
-        <h3 class="padmar0 headtext1">Kitkat 25RS</h3>
-        <p>ID:0001</p>
-        <p>Category: Chocolate</p>
-        <h4>$2.99</h4>
-        <p class="sku">30% discount!</p>
-          <span class="label label-success">In Stock</span>
-        <hr>
-        <h5>Product Info</h5>
-        <p class="slidePara1">I'm a product details. Quibusdam minim occaecat, eu fugiat lorem ea cupidatat. Do et enim deserunt nam duis imitarentur occaecat noster eiusmod. Ita iis tamen quorum aliqua e quamquam sunt mandaremus arbitror. Occaecat concursionibus ne doctrina, do hic anim labore noster.</p>
-      </div>
-    </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-    
-</div>
-<!--end View product modal-->
+@each('includes.product-preview-modal', $products, 'product')
 
 @endsection
 
