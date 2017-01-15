@@ -140,7 +140,7 @@ class ProductController extends Controller
 
         for($specCount = 1; $specCount <= ($request->has('spec_count') ? $request->input('spec_count') : 1); ++$specCount)
         {
-            $specs []= [ $request->input('title_' . $specCount) => [ 'values' => $request->input('values_' . $specCount), 'view_type' => $request->input('option_' . $specCount) ] ];
+            $specs[$request->input('title_' . $specCount)] = [ 'values' => $request->input('values_' . $specCount), 'view_type' => $request->input('option_' . $specCount) ];
         }
 
         // dd($specs);
@@ -161,6 +161,8 @@ class ProductController extends Controller
             'uploaded_files' => $uploadedFiles,
             'embed_url' => $request->input('embed_video_url'),
             'has_embed_video' => $request->input('has_embed_video') == 'checked' ? true : false,
+            'description' => $request->input('description'),
+            'product_type' => $request->input('product_type'),
         ]; 
 
         // dd($data);       
@@ -177,6 +179,7 @@ class ProductController extends Controller
             Log::error('[Inzaana][Product saving error: ' . $e->getMessage() . ' ]');
             return redirect()->back()->withErrors([ 'Something went wrong during saving your product! We have already know the reason. Try again or please contact Inzaana admnistrator.' ]);
         }
+        flash()->success('Your product is submitted for approval. Will be available and notified by mail when approved.');
         return redirect()->route('user::products');
     }
 
@@ -205,11 +208,13 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
+        // return $product->specialSpecs();
         return redirect()->route('user::products')->withProduct($product)->withEmbedUrl($product->videoEmbedUrl()['url']);
     }
 
     public function update(ProductRequest $request, Product $product)
     {
+        // dd($request);
         $validation = $this->validateProduct($request, $product);
 
         if ($validation->fails())
@@ -247,7 +252,7 @@ class ProductController extends Controller
 
         for($specCount = 1; $specCount <= ($request->has('spec_count') ? $request->input('spec_count') : 1); ++$specCount)
         {
-            $specs []= [ $request->input('title_' . $specCount) => [ 'values' => $request->input('values_' . $specCount), 'view_type' => $request->input('option_' . $specCount) ] ];
+            $specs[$request->input('title_' . $specCount)] = [ 'values' => $request->input('values_' . $specCount), 'view_type' => $request->input('option_' . $specCount) ];
         }
 
         // dd($specs);
@@ -268,19 +273,27 @@ class ProductController extends Controller
             'uploaded_files' => $uploadedFiles,
             'embed_url' => $request->input('embed_video_url'),
             'has_embed_video' => $request->input('has_embed_video') == 'checked' ? true : false,
+            'description' => $request->input('description'),
+            'product_type' => $request->input('product_type'),
         ];
+
+        // dd($data);
 
         // save product
 
         $product->store_id = $data['store_id'];
 
-        $product->marketProduct()->category_id = $data['category_id'];
-        $product->marketProduct()->manufacturer_name = $data['manufacturer_name'];
-        $product->marketProduct()->price = $data['price'];
-        $product->marketProduct()->title = $data['title'];
-        $product->marketProduct()->save();
+        $marketProduct = $product->marketProduct();
+
+        $marketProduct->category_id = $data['category_id'];
+        $marketProduct->manufacturer_name = $data['manufacturer_name'];
+        $marketProduct->price = $data['price'];
+        $marketProduct->title = $data['title'];
+        $marketProduct->save();
 
         $product->title = $data['title'];
+        $product->description = $data['description'];
+        $product->product_type = $data['product_type'];
         $product->is_public = $data['is_public'];
         $product->special_specs = collect($data['spec'])->toJson();
         $product->available_quantity = $data['available_quantity'];

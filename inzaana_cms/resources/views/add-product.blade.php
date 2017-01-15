@@ -268,11 +268,12 @@
                             @endif
                           </div>
                         </div>
-
+                        
+                        @if(isset($product))
                         <div class="form-group">
                           <label for="status" class="col-sm-3 control-label">Status:</label>
                           <div class="col-sm-2">
-                              <select name="status" id="status" class="form-control select2{{ isset($product) ? '' : ' hidden' }}" style="width: 100%;">
+                              <select name="status" id="status" class="form-control select2" style="width: 100%;"{{ isset($product) ? '' : ' hidden' }}>
                                 @if(isset($product))
                                     @foreach(Inzaana\Product::STATUS_FLOWS as $status)
                                         <option {{ $status == $product->status ? ' selected' : '' }}> {{ $status }} </option>                                    
@@ -281,6 +282,7 @@
                               </select>             
                           </div>
                         </div>
+                        @endif
                         <!--<div class="form-group">
                             <label class="col-xs-3 control-label">Created Date:</label>
                             <div class="col-sm-2 date">
@@ -452,7 +454,7 @@
                 <div class="block-of-block">
                     <div class="box-body">
                         <div>
-                            <textarea class="textarea" placeholder="Product Description" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                            <textarea name="description" class="textarea" placeholder="Product Description" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
                         </div>
                     </div>
                 </div>
@@ -556,39 +558,15 @@
                                 <th>Values</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody><!-- $product->specialSpecs() -->
                             @if(isset($product))
+                                
+                                @each('includes.product-special-specs', $product->specialSpecs(), 'properties', 'includes.product-specs-empty')
 
-                                  @foreach($product->special_specs as $key => $properties)
-                                  
-                                      <tr>
-                                      
-                                      <td>{{ $key }}<input name="title_1" type="text" value="{{ $key }}" hidden></td>
-
-                                      @foreach($properties as $name => $property)
-
-                                          
-                                          @if($name == 'view_type' )
-                                            
-                                            <td>{{ $property }}<input name="option_1" type="text" value="{{ $property }}" hidden></td>
-
-                                          @else
-
-                                            <td>{{ $property }}<input name="values_1" type="text" value="{{ $property }}" hidden></td>
-
-                                          @endif
-
-                                      @endforeach
-
-                                      </tr>
-
-                                  @endforeach
                             @else
-                            <tr>
-                                <td>---- <input name="title_1" type="text" value="" hidden></td>
-                                <td>---- <input name="option_1" type="text" value="" hidden></td>
-                                <td>---- <input name="values_1" type="text" value="" hidden></td>
-                            </tr>
+
+                                @include('includes.product-specs-empty')
+
                             @endif
                             </tbody>
                         </table>
@@ -715,9 +693,11 @@
                     </tr>
 
                   @if(isset($products))
+
                     @foreach( $products as $product )
 
                       @if($product->marketProduct())
+
                         <tr>
                           <!-- <td id="child"><a href="">001</a> </td> -->
                           <td id="child"><a href="">{{ $product->title }}</a></td>
@@ -739,10 +719,11 @@
                             <form id="product-modification-form" class="form-horizontal" method="POST" >
                               {!! csrf_field() !!}
                               <input formaction="{{ route('user::products.edit', [$product]) }}" id="product-edit-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Edit"></input>
-                              <input formaction="{{ route('user::products.delete', [$product]) }}" id="product-delete-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Delete"></input>
+                              <input class="btn btn-info btn-flat btn-xs" type="button" data-toggle="modal" data-target="#confirm_remove_{{ $product->id }}" value="Delete"></input>
                             </form>
                           </td>
                         </tr>
+
                       @endif
 
                     @endforeach
@@ -754,6 +735,8 @@
     </div>
 
     <!--end of recently added product-->
+
+@each('includes.product-delete-confirm-modal', $products, 'product')
 
 <!--View product modal-->
 <div id="viewImage" class="modal fade" role="dialog">
@@ -790,7 +773,7 @@
   </div>
     
 </div>
-    <!--end View product modal-->
+<!--end View product modal-->
 
 @endsection
 
@@ -830,14 +813,14 @@
               $('#product-create-form').attr("action", "{{ route('user::products.create') }}");
               console.log('Changed action to:' + $('#product-create-form').attr("action"));
 
-              var defaultSetter = function(index, input) {
+              // var defaultSetter = function(index, input) {
 
-                    $(this).val("");
-              };
-              $('#product-create-form').find("select").each(defaultSetter);
-              $('#product-create-form').find("input").each(defaultSetter);
-              $("select#status").addClass("hidden");
-              console.log($("select#status").is(":hidden"));
+              //       $(this).val("");
+              // };
+              // $('#product-create-form').find("select").each(defaultSetter);
+              // $('#product-create-form').find("input").each(defaultSetter);
+              // $("select#status").addClass("hidden");
+              // console.log($("select#status").is(":hidden"));
         });
 
         $('#embed_video_url').focusout(onUrlPaste);
@@ -856,7 +839,8 @@
         $('.add-option').prop("hidden", "hidden");
         $( "input[type='button']" ).bind( "click", specResetOnly );
 
-        $('#control_type').val("spinner");
+        $('#control_type').val("input");
+        $('#control_type').change();
 
         $('#control_type').change( function(event) {
 
@@ -871,6 +855,7 @@
             else if(this.value == 'spinner')
             {
                 $('#' + this.value).prop("hidden", "");
+                $('.add-option').prop("hidden", "hidden");
             }
             else
             {
@@ -898,7 +883,7 @@
         $('#apply_spec').click( function(e) {
 
             e.preventDefault();
-            ;
+
             $('#spec_count').val(++spec_count);
 
             var specValues = optionCount > 0 ? '' : $('#single_spec').val();
@@ -932,6 +917,8 @@
             console.log(specValues);
 
             $('table.spec-table tbody').html(specs);
+
+            // $('#spec_count').val($('table.spec-table tbody tr').length);
 
             $( "input[type='button']" ).bind( "click", specResetOnly );
 
@@ -1007,57 +994,57 @@
     }
   </script>
 
-  <script>
-              
-    // + function($) {
-    //       'use strict';
+<script>
+            
+  // + function($) {
+  //       'use strict';
 
-    //       // UPLOAD CLASS DEFINITION
-    //       // ======================
+  //       // UPLOAD CLASS DEFINITION
+  //       // ======================
 
-    //       var dropZone = document.getElementById('drop-zone');
-    //       var uploadForm = document.getElementById('js-upload-form');
+  //       var dropZone = document.getElementById('drop-zone');
+  //       var uploadForm = document.getElementById('js-upload-form');
 
-    //       var startUpload = function(files) {
-    //           console.log(files)
-    //           // var fileView = '<ul>';
-    //           // $.each(files, function(index, item){
-    //           //     fileView += '<li>' + item.name + '</li>';
-    //           // });
-    //           // fileView += '<ul>';
-    //           // $('#drop-zone').html(fileView);
-    //       }
-
-
-    //       // uploadForm.addEventListener('submit', function(e) {
-    //       //     var uploadFiles = document.getElementById('csv').files;
-    //       //     e.preventDefault()
+  //       var startUpload = function(files) {
+  //           console.log(files)
+  //           // var fileView = '<ul>';
+  //           // $.each(files, function(index, item){
+  //           //     fileView += '<li>' + item.name + '</li>';
+  //           // });
+  //           // fileView += '<ul>';
+  //           // $('#drop-zone').html(fileView);
+  //       }
 
 
-    //       //     startUpload(uploadFiles)
-    //       // });
-
-    //       dropZone.ondrop = function(e) {
-    //           e.preventDefault();
-    //           this.className = 'upload-drop-zone';
-
-    //           startUpload(e.dataTransfer.files)
-    //       }
-
-    //       dropZone.ondragover = function() {
-    //           this.className = 'upload-drop-zone drop';
-    //           return false;
-    //       }
-
-    //       dropZone.ondragleave = function() {
-    //           this.className = 'upload-drop-zone';
-    //           return false;
-    //       }
+  //       // uploadForm.addEventListener('submit', function(e) {
+  //       //     var uploadFiles = document.getElementById('csv').files;
+  //       //     e.preventDefault()
 
 
-    //   }(jQuery);
+  //       //     startUpload(uploadFiles)
+  //       // });
 
-  </script>
+  //       dropZone.ondrop = function(e) {
+  //           e.preventDefault();
+  //           this.className = 'upload-drop-zone';
+
+  //           startUpload(e.dataTransfer.files)
+  //       }
+
+  //       dropZone.ondragover = function() {
+  //           this.className = 'upload-drop-zone drop';
+  //           return false;
+  //       }
+
+  //       dropZone.ondragleave = function() {
+  //           this.className = 'upload-drop-zone';
+  //           return false;
+  //       }
+
+
+  //   }(jQuery);
+
+</script>
 
 <script>
     // $(document).ready(function() {
@@ -1183,3 +1170,4 @@
   // });
 </script>
 @endsection
+<!--  -->

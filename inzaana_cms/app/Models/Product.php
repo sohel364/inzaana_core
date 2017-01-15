@@ -152,6 +152,16 @@ class Product extends Model
         return $isDefaulImage ? $title : route('user::products.medias.image', [ 'file_name' => $title ] );
     }
 
+    public function specialSpecs()
+    {
+        $specs = [];
+        $id = 1;
+        foreach ($this->special_specs as $key => $value) {
+            $specs[$key] = collect($value)->merge([ 'id' => $id++ ])->toArray();
+        }
+        return $specs;
+    }
+
     public function marketProduct()
     {
         return MarketProduct::find($this->market_product_id);

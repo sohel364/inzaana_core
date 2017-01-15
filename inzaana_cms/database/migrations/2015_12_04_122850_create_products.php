@@ -27,6 +27,7 @@ class CreateProducts extends Migration
             $table->bigInteger('available_quantity')->default(0);
             $table->integer('return_time_limit')->default(0);
             $table->longText('description')->nullable();
+            $table->enum('type', [ 'PHYSICAL', 'DOWNLOADABLE' ])->default('PHYSICAL');
             $table->enum('status', Product::STATUS_FLOWS)->default('ON_APPROVAL');
             $table->timestamps();  
             $table->index(['id', 'user_id', 'store_id', 'market_product_id', 'created_at'], 'products_index');
