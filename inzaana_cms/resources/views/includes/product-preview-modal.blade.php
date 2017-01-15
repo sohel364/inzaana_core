@@ -1,6 +1,6 @@
 <!--View product modal-->
 @if($product->marketProduct())
-<div id="viewImage" class="modal fade" role="dialog">
+<div id="view_detail_{{ $product->id }}" class="modal fade" role="dialog">
     
   <div class="modal-dialog">
     <!-- Modal content-->

@@ -707,7 +707,7 @@
                           <td id="child"><a href="">{{ $product->discount }} %</a></td>
                           <td id="child"><a href="">₹ {{ $product->marketProduct()->price }}</a></td>
                           <td id="child">
-                            <a data-toggle="modal" data-target="#viewImage">
+                            <a data-toggle="modal" data-target="#view_detail_{{ $product->id }}">
                               <img src="{{ $product->thumbnail() }}" height="60px" width="90px"/>
                             </a>
                           </td>
