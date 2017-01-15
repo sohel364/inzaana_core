@@ -503,7 +503,7 @@
                           
                           <div id="options" class="col-sm-3 spec-controls" hidden="">
                             <div class="radio">
-                                  <label><input type="radio" id="optradio" name="optradio">---</label>
+                                  <label for="optradio_1"><input type="radio" id="optradio" name="optradio">---</label>
                             </div>
                           </div>
                           
@@ -866,10 +866,14 @@
             }
             if(selectedControlType == 'options')
             {
-                console.log($('#options .radio input'));
+                specValues = $("input[type='radio']:checked").map(function() {
+                    var idVal = $(this).attr("id");
+                    return $("label[for='"+idVal+"']").text();
+                }).get().join(",");
+                /*console.log($('#options .radio input'));
                 specValues = $('#options .radio input').map( function() {
                                   return this.value;
-                              }).get().join(",");
+                              }).get().join(",");*/
             }
             if(selectedControlType == 'spinner')
             {
@@ -917,7 +921,7 @@
             {
                 ++optionCount;
                 options += '<div class="radio">';
-                options += '<label><input type="radio" id="optradio_' + optionCount + '" name="optradio_' + optionCount + '">' + optionInput + '</label>';
+                options += '<label for="optradio_' + optionCount + '"><input type="radio" id="optradio_' + optionCount + '" name="optradio_' + optionCount + '">' + optionInput + '</label>';
                 options += '</div>';
                 $('#options').html(options);
             }

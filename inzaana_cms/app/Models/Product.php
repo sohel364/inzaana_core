@@ -32,7 +32,7 @@ class Product extends Model
         'group' => [
             'dropdown' => 'Dropdown',
             // 'checkboxes' => 'Checkboxes',
-            // 'options' => 'Radio Controllers',
+            'options' => 'Radio Controllers',
             'spinner' => 'Spinners'
         ],
         'single' => [
