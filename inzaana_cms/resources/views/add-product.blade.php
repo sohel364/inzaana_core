@@ -552,7 +552,7 @@
 
                                     <div class="panel">
                                         <div class="panel-body">
-                                            <input name="spec_count" id="spec_count" type="text" value="0" hidden>
+                                            <input name="spec_count" id="spec_count" type="text" value="{{ isset($product) ? count($product->specialSpecs()) : 0 }}" hidden>
                                             <table id="spac_table" class="table table-hover table-condensed table-bordered text-center spec-table">
                                                 <thead>
                                                 <tr>
@@ -585,7 +585,7 @@
                                             <label for="" class="col-sm-3 control-label"></label>
                                             <div class="col-sm-3" >
                                                 <div class="checkbox">
-                                                    <label><input id="is_public" name="is_public" type="checkbox" value="{{ (isset($product) && $product->is_public) ? 'checked' : '' }}"{{ (isset($product) && $product->is_public) ? ' checked' : '' }}>Make this product public.</label>
+                                                    <label><input id="is_public" name="is_public" type="checkbox" {{ isset($product) ? ($product->is_public ? 'checked="checked"' : old('is_public')) : '' }}>Make this product public.</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -740,9 +740,9 @@
         <!--end of recently added product-->
 
         @each('includes.product-delete-confirm-modal', $products, 'product')
-        {{--@each('includes.product-preview-modal', $products, 'product')--}}
 
         <div id="modal_container">{{--Modal load here--}}</div>
+
         @endsection
 
         @section('footer-scripts')
@@ -817,18 +817,10 @@
                     $('#embed_video_url').focusout(onUrlPaste);
                 }
 
-                function specResetOnly() {
-
-                    $(this.previousSibling).val(function() {
-                        return this.defaultValue;
-                    });
-                }
-
                 function specControlEvents()
                 {
                     $('#input').prop("hidden", "");
                     $('.add-option').prop("hidden", "hidden");
-                    $( "input[type='button']" ).bind( "click", specResetOnly );
 
                     $('#control_type').val("input");
                     $('#control_type').change();
@@ -867,8 +859,8 @@
                     });
 
                     var isEdit = $('div.is-edit').length > 0;
-                    var specs = isEdit ? $('table.spec-table tbody').html() : '';
-                    var spec_count = 0;
+                    var specs = '';
+                    var spec_count = $('#spec_count').val();
                     var options = '';
                     var optionCount = 0;
                     var firstTime = true;
@@ -877,7 +869,7 @@
 
                         e.preventDefault();
 
-                        $('#spec_count').val($('table.spec-table tbody tr').length);
+                        ++spec_count;
 
                         var specValues = optionCount > 0 ? '' : $('#single_spec').val();
 
@@ -896,10 +888,6 @@
                                 var idVal = $(this).attr("id");
                                 return $("label[for='"+idVal+"']").text();
                             }).get().join(",");
-                            /*console.log($('#options .radio input'));
-                             specValues = $('#options .radio input').map( function() {
-                             return this.value;
-                             }).get().join(",");*/
                         }
                         if(selectedControlType == 'spinner')
                         {
@@ -914,17 +902,16 @@
                         specs += '</tr>';
 
                         console.log(specValues);
-                        if(firstTime)
+                        if($('#spec_count').val() == 0)
                             $('table.spec-table tbody').html(specs);
                         else
                             $('table.spec-table tbody').append(specs);
+
                         specs = '';
-                        firstTime = false;
 
                         $('#spec_count').val($('table.spec-table tbody tr').length);
-                        console.log('applied specs: ' + $('table.spec-table tbody tr').length);
 
-                        // $( "input[type='button']" ).bind( "click", specResetOnly );
+                        console.log('applied specs: ' + $('#spec_count').val());
 
                         $('#option_input').val("");
                         $('#spec_title').val("");

@@ -138,13 +138,15 @@ class ProductController extends Controller
         }
 
         $specs = array();
-
-        for($specCount = 1; $specCount <= ($request->has('spec_count') ? $request->input('spec_count') : 1); ++$specCount)
+        if($request->has('spec_count'))
         {
-            $specs[$request->input('title_' . $specCount)] = [ 'values' => $request->input('values_' . $specCount), 'view_type' => $request->input('option_' . $specCount) ];
+            for($specCount = 1; $specCount <= $request->input('spec_count'); ++$specCount)
+            {
+                if(!$request->has('title_' . $specCount))
+                    continue;
+                $specs[$request->input('title_' . $specCount)] = [ 'values' => $request->input('values_' . $specCount), 'view_type' => $request->input('option_' . $specCount) ];
+            }
         }
-
-
         // dd($specs);
 
         $store_name_as_url = $request->input('store_name');
@@ -155,7 +157,7 @@ class ProductController extends Controller
             'manufacturer_name' => $request->input('manufacturer_name'),
             'title' => $request->input('title'),
             'price' => $request->input('price'),
-            'is_public' => ($request->input('is_public') == 'checked'),
+            'is_public' => $request->has('is_public') ? true : false,
             'discount' => 0,
             'spec' => $specs,
             'available_quantity' => $request->input('available_quantity'),
@@ -251,11 +253,17 @@ class ProductController extends Controller
 
         $specs = array();
 
-        for($specCount = 1; $specCount <= ($request->has('spec_count') ? $request->input('spec_count') : 1); ++$specCount)
-        {
-            $specs[$request->input('title_' . $specCount)] = [ 'values' => $request->input('values_' . $specCount), 'view_type' => $request->input('option_' . $specCount) ];
-        }
+        // dd($request->input('spec_count'));
 
+        if($request->has('spec_count'))
+        {
+            for($specCount = 1; $specCount <= $request->input('spec_count'); ++$specCount)
+            {
+                if(!$request->has('title_' . $specCount))
+                    continue;
+                $specs[$request->input('title_' . $specCount)] = [ 'values' => $request->input('values_' . $specCount), 'view_type' => $request->input('option_' . $specCount) ];
+            }
+        }
         // dd($specs);
 
         $store_name_as_url = $request->input('store_name');
@@ -266,7 +274,7 @@ class ProductController extends Controller
             'manufacturer_name' => $request->input('manufacturer_name'),
             'title' => $request->input('title'),
             'price' => $request->input('price'),
-            'is_public' => ($request->input('is_public') == 'checked'),
+            'is_public' => $request->has('is_public') ? true : false,
             'discount' => 0,
             'spec' => $specs,
             'available_quantity' => $request->input('available_quantity'),
@@ -279,6 +287,7 @@ class ProductController extends Controller
         ];
 
         // dd($data);
+        // dd($request->input('is_public'));
 
         // save product
 
