@@ -181,6 +181,9 @@ Route::group(['middleware' => 'web'], function () {
                 Route::post('/import/csv', [ 'uses' => 'ProductController@uploadCSV', 'as' => 'products.upload.csv' ]);
                 Route::get('/medias/image/{file_name}', [ 'uses' => 'ProductController@image', 'as' => 'products.medias.image' ]);
 
+                // Sk script
+                Route::get('/{product}/quick-view', [ 'uses' => 'ProductController@quickView', 'as' => 'products.quick.view' ]);
+
                 // Route::group( [ 'middleware' => ['JsonValidation'] ], function () {
 
                 //     Route::post('/create', [ 'uses' => 'ProductController@create', 'as' => 'products.create' ]);

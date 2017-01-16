@@ -103,7 +103,7 @@ class ProductController extends Controller
      */
     public function create(ProductRequest $request)
     {
-        // dd($request);
+        //dd($request->all());
         $validation = $this->validateProduct($request);
 
         if ($validation->fails())
@@ -611,5 +611,14 @@ class ProductController extends Controller
     {
         $manager = new ImageManager();
         return $manager->make(ProductMedia::getStoragePath('IMAGE') . $file_name)->response();
+    }
+    public function quickView($product_id)
+    {
+        $view_data = [
+            'product' => Product::find($product_id),
+        ];
+
+        return response()->view('includes.product-preview-modal', $view_data)
+            ->header('Content-Type', 'html');
     }
 }
