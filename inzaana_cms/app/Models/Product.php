@@ -97,12 +97,12 @@ class Product extends Model
                 $success = $this->medias()->save($productMedia);
 
                 $imagesExisting = $this->medias->where('is_embed', false)->where('media_type', 'IMAGE');
-                if($newImageCount-- > 0 && $imagesExisting->first())
+                if($imagesExisting->count() > 4)
                 {
                     $imagesExisting->first()->delete();
                 }
             }
-        }
+    }
         // $hasEmbed = $data['has_embed_video'];
         if(collect($data)->has('embed_url') && $data['embed_url'])
         {   
