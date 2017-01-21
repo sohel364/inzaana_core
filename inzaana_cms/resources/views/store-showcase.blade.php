@@ -39,7 +39,7 @@
 <body>
 <div class="container">
     <div class="content">
-        <div class="title">Hello world!!! <br>Store coming soon!</div>
+        <div class="title">Hello world!! <br>Store coming soon!</div>
     </div>
 </div>
 </body>
