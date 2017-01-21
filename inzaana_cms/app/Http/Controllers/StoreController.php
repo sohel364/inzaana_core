@@ -62,7 +62,8 @@ class StoreController extends Controller
 
     public function redirectUrl($site)
     {
-        return StoreRedirect::to('http://' . $site . '/showcase');
+        return view('store-showcase');
+        //return StoreRedirect::to('http://' . $site . '/showcase');
     }
 
     private function validator(array $data, array $rules)
