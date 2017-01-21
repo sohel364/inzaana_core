@@ -24,7 +24,27 @@
         <h5>Product Info</h5>
         <p class="slidePara1">{!! $product->description or '<i>No description is found to this product</i>' !!}</p>
         <h5>Product Spec</h5>
-        <p class="slidePara1">@each('includes.product-special-specs', $product->specialSpecs(), 'properties', 'includes.product-specs-empty')</p>
+        
+        <p class="slidePara1">
+          <table id="spac_table" class="table table-hover table-condensed table-bordered text-center spec-table">
+              <thead>
+              <tr>
+                  <th>Specification</th>
+                  <th>Conditions</th>
+              </tr>
+              </thead>
+              <tbody><!-- $product->specialSpecs() -->
+
+                @forelse($product->specialSpecs() as $spec_title => $properties)
+                    @include('includes.product-special-specs', [ 'key' => $spec_title, 'properties' => $properties, 'is_operational_view' => false ])
+                @empty
+                    @include('includes.product-specs-empty')
+                @endforelse
+
+              </tbody>
+          </table>
+        </p>
+
       </div>
     </div>
       </div>
