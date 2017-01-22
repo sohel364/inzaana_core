@@ -39,6 +39,9 @@
             Store
         </th>
         <th>
+            Discount
+        </th>
+        <th>
             Status
         </th>
         <th>
@@ -70,6 +73,15 @@
                     </li>
                 @endforeach
 
+            </td>
+            <td>
+                @if($subscriber->coupon_id != null)
+                    {{ $subscriber->coupon['coupon_name'] }}<br>
+                    {{--{{ $subscriber->coupon['discount'] }}<br>
+                    {{ $subscriber->coupon['redeem_by'] }}<br>--}}
+                @else
+                    No Discount
+                @endif
             </td>
             <td><span class="label label-success">Active</span></td>
             <td>{{ $subscriber->trial }}</td>

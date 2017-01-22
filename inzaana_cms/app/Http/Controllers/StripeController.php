@@ -658,25 +658,31 @@ class StripeController extends Controller
         }
 
         $subscribers = DB::table('subscriptions')
-                    ->join('users','users.id','=','subscriptions.user_id')
-                    ->join('stripe_plans','stripe_plans.plan_id','=','subscriptions.stripe_plan')
-                    ->join('stores','stores.user_id','=','users.id')
-                    ->select('subscriptions.id','subscriptions.name as plan_name','subscriptions.stripe_id','subscriptions.quantity','users.name as subscriber_name','users.email','users.phone_number as contact','users.address','stripe_plans.amount','stripe_plans.interval','stripe_plans.interval_count','stripe_plans.coupon_id','stripe_plans.trial_period_days as trial', DB::raw('GROUP_CONCAT(stores.name,"#",stores.status) AS store_name'))
-                    /*->where('stores.status','=','APPROVED')*/
-                    ->groupBy('stores.user_id')
-                    ->orderBy($sort,$order)
-                    ->get();
+            ->join('users','users.id','=','subscriptions.user_id')
+            ->join('stripe_plans','stripe_plans.plan_id','=','subscriptions.stripe_plan')
+            ->join('stores','stores.user_id','=','users.id')
+            ->select('subscriptions.id','subscriptions.name as plan_name','subscriptions.stripe_id','subscriptions.quantity','users.name as subscriber_name','users.email','users.phone_number as contact','users.address','stripe_plans.amount','stripe_plans.interval','stripe_plans.interval_count','stripe_plans.coupon_id','stripe_plans.trial_period_days as trial', 'stores.name AS store_name','stores.status')
+            ->orderBy($sort,$order)
+            ->get();
         $coupon_all = StripeCoupon::all();
-        $subscriber_collect = [];
+
+        $store_collect = collect($subscribers);
+        $store_name_collect = $store_collect->map(function($store_collect){
+            $store_name ['id'] = $store_collect->id;
+            $store_name ['store_name'] = $store_collect->store_name;
+            $store_name ['status'] = $store_collect->status;
+            return $store_name;
+        });
+        $subscribers = $store_collect->unique('id');
         foreach($subscribers as $subscriber)
         {
             if($subscriber->interval_count > 1)
             {
                 $subscriber->interval = "Every ". $subscriber->interval_count ." ".$subscriber->interval."s";
             }
-            $store_name = $subscriber->store_name;
+            //$store_name = $subscriber->store_name;
             $data_process = [];
-            if($store_name != null)
+            /*if($store_name != null)
             {
                 $store_name = explode(',',$store_name);
                 foreach ($store_name as $name) {
@@ -684,6 +690,11 @@ class StripeController extends Controller
                         $name = explode('#',$name);
                         $data_process[] = $name;
                     }
+                }
+            }*/
+            foreach($store_name_collect as $store_name){
+                if($subscriber->id == $store_name['id']){
+                    $data_process[] = [0 => $store_name['store_name'],1=> $store_name['status']];
                 }
             }
             $subscriber->store_name = collect($data_process);
@@ -717,7 +728,7 @@ class StripeController extends Controller
             }
             $subscriber->coupon = $coupon_information;
         }
-        $email_user = DB::select('SELECT t2.name,t2.email,t1.ends_at FROM `subscriptions` as t1 inner join users as t2 on t1.`user_id`=t2.id WHERE `ends_at` BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 1 DAY)');
+        //$email_user = DB::select('SELECT t2.name,t2.email,t1.ends_at FROM subscriptions as t1 inner join users as t2 on t1.user_id=t2.id WHERE ends_at BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 1 DAY)');
         /*dd($subscribers);*/
         $sln = 1;
         $user = Auth::user();

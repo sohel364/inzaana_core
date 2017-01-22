@@ -44,7 +44,7 @@
             {{--End of Success & Error Message--}}
 
             <div class="subscribe_dom" id="subscribe_dom">
-                @if($email_user)
+                {{--@if($email_user)
                     <form action="{{ route('admin::email.notification') }}" method="POST" id="email_notification">
                         {{ csrf_field() }}
                         @foreach($email_user as $k => $email)
@@ -52,7 +52,7 @@
                         @endforeach
                         <button type="submit" class="btn btn-primary btn-xs" id="notify_by_email">Notify</button><br>
                     </form>
-                @endif
+                @endif--}}
                 <table class="table table-bordered">
                     <thead>
                     <tr>

@@ -234,6 +234,7 @@ class StoreController extends Controller
 
     public function confirmApproval(StoreRequest $request, AppMailer $mailer, $id)
     {
+        dd($request->all());
         $store = Store::find($id);
         if(!$store)
             return redirect()->back()->withErrors(['Your requested store is not found to approve!']);
@@ -242,12 +243,12 @@ class StoreController extends Controller
 
         switch($request->input('confirmation-select'))
         {
-            case 'approve': 
-                $category->status = 'APPROVED';
+            case 'approve':
+                $store->status = 'APPROVED';
             case 'reject':
-                $category->status = 'REJECTED';
+                $store->status = 'REJECTED';
             case 'remove':
-                $category->status = 'REMOVED';
+                $store->status = 'REMOVED';
         }
         
         if(!$store->save())
