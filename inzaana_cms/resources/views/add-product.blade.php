@@ -90,7 +90,7 @@
                                             <td id="sellyours">
                                                 <form method="POST">
                                                     {!! csrf_field() !!}
-                                                    <input formaction="{{ route('user::products.sell-yours', [$productFromSearch]) }}" class="btn btn-info btn-flat btn-sm" type="submit" value="Sell yours"></input>
+                                                    <input formaction="{{ route('user::products.sell-yours', [$productFromSearch]) }}" class="btn btn-info btn-flat btn-sm" type="submit" value="Sell yours">
                                                 </form>
                                             </td>
                                         </tr>
@@ -704,8 +704,7 @@
                                 @foreach( $products as $product )
 
                                     @if($product->marketProduct())
-
-                                        <tr>
+                                        <tr id="product_{{ $product->id }}">
                                             <!-- <td id="child"><a href="">001</a> </td> -->
                                             <td id="child"><a href="">{{ $product->title }}</a></td>
                                             <td id="child"><a href="">{{ $product->categoryName() }}</a></td>
@@ -724,8 +723,8 @@
                                             <td class="text-center" id="child">
                                                 <form id="product-modification-form" class="form-horizontal" method="POST" >
                                                     {!! csrf_field() !!}
-                                                    <input formaction="{{ route('user::products.edit', [$product]) }}" id="product-edit-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Edit"></input>
-                                                    <input class="btn btn-info btn-flat btn-xs" type="button" data-toggle="modal" data-target="#confirm_remove_{{ $product->id }}" value="Delete"></input>
+                                                    <input formaction="{{ route('user::products.edit', [$product]) }}" id="product-edit-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Edit">
+                                                    <input class="btn btn-info btn-flat btn-xs" type="button" data-toggle="modal" data-target="#confirm_remove_{{ $product->id }}_disabled" data-product_id="{{ $product->id }}" data-url="{{ route('user::products.delete', [$product]) }}" id="product_del_btn" value="Delete">
                                                 </form>
                                             </td>
                                         </tr>
@@ -782,6 +781,37 @@
                         },
                         timeout: 10000
                     });
+                });
+
+                $(document).on('click','#product_del_btn',function(e){
+                    e.preventDefault();
+                    var c = confirm("Are you sure want to delete this product?");
+                    if(c) {
+                        var id = $(this).data('product_id')
+                        var product_id = "#product_" + id;
+                        //$(product_id).closest('tr').remove();
+                        var url = $(this).data('url');
+                        var formData = $(this).serialize();
+                        $.ajax({
+                            async: true,
+                            type: 'POST',
+                            data: formData,
+                            url: url, // you need change it.
+                            processData: false, // high importance!
+                            success: function (data) {
+                                if(data['status'] == 1){
+                                    $(product_id).closest('tr').remove();
+                                    alert(data['msg']);
+                                }
+
+                            },
+                            error: function (data) {
+
+                            },
+                            timeout: 10000
+                        });
+                    }
+
                 });
             </script>
             <script>
@@ -1187,4 +1217,3 @@
 
 
             @endsection
-                    <!--  -->

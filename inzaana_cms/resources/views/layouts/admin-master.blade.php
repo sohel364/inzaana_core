@@ -275,6 +275,7 @@
 
         <!-- For sweet message box alert -->
         <script type="text/javascript" src="{{ asset('dist/sweetalert.min.js') }}"></script>
+        <script src="{{ URL::asset('js/config.js') }}"></script>
 
         @yield('footer-scripts')
 

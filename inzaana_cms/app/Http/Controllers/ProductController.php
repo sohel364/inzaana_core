@@ -4,6 +4,7 @@ namespace Inzaana\Http\Controllers;
 
 use DB;
 use Auth;
+use Illuminate\Support\Facades\Response;
 use Log;
 use Validator;
 use Exception;
@@ -52,6 +53,7 @@ class ProductController extends Controller
     {
         $productsCount = 0;
         $products = Auth::user()->products;
+        //dd($products);
         $categories = Category::all();
         $tab = !session()->has('selected_tab') ? self::PRODUCT_ENTRY_TABS[0] : session('selected_tab');
         $viewData = [ 
@@ -340,20 +342,24 @@ class ProductController extends Controller
     public function delete(Product $product)
     {
         //delete the product
+        $delete = 0;
         if($product)
         {
             $message = 'Your product (' . $product->title . ') is removed from your product list.';
-            $product->delete();
-            flash($message);
+            //$product->delete();
+            $delete = 1;
+            //flash($message);
         }
         else
         {
             $message = 'Your product (' . $product->title . ') is NOT removed from your product list.';
             $message .= 'Product is NOT found to your product list.';
             $message .= 'Contact your administrator to know about product removing policy';
-            flash($message);
+            //flash($message);
         }
-        return redirect()->route('user::products');
+        //return redirect()->route('user::products');
+        //Response::json(['plan_id'=>$id,'confirm' => $all_data['confirm_action']]);
+        return Response::json(['msg' => $message,'status' => $delete]);
     }
 
     public function copy(Product $product)
