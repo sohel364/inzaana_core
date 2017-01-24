@@ -65,7 +65,7 @@
                 <div class="col-lg-6 col-lg-offset-3 boxPadTop">
                     <div class="box box-down box-info{{ $productsCount == 0 ? ' hidden' : '' }}">
                         <div class="boxed-header">
-                            <h5>Results on Inzaana.com &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<b>1</b> to <b>{{ $productsCount < 5 ? $productsCount : 5 }}</b> of <b>{{ $productsCount }}</b> results.</h5>
+                            <h5>Results on Inzaana.com &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<b>1</b> to <b>{{ count($productsBySearch) > 0 ? $productsBySearch->count() : 0 }}</b> of <b>{{ count($productsBySearch) > 0 ? $productsBySearch->total() : 0 }}</b> results.</h5>
                         </div>
                         <div class="box-body no-padding">
                             <table id="parent" class="table table-hover">
@@ -78,7 +78,13 @@
                                 @if(isset($productsBySearch))
                                     @foreach($productsBySearch as $productFromSearch)
                                         <tr>
-                                            <td id="photo"><a data-toggle="modal" data-target="#viewImage"><img src="{{ $productFromSearch->photo_name or 'http://lorempixel.com/400/200/food/' }}" height="50px" width="80px"/></a></td>
+                                            <td id="photo">
+                                                <a  data-toggle="modal" 
+                                                    data-product_url="{{ route('user::products.quick.view', [$productFromSearch]) }}"
+                                                    data-target="#_view_detail_{{ $productFromSearch->id }}">
+                                                    <img src="{{ $productFromSearch->thumbnail() }}" height="50px" width="80px"/></a>
+                                            </td>
+
                                             <td id="product">{{ $productFromSearch->title }}</td>
                                             <td id="category">{{ $productFromSearch->marketProduct()->category->name or 'Uncategorized' }}</td>
                                             <td id="sellyours">
@@ -92,12 +98,9 @@
                                 @endif
                             </table>
                             <div class="col-sm-12 noPadMar text-center">
-                                <ul class="pagination pagination-sm noPadMar">
-                                    <li class="active"><a href="#">1</a></li>
-                                    @for ($i = 0; $i < ($productsCount / 5) - 1; $i++)
-                                        <li><a href="#">{{ $i }}</a></li>
-                                    @endfor
-                                </ul>
+                                
+                                {{ count($productsBySearch) > 0 ? $productsBySearch->appends([ 'search-box' => $search_terms ])->links() : '' }}
+
                             </div>
                         </div>
                     </div>
@@ -322,8 +325,8 @@
                                                     </div>
                                                     @if ($errors->has('available_quantity'))
                                                         <span class="help-block">
-                                    <strong>{{ $errors->first('available_quantity') }}</strong>
-                                  </span>
+                                                        <strong>{{ $errors->first('available_quantity') }}</strong>
+                                                        </span>
                                                     @endif
                                                 </div>
                                             </div>
@@ -732,7 +735,9 @@
                                 @endforeach
                             @endif
                         </table>
+                        <div class="col-sm-12 noPadMar text-center">
                         {{ $products->links() }}
+                        </div>
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
             </div>

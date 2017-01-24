@@ -57,6 +57,7 @@ class ProductController extends Controller
         $viewData = [ 
             'productsCount' => session()->has('productsBySearch') ? session('productsBySearch')->count() : 0,
             'productsBySearch' => session()->has('productsBySearch') ? session('productsBySearch') : [],
+            'search_terms' => session()->has('search_terms') ? session('search_terms') : '',
             'products' => Auth::user()->products()->paginate(4),
             'product' => session()->has('product') ? session('product') : null,
             'categories' => Category::all(),
@@ -192,20 +193,23 @@ class ProductController extends Controller
         if($request->exists('search-box') && $request->has('search-box'))
         {
             $search_terms = $request->query('search-box');
-            $search_terms_slugged = str_slug($search_terms);
 
             // NOTE: like -> searches case sensitive
             // $productsBySearch = Product::where('title', $search_terms)->orWhere('title', 'like', '%' . $search_terms . '%')->get();
 
             // NOTE: ilike -> seaches case insensitive
             $productsBySearch = Product::where('title', $search_terms)->orWhere('title', 'ilike', '%' . $search_terms . '%')->get();
+            $productsBySearchPaginated = Product::where('title', $search_terms)->orWhere('title', 'ilike', '%' . $search_terms . '%')->paginate(2);
             $productsBySearch = $productsBySearch->reject(function ($product) {
                 return $product->trashed() || $product->is_public === false;
             });
             $productsCount = $productsBySearch->count();
 
+            $productsBySearch = $productsBySearchPaginated;
+            $productsBySearch->setPath('products/search');
+
             return redirect()->route('user::products')
-                             ->with(compact('productsBySearch', 'productsCount'));
+                             ->with(compact('productsBySearch', 'productsCount', 'search_terms'));
         }
         return redirect()->route('user::products');
     }
