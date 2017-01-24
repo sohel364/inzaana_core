@@ -731,6 +731,7 @@
                                 @endforeach
                             @endif
                         </table>
+                        {{ $products->links() }}
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
             </div>

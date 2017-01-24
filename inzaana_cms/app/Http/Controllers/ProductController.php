@@ -59,7 +59,7 @@ class ProductController extends Controller
         $viewData = [ 
             'productsCount' => session()->has('productsBySearch') ? session('productsBySearch')->count() : 0,
             'productsBySearch' => session()->has('productsBySearch') ? session('productsBySearch') : [],
-            'products' => Auth::user()->products,
+            'products' => Auth::user()->products()->paginate(4),
             'product' => session()->has('product') ? session('product') : null,
             'categories' => Category::all(),
         ];
