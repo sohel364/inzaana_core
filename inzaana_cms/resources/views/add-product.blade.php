@@ -9,7 +9,27 @@
     <!--for date picker only-->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
-
+    <style>
+        .btn-file {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            background: white;
+            cursor: inherit;
+            display: block;
+        }
+    </style>
     <!--end of date picker css-->
 @endsection
 
@@ -356,16 +376,16 @@
                                         @for($i = 1; $i <= 4; ++$i)
                                             <div class="form-group{{ ($errors->has('upload_image_' . $i)) ? ' has-error' : '' }}">
 
-                                                <label for="upload_image" class="col-sm-3 control-label"> {{ $i == 1 ? 'Upload Image:' : '' }} </label>
+                                               {{-- <label for="upload_image" class="col-sm-3 control-label"> {{ $i == 1 ? 'Upload Image:' : '' }} </label>--}}
 
-                                                <div class="col-sm-3">
+                                                {{--<div class="col-sm-3">
                                                     <input id="upload_image_{{ $i }}" name="upload_image_{{ $i }}" type="file" style="margin-top: 7px" placeholder="Include some file">
                                                     @if ($errors->has('upload_image_' . $i))
                                                         <span class="help-block">
                                         <strong>{{ $errors->first('upload_image_' . $i) }}</strong>
                                     </span>
                                                     @endif
-                                                </div>
+                                                </div>--}}
                                             </div>
                                         @endfor
 
@@ -374,30 +394,53 @@
                                                 <label for="" class="col-sm-3 control-label"></label>
                                                 <div class="col-md-2">
                                                     <div class="thumbnail">
-                                                        <a href="" target="_blank">
-                                                            <img id="preview-image-1" src="{{ isset($product) ? $product->previewImage(0) : Inzaana\Product::defaultImage() }}">
-                                                        </a>
+                                                        <img id="blah-1" src="{{ isset($product) ? $product->previewImage(0) : Inzaana\Product::defaultImage() }}">
+                                                        <span class="btn btn-default btn-file">
+
+                                                            Browse <input id="imgInp-1" name="upload_image_1" data-image_id="1" type="file" style="margin-top: 7px" >
+                                                        </span>
+
+                                                    </div>
+                                                    <div class="col-md-6 col-md-offset-3">
+                                                        <span><a href="#" id="remove_image_1"><i class="fa fa-times"></i></a></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="thumbnail">
-                                                        <a href="" target="_blank">
-                                                            <img id="preview-image-2" src="{{ isset($product) ? $product->previewImage(1) : Inzaana\Product::defaultImage() }}">
-                                                        </a>
+                                                        <img id="blah-2" src="{{ isset($product) ? $product->previewImage(1) : Inzaana\Product::defaultImage() }}">
+                                                        <span class="btn btn-default btn-file">
+
+                                                            Browse <input id="imgInp-2" name="upload_image_2" data-image_id="2" type="file" style="margin-top: 7px" >
+                                                        </span>
+
+                                                    </div>
+                                                    <div class="col-md-6 col-md-offset-3">
+                                                        <span><a href="#" id="remove_image_2"><i class="fa fa-times"></i></a></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="thumbnail">
-                                                        <a href="" target="_blank">
-                                                            <img id="preview-image-3" src="{{ isset($product) ? $product->previewImage(2) : Inzaana\Product::defaultImage() }}">
-                                                        </a>
+                                                        <img id="blah-3" src="{{ isset($product) ? $product->previewImage(2) : Inzaana\Product::defaultImage() }}">
+                                                        <span class="btn btn-default btn-file">
+
+                                                            Browse <input id="imgInp-3" name="upload_image_3" data-image_id="3" type="file" style="margin-top: 7px" >
+                                                        </span>
+
+                                                    </div>
+                                                    <div class="col-md-6 col-md-offset-3">
+                                                        <span><a href="#" id="remove_image_3"><i class="fa fa-times"></i></a></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="thumbnail">
-                                                        <a href="" target="_blank">
-                                                            <img id="preview-image-4" src="{{ isset($product) ? $product->previewImage(3) : Inzaana\Product::defaultImage() }}">
-                                                        </a>
+                                                        <img id="blah-4" src="{{ isset($product) ? $product->previewImage(3) : Inzaana\Product::defaultImage() }}">
+                                                        <span class="btn btn-default btn-file">
+
+                                                            Browse <input id="imgInp-4" name="upload_image_4" data-image_id="4" type="file" style="margin-top: 7px" >
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-md-6 col-md-offset-3">
+                                                        <span><a href="#" id="remove_image_4"><i class="fa fa-times"></i></a></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -686,7 +729,9 @@
                         <table id="parent" class="table table-hover">
                             <tr>
                                 <!-- <th>ID</th> -->
-                                <th>Product Name</th>
+                                <th data-sort="product_name" data-order="ASC" id="sort_by_click">
+                                    <a href="#">Product Name</a>
+                                </th>
                                 <th>Category</th>
                                 <th>Sub Category</th>
                                 <th>MRP</th>
@@ -813,6 +858,73 @@
                     }
 
                 });
+
+                $(document).on('click','#sort_by_click', function (e) {
+                    e.preventDefault();
+                    var sort = $(this).attr('data-sort');
+                    var order = $(this).attr('data-order');
+                    var url = window.location.pathname;
+                   /* alert(url);
+                    $.ajax({
+                        async: true,
+                        type: 'GET',
+                        url: url+'?sort='+sort+'&order='+order, // you need change it.
+                        processData: false, // high importance!
+                        success: function (data) {
+                            //$('#coupon-area').html(data);
+                            alert(data);
+                        },
+                        error: function(data){
+
+                        },
+                        timeout: 10000
+                    });*/
+
+                });
+
+
+                function readURL(input, id) {
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            $('#blah-'+id).attr('src', e.target.result);
+                        }
+
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                }
+
+                for(i=1;i<5;i++){
+                    $("#imgInp-"+i).change(function(){
+                        var preview_id = $(this).data('image_id');
+                        readURL(this, preview_id);
+                    });
+                }
+
+
+
+
+                    $("#remove_image_1").click(function(){
+                        $('#blah-1').attr('src','/images/products/default_product.jpg');
+                        $('#imgInp-1').val("");
+                    });
+                    $("#remove_image_2").click(function(){
+                        $('#blah-2').attr('src','/images/products/default_product.jpg');
+                        $('#imgInp-2').val("");
+                    });
+                    $("#remove_image_3").click(function(){
+                        $('#blah-3').attr('src','/images/products/default_product.jpg');
+                        $('#imgInp-3').val("");
+                    });
+                    $("#remove_image_4").click(function(){
+                        $('#blah-4').attr('src','/images/products/default_product.jpg');
+                        $('#imgInp-4').val("");
+                    });
+
+
+
+                /* End of Asad Script */
             </script>
             <script>
                 function matchStart (term, text) {

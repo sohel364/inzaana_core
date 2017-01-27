@@ -59,8 +59,7 @@ class ProductController extends Controller
         $viewData = [ 
             'productsCount' => session()->has('productsBySearch') ? session('productsBySearch')->count() : 0,
             'productsBySearch' => session()->has('productsBySearch') ? session('productsBySearch') : [],
-            'search_terms' => session()->has('search_terms') ? session('search_terms') : '',
-            'products' => Auth::user()->products()->paginate(4),
+            'products' => Auth::user()->products()->orderBy('title','DESC')->paginate(15),
             'product' => session()->has('product') ? session('product') : null,
             'categories' => Category::all(),
         ];
@@ -195,6 +194,7 @@ class ProductController extends Controller
         if($request->exists('search-box') && $request->has('search-box'))
         {
             $search_terms = $request->query('search-box');
+            $search_terms_slugged = str_slug($search_terms);
 
             // NOTE: like -> searches case sensitive
             // $productsBySearch = Product::where('title', $search_terms)->orWhere('title', 'like', '%' . $search_terms . '%')->get();
@@ -316,7 +316,7 @@ class ProductController extends Controller
 
         try
         {
-            // Media update        
+            // Media update
             if(!$product->saveMedias($data))
             {
                 // You may revert all files by deleting and undoing stored media entry
