@@ -21,9 +21,9 @@
         <p class="sku">{{ $product->discount }}% discount!</p>
           @include('includes.approval-label', [ 'status' => $product->status, 'labelText' => $product->getStatus() ])
         <hr>
-        <h5>Product Info</h5>
+        <h5><strong>Product Info</strong></h5>
         <p class="slidePara1">{!! $product->description or '<i>No description is found to this product</i>' !!}</p>
-        <h5>Product Spec</h5>
+        <h5><strong>Product Spec</strong></h5>
         
         <p class="slidePara1">
           <table id="spac_table" class="table table-hover table-condensed table-bordered text-center spec-table">

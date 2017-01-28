@@ -118,7 +118,7 @@
                                 @endif
                             </table>
                             <div class="col-sm-12 noPadMar text-center">
-                                
+
                                 {{ count($productsBySearch) > 0 ? $productsBySearch->appends([ 'search-box' => $search_terms ])->links() : '' }}
 
                             </div>
@@ -729,9 +729,11 @@
                         </div>
                     </div><!-- /.box-header -->
                     <div class="box-body table-responsive no-padding">
-                        <table id="parent" class="table table-hover">
+                        <div id="delete_all"></div>
+                        <table id="parent" class="table table-hover table-bordered product_table">
                             <tr>
                                 <!-- <th>ID</th> -->
+                                <th style="vertical-align: middle"><input type="checkbox" name="select_all" id="select_all"> </th>
                                 <th data-sort="product_name" data-order="ASC" id="sort_by_click">
                                     <a href="#">Product Name</a>
                                 </th>
@@ -754,6 +756,7 @@
                                     @if($product->marketProduct())
                                         <tr id="product_{{ $product->id }}">
                                             <!-- <td id="child"><a href="">001</a> </td> -->
+                                            <td style="vertical-align: middle"><input type="checkbox" name="check_box" value="{{ $product->id }}" id=""></td>
                                             <td id="child"><a href="">{{ $product->title }}</a></td>
                                             <td id="child"><a href="">{{ $product->categoryName() }}</a></td>
                                             <td id="child"><a href=""></a></td> <!-- sub category-->
@@ -959,6 +962,24 @@
                         });
                     }
                 }
+
+                $(document).on('click','#select_all',function(e){
+                    var table= $(e.target).closest('table');
+                    $('td input:checkbox',table).prop('checked',this.checked);
+                    if($("#select_all").is(':checked'))
+                        $('#delete_all').html('<button class="btn btn-danger" id="product_delete_all">Delete All</button>');
+                    else
+                        $('#delete_all').html('');
+                });
+
+                $(document).on('click','#product_delete_all',function(){
+                    $('.product_table').find('tr').each(function (e) {
+                        var row = $(this);
+                        if (row.find('input[type="checkbox"]').is(':checked')) {
+                            //alert($(row).val());
+                        }
+                    });
+                });
 
                 /* End of Asad Script */
             </script>
