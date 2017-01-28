@@ -225,6 +225,14 @@ class ProductController extends Controller
     }
 
     // Added by Asad
+
+    public function bulkDelete($product_id)
+    {
+        $productId = explode(',',$product_id);
+        Product::destroy($productId);
+        return 1;
+    }
+
     // TODO:: Need to add log
     public function imageDelete($imageTitle)
     {

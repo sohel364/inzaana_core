@@ -973,12 +973,30 @@
                 });
 
                 $(document).on('click','#product_delete_all',function(){
-                    $('.product_table').find('tr').each(function (e) {
-                        var row = $(this);
-                        if (row.find('input[type="checkbox"]').is(':checked')) {
-                            //alert($(row).val());
-                        }
+
+                    var productID = $(".product_table tbody>tr input:checkbox:checked").map(function(e){
+                        if($(this).val() != 'on')
+                            return $(this).val();
+                    }).get();
+
+                    var url = window.location.pathname;
+
+                    $.ajax({
+                        async: true,
+                        type: 'POST',
+                        url: url+'/'+productID+'/product-bulk-delete', // you need change it.
+                        processData: false, // high importance!
+                        success: function (data) {
+                            if(data){
+                                window.location.reload()
+                            }
+                        },
+                        error: function (data) {
+
+                        },
+                        timeout: 10000
                     });
+
                 });
 
                 /* End of Asad Script */
@@ -1192,7 +1210,7 @@
             <script>
                 $(document).on('click','#delete_me',function(e){
                     e.preventDefault();
-                    $('#delete_me').parent().parent().remove();
+                    $(this).parent().parent().remove();
                 });
             </script>
 

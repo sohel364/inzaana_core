@@ -176,6 +176,7 @@ Route::group(['middleware' => 'web'], function () {
                 Route::post('/{product}/edit', [ 'uses' => 'ProductController@edit', 'as' => 'products.edit' ]);
                 Route::post('/{product}/update', [ 'uses' => 'ProductController@update', 'as' => 'products.update' ]);
                 Route::post('/{product}/delete', [ 'uses' => 'ProductController@delete', 'as' => 'products.delete' ]);
+                Route::post('/{product_bulk_id}/product-bulk-delete', [ 'uses' => 'ProductController@bulkDelete', 'as' => 'products.bulk.delete' ]);
                 Route::get('/approvals', [ 'uses' => 'ProductController@approvals', 'as' => 'products.approvals' ]);
                 Route::post('/approvals/confirm/{id}', [ 'uses' => 'ProductController@confirmApproval', 'as' => 'products.approvals.confirm' ]);
                 Route::post('/import/csv', [ 'uses' => 'ProductController@uploadCSV', 'as' => 'products.upload.csv' ]);
