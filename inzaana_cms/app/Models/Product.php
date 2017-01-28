@@ -162,7 +162,16 @@ class Product extends Model
     public function images()
     {
         $images = $this->medias->where('is_embed', false)->where('media_type', 'IMAGE');
-        while($images->count() < 4)
+        /*Sk Asadur Rahman Script*/
+        foreach($images as $image){
+            $_location = explode('_',$image->title);
+            if(count($_location) > 1){
+                $image->_image_position = $_location[1];
+            }
+        }
+        /*EOS*/
+        $firstTime = true;
+        while($images->count() < 4 && $firstTime)
         {
             $image = new ProductMedia();
             $image->is_public = true;
@@ -170,15 +179,31 @@ class Product extends Model
             $image->media_type = 'IMAGE';
             $image->title = ProductMedia::uuid();
             $image->is_embed = true; // THIS BOOLEAN IS SET TO CHECK IF IT'S A DEFAULT IMAGE OR NOT
+            $image->_image_position = false; //Added by Asad
             $images->push($image);
+            $firstTime = false;
         }
         return $images;
     }
 
     public function previewImage($index)
     {
-        $image = $this->images()[$index];
+        $image = $this->images()->where('_image_position', $index+1,false);
+        if($image->isEmpty()){
+            $image = $this->images()->where('_image_position', false,false);
+        }
+        foreach($image as $image); // Added by Asad
         return $image->is_embed ? $image->url : route('user::products.medias.image', [ 'file_name' => $image->title ]);
+    }
+    // getImageURL() added by Asad
+    public function getImageURL($index)
+    {
+        $image = $this->images()->where('_image_position', $index+1,false);
+        if($image->isEmpty()){
+            $image = $this->images()->where('_image_position', false,false);
+        }
+        foreach($image as $image);
+        return $image->url != $this->defaultImage() ? ['title' => $image->title, 'url'=> $image->url] : false;
     }
 
     public static function defaultImage()

@@ -73,8 +73,9 @@ class ProductMedia extends Model
     {
         $serverFiles = [];
         $errors = [];
-        foreach($requestedFiles as $requestedFile)
+        foreach($requestedFiles as $key => $requestedFile)
         {
+            $requestedFile->_image_position = $key;
             $requestedFileName = $requestedFile->getClientOriginalName();
             $serverEntity = self::uploadSingle($requestedFile);
             if(!is_array($serverEntity))

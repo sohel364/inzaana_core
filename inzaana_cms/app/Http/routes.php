@@ -183,6 +183,7 @@ Route::group(['middleware' => 'web'], function () {
 
                 // Sk script
                 Route::get('/{product}/quick-view', [ 'uses' => 'ProductController@quickView', 'as' => 'products.quick.view' ]);
+                Route::get('/{image_title}/image-delete', [ 'uses' => 'ProductController@imageDelete', 'as' => 'products.image.delete' ]);
 
                 // Route::group( [ 'middleware' => ['JsonValidation'] ], function () {
 

@@ -4,6 +4,8 @@ namespace Inzaana\Http\Controllers;
 
 use DB;
 use Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
 use Log;
 use Validator;
@@ -59,7 +61,7 @@ class ProductController extends Controller
         $viewData = [ 
             'productsCount' => session()->has('productsBySearch') ? session('productsBySearch')->count() : 0,
             'productsBySearch' => session()->has('productsBySearch') ? session('productsBySearch') : [],
-            'products' => Auth::user()->products()->orderBy('title','DESC')->paginate(15),
+            'products' => Auth::user()->products()->orderBy('title','ASC')->paginate(15),
             'product' => session()->has('product') ? session('product') : null,
             'categories' => Category::all(),
         ];
@@ -118,7 +120,7 @@ class ProductController extends Controller
         for($i = 1; $i <= ProductMedia::MAX_ALLOWED_IMAGE; ++$i)
         {
             if($request->hasFile('upload_image_' . $i))
-                $uploadedFiles []= $request->file('upload_image_' . $i);
+                $uploadedFiles [$i]= $request->file('upload_image_' . $i);
         }
         if (!collect($uploadedFiles)->isEmpty())
         {
@@ -217,8 +219,26 @@ class ProductController extends Controller
     }
 
     public function edit(Product $product)
-    { 
+    {
         return redirect()->route('user::products')->withProduct($product)->withEmbedUrl($product->videoEmbedUrl()['url']);
+    }
+
+    // Added by Asad
+    // TODO:: Need to add log
+    public function imageDelete($imageTitle)
+    {
+        $imagePATH = Input::get('imagePath');
+        $productImage = ProductMedia::Where('title','=',$imageTitle)->first();
+        $productImage->delete();
+        $message = "Delete Image from remote server.";
+        if(File::exists($imagePATH))
+        {
+            File::delete($imagePATH);
+        }else{
+            $message = "Image not found!!!";
+        }
+        return Response::json(['msg' => $message,'status' => 1]);
+
     }
 
     public function update(ProductRequest $request, Product $product)
@@ -236,7 +256,7 @@ class ProductController extends Controller
         for($i = 1; $i <= ProductMedia::MAX_ALLOWED_IMAGE; ++$i)
         {
             if($request->hasFile('upload_image_' . $i))
-                $uploadedFiles []= $request->file('upload_image_' . $i);
+                $uploadedFiles [$i]= $request->file('upload_image_' . $i);
         }
         if (!collect($uploadedFiles)->isEmpty())
         {
@@ -271,7 +291,6 @@ class ProductController extends Controller
             }
         }
         // dd($specs);
-
         $store_name_as_url = $request->input('store_name');
         $store = Store::whereNameAsUrl($store_name_as_url)->get()->first();
         $data = [

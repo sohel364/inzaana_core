@@ -402,7 +402,7 @@
 
                                                     </div>
                                                     <div class="col-md-6 col-md-offset-3">
-                                                        <span><a href="#" id="remove_image_1"><i class="fa fa-times"></i></a></span>
+                                                        <span><a href="#" data-image_src="blah-1" data-file_input="imgInp-1" {{ (isset($product) && $product->getImageURL(0)) ? 'data-image_url='.$product->getImageURL(0)['url'].'' : "" }} {{ (isset($product) && $product->getImageURL(0)) ? 'data-image_title='.$product->getImageURL(0)['title'].'' : "" }} {{ (isset($product) && $product->getImageURL(0)) ? "onClick=removeServerImage(this)" : 'onClick=removeLocalImage(this)' }}><i class="fa fa-times"></i></a></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
@@ -415,7 +415,8 @@
 
                                                     </div>
                                                     <div class="col-md-6 col-md-offset-3">
-                                                        <span><a href="#" id="remove_image_2"><i class="fa fa-times"></i></a></span>
+                                                        {{--<span><a href="#" id="remove_image_2"><i class="fa fa-times"></i></a></span>--}}
+                                                        <span><a href="#" data-image_src="blah-2" data-file_input="imgInp-2"  {{ (isset($product) && $product->getImageURL(1)) ? 'data-image_url='.$product->getImageURL(1)['url'].'' : "" }} {{ (isset($product) && $product->getImageURL(1)) ? 'data-image_title='.$product->getImageURL(1)['title'].'' : "" }} {{ (isset($product) && $product->getImageURL(1)) ? "onClick=removeServerImage(this)" : 'onClick=removeLocalImage(this)' }}><i class="fa fa-times"></i></a></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
@@ -428,7 +429,8 @@
 
                                                     </div>
                                                     <div class="col-md-6 col-md-offset-3">
-                                                        <span><a href="#" id="remove_image_3"><i class="fa fa-times"></i></a></span>
+                                                        {{--<span><a href="#" id="remove_image_3"><i class="fa fa-times"></i></a></span>--}}
+                                                        <span><a href="#" data-image_src="blah-3" data-file_input="imgInp-3"  {{ (isset($product) && $product->getImageURL(2)) ? 'data-image_url='.$product->getImageURL(2)['url'].'' : "" }} {{ (isset($product) && $product->getImageURL(2)) ? 'data-image_title='.$product->getImageURL(2)['title'].'' : "" }} {{ (isset($product) && $product->getImageURL(2)) ? "onClick=removeServerImage(this)" : 'onClick=removeLocalImage(this)' }}><i class="fa fa-times"></i></a></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
@@ -440,7 +442,8 @@
                                                         </span>
                                                     </div>
                                                     <div class="col-md-6 col-md-offset-3">
-                                                        <span><a href="#" id="remove_image_4"><i class="fa fa-times"></i></a></span>
+                                                        {{--<span><a href="#" id="remove_image_4"><i class="fa fa-times"></i></a></span>--}}
+                                                        <span><a href="#" data-image_src="blah-4" data-file_input="imgInp-4"  {{ (isset($product) && $product->getImageURL(3)) ? 'data-image_url='.$product->getImageURL(3)['url'].'' : "" }} {{ (isset($product) && $product->getImageURL(3)) ? 'data-image_title='.$product->getImageURL(3)['title'].'' : "" }} {{ (isset($product) && $product->getImageURL(3)) ? "onClick=removeServerImage(this)" : 'onClick=removeLocalImage(this)' }}><i class="fa fa-times"></i></a></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -905,7 +908,7 @@
 
 
 
-                    $("#remove_image_1").click(function(){
+                   /* $("#remove_image_1").click(function(){
                         $('#blah-1').attr('src','/images/products/default_product.jpg');
                         $('#imgInp-1').val("");
                     });
@@ -920,9 +923,42 @@
                     $("#remove_image_4").click(function(){
                         $('#blah-4').attr('src','/images/products/default_product.jpg');
                         $('#imgInp-4').val("");
-                    });
+                    });*/
 
+                function removeLocalImage(e){
+                    var imageSource = '#'+$(e).data('image_src');
+                    var fileInput = '#'+$(e).data('file_input');
+                    $(imageSource).attr('src','/images/products/default_product.jpg');
+                    $(fileInput).val("");
 
+                }
+
+                function removeServerImage(e){
+                    var imageSource = '#'+$(e).data('image_src');
+                    var fileInput = '#'+$(e).data('file_input');
+                    var imageTitle = $(e).data('image_title');
+                    var imagePATH = $(e).data('image_url');
+                    var url = window.location.pathname;
+                    if(imageTitle != null){
+                        $.ajax({
+                            async: true,
+                            type: 'GET',
+                            url: url+'/'+imageTitle+'/image-delete?imagePath='+imagePATH, // you need change it.
+                            processData: false, // high importance!
+                            success: function (data) {
+                                if(data['status']){
+                                    $(imageSource).attr('src','/images/products/default_product.jpg');
+                                    $(fileInput).val("");
+                                    $(e).attr("onclick", "removeLocalImage(this)");
+                                }
+                            },
+                            error: function (data) {
+
+                            },
+                            timeout: 10000
+                        });
+                    }
+                }
 
                 /* End of Asad Script */
             </script>
