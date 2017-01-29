@@ -9,6 +9,7 @@
     <!--for date picker only-->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <style>
         .btn-file {
             position: relative;
@@ -28,6 +29,21 @@
             background: white;
             cursor: inherit;
             display: block;
+        }
+        .ui-autocomplete {
+            max-height: 100px;
+            overflow-y: auto;
+            /* prevent horizontal scrollbar */
+            overflow-x: hidden;
+        }
+        /* IE 6 doesn't support max-height
+         * we use height instead, but this forces the menu to always be this tall
+         */
+        * html .ui-autocomplete {
+            height: 100px;
+        }
+        .ui-autocomplete-loading {
+            background: white url('http://loading.io/loader/?use=eyJzaXplIjo4LCJzcGVlZCI6MSwiY2JrIjoiI2ZmZmZmZiIsImMxIjoiIzAwYjJmZiIsImMyIjoiMTIiLCJjMyI6IjciLCJjNCI6IjIwIiwiYzUiOiI1IiwiYzYiOiIzMCIsInR5cGUiOiJkZWZhdWx0In0=') right center no-repeat;
         }
     </style>
     <!--end of date picker css-->
@@ -721,7 +737,7 @@
                         <h3 class="box-title">Recently Added product</h3>
                         <div class="box-tools">
                             <div class="input-group" style="width: 150px;">
-                                <input type="text" name="table_search" class="form-control input-sm pull-right" placeholder="Search">
+                                <input type="text" name="table_search" id="search_box" class="form-control input-sm pull-right" placeholder="Search">
                                 <div class="input-group-btn">
                                     <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
                                 </div>
@@ -737,15 +753,21 @@
                                 <th data-sort="product_name" data-order="ASC" id="sort_by_click">
                                     <a href="#">Product Name</a>
                                 </th>
-                                <th>Category</th>
+                                <th data-sort="category" data-order="ASC" id="sort_by_click">
+                                    <a href="#">Category</a>
+                                </th>
                                 <th>Sub Category</th>
                                 <th>MRP</th>
                                 <th>Discount</th>
-                                <th>Price</th>
+                                <th data-sort="price" data-order="ASC" id="sort_by_click">
+                                    <a href="#">Price</a>
+                                </th>
                                 <th>Image</th>
                                 <th>Available Quantity</th>
                                 <th>Time Limit For Return (in days)</th>
-                                <th>Status</th>
+                                <th data-sort="status" data-order="ASC" id="sort_by_click">
+                                    <a href="#">Status</a>
+                                </th>
                                 <th>Action</th>
                             </tr>
 
@@ -811,6 +833,7 @@
    -->
             <script src="{{ asset('js/select2.full.min.js') }}" type="text/javascript"></script>
             <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
             <script>
                 /* Sk Asadur Rahman Script*/
                 $(document).on('click','#view_detail', function (e) {
@@ -909,25 +932,6 @@
                 }
 
 
-
-
-                   /* $("#remove_image_1").click(function(){
-                        $('#blah-1').attr('src','/images/products/default_product.jpg');
-                        $('#imgInp-1').val("");
-                    });
-                    $("#remove_image_2").click(function(){
-                        $('#blah-2').attr('src','/images/products/default_product.jpg');
-                        $('#imgInp-2').val("");
-                    });
-                    $("#remove_image_3").click(function(){
-                        $('#blah-3').attr('src','/images/products/default_product.jpg');
-                        $('#imgInp-3').val("");
-                    });
-                    $("#remove_image_4").click(function(){
-                        $('#blah-4').attr('src','/images/products/default_product.jpg');
-                        $('#imgInp-4').val("");
-                    });*/
-
                 function removeLocalImage(e){
                     var imageSource = '#'+$(e).data('image_src');
                     var fileInput = '#'+$(e).data('file_input');
@@ -997,6 +1001,53 @@
                         timeout: 10000
                     });
 
+                });
+
+                $( "#search_box" ).autocomplete({
+                    source: function( request, response ) {
+                        var url = window.location.pathname;
+                        var search_item = request.term;
+                        $.ajax( {
+                            async: true,
+                            type: 'GET',
+                            url: url+'/'+search_item+'/search-product', // you need change it.
+                            processData: false, // high importance!
+                            success: function (data) {
+                                response(data);
+                            },
+                            error: function (data) {
+
+                            },
+                            timeout: 10000
+                        } );
+                    },
+                    minLength: 2,
+                    select: function( event, ui ) {
+                        log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+                    }
+                });
+
+
+                $(document).on('keyup','#search_boxs',function(e){
+                    var search_item = ''+$(this).val();
+                    var url = window.location.pathname;
+                    $.ajax({
+                        async: true,
+                        type: 'GET',
+                        url: url+'/'+search_item+'/search-product', // you need change it.
+                        processData: false, // high importance!
+                        success: function (data) {
+                            alert(data);
+                        },
+                        error: function (data) {
+
+                        },
+                        timeout: 10000
+                    });
+                    //var regex = new RegExp("^[ A-Za-z0-9_@./#&+-]*$");
+                    //if(regex.test(search_item)){
+                        //console.log(search_item);
+                    //}
                 });
 
                 /* End of Asad Script */

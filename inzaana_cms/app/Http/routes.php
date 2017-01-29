@@ -185,6 +185,7 @@ Route::group(['middleware' => 'web'], function () {
                 // Sk script
                 Route::get('/{product}/quick-view', [ 'uses' => 'ProductController@quickView', 'as' => 'products.quick.view' ]);
                 Route::get('/{image_title}/image-delete', [ 'uses' => 'ProductController@imageDelete', 'as' => 'products.image.delete' ]);
+                Route::get('/{search_item}/search-product', [ 'uses' => 'ProductController@productSearch', 'as' => 'products.search.table' ]);
 
                 // Route::group( [ 'middleware' => ['JsonValidation'] ], function () {
 

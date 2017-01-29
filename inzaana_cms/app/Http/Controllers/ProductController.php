@@ -250,6 +250,16 @@ class ProductController extends Controller
 
     }
 
+    public function productSearch($search_item)
+    {
+        $productsBySearch = Product::where('title', $search_item)->orWhere('title', 'ilike', '%' . $search_item . '%')->take(10)->get();
+        $product_title = [];
+        foreach($productsBySearch as $product){
+            $product_title[] = $product->title;
+        }
+        return $product_title;
+    }
+
     public function update(ProductRequest $request, Product $product)
     {
         // dd($request);
