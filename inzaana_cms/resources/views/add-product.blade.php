@@ -77,10 +77,10 @@
                             </div>
                             <div class="box-body">
                                 <div class="input-group">
-                                    <input id="search-box" name="search-box" type="text" class="form-control">
-                        <span class="input-group-btn">
-                          <button id="product-search-btn" class="btn btn-info btn-flat" type="submit"><i class="fa fa-lg fa-search"><!-- Search --></i></button>
-                        </span>
+                                    <input id="search-box" name="search-box" type="text" class="form-control search_box">
+                                    <span class="input-group-btn">
+                                      <button id="product-search-btn" class="btn btn-info btn-flat" type="submit"><i class="fa fa-lg fa-search"><!-- Search --></i></button>
+                                    </span>
                                 </div>
                             </div>
                             <div class="box-footer box-comments{{ $productsCount == 0 ? '' : ' hidden' }}">
@@ -125,8 +125,14 @@
                                             <td id="category">{{ $productFromSearch->marketProduct()->category->name or 'Uncategorized' }}</td>
                                             <td id="sellyours">
                                                 <form method="POST">
+                                                    
                                                     {!! csrf_field() !!}
-                                                    <input formaction="{{ route('user::products.sell-yours', [$productFromSearch]) }}" class="btn btn-info btn-flat btn-sm" type="submit" value="Sell yours">
+
+                                                    @if($productFromSearch->isMine())
+                                                        @include('includes.single-product-actions', [ 'product' => $productFromSearch ])
+                                                    @else
+                                                        <input formaction="{{ route('user::products.sell-yours', [$productFromSearch]) }}" class="btn btn-info btn-flat btn-sm" type="submit" value="Sell yours">                                                                                                   
+                                                    @endif
                                                 </form>
                                             </td>
                                         </tr>
@@ -196,8 +202,8 @@
                                                 </select>
                                                 @if ($errors->has('store_name'))
                                                     <span class="help-block">
-                                        <strong>{{ $errors->first('store_name') }}</strong>
-                                    </span>
+                                                        <strong>{{ $errors->first('store_name') }}</strong>
+                                                    </span>
                                                 @endif
                                             </div>
                                         </div>
@@ -216,8 +222,8 @@
                                                 </select>
                                                 @if ($errors->has('category'))
                                                     <span class="help-block">
-                                      <strong>{{ $errors->first('category') }}</strong>
-                                  </span>
+                                                      <strong>{{ $errors->first('category') }}</strong>
+                                                    </span>
                                                 @endif
                                             </div>
                                             <div class="col-sm-2">
@@ -737,7 +743,7 @@
                         <h3 class="box-title">Recently Added product</h3>
                         <div class="box-tools">
                             <div class="input-group" style="width: 150px;">
-                                <input type="text" name="table_search" id="search_box" class="form-control input-sm pull-right" placeholder="Search">
+                                <input type="text" name="table_search" id="search_box" class="form-control input-sm pull-right search_box" placeholder="Search">
                                 <div class="input-group-btn">
                                     <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
                                 </div>
@@ -796,8 +802,8 @@
                                             <td class="text-center" id="child">
                                                 <form id="product-modification-form" class="form-horizontal" method="POST" >
                                                     {!! csrf_field() !!}
-                                                    <input formaction="{{ route('user::products.edit', [$product]) }}" id="product-edit-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Edit">
-                                                    <input class="btn btn-info btn-flat btn-xs" type="button" data-toggle="modal" data-target="#confirm_remove_{{ $product->id }}_disabled" data-product_id="{{ $product->id }}" data-url="{{ route('user::products.delete', [$product]) }}" id="product_del_btn" value="Delete">
+
+                                                    @include('includes.single-product-actions', compact('product'))
                                                 </form>
                                             </td>
                                         </tr>
@@ -1003,7 +1009,7 @@
 
                 });
 
-                $( "#search_box" ).autocomplete({
+                $( ".search_box" ).autocomplete({
                     source: function( request, response ) {
                         var url = window.location.pathname;
                         var search_item = request.term;
@@ -1018,7 +1024,7 @@
                             error: function (data) {
 
                             },
-                            timeout: 10000
+                            timeout: 5000
                         } );
                     },
                     minLength: 2,

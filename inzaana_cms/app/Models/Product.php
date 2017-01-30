@@ -5,6 +5,8 @@ namespace Inzaana;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Illuminate\Support\Facades\Auth;
+
 class Product extends Model
 {
     use SoftDeletes;
@@ -102,7 +104,7 @@ class Product extends Model
                     $imagesExisting->first()->delete();
                 }
             }
-    }
+        }
         // $hasEmbed = $data['has_embed_video'];
         if(collect($data)->has('embed_url') && $data['embed_url'])
         {   
@@ -211,6 +213,11 @@ class Product extends Model
         return (ProductMedia::IMAGES_PATH_PUBLIC . ProductMedia::DEFAUL_IMAGE);
     }
 
+    public function isMine()
+    {
+        return Auth::user()->products()->find($this->id);
+    }
+
     public function marketProduct()
     {
         return MarketProduct::find($this->market_product_id);
@@ -274,21 +281,6 @@ class Product extends Model
     {
         return $this->marketProduct()->price * ( 1 -  ( $this->discount / 100.0) );
     }
-
-    // public function isViewDropdown()
-    // {
-    //     return ($this->special_specs->view_type == 'dropdown');
-    // }
-
-    // public function isViewOptions()
-    // {
-    //     return ($this->special_specs->view_type == 'options');
-    // }
-
-    // public function isViewTypeGroup()
-    // {
-    //     return array_has(array_flatten(ScanRule::VIEW_TYPES['group']), $this->special_specs->view_type);
-    // }
 
     public function getStatus()
     {
