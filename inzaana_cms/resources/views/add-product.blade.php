@@ -803,13 +803,8 @@
                                                 <td class="text-center" id="child">
                                                     <form id="product-modification-form" class="form-horizontal" method="POST" >
                                                         {!! csrf_field() !!}
-                                                        <input formaction="{{ route('user::products.edit', [$product]) }}" id="product-edit-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Edit">
-                                                        <input class="btn btn-info btn-flat btn-xs" type="button" data-toggle="modal" data-target="#confirm_remove_{{ $product->id }}_disabled" data-product_id="{{ $product->id }}" data-url="{{ route('user::products.delete', [$product]) }}" id="product_del_btn" value="Delete">
-                                                    </form>
-                                                </td>
-                                            </tr>
 
-                                                    @include('includes.single-product-actions', compact('product'))
+                                                        @include('includes.single-product-actions', compact('product'))
                                                 </form>
                                             </td>
                                         </tr>
@@ -1015,7 +1010,7 @@
 
                 });
 
-                $( "#search_box" ).autocomplete({
+                $( ".search_box" ).autocomplete({
                     source: function( request, response ) {
                         var url = window.location.pathname;
                         var search_item = request.term;
@@ -1030,7 +1025,7 @@
                             error: function (data) {
 
                             },
-                            timeout: 10000
+                            timeout: 5000
                         } );
                     },
                     minLength: 2,

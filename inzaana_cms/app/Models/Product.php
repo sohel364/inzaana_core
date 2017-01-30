@@ -78,7 +78,7 @@ class Product extends Model
             $media->delete(); // call the ProductMedia delete()
         }
         
-        parent::delete();
+        return parent::delete();
     }
 
     public function saveMedias(array $data)

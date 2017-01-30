@@ -35,15 +35,23 @@ class ProductMedia extends Model
     public function mediable()
     {
         return $this->morphTo();
-    }    
+    }
+
+    private function isRemovable()
+    {
+        return !$this->is_embed || !$this->is_public;
+    }
 
     public function delete()
     {
-        if(!$this->is_embed)
+        if($this->isRemovable())
+        {
             File::delete($this->url);
-        if(File::exists($this->url))
-            return false;
-        parent::delete();
+
+            if(File::exists($this->url))
+                return false;
+        }
+        return parent::delete();
     }
 
     public static function uuid()
