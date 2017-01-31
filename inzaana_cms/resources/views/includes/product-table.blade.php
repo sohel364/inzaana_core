@@ -1,16 +1,25 @@
-<table id="parent" class="table table-hover">
+<table id="parent" class="table table-hover table-bordered product_table">
     <tr>
         <!-- <th>ID</th> -->
-        <th>Product Name</th>
-        <th>Category</th>
+        <th style="vertical-align: middle"><input type="checkbox" name="select_all" id="select_all"> </th>
+        <th data-sort="product_name" data-order="ASC" id="sort_by_click">
+            <a href="#">Product Name</a>
+        </th>
+        <th data-sort="category" data-order="ASC" id="sort_by_click">
+            <a href="#">Category</a>
+        </th>
         <th>Sub Category</th>
         <th>MRP</th>
         <th>Discount</th>
-        <th>Price</th>
+        <th data-sort="price" data-order="ASC" id="sort_by_click">
+            <a href="#">Price</a>
+        </th>
         <th>Image</th>
         <th>Available Quantity</th>
         <th>Time Limit For Return (in days)</th>
-        <th>Status</th>
+        <th data-sort="status" data-order="ASC" id="sort_by_click">
+            <a href="#">Status</a>
+        </th>
         <th>Action</th>
     </tr>
 
@@ -21,6 +30,7 @@
             @if($product->marketProduct())
                 <tr id="product_{{ $product->id }}">
                     <!-- <td id="child"><a href="">001</a> </td> -->
+                    <td style="vertical-align: middle"><input type="checkbox" name="check_box" value="{{ $product->id }}" id=""></td>
                     <td id="child"><a href="">{{ $product->title }}</a></td>
                     <td id="child"><a href="">{{ $product->categoryName() }}</a></td>
                     <td id="child"><a href=""></a></td> <!-- sub category-->
@@ -49,3 +59,6 @@
         @endforeach
     @endif
 </table>
+<div class="col-sm-12 noPadMar text-center">
+    {{ $products->links() }}
+</div>

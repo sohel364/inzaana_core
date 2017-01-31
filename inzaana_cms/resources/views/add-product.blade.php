@@ -739,76 +739,78 @@
                             <div class="input-group" style="width: 150px;">
                                 <input type="text" name="table_search" id="search_box" class="form-control input-sm pull-right" placeholder="Search">
                                 <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+                                    <button class="btn btn-sm btn-default" id="search_by_button_click"><i class="fa fa-search"></i></button>
                                 </div>
                             </div>
                         </div>
                     </div><!-- /.box-header -->
                     <div class="box-body table-responsive no-padding">
                         <div id="delete_all"></div>
-                        <table id="parent" class="table table-hover table-bordered product_table">
-                            <tr>
-                                <!-- <th>ID</th> -->
-                                <th style="vertical-align: middle"><input type="checkbox" name="select_all" id="select_all"> </th>
-                                <th data-sort="product_name" data-order="ASC" id="sort_by_click">
-                                    <a href="#">Product Name</a>
-                                </th>
-                                <th data-sort="category" data-order="ASC" id="sort_by_click">
-                                    <a href="#">Category</a>
-                                </th>
-                                <th>Sub Category</th>
-                                <th>MRP</th>
-                                <th>Discount</th>
-                                <th data-sort="price" data-order="ASC" id="sort_by_click">
-                                    <a href="#">Price</a>
-                                </th>
-                                <th>Image</th>
-                                <th>Available Quantity</th>
-                                <th>Time Limit For Return (in days)</th>
-                                <th data-sort="status" data-order="ASC" id="sort_by_click">
-                                    <a href="#">Status</a>
-                                </th>
-                                <th>Action</th>
-                            </tr>
+                        <div id="load_table_dom">
+                            <table id="parent" class="table table-hover table-bordered product_table">
+                                <tr>
+                                    <!-- <th>ID</th> -->
+                                    <th style="vertical-align: middle"><input type="checkbox" name="select_all" id="select_all"> </th>
+                                    <th data-sort="product_name" data-order="ASC" id="sort_by_click">
+                                        <a href="#">Product Name</a>
+                                    </th>
+                                    <th data-sort="category" data-order="ASC" id="sort_by_click">
+                                        <a href="#">Category</a>
+                                    </th>
+                                    <th>Sub Category</th>
+                                    <th>MRP</th>
+                                    <th>Discount</th>
+                                    <th data-sort="price" data-order="ASC" id="sort_by_click">
+                                        <a href="#">Price</a>
+                                    </th>
+                                    <th>Image</th>
+                                    <th>Available Quantity</th>
+                                    <th>Time Limit For Return (in days)</th>
+                                    <th data-sort="status" data-order="ASC" id="sort_by_click">
+                                        <a href="#">Status</a>
+                                    </th>
+                                    <th>Action</th>
+                                </tr>
 
-                            @if(isset($products))
+                                @if(isset($products))
 
-                                @foreach( $products as $product )
+                                    @foreach( $products as $product )
 
-                                    @if($product->marketProduct())
-                                        <tr id="product_{{ $product->id }}">
-                                            <!-- <td id="child"><a href="">001</a> </td> -->
-                                            <td style="vertical-align: middle"><input type="checkbox" name="check_box" value="{{ $product->id }}" id=""></td>
-                                            <td id="child"><a href="">{{ $product->title }}</a></td>
-                                            <td id="child"><a href="">{{ $product->categoryName() }}</a></td>
-                                            <td id="child"><a href=""></a></td> <!-- sub category-->
-                                            <td id="child"><a href="">{{ $product->mrp }}</a></td>
-                                            <td id="child"><a href="">{{ $product->discount }} %</a></td>
-                                            <td id="child"><a href="">₹ {{ $product->marketProduct()->price }}</a></td>
-                                            <td id="child">
-                                                <a data-toggle="modal" id="view_detail" data-product_url="{{ route('user::products.quick.view', [$product]) }}"  data-target="#_view_detail_{{ $product->id }}">
-                                                    <img src="{{ $product->thumbnail() }}" height="60px" width="90px"/>
-                                                </a>
-                                            </td>
-                                            <td id="child"><a href="">{{ $product->available_quantity }}</a></td> <!-- Available quantity-->
-                                            <td id="child"><a href="">{{ $product->return_time_limit }}</a></td> <!-- Time limit for return-->
-                                            <td id="child">@include('includes.approval-label', [ 'status' => $product->status, 'labelText' => $product->getStatus() ])</td>
-                                            <td class="text-center" id="child">
-                                                <form id="product-modification-form" class="form-horizontal" method="POST" >
-                                                    {!! csrf_field() !!}
-                                                    <input formaction="{{ route('user::products.edit', [$product]) }}" id="product-edit-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Edit">
-                                                    <input class="btn btn-info btn-flat btn-xs" type="button" data-toggle="modal" data-target="#confirm_remove_{{ $product->id }}_disabled" data-product_id="{{ $product->id }}" data-url="{{ route('user::products.delete', [$product]) }}" id="product_del_btn" value="Delete">
-                                                </form>
-                                            </td>
-                                        </tr>
+                                        @if($product->marketProduct())
+                                            <tr id="product_{{ $product->id }}">
+                                                <!-- <td id="child"><a href="">001</a> </td> -->
+                                                <td style="vertical-align: middle"><input type="checkbox" name="check_box" value="{{ $product->id }}" id=""></td>
+                                                <td id="child"><a href="">{{ $product->title }}</a></td>
+                                                <td id="child"><a href="">{{ $product->categoryName() }}</a></td>
+                                                <td id="child"><a href=""></a></td> <!-- sub category-->
+                                                <td id="child"><a href="">{{ $product->mrp }}</a></td>
+                                                <td id="child"><a href="">{{ $product->discount }} %</a></td>
+                                                <td id="child"><a href="">₹ {{ $product->marketProduct()->price }}</a></td>
+                                                <td id="child">
+                                                    <a data-toggle="modal" id="view_detail" data-product_url="{{ route('user::products.quick.view', [$product]) }}"  data-target="#_view_detail_{{ $product->id }}">
+                                                        <img src="{{ $product->thumbnail() }}" height="60px" width="90px"/>
+                                                    </a>
+                                                </td>
+                                                <td id="child"><a href="">{{ $product->available_quantity }}</a></td> <!-- Available quantity-->
+                                                <td id="child"><a href="">{{ $product->return_time_limit }}</a></td> <!-- Time limit for return-->
+                                                <td id="child">@include('includes.approval-label', [ 'status' => $product->status, 'labelText' => $product->getStatus() ])</td>
+                                                <td class="text-center" id="child">
+                                                    <form id="product-modification-form" class="form-horizontal" method="POST" >
+                                                        {!! csrf_field() !!}
+                                                        <input formaction="{{ route('user::products.edit', [$product]) }}" id="product-edit-btn" class="btn btn-info btn-flat btn-xs" type="submit" value="Edit">
+                                                        <input class="btn btn-info btn-flat btn-xs" type="button" data-toggle="modal" data-target="#confirm_remove_{{ $product->id }}_disabled" data-product_id="{{ $product->id }}" data-url="{{ route('user::products.delete', [$product]) }}" id="product_del_btn" value="Delete">
+                                                    </form>
+                                                </td>
+                                            </tr>
 
-                                    @endif
+                                        @endif
 
-                                @endforeach
-                            @endif
-                        </table>
-                        <div class="col-sm-12 noPadMar text-center">
-                        {{ $products->links() }}
+                                    @endforeach
+                                @endif
+                            </table>
+                            <div class="col-sm-12 noPadMar text-center">
+                            {{ $products->links() }}
+                            </div>
                         </div>
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
@@ -1023,32 +1025,102 @@
                     },
                     minLength: 2,
                     select: function( event, ui ) {
-                        log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+                        var single_product = ui.item.value;
+                        var url = window.location.pathname;
+                        $.ajax( {
+                            async: true,
+                            type: 'GET',
+                            url: url+'/'+single_product+'/search-single-product', // you need change it.
+                            processData: false, // high importance!
+                            success: function (data) {
+                                $('#load_table_dom').html(data);
+                            },
+                            error: function (data) {
+
+                            },
+                            timeout: 10000
+                        } );
                     }
                 });
 
 
-                $(document).on('keyup','#search_boxs',function(e){
-                    var search_item = ''+$(this).val();
+                $(document).on('click','#search_by_button_click',function(e){
+                    var search_item = $('#search_box').val();
                     var url = window.location.pathname;
+                    if(search_item !== ''){
+                        $.ajax({
+                            async: true,
+                            type: 'GET',
+                            url: url+'/'+search_item+'/search-all-product', // you need change it.
+                            processData: false, // high importance!
+                            success: function (data) {
+                                $('#load_table_dom').html(data);
+                            },
+                            error: function (data) {
+
+                            },
+                            timeout: 10000
+                        });
+                    }else{
+                        alert("Please input search string.");
+                    }
+                });
+
+                $('#search_box').keyup(function(e){
+                    if(e.keyCode == 13)
+                    {
+                        var search_item = $('#search_box').val();
+                        var url = window.location.pathname;
+                        if(search_item !== '') {
+                            $.ajax({
+                                async: true,
+                                type: 'GET',
+                                url: url + '/' + search_item + '/search-all-product', // you need change it.
+                                processData: false, // high importance!
+                                success: function (data) {
+                                    $('#load_table_dom').html(data);
+                                },
+                                error: function (data) {
+
+                                },
+                                timeout: 10000
+                            });
+                        }else{
+                            alert("Please input search string.");
+                        }
+                    }
+                });
+
+                $(document).on('click','.pagination > li > a', function(e){
+                    e.preventDefault();
+                    var url = $(this).attr('href');
                     $.ajax({
                         async: true,
                         type: 'GET',
-                        url: url+'/'+search_item+'/search-product', // you need change it.
+                        url: url, // you need change it.
                         processData: false, // high importance!
                         success: function (data) {
-                            alert(data);
+                            $('#load_table_dom').html(data);
                         },
                         error: function (data) {
 
                         },
                         timeout: 10000
                     });
-                    //var regex = new RegExp("^[ A-Za-z0-9_@./#&+-]*$");
-                    //if(regex.test(search_item)){
-                        //console.log(search_item);
-                    //}
                 });
+
+                function getUrlVars()
+                {
+                    var vars = [], hash;
+                    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                    for(var i = 0; i < hashes.length; i++)
+                    {
+                        hash = hashes[i].split('=');
+                        vars.push(hash[0]);
+                        vars[hash[0]] = hash[1];
+                    }
+                    return vars;
+                }
 
                 /* End of Asad Script */
             </script>

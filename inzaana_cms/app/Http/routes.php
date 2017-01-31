@@ -186,6 +186,8 @@ Route::group(['middleware' => 'web'], function () {
                 Route::get('/{product}/quick-view', [ 'uses' => 'ProductController@quickView', 'as' => 'products.quick.view' ]);
                 Route::get('/{image_title}/image-delete', [ 'uses' => 'ProductController@imageDelete', 'as' => 'products.image.delete' ]);
                 Route::get('/{search_item}/search-product', [ 'uses' => 'ProductController@productSearch', 'as' => 'products.search.table' ]);
+                Route::get('/{search_item}/search-single-product', [ 'uses' => 'ProductController@productSearchSingle', 'as' => 'products.search.single.table' ]);
+                Route::get('/{search_item}/search-all-product', [ 'uses' => 'ProductController@productSearchAll', 'as' => 'products.search.all.table' ]);
 
                 // Route::group( [ 'middleware' => ['JsonValidation'] ], function () {
 

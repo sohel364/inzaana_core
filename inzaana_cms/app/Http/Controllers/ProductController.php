@@ -4,6 +4,7 @@ namespace Inzaana\Http\Controllers;
 
 use DB;
 use Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
@@ -51,7 +52,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $productsCount = 0;
         $products = Auth::user()->products;
@@ -69,9 +70,16 @@ class ProductController extends Controller
         session()->forget('selected_tab');
         session()->forget('productsBySearch');
         session()->forget('product');
-        return view('add-product', $viewData)->withUser(Auth::user())
-                                             ->withStores(Auth::user()->stores->pluck('name', 'name_as_url'))
-                                             ->withTab($tab);
+        if($request->ajax()){
+            return response()->view('includes.product-table',$viewData)->header('Content-Type', 'html');
+        }else{
+            return view('add-product', $viewData)->withUser(Auth::user())
+                ->withStores(Auth::user()->stores->pluck('name', 'name_as_url'))
+                ->withTab($tab);
+        }
+
+
+
     }
 
     private function validateProduct(ProductRequest $request, Product $product = null)
@@ -258,6 +266,21 @@ class ProductController extends Controller
             $product_title[] = $product->title;
         }
         return $product_title;
+    }
+
+    public function productSearchSingle($search_item){
+        $products = Product::where('title', $search_item)->orWhere('title', 'ilike', '%' . $search_item . '%')->paginate(10);
+
+        return response()->view('includes.product-table',compact('products'))
+            ->header('Content-Type', 'html');
+    }
+
+    public function productSearchAll($search_item){
+
+        $products = Product::where('title', $search_item)->orWhere('title', 'ilike', '%' . $search_item . '%')->paginate(10);
+        return response()->view('includes.product-table',compact('products'))
+            ->header('Content-Type', 'html');
+
     }
 
     public function update(ProductRequest $request, Product $product)
