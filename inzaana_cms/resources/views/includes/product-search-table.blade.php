@@ -3,6 +3,7 @@
     <h5>Results on Inzaana.com &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<b>1</b> to <b>{{ count($productsBySearch) > 0 ? $productsBySearch->count() : 0 }}</b> of <b>{{ count($productsBySearch) > 0 ? $productsBySearch->total() : 0 }}</b> results.</h5>
 </div>
 <div class="box-body no-padding">
+    <!-- <div class="alert alert-warning">{{ session('flash_notification.message') }}</div> -->
     <table id="parent" class="table table-hover">
         <tr>
             <th>Image</th>
@@ -14,10 +15,9 @@
             @foreach($productsBySearch as $productFromSearch)
                 <tr>
                     <td id="photo">
-                        <a  data-toggle="modal" 
-                            data-product_url="{{ route('user::products.quick.view', [$productFromSearch]) }}"
-                            data-target="#_view_detail_{{ $productFromSearch->id }}">
-                            <img src="{{ $productFromSearch->thumbnail() }}" height="50px" width="80px"/></a>
+                        <a class="view_detail" data-product_url="{{ route('user::products.quick.view', [$productFromSearch]) }}">
+                            <img src="{{ $productFromSearch->thumbnail() }}" height="50px" width="80px"/>
+                        </a>
                     </td>
 
                     <td id="product">{{ $productFromSearch->title }}</td>

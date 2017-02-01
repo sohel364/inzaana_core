@@ -749,7 +749,7 @@
                                                 <td id="child"><a href="">{{ $product->discount }} %</a></td>
                                                 <td id="child"><a href="">₹ {{ $product->marketProduct()->price }}</a></td>
                                                 <td id="child">
-                                                    <a data-toggle="modal" id="view_detail" data-product_url="{{ route('user::products.quick.view', [$product]) }}"  data-target="#_view_detail_{{ $product->id }}">
+                                                    <a class="view_detail" data-product_url="{{ route('user::products.quick.view', [$product]) }}">
                                                         <img src="{{ $product->thumbnail() }}" height="60px" width="90px"/>
                                                     </a>
                                                 </td>
@@ -799,7 +799,7 @@
             <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
             <script>
                 /* Sk Asadur Rahman Script*/
-                $(document).on('click','#view_detail', function (e) {
+                $(document).on('click','.view_detail', function (e) {
                     e.preventDefault();
                     var url = $(this).data('product_url');
                     //alert(id);
