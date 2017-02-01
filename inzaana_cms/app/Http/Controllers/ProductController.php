@@ -202,27 +202,37 @@ class ProductController extends Controller
 
     public function search(ProductRequest $request)
     {   
-        if($request->exists('search-box') && $request->has('search-box'))
+        if($request->exists('search_box') && $request->has('search_box'))
         {
-            $search_terms = $request->query('search-box');
-            $search_terms_slugged = str_slug($search_terms);
+            $search_terms = $request->query('search_box');
 
             // NOTE: like -> searches case sensitive
             // $productsBySearch = Product::where('title', $search_terms)->orWhere('title', 'like', '%' . $search_terms . '%')->get();
 
             // NOTE: ilike -> seaches case insensitive
             $productsBySearch = Product::where('title', $search_terms)->orWhere('title', 'ilike', '%' . $search_terms . '%')->get();
-            $productsBySearchPaginated = Product::where('title', $search_terms)->orWhere('title', 'ilike', '%' . $search_terms . '%')->paginate(2);
+            $productsBySearchPaginated = Product::where('title', $search_terms)->orWhere('title', 'ilike', '%' . $search_terms . '%')->paginate(10);
             $productsBySearch = $productsBySearch->reject(function ($product) {
                 return $product->trashed() || $product->is_public === false;
             });
             $productsCount = $productsBySearch->count();
+            $productsBySearchPaginated->setPath('products/search');
 
-            $productsBySearch = $productsBySearchPaginated;
-            $productsBySearch->setPath('products/search');
-
+            if($request->ajax())
+            {
+                if($request->exists('search_title') && $request->has('search_title') && $request->query('search_title') === true)
+                {                    
+                    $product_title = [];
+                    foreach($productsBySearch->take(10)->get() as $product){
+                        $product_title[] = $product->title;
+                    }
+                    return $product_title;
+                }
+                return response()->view('includes.product-search-table', [ 'productsBySearch' =>  $productsBySearchPaginated, 'search_terms' => $search_terms ])
+                                 ->header('Content-Type', 'html');
+            }
             return redirect()->route('user::products')
-                             ->with(compact('productsBySearch', 'productsCount', 'search_terms'));
+                             ->with([ 'productsBySearch' =>  $productsBySearchPaginated, 'search_terms' => $search_terms, 'productsCount' => $productsCount ]);
         }
         return redirect()->route('user::products');
     }

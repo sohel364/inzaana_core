@@ -77,7 +77,7 @@
                             </div>
                             <div class="box-body">
                                 <div class="input-group">
-                                    <input id="search-box" name="search-box" type="text" class="form-control search_box">
+                                    <input id="search-box" name="search_box" type="text" class="form-control search_box">
                                     <span class="input-group-btn">
                                       <button id="product-search-btn" class="btn btn-info btn-flat" type="submit"><i class="fa fa-lg fa-search"><!-- Search --></i></button>
                                     </span>
@@ -99,52 +99,8 @@
                 <!--end of form-->
 
                 <div class="col-lg-6 col-lg-offset-3 boxPadTop">
-                    <div class="box box-down box-info{{ $productsCount == 0 ? ' hidden' : '' }}">
-                        <div class="boxed-header">
-                            <h5>Results on Inzaana.com &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<b>1</b> to <b>{{ count($productsBySearch) > 0 ? $productsBySearch->count() : 0 }}</b> of <b>{{ count($productsBySearch) > 0 ? $productsBySearch->total() : 0 }}</b> results.</h5>
-                        </div>
-                        <div class="box-body no-padding">
-                            <table id="parent" class="table table-hover">
-                                <tr>
-                                    <th>Image</th>
-                                    <th>Product Name</th>
-                                    <th>Category</th>
-                                    <th>Action</th>
-                                </tr>
-                                @if(isset($productsBySearch))
-                                    @foreach($productsBySearch as $productFromSearch)
-                                        <tr>
-                                            <td id="photo">
-                                                <a  data-toggle="modal" 
-                                                    data-product_url="{{ route('user::products.quick.view', [$productFromSearch]) }}"
-                                                    data-target="#_view_detail_{{ $productFromSearch->id }}">
-                                                    <img src="{{ $productFromSearch->thumbnail() }}" height="50px" width="80px"/></a>
-                                            </td>
-
-                                            <td id="product">{{ $productFromSearch->title }}</td>
-                                            <td id="category">{{ $productFromSearch->marketProduct()->category->name or 'Uncategorized' }}</td>
-                                            <td id="sellyours">
-                                                <form method="POST">
-                                                    
-                                                    {!! csrf_field() !!}
-
-                                                    @if($productFromSearch->isMine())
-                                                        @include('includes.single-product-actions', [ 'product' => $productFromSearch ])
-                                                    @else
-                                                        <input formaction="{{ route('user::products.sell-yours', [$productFromSearch]) }}" class="btn btn-info btn-flat btn-sm" type="submit" value="Sell yours">                                                                                                   
-                                                    @endif
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endif
-                            </table>
-                            <div class="col-sm-12 noPadMar text-center">
-
-                                {{ count($productsBySearch) > 0 ? $productsBySearch->appends([ 'search-box' => $search_terms ])->links() : '' }}
-
-                            </div>
-                        </div>
+                    <div id="sell_yours_search" class="box box-down box-info{{ $productsCount == 0 ? ' hidden' : '' }}">
+                        @include('includes.product-search-table')
                     </div>
                 </div>
             </div>
@@ -1010,41 +966,56 @@
 
                 });
 
+                function requestProductsAutoCompleted(search_terms, input_id, response, context)
+                {                    
+                    var url = window.location.pathname;
+                    var route_url = url + '/' + search_terms + '/' + context;
+                    var targetDom = '#load_table_dom';
+                    var processData = false;
+
+                    if(input_id == 'search-box')
+                    {
+                        route_url = url + '/search';
+                        targetDom = '#sell_yours_search';
+                        processData = true;
+                    }
+
+                    return $.ajax( {
+                        async: true,
+                        type: 'GET',
+                        url: route_url, // you need change it.
+                        processData: processData, // high importance!
+                        data: {
+                            search_box: search_terms,
+                            search_title: (response === false)
+                        },
+                        success: function (data) {
+                            if(response === false)
+                            {
+                                if(input_id == 'search-box')
+                                    $(targetDom).removeClass("hidden");
+                                $(targetDom).html(data);
+                            }
+                            else
+                                response(data);
+                        },
+                        error: function (data) {
+
+                        },
+                        timeout: 5000
+                    });
+                }
+
                 $( ".search_box" ).autocomplete({
                     source: function( request, response ) {
-                        var url = window.location.pathname;
-                        var search_item = request.term;
-                        $.ajax( {
-                            async: true,
-                            type: 'GET',
-                            url: url+'/'+search_item+'/search-product', // you need change it.
-                            processData: false, // high importance!
-                            success: function (data) {
-                                response(data);
-                            },
-                            error: function (data) {
 
-                            },
-                            timeout: 5000
-                        } );
+                        requestProductsAutoCompleted(request.term, false, response, 'search-product');
                     },
                     minLength: 2,
                     select: function( event, ui ) {
-                        var single_product = ui.item.value;
-                        var url = window.location.pathname;
-                        $.ajax( {
-                            async: true,
-                            type: 'GET',
-                            url: url+'/'+single_product+'/search-single-product', // you need change it.
-                            processData: false, // high importance!
-                            success: function (data) {
-                                $('#load_table_dom').html(data);
-                            },
-                            error: function (data) {
 
-                            },
-                            timeout: 10000
-                        } );
+                        console.log(ui.item);
+                        requestProductsAutoCompleted(ui.item.value, this.id, false, 'search-all-product');
                     }
                 });
 
