@@ -13,7 +13,55 @@
 </head>
 
 <body>
-  <!--Nav-->
+    <!--top login onfo bar-->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+          <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle slimline" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-user"></span> 
+                        <strong>mohsin.ofcl@gmail.com</strong>
+                        <span class="glyphicon glyphicon-chevron-down"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <div class="navbar-login">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <p class="text-center">
+                                            <span class="glyphicon glyphicon-user icon-size"></span>
+                                        </p>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <p class="text-left"><strong>Shrabon Mohsin</strong></p>
+                                        <p class="text-left small">mohsin.ofcl@gmail.com</p>
+                                        <p class="text-left">
+                                            <a href="#" class="btn btn-primary btn-block btn-sm">Account settings</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="navbar-login navbar-login-session">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <p>
+                                            <a href="#" class="btn btn-danger btn-block">Log Out</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+      </div>
+    </nav>
+    <!--End of top login onfo bar-->
+    <div class="main-body">
+        <!--Nav-->
   <div class="shadow">
     <div class="container">
       <nav class="navbar navbar-default navbar-static-top">
@@ -348,6 +396,7 @@
     </div>
   </div>
 
+    </div>
   <!--End Footer -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <script src="{{ asset('js/bootstrap.min.js') }}"></script>

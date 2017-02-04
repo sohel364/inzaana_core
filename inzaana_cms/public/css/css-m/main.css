@@ -336,3 +336,41 @@ ul.dropdown-cart li .item-right{
 ul.dropdown-cart li .item-right button{
     margin-top:14px;
 }
+.main-body{
+    padding-top: 70px;
+}
+.navbar-inverse {
+    background-color: #3c8dbc; !important;
+    border-color: #ffffff;
+}
+.navbar-inverse .navbar-text {
+    color: #ffffff !important;
+}
+.navbar-login
+{
+    width: 305px;
+    padding: 10px;
+    padding-bottom: 0px;
+}
+
+.navbar-login-session
+{
+    padding: 10px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+
+.icon-size
+{
+    font-size: 87px;
+}
+.slimline {
+    line-height: 50px !important;
+}
+.navbar-inverse .navbar-nav>li>a {
+    color: #ffffff !important;
+}
+.slimline .glyphicon {
+        position: relative;
+    top: 3px !important;
+}
