@@ -38,7 +38,7 @@
                     <td id="child"><a href="">{{ $product->discount }} %</a></td>
                     <td id="child"><a href="">₹ {{ $product->marketProduct()->price }}</a></td>
                     <td id="child">
-                        <a data-toggle="modal" id="view_detail" data-product_url="{{ route('user::products.quick.view', [$product]) }}"  data-target="#_view_detail_{{ $product->id }}">
+                        <a class="view_detail" data-product_url="{{ route('user::products.quick.view', [$product]) }}">
                             <img src="{{ $product->thumbnail() }}" height="60px" width="90px"/>
                         </a>
                     </td>
@@ -48,6 +48,7 @@
                     <td class="text-center" id="child">
                         <form id="product-modification-form" class="form-horizontal" method="POST" >
                             {!! csrf_field() !!}
+
                             @include('includes.single-product-actions', compact('product'))
                         </form>
                     </td>
@@ -58,6 +59,6 @@
         @endforeach
     @endif
 </table>
-<div class="col-sm-12 noPadMar text-center">
+<div class="col-sm-12 noPadMar text-center parentPagDiv">
     {{ $products->links() }}
 </div>

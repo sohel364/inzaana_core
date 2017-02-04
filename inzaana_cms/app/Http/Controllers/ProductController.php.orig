@@ -70,14 +70,13 @@ class ProductController extends Controller
         session()->forget('selected_tab');
         session()->forget('productsBySearch');
         session()->forget('product');
-        if($request->ajax()){
-            return response()->view('includes.product-table',$viewData)->header('Content-Type', 'html');
-        }else{
+        if ($request->ajax()) {
+            return response()->view('includes.product-table', $viewData)->header('Content-Type', 'html');
+        } else {
             return view('add-product', $viewData)->withUser(Auth::user())
                 ->withStores(Auth::user()->stores->pluck('name', 'name_as_url'))
                 ->withTab($tab);
         }
-
 
 
     }
@@ -102,7 +101,7 @@ class ProductController extends Controller
                 'upload_image_2' => $image_file_rule,
                 'upload_image_3' => $image_file_rule,
                 'upload_image_4' => $image_file_rule,
-                'upload_video'   => ProductMedia::getMediaRule('VIDEO'),
+                'upload_video' => ProductMedia::getMediaRule('VIDEO'),
                 // 'embed_video_url' => 'required_unless:has_embed_video,checked|url',
                 // 'embed_video_url' => 'url',
             ]
@@ -188,16 +187,23 @@ class ProductController extends Controller
     }
 
     public function search(ProductRequest $request)
+<<<<<<< Updated upstream
+    {   
+        if($request->exists('search_box') && $request->has('search_box'))
+        {
+            $search_terms = $request->query('search_box');
+=======
     {
         if ($request->exists('search-box') && $request->has('search-box')) {
             $search_terms = $request->query('search-box');
+>>>>>>> Stashed changes
 
             // NOTE: like -> searches case sensitive
             // $productsBySearch = Product::where('title', $search_terms)->orWhere('title', 'like', '%' . $search_terms . '%')->get();
 
             // NOTE: ilike -> seaches case insensitive
             $productsBySearch = Product::where('title', $search_terms)->orWhere('title', 'ilike', '%' . $search_terms . '%')->get();
-            $productsBySearchPaginated = Product::where('title', $search_terms)->orWhere('title', 'ilike', '%' . $search_terms . '%')->paginate(2);
+            $productsBySearchPaginated = Product::where('title', $search_terms)->orWhere('title', 'ilike', '%' . $search_terms . '%')->paginate(10);
             $productsBySearch = $productsBySearch->reject(function ($product) {
                 return $product->trashed() || $product->is_public === false;
             });
@@ -218,7 +224,11 @@ class ProductController extends Controller
                                  ->header('Content-Type', 'html');
             }
             return redirect()->route('user::products')
+<<<<<<< Updated upstream
                              ->with([ 'productsBySearch' =>  $productsBySearchPaginated, 'search_terms' => $search_terms, 'productsCount' => $productsCount ]);
+=======
+                ->with(compact('productsBySearch', 'productsCount', 'search_terms'));
+>>>>>>> Stashed changes
         }
         return redirect()->route('user::products');
     }
@@ -237,15 +247,33 @@ class ProductController extends Controller
         return 1;
     }
 
+    //
+    /*public function imageDelete(Product $product, $imageTitle)
+    {
+        $images = $this->medias->where('is_embed', false)->where('media_type', 'IMAGE')->where('title', $imageTitle);
+        if ($images->first()) {
+            $images->first()->delete();
+        }
+    }*/
+
+
     // TODO:: Need to add log
     public function imageDelete($imageTitle)
     {
+        $imagePATH = Input::get('imagePath');
         $productImage = ProductMedia::Where('title', '=', $imageTitle)->first();
         $productImage->delete();
         $message = "Delete Image from remote server.";
+        if (File::exists($imagePATH)) {
+            File::delete($imagePATH);
+        } else {
+            $message = "Image not found!!!";
+        }
         return Response::json(['msg' => $message, 'status' => 1]);
+
     }
 
+    //TODO:: Need to generalize search logic
     public function productSearch($search_item)
     {
         $productsBySearch = Product::where('title', $search_item)->orWhere('title', 'ilike', '%' . $search_item . '%')->take(10)->get();
@@ -256,17 +284,19 @@ class ProductController extends Controller
         return $product_title;
     }
 
-    public function productSearchSingle($search_item){
+    public function productSearchSingle($search_item)
+    {
         $products = Product::where('title', $search_item)->orWhere('title', 'ilike', '%' . $search_item . '%')->paginate(10);
 
-        return response()->view('includes.product-table',compact('products'))
+        return response()->view('includes.product-table', compact('products'))
             ->header('Content-Type', 'html');
     }
 
-    public function productSearchAll($search_item){
+    public function productSearchAll($search_item)
+    {
 
         $products = Product::where('title', $search_item)->orWhere('title', 'ilike', '%' . $search_item . '%')->paginate(10);
-        return response()->view('includes.product-table',compact('products'))
+        return response()->view('includes.product-table', compact('products'))
             ->header('Content-Type', 'html');
 
     }
@@ -280,17 +310,14 @@ class ProductController extends Controller
             return redirect()->back()->withErrors($validation->errors())->withInput();
         }
         $uploadedFiles = [];
-        if($request->hasFile('upload_video'))
-            $uploadedFiles []= $request->file('upload_video');
-        for($i = 1; $i <= ProductMedia::MAX_ALLOWED_IMAGE; ++$i)
-        {
-            if($request->hasFile('upload_image_' . $i))
-                $uploadedFiles [$i]= $request->file('upload_image_' . $i);
+        if ($request->hasFile('upload_video'))
+            $uploadedFiles [] = $request->file('upload_video');
+        for ($i = 1; $i <= ProductMedia::MAX_ALLOWED_IMAGE; ++$i) {
+            if ($request->hasFile('upload_image_' . $i))
+                $uploadedFiles [$i] = $request->file('upload_image_' . $i);
         }
-        if (!collect($uploadedFiles)->isEmpty())
-        {
-            try
-            {
+        if (!collect($uploadedFiles)->isEmpty()) {
+            try {
                 $uploadResponse = ProductMedia::upload($uploadedFiles);
                 $errors = $uploadResponse['errors'];
                 if (!collect($errors)->isEmpty()) {
@@ -299,7 +326,7 @@ class ProductController extends Controller
                 $uploadedFiles = $uploadResponse['server_files'];
             } catch (\Exception $e) {
                 Log::error($e->getMessage());
-                return redirect()->back()->withErrors([ 'Something went wrong during media upload! ' . $e->getMessage()]);
+                return redirect()->back()->withErrors(['Something went wrong during media upload! ' . $e->getMessage()]);
             }
         }
 
@@ -307,13 +334,11 @@ class ProductController extends Controller
 
         // dd($request->input('spec_count'));
 
-        if($request->has('spec_count'))
-        {
-            for($specCount = 1; $specCount <= $request->input('spec_count'); ++$specCount)
-            {
-                if(!$request->has('title_' . $specCount))
+        if ($request->has('spec_count')) {
+            for ($specCount = 1; $specCount <= $request->input('spec_count'); ++$specCount) {
+                if (!$request->has('title_' . $specCount))
                     continue;
-                $specs[$request->input('title_' . $specCount)] = [ 'values' => $request->input('values_' . $specCount), 'view_type' => $request->input('option_' . $specCount) ];
+                $specs[$request->input('title_' . $specCount)] = ['values' => $request->input('values_' . $specCount), 'view_type' => $request->input('option_' . $specCount)];
             }
         }
         // dd($specs);
@@ -359,37 +384,31 @@ class ProductController extends Controller
         $product->description = collect($data)->has('description') ? $data['description'] : '';
         $product->type = collect($data)->has('product_type') ? $data['product_type'] : '';
 
-        try
-        {
+        try {
             // Media update
-            if(!$product->saveMedias($data))
-            {
+            if (!$product->saveMedias($data)) {
                 // You may revert all files by deleting and undoing stored media entry
                 // Right here
                 throw new \Exception("Some uploaded files did not store.");
-            } 
+            }
 
-            if(!$product->saveDiscountedPrice())
-            {
+            if (!$product->saveDiscountedPrice()) {
                 Log::info('[Inzaana][User:: ' . Auth::user()->name . '][error:: Product (' . $data['title'] . ') MRP not saved.]');
             }
 
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             Log::error('[Inzaana][Product update error: ' . $e->getMessage() . ' ]');
-            return redirect()->back()->withErrors([ 'Something went wrong during saving your product! We have already know the reason. Try again or please contact Inzaana admnistrator.' ]);
+            return redirect()->back()->withErrors(['Something went wrong during saving your product! We have already know the reason. Try again or please contact Inzaana admnistrator.']);
         }
         flash()->success('Your product is updated.');
-        return redirect()->route('user::products');        
+        return redirect()->route('user::products');
     }
 
     public function delete(Product $product)
     {
         //delete the product
         $delete = 0;
-        if($product)
-        {
+        if ($product) {
             $message = 'Your product (' . $product->title . ') is removed from your product list.';
             $product->delete();
             $delete = 1;
@@ -408,18 +427,13 @@ class ProductController extends Controller
     public function copy(Product $product)
     {
         $productExists = Auth::user()->products()->find($product->id);
-        if($productExists)
-        {
+        if ($productExists) {
             flash()->warning('Your selected product (' . $productExists->title . ') is from YOUR product list.');
-        }
-        else
-        {
-            if(!$product)
-            {
+        } else {
+            if (!$product) {
                 return redirect()->back()->withErrors(['Your selected product is invalid. Please contact your administrator.']);
             }
-            if(!$product->is_public)
-            {
+            if (!$product->is_public) {
                 return redirect()->back()->withErrors(['You can not own this product to your stores due to it\'s original owner\' privacy.']);
             }
             $product->user_id = Auth::user()->id;
@@ -430,8 +444,7 @@ class ProductController extends Controller
             $productSerialized->forget('updated_at');
 
             $productCopied = Product::create($productSerialized->toArray());
-            if(!$productCopied)
-            {
+            if (!$productCopied) {
                 return redirect()->back()->withErrors(['Something went wrong during creating your product (' . $product->title . '). Please try again or contact your administrator.']);
             }
             flash()->success('Your selected product (' . $productCopied->title . ') is copied to your product list.');
@@ -446,7 +459,7 @@ class ProductController extends Controller
 
     public function approvals()
     {
-        $products = collect(Product::whereStatus('ON_APPROVAL')->orWhere('status', 'REJECTED')->orWhere('status', 'APPROVED')->get())->pluck( 'id', 'title' );
+        $products = collect(Product::whereStatus('ON_APPROVAL')->orWhere('status', 'REJECTED')->orWhere('status', 'APPROVED')->get())->pluck('id', 'title');
         $approvals = [
             'products' => [
                 'type' => Product::class,
@@ -459,22 +472,21 @@ class ProductController extends Controller
     public function confirmApproval(ProductRequest $request, AppMailer $mailer, $id)
     {
         $product = Product::find($id);
-        if(!$product)
+        if (!$product)
             return redirect()->back()->withErrors(['Product not found to approve!']);
-        if(!$request->has('confirmation-select'))
+        if (!$request->has('confirmation-select'))
             return redirect()->back()->withErrors(['Invalid request of approval confirmation!']);
 
-        switch($request->input('confirmation-select'))
-        {
-            case 'approve': 
+        switch ($request->input('confirmation-select')) {
+            case 'approve':
                 $category->status = 'APPROVED';
             case 'reject':
                 $category->status = 'REJECTED';
             case 'remove':
                 $category->status = 'REMOVED';
         }
-        
-        if(!$product->save())
+
+        if (!$product->save())
             return redirect()->back()->withErrors(['Failed to confirm product approval!']);
         flash()->success('Your have ' . strtolower($product->getStatus()) . ' product (' . $product->title . ').');
 
@@ -490,63 +502,55 @@ class ProductController extends Controller
     private function getUploadedFileName(ProductRequest $request)
     {
         $errors = [];
-        if (!$request->hasFile('csv'))
-        {
+        if (!$request->hasFile('csv')) {
             $errors['has_input'] = 'No file is uploaded';
             flash()->error($errors['has_input']);
             return $errors;
         }
         $uploadingFile = $request->file('csv');
-        if (!$uploadingFile->isValid())
-        {
+        if (!$uploadingFile->isValid()) {
             $errors['corrupted_file'] = 'Upladed file is corrupted';
             flash()->error($errors['corrupted_file']);
             return $errors;
         }
 
-        if($uploadingFile->getSize() >= $uploadingFile->getMaxFilesize())
-        {
+        if ($uploadingFile->getSize() >= $uploadingFile->getMaxFilesize()) {
             $errors['size_limit_exits'] = 'Please keep your file size below ' . ($uploadingFile->getMaxFilesize() / 1000);
             flash()->warning($errors['size_limit_exits']);
             return $errors;
         }
-        if(!ProductImporter::isSupportedExtension($uploadingFile->getClientOriginalExtension()))
-        {
+        if (!ProductImporter::isSupportedExtension($uploadingFile->getClientOriginalExtension())) {
             $errors['ext_not_supported'] = 'Upladed file (*.' . $uploadingFile->getClientOriginalExtension() . ') is not supported!';
             flash()->warning($errors['ext_not_supported']);
             return $errors;
         }
 
         //Display File Name
-        $out = 'File Name: '.$uploadingFile->getClientOriginalName();
+        $out = 'File Name: ' . $uploadingFile->getClientOriginalName();
         Log::info('[Inzaana][' . $out . ']');
         //Display File Extension
-        $out = ', File Extension: '. $uploadingFile->getClientOriginalExtension();
+        $out = ', File Extension: ' . $uploadingFile->getClientOriginalExtension();
         Log::info('[Inzaana][' . $out . ']');
         //Display File Real Path
-        $out = ', File Real Path: '.$uploadingFile->getRealPath();
+        $out = ', File Real Path: ' . $uploadingFile->getRealPath();
         Log::info('[Inzaana][' . $out . ']');
         //Display File Size
-        $out = ', File Size: '.$uploadingFile->getSize();
+        $out = ', File Size: ' . $uploadingFile->getSize();
         Log::info('[Inzaana][' . $out . ']');
         //Display File Mime Type
-        $out = ', File Mime Type: '.$uploadingFile->getMimeType();        
+        $out = ', File Mime Type: ' . $uploadingFile->getMimeType();
         Log::info('[Inzaana][' . $out . ']');
-        try
-        {
+        try {
             //Move Uploaded File
             $serverFile = $uploadingFile->move(ProductImporter::getStoragePath(), $uploadingFile->getClientOriginalName());
-            if(!$serverFile)
-            {
+            if (!$serverFile) {
                 $errors['file_move_error'] = 'Upladed file did not move!';
                 flash()->error('Something went wrong during upload. We have already logged the problems. Please contact Inzaana help line for further assistance.');
                 return $errors;
-            }      
+            }
             Log::info('[Inzaana][ Upload success to ' . $serverFile->getRealPath() . ']');
             return $serverFile->getBasename();
-        }
-        catch(FileException $fe)
-        {
+        } catch (FileException $fe) {
             $errors['unknown_file_error'] = '[Inzaana][ Upload failed: ' . $fe->getMessage() . ']';
             Log::critical($errors['unknown_file_error']);
         }
@@ -561,8 +565,7 @@ class ProductController extends Controller
         $marketProduct->manufacturer_name = $data['manufacturer_name'];
         $marketProduct->price = $data['price'];
 
-        if(!$marketProduct->save())
-        {
+        if (!$marketProduct->save()) {
             Log::error('[Inzaana][User:: ' . Auth::user() . '][error:: Market product (' . $data['title'] . ') not added.]');
             return false;
         }
@@ -580,23 +583,20 @@ class ProductController extends Controller
         $product->description = collect($data)->has('description') ? $data['description'] : '';
         $product->type = collect($data)->has('product_type') ? $data['product_type'] : 'DOWNLOADABLE';
 
-        if(!$product->save())
-        {
+        if (!$product->save()) {
             $marketProduct->forceDelete();
             Log::error('[Inzaana][User:: ' . Auth::user() . '][error:: Product (' . $data['title'] . ') not added.]');
             return false;
         }
 
         // Media entry        
-        if(!$product->saveMedias($data))
-        {
+        if (!$product->saveMedias($data)) {
             // You may revert all files by deleting and undoing stored media entry
             // Right here
             throw new \Exception("Some uploaded files did not store.");
-        } 
+        }
 
-        if(!$product->saveDiscountedPrice())
-        {
+        if (!$product->saveDiscountedPrice()) {
             Log::info('[Inzaana][User:: ' . Auth::user() . '][error:: Product (' . $data['title'] . ') MRP not saved.]');
             return false;
         }
@@ -604,36 +604,31 @@ class ProductController extends Controller
     }
 
     public function uploadCSV(ProductRequest $request)
-    {        
-        try
-        {
+    {
+        try {
             $result = $this->getUploadedFileName($request);
-            if(is_array($result) && count($result) > 0)
-            {
+            if (is_array($result) && count($result) > 0) {
                 session(['selected_tab' => self::PRODUCT_ENTRY_TABS[1]]);
                 return redirect()->back()->withErrors($result);
             }
 
-            if(!$request->has('stores'))
-            {
+            if (!$request->has('stores')) {
                 session(['selected_tab' => self::PRODUCT_ENTRY_TABS[1]]);
                 return redirect()->back()
-                                 ->withErrors(['Please give a store name to upload your products.']);
-            }     
-                
+                    ->withErrors(['Please give a store name to upload your products.']);
+            }
+
             $store_name_as_url = $request->input('stores');
             $store = Store::whereNameAsUrl($store_name_as_url)->get()->first();
-            if(!$store)
-            {
+            if (!$store) {
                 session(['selected_tab' => self::PRODUCT_ENTRY_TABS[1]]);
                 return redirect()->back()
-                                 ->withErrors(['We did not find any store name of yours named ' . $store_name_as_url . '.inzaana.com.']);
+                    ->withErrors(['We did not find any store name of yours named ' . $store_name_as_url . '.inzaana.com.']);
             }
 
             $pi = new ProductImporter($result);
             $csv = $pi->getProducts()['raw'];
-            foreach($csv as $value)
-            {
+            foreach ($csv as $value) {
                 $categories = collect(Category::whereName($value['category_name'])->get());
 
                 $data = [
@@ -649,19 +644,16 @@ class ProductController extends Controller
                     'return_time_limit' => $value['return_time_limit']
                 ];
 
-                if(!self::createProduct($data))
-                {
-                    return redirect()->back()->withErrors([ ProductImporter::BULK_UPLOAD_ERRORS['unknown'] ]);
+                if (!self::createProduct($data)) {
+                    return redirect()->back()->withErrors([ProductImporter::BULK_UPLOAD_ERRORS['unknown']]);
                 }
             }
             flash()->success('Successfully uploaded all products.');
             return redirect()->back();//Product::where('special_specs->camera->values', 10)->get();
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             session(['selected_tab' => self::PRODUCT_ENTRY_TABS[1]]);
             Log::critical('[Inzaana][' . $e->getMessage() . ']');
-            return redirect()->back()->withErrors([ 'Something went wrong during bulk upload! We already know the reason. Please contact your administrator.']);
+            return redirect()->back()->withErrors(['Something went wrong during bulk upload! We already know the reason. Please contact your administrator.']);
         }
     }
 
@@ -674,6 +666,7 @@ class ProductController extends Controller
         $manager = new ImageManager();
         return $manager->make(ProductMedia::getStoragePath('IMAGE') . $file_name)->response();
     }
+
     public function quickView($product_id)
     {
         $view_data = [

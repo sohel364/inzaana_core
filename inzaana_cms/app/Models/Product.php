@@ -168,7 +168,7 @@ class Product extends Model
         foreach($images as $image){
             $_location = explode('_',$image->title);
             if(count($_location) > 1){
-                $image->_image_position = $_location[1];
+                $image->_image_position = $_location[1]; // runtime added properties
             }
         }
         /*EOS*/
