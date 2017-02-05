@@ -10,6 +10,24 @@
   <link href="{{ asset('css/css-m/main.css')}}" rel="stylesheet">
   <link href="{{ asset('css/bootstrap-magnify.min.css')}}" rel="stylesheet">
   <link href="{{ asset('font-awesome-4.4.0/css/font-awesome.min.css')}}" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.add-to-cart').on('click',function(){
+		//Scroll to top if cart icon is hidden on top
+		$('html, body').animate({
+			'scrollTop' : $(".cart_anchor").position().top
+		});
+		//Select item image and pass to the function
+		var itemImg = $(this).parent().find('img').eq(0);
+		flyToElement($(itemImg), $('.cart_anchor'));
+	});
+});
+</script>
+
+<style type="text/css">
+.cart_anchor{ float:right; vertical-align:top; background: url({{ asset('images/cart-icon.png') }}) no-repeat center center / 100% auto;width: 25px;height: 25px;  padding-top: 75px;}
+</style>
 </head>
 
 <body>
@@ -88,7 +106,7 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <span class="glyphicon glyphicon-shopping-cart"></span> 7 - Items<span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <span class="glyphicon cart_anchor"></span> 7 - Items<span class="caret"></span></a>
           <ul class="dropdown-menu dropdown-cart" role="menu">
               <li>
                   <span class="item">
@@ -191,135 +209,111 @@
 
   <!--Product View-->
   <div class="container pad20">
-    <div class="well well-sm">
-      <strong>Category Title</strong>
-      <div class="btn-group">
-        <a href="#" id="list" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-th-list">
-            </span>List</a> <a href="#" id="grid" class="btn btn-default btn-sm"><span
-                class="glyphicon glyphicon-th"></span>Grid</a>
-      </div>
-    </div>
+    
     <div id="products" class="row list-group">
-      <div class="item  col-xs-4 col-lg-4">
-        <div class="thumbnail">
-         <a href="product_details.html"> <img class="group list-group-image" src="{{ asset('images/1.png') }}" alt="" width="400px" height="250px" /></a>
-          <div class="caption">
-            <h4 class="group inner list-group-item-heading">
-                        Product title</h4>
-            <p class="group inner list-group-item-text">
-              Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-            <div class="row">
-              <div class="col-xs-12 col-md-6">
-                <p class="lead">
-                  $21.000</p>
-              </div>
-              <div class="col-xs-12 col-md-6">
-                <a class="btn btn-success" href="#">Add to cart</a>
-              </div>
-            </div>
+      <div class="col-lg-12">
+          <div class="row">
+              <div class="col-sm-3 col-lg-3 col-md-3">
+                    <div class="thumbnail">
+                        <img src="{{ asset('images/4.png') }}" alt="">
+                        <div class="caption">
+                            <h4 class="pull-right">$24.99</h4>
+                            <h4><a href="javascript:void(0);">Product Name</a></h4>
+                            <p>This is product short description section.</p>
+                        </div>
+						<a href="javascript:void(0);" class="btn btn-success add-to-cart">Add to Cart</a>
+                    </div>
+                </div>
+        
+              <div class="col-sm-3 col-lg-3 col-md-3">
+                    <div class="thumbnail">
+                        <img src="{{ asset('images/1.png') }}" alt="">
+                        <div class="caption">
+                            <h4 class="pull-right">$64.99</h4>
+                            <h4><a href="javascript:void(0);">Product Name</a>
+                            </h4>
+                            <p>This is product short description section.</p>
+                        </div>
+						<a href="javascript:void(0);" class="btn btn-success add-to-cart">Add to Cart</a>
+                    </div>
+                </div>
+              <div class="col-sm-3 col-lg-3 col-md-3">
+                    <div class="thumbnail">
+                        <img src="{{ asset('images/2.png') }}" alt="">
+                        <div class="caption">
+                            <h4 class="pull-right">$15.99</h4>
+                            <h4><a href="javascript:void(0);">Product Name</a>
+                            </h4>
+                            <p>This is product short description section.</p>
+                        </div>
+						<a href="javascript:void(0);" class="btn btn-success add-to-cart">Add to Cart</a>
+                    </div>
+                </div>
+              <div class="col-sm-3 col-lg-3 col-md-3">
+                    <div class="thumbnail">
+                        <img src="{{ asset('images/3.png') }}" alt="">
+                        <div class="caption">
+                            <h4 class="pull-right">$55.99</h4>
+                            <h4><a href="javascript:void(0);">Product Name</a>
+                            </h4>
+                            <p>This is product short description section.</p>
+                        </div>
+						<a href="javascript:void(0);" class="btn btn-success add-to-cart">Add to Cart</a>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-lg-3 col-md-3">
+                    <div class="thumbnail">
+                        <img src="{{ asset('images/4.png') }}" alt="">
+                        <div class="caption">
+                            <h4 class="pull-right">$24.99</h4>
+                            <h4><a href="javascript:void(0);">Product Name</a></h4>
+                            <p>This is product short description section.</p>
+                        </div>
+						<a href="javascript:void(0);" class="btn btn-success add-to-cart">Add to Cart</a>
+                    </div>
+                </div>
+        
+              <div class="col-sm-3 col-lg-3 col-md-3">
+                    <div class="thumbnail">
+                        <img src="{{ asset('images/1.png') }}" alt="">
+                        <div class="caption">
+                            <h4 class="pull-right">$64.99</h4>
+                            <h4><a href="javascript:void(0);">Product Name</a>
+                            </h4>
+                            <p>This is product short description section.</p>
+                        </div>
+						<a href="javascript:void(0);" class="btn btn-success add-to-cart">Add to Cart</a>
+                    </div>
+                </div>
+              <div class="col-sm-3 col-lg-3 col-md-3">
+                    <div class="thumbnail">
+                        <img src="{{ asset('images/2.png') }}" alt="">
+                        <div class="caption">
+                            <h4 class="pull-right">$15.99</h4>
+                            <h4><a href="javascript:void(0);">Product Name</a>
+                            </h4>
+                            <p>This is product short description section.</p>
+                        </div>
+						<a href="javascript:void(0);" class="btn btn-success add-to-cart">Add to Cart</a>
+                    </div>
+                </div>
+              <div class="col-sm-3 col-lg-3 col-md-3">
+                    <div class="thumbnail">
+                        <img src="{{ asset('images/3.png') }}" alt="">
+                        <div class="caption">
+                            <h4 class="pull-right">$55.99</h4>
+                            <h4><a href="javascript:void(0);">Product Name</a>
+                            </h4>
+                            <p>This is product short description section.</p>
+                        </div>
+						<a href="javascript:void(0);" class="btn btn-success add-to-cart">Add to Cart</a>
+                    </div>
+                </div>
           </div>
-        </div>
       </div>
-      <div class="item  col-xs-4 col-lg-4">
-        <div class="thumbnail">
-          <a href="product_details.html"> <img class="group list-group-image" src="{{ asset('images/2.png') }}" alt="" width="400px" height="250px" /></a>
-          <div class="caption">
-            <h4 class="group inner list-group-item-heading">
-                        Product title</h4>
-            <p class="group inner list-group-item-text">
-              Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-            <div class="row">
-              <div class="col-xs-12 col-md-6">
-                <p class="lead">
-                  $21.000</p>
-              </div>
-              <div class="col-xs-12 col-md-6">
-                <a class="btn btn-success" href="#">Add to cart</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="item  col-xs-4 col-lg-4">
-        <div class="thumbnail">
-          <a href="product_details.html"> <img class="group list-group-image" src="{{ asset('images/3.png') }}" alt="" width="400px" height="250px" /></a>
-          <div class="caption">
-            <h4 class="group inner list-group-item-heading">
-                        Product title</h4>
-            <p class="group inner list-group-item-text">
-              Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-            <div class="row">
-              <div class="col-xs-12 col-md-6">
-                <p class="lead">
-                  $21.000</p>
-              </div>
-              <div class="col-xs-12 col-md-6">
-                <a class="btn btn-success" href="#">Add to cart</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="item  col-xs-4 col-lg-4">
-        <div class="thumbnail">
-        <a href="product_details.html"> <img class="group list-group-image" src="{{ asset('images/4.png') }}" alt="" width="400px" height="250px" /></a>
-          <div class="caption">
-            <h4 class="group inner list-group-item-heading">
-                        Product title</h4>
-            <p class="group inner list-group-item-text">
-              Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-            <div class="row">
-              <div class="col-xs-12 col-md-6">
-                <p class="lead">
-                  $21.000</p>
-              </div>
-              <div class="col-xs-12 col-md-6">
-                <a class="btn btn-success" href="#">Add to cart</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="item  col-xs-4 col-lg-4">
-        <div class="thumbnail">
-          <a href="product_details.html"> <img class="group list-group-image" src="{{ asset('images/5.png') }}" alt="" width="400px" height="250px" /></a>
-          <div class="caption">
-            <h4 class="group inner list-group-item-heading">
-                        Product title</h4>
-            <p class="group inner list-group-item-text">
-              Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-            <div class="row">
-              <div class="col-xs-12 col-md-6">
-                <p class="lead">
-                  $21.000</p>
-              </div>
-              <div class="col-xs-12 col-md-6">
-                <a class="btn btn-success" href="#">Add to cart</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="item  col-xs-4 col-lg-4">
-        <div class="thumbnail">
-        <a href="product_details.html"> <img class="group list-group-image" src="{{ asset('images/6.png') }}" alt="" width="400px" height="250px" /></a>
-          <div class="caption">
-            <h4 class="group inner list-group-item-heading">
-                        Product title</h4>
-            <p class="group inner list-group-item-text">
-              Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-            <div class="row">
-              <div class="col-xs-12 col-md-6">
-                <p class="lead">
-                  $21.000</p>
-              </div>
-              <div class="col-xs-12 col-md-6">
-                <a class="btn btn-success" href="#">Add to cart</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+                
+                
+      
     </div>
     <div class="container text-center">
       <nav>
@@ -402,6 +396,34 @@
   <script src="{{ asset('js/bootstrap.min.js') }}"></script>
   <script src="{{ asset('js/js-m/product.js') }}"></script>
   <script src="{{ asset('js/js-m/bootstrap-magnify.min.js') }}"></script>
+  <script>
+function flyToElement(flyer, flyingTo) {
+	var $func = $(this);
+	var divider = 3;
+	var flyerClone = $(flyer).clone();
+	$(flyerClone).css({position: 'absolute', top: $(flyer).offset().top + "px", left: $(flyer).offset().left + "px", opacity: 1, 'z-index': 1000});
+	$('body').append($(flyerClone));
+	var gotoX = $(flyingTo).offset().left + ($(flyingTo).width() / 2) - ($(flyer).width()/divider)/2;
+	var gotoY = $(flyingTo).offset().top + ($(flyingTo).height() / 2) - ($(flyer).height()/divider)/2;
+	 
+	$(flyerClone).animate({
+		opacity: 0.4,
+		left: gotoX,
+		top: gotoY,
+		width: $(flyer).width()/divider,
+		height: $(flyer).height()/divider
+	}, 700,
+	function () {
+		$(flyingTo).fadeOut('fast', function () {
+			$(flyingTo).fadeIn('fast', function () {
+				$(flyerClone).fadeOut('fast', function () {
+					$(flyerClone).remove();
+				});
+			});
+		});
+	});
+}
+    </script>
 </body>
 
 </html>
