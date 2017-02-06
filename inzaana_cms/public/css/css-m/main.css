@@ -374,3 +374,21 @@ ul.dropdown-cart li .item-right button{
         position: relative;
     top: 3px !important;
 }
+.PsliderCaption{
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
+    margin-left: 13px !important;
+    font-family: 'PT Sans Narrow', sans-serif;
+    color:#ffffff;
+}
+.minimizeImage{
+    max-height: 160px;
+    width: 303px;
+}
+.mB0{
+    margin-bottom: 10px;
+}
+.SliderButton{
+    margin-right: 13px !important;
+    margin-top: 5px !important;
+}

@@ -176,35 +176,110 @@ $(document).ready(function(){
   <!--End of Nav-->
 
   <!--Slider-->
-  <!-- <div class="container">
+   <div class="container">
     <div class="row sliderrow">
       <div class="col-md-6 col-sm-6 box1">
-        <h1 class="slideText">MODERN <br>DESIGN <br>MEETS COZY <br>COMFORT</h1>
-        <br>
-        <p class="slidePara">Create the perfect space</p>
+        
+        <div class="row">
+            <div class="col-md-8">
+                <h3 class="PsliderCaption">Featured Products</h3>
+            </div>
+            <div class="col-md-4">
+                <!-- Controls -->
+                <div class="controls pull-right hidden-xs SliderButton">
+                    <a class="left fa fa-chevron-left btn btn-success" href="#carousel-example"
+                        data-slide="prev"></a><a class="right fa fa-chevron-right btn btn-success" href="#carousel-example"
+                            data-slide="next"></a>
+                </div>
+            </div>
+        </div>
+        <div id="carousel-example" class="carousel slide hidden-xs" data-ride="carousel">
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+                <div class="item active">
+                    
+                        <div class="col-sm-6 col-lg-6 col-md-6">
+                    <div class="thumbnail mB0">
+                        <img class="minimizeImage" src="{{ asset('images/1.png') }}" alt="">
+                        <div class="caption">
+                            <h4 class="pull-right">$64.99</h4>
+                            <h4><a href="javascript:void(0);">Product Name</a>
+                            </h4>
+                            <p>This is product short description section.</p>
+                        </div>
+						<a href="javascript:void(0);" class="btn btn-success add-to-cart">Add to Cart</a>
+                    </div>
+                </div>
+                        <div class="col-sm-6 col-lg-6 col-md-6">
+                    <div class="thumbnail mB0">
+                        <img class="minimizeImage" src="{{ asset('images/1.png') }}" alt="">
+                        <div class="caption">
+                            <h4 class="pull-right">$64.99</h4>
+                            <h4><a href="javascript:void(0);">Product Name</a>
+                            </h4>
+                            <p>This is product short description section.</p>
+                        </div>
+						<a href="javascript:void(0);" class="btn btn-success add-to-cart">Add to Cart</a>
+                    </div>
+                </div>
+                        
+                    
+                </div>
+                <div class="item">
+                    
+                        <div class="col-sm-6 col-lg-6 col-md-6">
+                    <div class="thumbnail mB0">
+                        <img class="minimizeImage" src="{{ asset('images/1.png') }}" alt="">
+                        <div class="caption">
+                            <h4 class="pull-right">$64.99</h4>
+                            <h4><a href="javascript:void(0);">Product Name</a>
+                            </h4>
+                            <p>This is product short description section.</p>
+                        </div>
+						<a href="javascript:void(0);" class="btn btn-success add-to-cart">Add to Cart</a>
+                    </div>
+                </div>
+                        <div class="col-sm-6 col-lg-6 col-md-6">
+                    <div class="thumbnail mB0">
+                        <img class="minimizeImage" src="{{ asset('images/1.png') }}" alt="">
+                        <div class="caption">
+                            <h4 class="pull-right">$64.99</h4>
+                            <h4><a href="javascript:void(0);">Product Name</a>
+                            </h4>
+                            <p>This is product short description section.</p>
+                        </div>
+						<a href="javascript:void(0);" class="btn btn-success add-to-cart">Add to Cart</a>
+                    </div>
+                </div>
+                        
+                    
+                </div>
+            </div>
+        </div>
+    
       </div>
   
       <div class="col-md-6 col-sm-6 box2">
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
-          Wrapper for slides
+          
           <div class="carousel-inner" role="listbox">
             <div class="item active">
-              <img src="images/sl1.jpg" alt="slider">
+              <img src="{{ asset('images/sl1.jpg') }}" alt="slider">
             </div>
   
             <div class="item">
-              <img src="images/sl2.jpg" alt="slider">
+              <img src="{{ asset('images/sl2.jpg') }}" alt="slider">
             </div>
   
             <div class="item">
-              <img src="images/sl3.jpg" alt="slider">
+              <img src="{{ asset('images/sl3.jpg') }}" alt="slider">
             </div>
   
           </div>
         </div>
       </div>
     </div>
-  </div> -->
+  </div> 
   <!--End of Slider-->
 
   <!--Product View-->
