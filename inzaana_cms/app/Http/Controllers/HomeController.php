@@ -49,7 +49,8 @@ class HomeController extends Controller
         else if($store->status == 'ON_APPROVAL')
             return view('store-comingsoon');
 
-        return view('vendor-store')->withProducts($store->user->products)->withSubDomain($name . '.inzaana.' . $domain)->withStoreNameUrl($name);
+        return view('store-showcase')->withProducts($store->user->products)->withSubDomain($name . '.inzaana.' . $domain)->withStoreNameUrl($name);
+        // return view('vendor-store')->withProducts($store->user->products)->withSubDomain($name . '.inzaana.' . $domain)->withStoreNameUrl($name);
     }
 
     public function suggest($input)

@@ -62,8 +62,8 @@ class StoreController extends Controller
 
     public function redirectUrl($site)
     {
-        return view('store-showcase');
-        //return StoreRedirect::to('http://' . $site . '/showcase');
+        // return view('store-showcase');
+        return StoreRedirect::to('http://' . $site . '/showcase');
     }
 
     private function validator(array $data, array $rules)
@@ -234,7 +234,6 @@ class StoreController extends Controller
 
     public function confirmApproval(StoreRequest $request, AppMailer $mailer, $id)
     {
-        dd($request->all());
         $store = Store::find($id);
         if(!$store)
             return redirect()->back()->withErrors(['Your requested store is not found to approve!']);
@@ -245,8 +244,10 @@ class StoreController extends Controller
         {
             case 'approve':
                 $store->status = 'APPROVED';
+                break;
             case 'reject':
                 $store->status = 'REJECTED';
+                break;
             case 'remove':
                 $store->status = 'REMOVED';
         }

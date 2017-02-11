@@ -14,7 +14,8 @@
         "stripe/stripe-php": "^3.17",
         "dompdf/dompdf": "^0.6.1",
         "kzykhys/php-csv-parser": "^1.4",
-        "darrylkuhn/dialect": "^1.0"
+        "darrylkuhn/dialect": "^1.0",
+        "predis/predis": "^1.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

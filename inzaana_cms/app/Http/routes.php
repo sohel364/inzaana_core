@@ -21,10 +21,23 @@ Route::group([ 'as' => 'guest::' ], function() {
 
     Route::get('/', [ 'uses' => 'HomeController@index', 'as' => 'home' ]);  
     Route::get('/suggest/input/{input}', [ 'uses' => 'HomeController@suggest', 'as' => 'suggest.home.stores' ]);
+
     // Subdomain routing
     Route::group(array('domain' => '{name}.inzaana.{domain}'), function() {
         
-        Route::get('/showcase', [ 'uses' => 'HomeController@redirectToStore', 'as' => 'showcase' ]); 
+        // routes grouped by /showcase
+        Route::group(['prefix' => 'showcase'], function () {
+
+            Route::get('/', [ 'uses' => 'ShoppingCartController@redirectToStore', 'as' => 'showcase' ]);
+            // Route::get('/', [ 'uses' => 'HomeController@redirectToStore', 'as' => 'showcase' ]);
+
+            // routes grouped by /showcase/cart
+            Route::group(['prefix' => 'cart'], function () {
+
+                Route::get('/add', [ 'uses' => 'ShoppingCartController@add', 'as' => 'cart.add' ]);
+                Route::get('/remove/{id}', [ 'uses' => 'ShoppingCartController@remove', 'as' => 'cart.remove' ]);
+            });
+        });
     });
 });
 

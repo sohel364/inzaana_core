@@ -119,8 +119,10 @@ class CategoryController extends Controller
         {
             case 'approve': 
                 $category->status = 'APPROVED';
+                break;
             case 'reject':
                 $category->status = 'REJECTED';
+                break;
             case 'remove':
                 $category->status = 'REMOVED';
         }
