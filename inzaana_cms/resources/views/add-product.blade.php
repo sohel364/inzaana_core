@@ -122,6 +122,7 @@
                             <ul class="nav nav-tabs">
                                 <li class="{{ ($tab == 'single_product_entry_tab') ? 'active' : '' }}"><a href="#tab-edit" data-toggle="tab">Add Product Details</a></li>
                                 <li class="{{ ($tab == 'bulk_product_entry_tab') ? 'active' : '' }}"><a href="#tab-messages" data-toggle="tab">Upload Products</a></li>
+                                <li class=""><a href="#tab-logistic" data-toggle="tab">Logistics & Others</a></li>
                             </ul>
                         </div>
                     </div>
@@ -604,6 +605,7 @@
                                         </div>
                                     </div>
                                 </div>
+                              
 
                                 <h4 class="block-title">Availability</h4>
                                 <div class="block-of-block">
@@ -618,6 +620,8 @@
                                         </div>
                                     </div>
                                 </div>
+                                
+
 
 
                                 <div class="modal-footer">
@@ -676,6 +680,174 @@
 
                                         <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
                                         <button type="submit" class="btn btn-primary btn-flat">Upload Files</button>
+                                    </div>
+
+                                </form>
+
+
+                            </div>
+                        </div>
+                        
+                        <div id="tab-logistic" class="tab-pane fade in">
+                            <div class=" form-horizontal">
+
+                                <form action="" method="POST" id="js-upload-form">
+                                    
+                                <h4 class="block-title">Tax & Price Calculation</h4>
+                                <div class="block-of-block">
+                                    <div id="product-create-privacy" class="form-horizontal">
+                                        <div class="form-group">
+                                            <label  class="col-sm-3 control-label">Tax Type:</label>
+                                            <div class="col-sm-3">
+                                                <select id="control_type" name="control_type" class="form-control"  data-placeholder="Control Type" style="width: 100%;">
+                                                        <option value="Exempt">Exempt</option>
+                                                        <option value="Standard">Standard</option>
+                                                </select>
+                                            </div>
+                                         </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                            <label for="buy_price" class="col-sm-3 control-label">Buy Price:</label>
+                                            <div class="col-sm-2">
+                                                <input type="text" class="form-control" id="buy_price" name="buy_price" placeholder="ex: 6₹" value="">
+                                               
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                            <label for="sell_price" class="col-sm-3 control-label">Sell Price:</label>
+                                            <div class="col-sm-2">
+                                                <input type="text" class="form-control" id="sell_price" name="sell_price" placeholder="ex: 9₹" value="">
+                                               
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                            <label for="profit" class="col-sm-3 control-label">Profit Margin:</label>
+                                            <div class="col-sm-2">
+                                                <input type="text" class="form-control" id="profit" name="profit" placeholder="ex: 3₹" value="">
+                                               
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                            <label for="final_price" class="col-sm-3 control-label">Final Price:</label>
+                                            <div class="col-sm-2">
+                                                <label for="final_price" class="col-sm-3 control-label"><h4 style="padding: 0 !important;
+    margin: 0 !important;">00₹</h4></label>
+                                               
+                                            </div>
+                                    </div>
+                                </div>
+                                    
+                                  
+                                <h4 class="block-title">Product Deliver Type</h4>
+                                <div class="block-of-block">
+                                    <div id="product-create-privacy" class="form-horizontal">
+                                        <div class="form-group">
+                                            <label  class="col-sm-3 control-label">Delivery Type:</label>
+                                            <div class="col-sm-3">
+                                                <select id="control_type" name="control_type" class="form-control"  data-placeholder="Control Type" style="width: 100%;">
+                                                        <option value="Exempt">Cash On Deliver</option>
+                                                        <option value="Standard">Full Paid</option>
+                                                </select>
+                                            </div>
+                                         </div>
+                                    </div>
+                                </div>
+                                
+                                <h4 class="block-title">Shipment</h4>
+                                <div class="block-of-block">
+                                    <div id="product-create-privacy" class="form-horizontal">
+                                        <div class="form-group">
+                                            <label  class="col-sm-3 control-label">Select Vendor:</label>
+                                            <div class="col-sm-3">
+                                                <select id="control_type" name="control_type" class="form-control"  data-placeholder="Control Type" style="width: 100%;">
+                                                        <option value="Exempt">Vendor Name</option>
+                                                        <option value="Standard">Vendor Name</option>
+                                                </select>
+                                            </div>
+                                         </div>
+                                         <div class="form-group">
+                                            <label class="col-xs-3 control-label">Expected Date:</label>
+                                            <div class="col-sm-3 date">
+                                                <div class="input-group input-append date" id="dateRangePicker">
+                                                    <input type="text" class="form-control" name="date" />
+                                                    <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="shipping_cost" class="col-sm-3 control-label">Cost:</label>
+                                            <div class="col-sm-2">
+                                                <input type="text" class="form-control" id="shipping_cost" name="shipping_cost" placeholder="ex: 3₹" value="">
+                                               
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-xs-3 control-label">Expected Delivery Timeline:</label>
+                                            <div class="col-sm-2 date">
+                                                <div class="input-group input-append date" id="dateRangePicker">
+                                                    <input type="text" class="form-control" name="date" />
+                                                    <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-1">
+                                                    <label  class="col-sm-1 control-label">To</label>
+                                                </div>
+                                            <div class="col-sm-2 date">
+                                                <div class="input-group input-append date" id="dateRangePicker">
+                                                    <input type="text" class="form-control" name="date" />
+                                                    <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h4 class="block-title">Return</h4>
+                                <div class="block-of-block">
+                                    <div id="product-create-privacy" class="form-horizontal">
+                                        <div class="form-group">
+                                            <label for="" class="col-sm-3 control-label">Is Returnable:</label>
+                                            <div class="col-sm-3" >
+                                                <div class="checkbox">
+                                                    <label><input id="is_public" name="is_public" type="checkbox" >Yes.</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                            <label  class="col-sm-3 control-label">Return days:</label>
+                                            <div class="col-sm-3">
+                                                <select id="control_type" name="control_type" class="form-control"  data-placeholder="Control Type" style="width: 100%;">
+                                                        <option value="Exempt">7 Days</option>
+                                                        <option value="Standard">15 Days</option>
+                                                </select>
+                                            </div>
+                                    </div>
+                                    
+                                     <div class="form-group">
+                                            <label  class="col-sm-3 control-label">Return Conditional Text:</label>
+                                            <div class="col-sm-9">
+                                               <div class="box-body">
+                                                <div>
+                                                    <textarea name="description" class="textarea" placeholder="Product Description"
+                                                              style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"
+                                                    ></textarea>
+                                                </div>
+                                    </div>
+                                            </div>
+                                    </div>
+                                
+                                </div>
+
+                                    <br>
+
+                                    
+
+                                    <div class="modal-footer">
+
+                                        <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary btn-flat">Save</button>
                                     </div>
 
                                 </form>
