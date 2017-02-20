@@ -33,6 +33,11 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:60,1',
         ],
+        'session' => [
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \Inzaana\Http\Middleware\VerifyCsrfToken::class,
+        ],
     ];
        
     /**

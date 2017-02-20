@@ -1,14 +1,17 @@
 <li>
     <span class="item">
       <span class="item-left">
-          <img src="{{ json_decode($cart_item)->image_url }}" alt="" />
+          <img src="{{ $cart_item->image_url }}" alt="" />
           <span class="item-info">
-              <span>{{ json_decode($cart_item)->title }}</span>
-              <span>{{ json_decode($cart_item)->mrp }}</span>
+              <span>{{ $cart_item->title }}</span>
+              <span>{{ $cart_item->mrp }}</span>
           </span>
       </span>
       <span class="item-right">
-          <button class="btn btn-xs btn-danger pull-right">x</button>
+          <form method="GET">
+            <button formaction="{{ route('guest::cart.remove', [ 'product_id' => $cart_item->product_id, 'name' => $cart_item->store_name, 'domain' => $cart_item->domain ]) }}"
+                    id="cart-item-remove-btn" class="btn btn-xs btn-danger pull-right" type="submit">x</button>
+          </form>
       </span>
   </span>
 </li>

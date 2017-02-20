@@ -12,12 +12,18 @@ use Redis;
 
 use Inzaana\Store;
 use Inzaana\Product;
-use Redirect as StoreRedirect;
+use Redirect as ShoppingCartRedirect;
+
+/*
+    @reference:
+    - https://cartalyst.com/manual/cart/2.0#features
+    - https://www.dunebook.com/5-ways-to-implement-shopping-cart-in-laravel/10/
+    - http://andremadarang.com/implementing-a-shopping-cart-in-laravel/
+    - http://stackoverflow.com/questions/36234548/how-track-sessionid-for-shopping-cart-table-in-laravel    
+ */
 
 class ShoppingCartController extends Controller
 {
-
-    const CART_ID = 'cart:101';
     /**
      * Create a new controller instance.
      *
@@ -25,34 +31,62 @@ class ShoppingCartController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('session');
+    }
+
+    public function index($name, $domain)
+    {
+        return ShoppingCartRedirect::to('http://inzaana.' . $domain . '/');
     }
 
     public function add(CartRequest $request, $name, $domain)
     {
     	$faker = \Faker\Factory::create();
 
-    	$item = [ 'id' => $faker->unique()->randomDigit, 'title' => str_random(10), 'image_url' => $faker->imageUrl(50, 50, 'cats'), 'mrp' => $faker->unique()->randomFloat ];
+    	$item = [
+            'product_id' => $faker->unique()->randomDigit,
+            'title' => str_random(10),
+            'image_url' => $faker->imageUrl(50, 50, 'cats'),
+            'mrp' => $faker->unique()->randomFloat,
+            'store_name' => $name,
+            'domain' => $domain
+        ];
 
-    	$redis = Redis::connection();
-    	
-    	$cart_id = self::CART_ID;
+        $cart = Cart::get($request);
 
-    	$redis->rpush($cart_id, collect($item)->toJson());
-		$item_count = $redis->llen($cart_id);
+        if(!Cart::addItem($cart->fingerprint, $item))
+        {
+            flash()->error('Add item to cart is failed!');
+        }
 
     	if($request->ajax())
     	{
     		if($request->has('cart_item'))
     		{
-    			$item = $request->query('cart_item');
-				$items = $redis->lrange($cart_id, 0, $item_count - 1);
-				return response()->view('shopping-cart', [ 'cart' => [ 'cart_id' => $cart_id, 'item_count' => $item_count, 'items' => $items ] ])
-				    					 ->header('Content-Type', 'html');
+    			// $item = $request->query('cart_item');
+                $cart = Cart::get($request);
+
+                return response()->view('shopping-cart', [ 'cart' => $cart ])->header('Content-Type', 'html');
     		}
     	}
         return redirect()->route('guest::showcase', compact('name', 'domain'));
     } 
+
+    public function remove(CartRequest $request, $name, $domain, $product_id)
+    {
+        $cart = Cart::get($request);
+
+        if(!Cart::removeItem($cart->fingerprint, $product_id))
+        {
+            flash()->error('Remove item from cart is failed!');
+        }
+        if($request->ajax())
+        {
+            $cart = Cart::get($request);
+            return response()->view('shopping-cart', [ 'cart' => $cart ])->header('Content-Type', 'html');
+        }
+        return redirect()->route('guest::showcase', compact('name', 'domain'));
+    }
 
     public function redirectToStore(CartRequest $request, $name, $domain)
     {
@@ -69,27 +103,13 @@ class ShoppingCartController extends Controller
         else if($store->status == 'ON_APPROVAL')
             return view('store-comingsoon');
 
-    	$faker = \Faker\Factory::create();
-    	$cart_id = self::CART_ID;//'cart:' . $faker->unique()->randomDigit;
-    	$redis = Redis::connection();
-		$item_count = $redis->llen($cart_id);
-		$items = $redis->lrange($cart_id, 0, $item_count - 1);
-		if($item_count == 0)
-		{
-	        $cart = new Cart();
-	        $cart->id = $cart_id;
-	        $cart->items_count = 6; 
-	        $cart->items = $items; 
-		}
-		else
-		{			
-	        $cart = new Cart();
-	        $cart->items_count = $item_count; 
-	        $cart->items = $items;
-		}
+    	$cart = Cart::get($request);
+
         return view('store-showcase')->withProducts($store->user->products)
         							 ->withSubDomain($name . '.inzaana.' . $domain)
-        							 ->withStoreNameUrl($name)
+                                     ->withStoreEmail($store->user->email)
+                                     ->withStoreOwner($store->user)
+                                     ->withStoreName($name)
         							 ->withCart($cart);
         // return view('vendor-store')->withProducts($store->user->products)->withSubDomain($name . '.inzaana.' . $domain)->withStoreNameUrl($name);
     }

@@ -38,7 +38,7 @@ $(document).ready(function(){
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle slimline" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-user"></span> 
-                        <strong>mohsin.ofcl@gmail.com</strong>
+                        <strong>{{ $store_email }}</strong>
                         <span class="glyphicon glyphicon-chevron-down"></span>
                     </a>
                     <ul class="dropdown-menu">
@@ -51,8 +51,8 @@ $(document).ready(function(){
                                         </p>
                                     </div>
                                     <div class="col-lg-8">
-                                        <p class="text-left"><strong>Shrabon Mohsin</strong></p>
-                                        <p class="text-left small">mohsin.ofcl@gmail.com</p>
+                                        <p class="text-left"><strong>{{ $store_owner->name }}</strong></p>
+                                        <p class="text-left small">{{ $store_email }}</p>
                                         <p class="text-left">
                                             <a href="#" class="btn btn-primary btn-block btn-sm">Account settings</a>
                                         </p>
@@ -89,7 +89,7 @@ $(document).ready(function(){
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="index.html"><strong>INTERIOR</strong></a>
+          <a class="navbar-brand" href="index.html"><strong>{{ $store_name }}</strong></a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul class="nav navbar-nav text-center">
@@ -105,7 +105,7 @@ $(document).ready(function(){
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
+            <li class="dropdown shopping-cart">
               @include('includes.shopping-cart', ['cart' => $cart ])
             </li>
           </ul>
