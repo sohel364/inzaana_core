@@ -208,6 +208,11 @@ class Product extends Model
         return $image->url != $this->defaultImage() ? ['title' => $image->title, 'url'=> $image->url] : false;
     }
 
+    public function scopeSearchByTitle($query,$title)
+    {
+        return $query->where('title', $title)->orWhere('title', 'ilike', '%' . $title . '%');
+    }
+
     public static function defaultImage()
     {
         return (ProductMedia::IMAGES_PATH_PUBLIC . ProductMedia::DEFAUL_IMAGE);

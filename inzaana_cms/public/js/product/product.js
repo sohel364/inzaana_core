@@ -17,7 +17,7 @@ var myProduct = {
                 flushData.getResult(data);
             },
             error: function(data){
-                alert(data);
+                alert("Oops!!! Something went wrong.");
             },
             timeout: 10000
         });
@@ -33,7 +33,7 @@ var myProduct = {
                 flushData.getResult(data);
             },
             error: function (data) {
-                alert(data);
+                alert("Oops!!! Something went wrong.");
             },
             timeout: 10000
         });
@@ -102,7 +102,7 @@ function readURL(input, id) {
 
         reader.onload = function (e) {
             $('#blah-'+id).attr('src', e.target.result);
-        }
+        };
 
         reader.readAsDataURL(input.files[0]);
     }
@@ -163,13 +163,14 @@ $(document).on('click','#product_delete_all',function(){
     var dataArea = {
         getResult: function (data) {
             if(data){
-                window.location.reload()
+                window.location.reload();
             }
         }
     }
     myProduct.sendPostAjax(productID,dataArea);
 });
 
+$( "#search_box" ).autocomplete( "instance" );
 
 $( "#search_box" ).autocomplete({
     source: function( request, response ) {

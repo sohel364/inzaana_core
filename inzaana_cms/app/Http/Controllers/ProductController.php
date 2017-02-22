@@ -189,8 +189,9 @@ class ProductController extends Controller
 
     public function search(ProductRequest $request)
     {
-        if ($request->exists('search-box') && $request->has('search-box')) {
-            $search_terms = $request->query('search-box');
+        //dd($request->query('search_box'));
+        if ($request->exists('search_box') && $request->has('search_box')) {
+            $search_terms = $request->query('search_box');
 
             // NOTE: like -> searches case sensitive
             // $productsBySearch = Product::where('title', $search_terms)->orWhere('title', 'like', '%' . $search_terms . '%')->get();
@@ -203,19 +204,19 @@ class ProductController extends Controller
             });
             $productsCount = $productsBySearch->count();
             $productsBySearchPaginated->setPath('products/search');
-
             if($request->ajax())
             {
-                if($request->exists('search_title') && $request->has('search_title') && $request->query('search_title') === true)
-                {                    
+                if($request->exists('search_title') && $request->has('search_title') && $request->query('search_title') === "true")
+                {
                     $product_title = [];
-                    foreach($productsBySearch->take(10)->get() as $product){
+                    foreach($productsBySearch->take(10) as $product){
                         $product_title[] = $product->title;
                     }
                     return $product_title;
+                }else{
+                    return response()->view('includes.product-search-table', [ 'productsBySearch' =>  $productsBySearchPaginated, 'search_terms' => $search_terms ])
+                        ->header('Content-Type', 'html');
                 }
-                return response()->view('includes.product-search-table', [ 'productsBySearch' =>  $productsBySearchPaginated, 'search_terms' => $search_terms ])
-                                 ->header('Content-Type', 'html');
             }
             return redirect()->route('user::products')
                              ->with([ 'productsBySearch' =>  $productsBySearchPaginated, 'search_terms' => $search_terms, 'productsCount' => $productsCount ]);
@@ -240,7 +241,7 @@ class ProductController extends Controller
     // TODO:: Need to add log
     public function imageDelete($imageTitle)
     {
-        $productImage = ProductMedia::Where('title', '=', $imageTitle)->first();
+        $productImage = ProductMedia::where('mediable_type','=',Product::class)->where('title', '=', $imageTitle)->first();
         $productImage->delete();
         $message = "Delete Image from remote server.";
         return Response::json(['msg' => $message, 'status' => 1]);
@@ -248,7 +249,7 @@ class ProductController extends Controller
 
     public function productSearch($search_item)
     {
-        $productsBySearch = Product::where('title', $search_item)->orWhere('title', 'ilike', '%' . $search_item . '%')->take(10)->get();
+        $productsBySearch = Product::SearchByTitle($search_item)->take(10)->get();
         $product_title = [];
         foreach ($productsBySearch as $product) {
             $product_title[] = $product->title;
@@ -257,7 +258,7 @@ class ProductController extends Controller
     }
 
     public function productSearchSingle($search_item){
-        $products = Product::where('title', $search_item)->orWhere('title', 'ilike', '%' . $search_item . '%')->paginate(10);
+        $products = Product::SearchByTitle($search_item)->paginate(10);
 
         return response()->view('includes.product-table',compact('products'))
             ->header('Content-Type', 'html');
@@ -265,7 +266,7 @@ class ProductController extends Controller
 
     public function productSearchAll($search_item){
 
-        $products = Product::where('title', $search_item)->orWhere('title', 'ilike', '%' . $search_item . '%')->paginate(10);
+        $products = Product::SearchByTitle($search_item)->paginate(10);
         return response()->view('includes.product-table',compact('products'))
             ->header('Content-Type', 'html');
 
@@ -466,14 +467,14 @@ class ProductController extends Controller
 
         switch($request->input('confirmation-select'))
         {
-            case 'approve': 
-                $category->status = 'APPROVED';
+            case 'approve':
+                $product->status = 'APPROVED';
                 break;
             case 'reject':
-                $category->status = 'REJECTED';
+                $product->status = 'REJECTED';
                 break;
             case 'remove':
-                $category->status = 'REMOVED';
+                $product->status = 'REMOVED';
         }
         
         if(!$product->save())

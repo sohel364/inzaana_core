@@ -17,6 +17,7 @@
 | --------------------------
 */
 
+
 Route::group([ 'as' => 'guest::' ], function() {
 
     Route::get('/', [ 'uses' => 'HomeController@index', 'as' => 'home' ]);  
@@ -24,8 +25,11 @@ Route::group([ 'as' => 'guest::' ], function() {
 
     // Subdomain routing
     Route::group(array('domain' => '{name}.inzaana.{domain}'), function() {
+<<<<<<< Updated upstream
         
         Route::get('/', [ 'uses' => 'ShoppingCartController@index', 'as' => 'index' ]);
+=======
+>>>>>>> Stashed changes
 
         // routes grouped by /showcase
         Route::group(['prefix' => 'showcase'], function () {

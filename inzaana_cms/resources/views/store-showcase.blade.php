@@ -12,7 +12,7 @@
   <link href="{{ asset('font-awesome-4.4.0/css/font-awesome.min.css')}}" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script type="text/javascript">
-$(document).ready(function(){
+/*$(document).ready(function(){
 	$('.add-to-cart').on('click',function(){
 		//Scroll to top if cart icon is hidden on top
 		$('html, body').animate({
@@ -22,11 +22,11 @@ $(document).ready(function(){
 		var itemImg = $(this).parent().find('img').eq(0);
 		flyToElement($(itemImg), $('.cart_anchor'));
 	});
-});
+});*/
 </script>
 
 <style type="text/css">
-.cart_anchor{ float:right; vertical-align:top; background: url({{ asset('images/cart-icon.png') }}) no-repeat center center / 100% auto;width: 25px;height: 25px;  padding-top: 75px;}
+.cart_anchor{ float:right; vertical-align:top; background: url('{{ asset('images/cart-icon.png') }}') no-repeat center center / 100% auto;width: 25px;height: 25px;  padding-top: 75px;}
 </style>
 </head>
 
@@ -105,7 +105,7 @@ $(document).ready(function(){
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown shopping-cart">
+            <li class="dropdown shopping-cart" id="add-item">
               @include('includes.shopping-cart', ['cart' => $cart ])
             </li>
           </ul>
@@ -114,7 +114,6 @@ $(document).ready(function(){
     </div>
   </div>
   <!--End of Nav-->
-
   <!--Slider-->
    <div class="container">
     <div class="row sliderrow">
@@ -188,7 +187,7 @@ $(document).ready(function(){
                             </h4>
                             <p>This is product short description section.</p>
                         </div>
-						<a href="javascript:void(0);" class="btn btn-success add-to-cart">Add to Cart</a>
+						<a href="javascript:void(0);" class="btn btn-success add-to-carts">Add to Cart</a>
                     </div>
                 </div>
                         
@@ -228,19 +227,22 @@ $(document).ready(function(){
     <div id="products" class="row list-group">
       <div class="col-lg-12">
           <div class="row">
-              <div class="col-sm-3 col-lg-3 col-md-3">
-                    <div class="thumbnail">
-                        <img src="{{ asset('images/4.png') }}" alt="">
-                        <div class="caption">
-                            <h4 class="pull-right">$24.99</h4>
-                            <h4><a href="javascript:void(0);">Product Name</a></h4>
-                            <p>This is product short description section.</p>
-                        </div>
-						<a href="javascript:void(0);" class="btn btn-success add-to-cart">Add to Cart</a>
-                    </div>
-                </div>
-        
-              <div class="col-sm-3 col-lg-3 col-md-3">
+              @foreach($products as $singleProduct)
+                  <div class="col-sm-3 col-lg-3 col-md-3">
+                      <div class="thumbnail">
+                          <img src="{{ $singleProduct->thumbnail() }}" alt="">
+                          {{--<img src="{{ asset('images/4.png') }}" alt="">--}}
+                          <div class="caption">
+                              <h4 class="pull-right">₹<span id="p-price">{{ $singleProduct->marketProduct()->price }}</span></h4>
+                              <h4><a href="javascript:void(0);" id="p-title">{{ $singleProduct->title }}</a></h4>
+                              <p>{!! $product->description or '<i>No description is found to this product</i>' !!}</p>
+                          </div>
+                          <a href="javascript:void(0);" class="btn btn-success add-to-cart" id="add_to_cart{{\Inzaana\ShoppingCart::existInArray($cart->items,$singleProduct->id)? "-inactive":"" }}" data-pid="{{ $singleProduct->id }}">{{ \Inzaana\ShoppingCart::existInArray($cart->items,$singleProduct->id)? "Added": "Add to Cart"}}</a>
+                      </div>
+                  </div>
+              @endforeach
+
+              {{--<div class="col-sm-3 col-lg-3 col-md-3">
                     <div class="thumbnail">
                         <img src="{{ asset('images/1.png') }}" alt="">
                         <div class="caption">
@@ -323,7 +325,7 @@ $(document).ready(function(){
                         </div>
 						<a href="javascript:void(0);" class="btn btn-success add-to-cart">Add to Cart</a>
                     </div>
-                </div>
+                </div>--}}
           </div>
       </div>
                 
@@ -410,9 +412,10 @@ $(document).ready(function(){
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <script src="{{ asset('js/bootstrap.min.js') }}"></script>
   <script src="{{ asset('js/js-m/product.js') }}"></script>
+  <script src="{{ asset('data-requests/product/cart.js') }}"></script>
   <script src="{{ asset('js/js-m/bootstrap-magnify.min.js') }}"></script>
   <script>
-function flyToElement(flyer, flyingTo) {
+/*function flyToElement(flyer, flyingTo) {
 	var $func = $(this);
 	var divider = 3;
 	var flyerClone = $(flyer).clone();
@@ -437,7 +440,7 @@ function flyToElement(flyer, flyingTo) {
 			});
 		});
 	});
-}
+}*/
     </script>
 </body>
 

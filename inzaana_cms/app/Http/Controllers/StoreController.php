@@ -62,7 +62,7 @@ class StoreController extends Controller
 
     public function redirectUrl($site)
     {
-        // return view('store-showcase');
+        //return view('store-showcase');
         return StoreRedirect::to('http://' . $site . '/showcase');
     }
 

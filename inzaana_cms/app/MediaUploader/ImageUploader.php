@@ -66,10 +66,7 @@ class ImageUploader extends MediaUploader
                 }  
             }
             //Move Uploaded File
-            if($this->__uploadedFile->_image_position != null)
-                $serverFileName = $fileName ?: ProductMedia::uuid(). '_'.$this->__uploadedFile->_image_position.'_' . '.' . $this->__uploadedFile->getClientOriginalExtension();
-            else
-                $serverFileName = $fileName ?: ProductMedia::uuid() . '.' . $this->__uploadedFile->getClientOriginalExtension();
+            $serverFileName = $fileName ?: ProductMedia::uuid() . '.' . $this->__uploadedFile->getClientOriginalExtension();
             //dd($serverFileName);
             $beforeMoveFileSize = $this->__uploadedFile->getSize();
             $serverFile = $this->__uploadedFile->move($destinationDir, $serverFileName);

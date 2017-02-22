@@ -99,8 +99,8 @@
                 <!--end of form-->
 
                 <div class="col-lg-6 col-lg-offset-3 boxPadTop">
-                    <div id="sell_yours_search" class="box box-down box-info{{ $productsCount == 0 ? ' hidden' : '' }}">
-                        @include('includes.product-search-table')
+                    <div id="sell_yours_search" class="box box-down box-info{{--{{ $productsCount == 0 ? ' hidden' : '' }}--}}">
+                        {{--@include('includes.product-search-table')--}}
                     </div>
                 </div>
             </div>
@@ -955,6 +955,7 @@
         @each('includes.product-delete-confirm-modal', $products, 'product')
 
         <div id="modal_container">{{--Modal load here--}}</div>
+        <div id="alert_modal_container">{{--Alert Modal load here--}}</div>
 
         @endsection
 
@@ -987,6 +988,48 @@
             </script>
 
             <script type="text/javascript">
+
+                function requestProductsAutoCompleted(search_terms, auto_complete, response, context)
+                {
+                    var URI = window.location.pathname;
+                    route_url = URI + '/search';
+                    targetDom = '#sell_yours_search';
+                    processData = true;
+                    var dataObj = {
+                        search_box: search_terms,
+                        search_title: auto_complete
+                    };
+
+                    return $.ajax( {
+                        async: true,
+                        type: 'GET',
+                        url: route_url, // you need change it.
+                        processData: processData, // high importance!
+                        data: dataObj,
+                        success: function (data) {
+                            if(response === false)
+                            {
+                                if(auto_complete == false)
+                                    $(targetDom).removeClass("hidden");
+                                    $(targetDom).html(data);
+                            }
+                            else
+                                response(data);
+                        },
+                        error: function (data) {
+                        },
+                        timeout: 5000
+                    });
+                }
+                $( ".search_boxs" ).autocomplete({
+                    source: function( request, response ) {
+                        requestProductsAutoCompleted(request.term, true, response, 'search-product');
+                    },
+                    minLength: 2,
+                    select: function( event, ui ) {
+                        requestProductsAutoCompleted(ui.item.value, this.id, false, 'search-all-product');
+                    }
+                });
 
                 function productFormEvents()
                 {

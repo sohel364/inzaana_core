@@ -69,7 +69,8 @@ class ProductMedia extends Model
         {
             return $mediaUploader->errors();
         }
-        $serverFile = $mediaUploader->upload();
+        $image_name = ProductMedia::uuid(). '_'.$requestedFile->_image_position.'_' . '.' . $requestedFile->getClientOriginalExtension();
+        $serverFile = $mediaUploader->upload($image_name);
         if($mediaUploader->fails())
         {
             return $mediaUploader->errors();

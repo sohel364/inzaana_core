@@ -112,4 +112,12 @@ class ShoppingCart extends Model
     	}
     	return false;
     }
+    public static function existInArray($cart_ids=null, $product_id=null){
+        foreach($cart_ids as $cart){
+            if($cart->product_id == $product_id){
+                return true;
+            }
+        }
+        return false;
+    }
 }
