@@ -30,6 +30,8 @@ Route::group([ 'as' => 'guest::' ], function() {
         // routes grouped by /showcase
         Route::group(['prefix' => 'showcase'], function () {
 
+            Route::get('/checkout', [ 'uses' => 'ShoppingCartController@redirectToCheckout', 'as' => 'checkout' ]);
+            
             Route::get('/', [ 'uses' => 'ShoppingCartController@redirectToStore', 'as' => 'showcase' ]);
 
             // routes grouped by /showcase/cart

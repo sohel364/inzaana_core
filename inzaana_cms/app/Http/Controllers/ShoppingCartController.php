@@ -128,4 +128,8 @@ class ShoppingCartController extends Controller
         							 ->withCart($cart);
         // return view('vendor-store')->withProducts($store->user->products)->withSubDomain($name . '.inzaana.' . $domain)->withStoreNameUrl($name);
     }
+    public function redirectToCheckout()
+    {
+        return view('product-chekcout');
+    }
 }
