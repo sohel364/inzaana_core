@@ -29,8 +29,6 @@ Route::group([ 'as' => 'guest::' ], function() {
 
         // routes grouped by /showcase
         Route::group(['prefix' => 'showcase'], function () {
-
-            Route::get('/checkout', [ 'uses' => 'ShoppingCartController@redirectToCheckout', 'as' => 'checkout' ]);
             
             Route::get('/', [ 'uses' => 'ShoppingCartController@redirectToStore', 'as' => 'showcase' ]);
 
@@ -39,6 +37,7 @@ Route::group([ 'as' => 'guest::' ], function() {
 
                 Route::get('/add', [ 'uses' => 'ShoppingCartController@add', 'as' => 'cart.add' ]);
                 Route::get('/remove/{product_id}', [ 'uses' => 'ShoppingCartController@remove', 'as' => 'cart.remove' ]);
+                Route::get('/checkout', [ 'uses' => 'ShoppingCartController@redirectToCheckout', 'as' => 'cart.checkout' ]);
             });
         });
     });

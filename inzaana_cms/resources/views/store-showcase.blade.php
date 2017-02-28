@@ -106,7 +106,7 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown shopping-cart" id="add-item">
-              @include('includes.shopping-cart', ['cart' => $cart ])
+              @include('includes.shopping-cart', [ 'cart' => $cart, 'store_name' => $store_name, 'domain' => $domain ])
             </li>
           </ul>
         </div>

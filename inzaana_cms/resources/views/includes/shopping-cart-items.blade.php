@@ -3,7 +3,7 @@
       <span class="item-left">
           <img width="100px" height="60px" src="{{ $cart_item->image_url }}" alt="" />
           <span class="item-info">
-              <span>{{ $cart_item->title }}</span>
+              <span>{{ $cart_item->title . '(' . $cart_item->quantity . ')' }}</span>
               <span>{{ $cart_item->mrp }}</span>
           </span>
       </span>

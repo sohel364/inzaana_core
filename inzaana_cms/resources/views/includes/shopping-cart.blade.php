@@ -3,5 +3,5 @@
 <ul class="dropdown-menu dropdown-cart" role="menu">
     @each('includes.shopping-cart-items', $cart->items, 'cart_item')
     <li class="divider"></li>
-    <li><a class="text-center" href="">View Cart</a></li>
+    <li><a class="text-center" href="{{ count($cart->items) > 0 ? route('guest::cart.checkout', compact('store_name', 'domain')) : '#' }}">View Cart</a></li>
 </ul>

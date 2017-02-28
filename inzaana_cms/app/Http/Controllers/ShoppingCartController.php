@@ -20,6 +20,7 @@ use Redirect as ShoppingCartRedirect;
     - https://www.dunebook.com/5-ways-to-implement-shopping-cart-in-laravel/10/
     - http://andremadarang.com/implementing-a-shopping-cart-in-laravel/
     - http://stackoverflow.com/questions/36234548/how-track-sessionid-for-shopping-cart-table-in-laravel    
+    - http://squizzle.me/php/predis/doc/Commands#expire
  */
 
 class ShoppingCartController extends Controller
@@ -80,7 +81,7 @@ class ShoppingCartController extends Controller
                     flash()->error('Add item to cart is failed!');
                 }
                 $cart = Cart::get($request);
-                return response()->view('includes.shopping-cart', [ 'cart' => $cart ])->header('Content-Type', 'html');
+                return response()->view('includes.shopping-cart', [ 'cart' => $cart, 'store_name' => $name, 'domain' => $domain ])->header('Content-Type', 'html');
     		}
     	}
         return redirect()->route('guest::showcase', compact('name', 'domain'));
@@ -125,10 +126,11 @@ class ShoppingCartController extends Controller
                                      ->withStoreEmail($store->user->email)
                                      ->withStoreOwner($store->user)
                                      ->withStoreName($name)
+                                     ->withDomain($domain)
         							 ->withCart($cart);
-        // return view('vendor-store')->withProducts($store->user->products)->withSubDomain($name . '.inzaana.' . $domain)->withStoreNameUrl($name);
     }
-    public function redirectToCheckout()
+
+    public function redirectToCheckout(CartRequest $request, $name, $domain)
     {
         return view('product-chekcout');
     }
