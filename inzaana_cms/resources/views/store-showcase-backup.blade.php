@@ -348,6 +348,6 @@
     });
   });
 }*/
-  </script>
+    </script>
 
-@endsection
+  @endsection

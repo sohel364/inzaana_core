@@ -42,25 +42,6 @@ class ShoppingCartController extends Controller
 
     public function add(CartRequest $request, $name, $domain)
     {
-    	/*$faker = \Faker\Factory::create();
-
-    	$item = [
-            'product_id' => $faker->unique()->randomDigit,
-            'title' => str_random(10),
-            'image_url' => $faker->imageUrl(50, 50, 'cats'),
-            'mrp' => $faker->unique()->randomFloat,
-            'store_name' => $name,
-            'domain' => $domain
-        ];
-
-
-        $cart = Cart::get($request);
-
-        if(!Cart::addItem($cart->fingerprint, $item))
-        {
-            flash()->error('Add item to cart is failed!');
-        }*/
-
     	if($request->ajax())
     	{
     		if($request->has('cart_item'))
@@ -98,8 +79,6 @@ class ShoppingCartController extends Controller
         if($request->ajax())
         {
             return 1;
-            //$cart = Cart::get($request);
-            //return response()->view('shopping-cart', [ 'cart' => $cart ])->header('Content-Type', 'html');
         }
         return redirect()->route('guest::showcase', compact('name', 'domain'));
     }
@@ -126,12 +105,31 @@ class ShoppingCartController extends Controller
                                      ->withStoreEmail($store->user->email)
                                      ->withStoreOwner($store->user)
                                      ->withStoreName($name)
+                                     ->withStoreNameTidy($store->name)
                                      ->withDomain($domain)
         							 ->withCart($cart);
     }
 
     public function redirectToCheckout(CartRequest $request, $name, $domain)
     {
-        return view('product-chekcout');
+        $store = Store::whereNameAsUrl($name)->first();
+        if(!$store)
+            return abort(404);
+            
+        if($store->status == 'REJECTED')
+            return response()->view('store-comingsoon', [], 404);
+        else if($store->status == 'ON_APPROVAL')
+            return view('store-comingsoon');
+
+        $cart = Cart::get($request);
+
+        return view('product-chekcout')->withProducts($store->user->products)
+                                       ->withSubDomain($name . '.inzaana.' . $domain)
+                                       ->withStoreEmail($store->user->email)
+                                       ->withStoreOwner($store->user)
+                                       ->withStoreName($name)
+                                       ->withStoreNameTidy($store->name)
+                                       ->withDomain($domain)
+                                       ->withCart($cart);
     }
 }
