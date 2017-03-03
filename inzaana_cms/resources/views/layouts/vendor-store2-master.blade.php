@@ -60,6 +60,8 @@
     </div>
   </nav>
   <!--End of top login onfo bar-->
+  
+    @include('flash')
 
   <div class="main-body">
     @yield('container')

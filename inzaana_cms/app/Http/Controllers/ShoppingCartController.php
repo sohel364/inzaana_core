@@ -12,6 +12,7 @@ use Redis;
 
 use Inzaana\Store;
 use Inzaana\Product;
+use Inzaana\MarketProduct;
 use Redirect as ShoppingCartRedirect;
 
 /*
@@ -48,11 +49,15 @@ class ShoppingCartController extends Controller
     		{
                 $item = $request->query('cart_item');
 
+                $marketProduct = MarketProduct::find($item['product_id']);
+
                 $item = [
                     'product_id' => $item['product_id'],
                     'title' => $item['title'],
                     'image_url' => $item['image_url'],
                     'mrp' => $item['price'],
+                    'product_manufacturer' => $marketProduct ? $marketProduct->manufacturer_name : 'Unknown',
+                    'product_status' => $marketProduct ? $marketProduct->product->getStatus() : 'Unknown',
                     'store_name' => $name,
                     'domain' => $domain
                 ];
@@ -81,6 +86,21 @@ class ShoppingCartController extends Controller
             return 1;
         }
         return redirect()->route('guest::showcase', compact('name', 'domain'));
+    }
+
+    public function removeFromCheckout(CartRequest $request, $name, $domain, $product_id)
+    {
+        $cart = Cart::get($request);
+
+        if(!Cart::removeItem($cart->fingerprint, $product_id))
+        {
+            flash()->error('Remove item from cart is failed!');
+        }
+        if($request->ajax())
+        {
+            return 1;
+        }
+        return redirect()->route('guest::cart.checkout', compact('name', 'domain'));
     }
 
     public function redirectToStore(CartRequest $request, $name, $domain)
@@ -122,6 +142,11 @@ class ShoppingCartController extends Controller
             return view('store-comingsoon');
 
         $cart = Cart::get($request);
+
+        if(empty($cart->items))
+        {
+            flash()->warning('Your shopping cart is empty!');
+        }
 
         return view('product-chekcout')->withProducts($store->user->products)
                                        ->withSubDomain($name . '.inzaana.' . $domain)

@@ -38,6 +38,7 @@ Route::group([ 'as' => 'guest::' ], function() {
                 Route::get('/add', [ 'uses' => 'ShoppingCartController@add', 'as' => 'cart.add' ]);
                 Route::get('/remove/{product_id}', [ 'uses' => 'ShoppingCartController@remove', 'as' => 'cart.remove' ]);
                 Route::get('/checkout', [ 'uses' => 'ShoppingCartController@redirectToCheckout', 'as' => 'cart.checkout' ]);
+                Route::get('/checkout/remove/{product_id}', [ 'uses' => 'ShoppingCartController@removeFromCheckout', 'as' => 'cart.checkout.remove' ]);
             });
         });
     });

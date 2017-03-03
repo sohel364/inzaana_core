@@ -21,10 +21,12 @@ class ShoppingCart extends Model
 
         $products = collect($items)->unique('product_id')->values()->all();
         $grouped = collect($items)->groupBy('product_id');
+        $cart->sub_total = 0;
         foreach($products as $item)
         {
             $item->quantity = $grouped->get($item->product_id)->count();
             $groupedProducts []= $item;
+            $cart->sub_total += ($item->quantity * $item->mrp);
         }
         $cart->items = empty($groupedProducts) ? $items : $groupedProducts;
         // dd($cart->items);
@@ -42,7 +44,7 @@ class ShoppingCart extends Model
     {
     	$prevCount = self::itemCount($cart_id);
     	Redis::rpush($cart_id, collect($item)->toJson());
-    	Redis::expire($cart_id, 60 * 5 /* 5 minutes */);
+    	Redis::expire($cart_id, config('session.lifetime'));
     	// stop the expire
     	// Redis::persist($cart_id);
     	return $prevCount < self::itemCount($cart_id);
@@ -55,7 +57,7 @@ class ShoppingCart extends Model
     	if(!$item)
     		return false;
     	Redis::lrem($cart_id, $count, json_encode($item));
-        Redis::expire($cart_id, 60 * 5 /* 5 minutes */);
+        Redis::expire($cart_id, config('session.lifetime'));
     	return $prevCount > self::itemCount($cart_id);
     }
 
@@ -112,6 +114,7 @@ class ShoppingCart extends Model
     	}
     	return false;
     }
+    
     public static function existInArray($cart_ids=null, $product_id=null){
         foreach($cart_ids as $cart){
             if($cart->product_id == $product_id){
