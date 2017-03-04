@@ -765,6 +765,9 @@
                                                         <option value="Standard">Vendor Name</option>
                                                 </select>
                                             </div>
+                                            <div class="col-sm-2">
+                                                <button formmethod="GET" formaction="" class="btn btn-default btn-flat"><i class="fa fa-plus"></i> </button>
+                                            </div>
                                          </div>
                                          <div class="form-group">
                                             <label class="col-xs-3 control-label">Expected Date:</label>
@@ -810,7 +813,7 @@
                                             <label for="" class="col-sm-3 control-label">Is Returnable:</label>
                                             <div class="col-sm-3" >
                                                 <div class="checkbox">
-                                                    <label><input id="is_public" name="is_public" type="checkbox" >Yes.</label>
+                                                    <label><input id="is_public" name="is_public" type="checkbox" ></label>
                                                 </div>
                                             </div>
                                         </div>
