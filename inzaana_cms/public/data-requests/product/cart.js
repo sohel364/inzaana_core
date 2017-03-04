@@ -10,11 +10,12 @@ jQuery(document).on('click','#add_to_cart',function(){
     $(this).text("Added");
     //$(this).removeAttr('id');
     $(this).attr('id','add_to_cart-inactive');
+    var fingerprint = $(this).data('fingerprint');
     $.ajax({
         async: true,
         type: 'GET',
         data: data,
-        url: window.location.pathname+'/cart/add', // you need change it.
+        url: '/showcase/cart/' + fingerprint + '/add', // you need change it.
         processData: true, // high importance!
         success: function (data) {
             $('#add-item').html(data);
@@ -39,10 +40,12 @@ jQuery(document).on('click','#cart-item-remove-btn',function(e){
         processData: false, // high importance!
         success: function (data) {
             if(data){
-                $('#cart_items_count').text($('#cart_items_count').text()-1);
-                $(define_this).closest('li').remove();
+                // $('#cart_items_count').text($('#cart_items_count').text()-1);
+                // $(define_this).closest('li').remove();
                 $('a[data-pid="'+pid+'"]').attr('id','add_to_cart').text("Add to Cart");
             }
+
+            $('#add-item').html(data);
         },
         error: function(data){
             alert("Oops!!! Something went wrong.");

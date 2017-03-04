@@ -9,7 +9,7 @@
       </span>
       <span class="item-right">
           <form method="GET">
-            <button formaction="{{ route('guest::cart.remove', [ 'product_id' => $cart_item->product_id, 'name' => $cart_item->store_name, 'domain' => $cart_item->domain ]) }}"
+            <button formaction="{{ route('guest::cart.remove', [ 'cart_id' => $cart_item->cart_id, 'product_id' => $cart_item->product_id, 'name' => $cart_item->store_name, 'domain' => $cart_item->domain ]) }}"
                     id="cart-item-remove-btn" data-pid="{{ $cart_item->product_id }}" class="btn btn-xs btn-danger pull-right" type="submit">x</button>
           </form>
       </span>

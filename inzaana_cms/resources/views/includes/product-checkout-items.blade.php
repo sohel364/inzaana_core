@@ -15,7 +15,7 @@
     <td class="col-sm-1 col-md-1 text-center"><strong>{{ ( $cart_item->mrp * $cart_item->quantity ) }}</strong></td>
     <td class="col-sm-1 col-md-1">
       <form method="GET">
-        <button formaction="{{ route('guest::cart.checkout.remove', [ 'product_id' => $cart_item->product_id, 'name' => $cart_item->store_name, 'domain' => $cart_item->domain ]) }}" id="cart-item-checkout-remove-btn" class="btn btn-danger" type="submit">
+        <button formaction="{{ route('guest::cart.checkout.remove', [ 'product_id' => $cart_item->product_id, 'cart_id' => $cart_item->cart_id, 'name' => $cart_item->store_name, 'domain' => $cart_item->domain ]) }}" id="cart-item-checkout-remove-btn" class="btn btn-danger" type="submit">
         <span class="glyphicon glyphicon-remove"></span> Remove</button>
       </form>
     </td>

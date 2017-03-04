@@ -53,14 +53,21 @@
                             <td>   </td>
                             <td>   </td>
                             <td>   </td>
-                            <td>
-                            <button type="button" class="btn btn-default">
-                                <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
-                            </button></td>
-                            <td>
-                            <button type="button" class="btn btn-success">
-                                Checkout <span class="glyphicon glyphicon-play"></span>
-                            </button></td>
+                            <form method="GET">                             
+                                <td>
+                                <button formaction="{{ route('guest::showcase.continue', [ 'name' => $store_name, 'domain' => $domain, 'cart_id' => $cart->fingerprint ]) }}"
+                                        id="continue-shopping-btn" class="btn btn-success" type="submit">
+                                    <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
+                                </button>
+                                </td>
+                            </form>
+                            <form method="POST">
+                                <td>
+                                <button formaction="{{ '#' }}" id="checkout-btn" class="btn btn-success" type="submit">
+                                    <span class="glyphicon glyphicon-play"></span> Checkout
+                                </button>
+                            </td>
+                            </form>
                         </tr>
                     </tbody>
                 </table>

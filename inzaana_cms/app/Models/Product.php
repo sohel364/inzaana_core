@@ -292,7 +292,7 @@ class Product extends Model
         switch($this->status)
         {
             case 'OUT_OF_STOCK':    return 'Out of stock';
-            case 'ON_APPROVAL':     return 'On Apprval';
+            case 'ON_APPROVAL':     return 'On Approval';
             case 'APPROVED':        return 'Approved';
             case 'REJECTED':        return 'Rejected';
         }

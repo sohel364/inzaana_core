@@ -11,9 +11,13 @@ class ShoppingCart extends Model
     public static function get(CartRequest $request)
     {
         $cart_id = self::generateCartId($request);
+		return self::findCart($cart_id);
+    }
 
+    public static function findCart($cart_id)
+    {
         $cart = new ShoppingCart();
-	    $cart->fingerprint = $cart_id;
+        $cart->fingerprint = $cart_id;
         $cart->items_count = self::itemCount($cart_id);
         $items = self::items($cart_id);
 
@@ -30,7 +34,7 @@ class ShoppingCart extends Model
         }
         $cart->items = empty($groupedProducts) ? $items : $groupedProducts;
         // dd($cart->items);
-		return $cart;
+        return $cart;
     }
 
     // destroys the cart
@@ -100,7 +104,7 @@ class ShoppingCart extends Model
 
     private static function generateCartId(CartRequest $request)
     {
-        return 'cart:' . $request->ip() . ':id:' . $request->session()->getId();
+        return 'cart_' . $request->ip() . '_' . $request->session()->getId();
     }
 
     // @returns mixed: boolean if failed | the item if passed

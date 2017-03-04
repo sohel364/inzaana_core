@@ -41,7 +41,7 @@ class ShoppingCartController extends Controller
         return ShoppingCartRedirect::to('http://inzaana.' . $domain . '/');
     }
 
-    public function add(CartRequest $request, $name, $domain)
+    public function add(CartRequest $request, $name, $domain, $cart_id)
     {
     	if($request->ajax())
     	{
@@ -53,6 +53,7 @@ class ShoppingCartController extends Controller
 
                 $item = [
                     'product_id' => $item['product_id'],
+                    'cart_id' => $cart_id,
                     'title' => $item['title'],
                     'image_url' => $item['image_url'],
                     'mrp' => $item['price'],
@@ -61,21 +62,38 @@ class ShoppingCartController extends Controller
                     'store_name' => $name,
                     'domain' => $domain
                 ];
-                $cart = Cart::get($request);
+                $cart = Cart::findCart($cart_id);
                 if(!Cart::addItem($cart->fingerprint, $item))
                 {
                     flash()->error('Add item to cart is failed!');
                 }
-                $cart = Cart::get($request);
+                $cart = Cart::findCart($cart_id);
                 return response()->view('includes.shopping-cart', [ 'cart' => $cart, 'store_name' => $name, 'domain' => $domain ])->header('Content-Type', 'html');
     		}
     	}
-        return redirect()->route('guest::showcase', compact('name', 'domain'));
+        return redirect()->route('guest::showcase', compact('name', 'domain', 'cart_id'));
     }
 
-    public function remove(CartRequest $request, $name, $domain, $product_id)
+    public function remove(CartRequest $request, $name, $domain, $cart_id, $product_id)
     {
-        $cart = Cart::get($request);
+        $cart = Cart::findCart($cart_id);
+
+        if(!Cart::removeItem($cart->fingerprint, $product_id))
+        {
+            flash()->error('Remove item from cart is failed!');
+        }
+        $cart = Cart::findCart($cart_id);
+        if($request->ajax())
+        {
+            // return 1;
+            return response()->view('includes.shopping-cart', [ 'cart' => $cart, 'store_name' => $name, 'domain' => $domain ])->header('Content-Type', 'html');
+        }
+        return redirect()->route('guest::showcase', compact('name', 'domain', 'cart_id'));
+    }
+
+    public function removeFromCheckout(CartRequest $request, $name, $domain, $cart_id, $product_id)
+    {
+        $cart = Cart::findCart($cart_id);
 
         if(!Cart::removeItem($cart->fingerprint, $product_id))
         {
@@ -85,22 +103,7 @@ class ShoppingCartController extends Controller
         {
             return 1;
         }
-        return redirect()->route('guest::showcase', compact('name', 'domain'));
-    }
-
-    public function removeFromCheckout(CartRequest $request, $name, $domain, $product_id)
-    {
-        $cart = Cart::get($request);
-
-        if(!Cart::removeItem($cart->fingerprint, $product_id))
-        {
-            flash()->error('Remove item from cart is failed!');
-        }
-        if($request->ajax())
-        {
-            return 1;
-        }
-        return redirect()->route('guest::cart.checkout', compact('name', 'domain'));
+        return redirect()->route('guest::cart.checkout', compact('name', 'domain', 'cart_id'));
     }
 
     public function redirectToStore(CartRequest $request, $name, $domain)
@@ -130,7 +133,7 @@ class ShoppingCartController extends Controller
         							 ->withCart($cart);
     }
 
-    public function redirectToCheckout(CartRequest $request, $name, $domain)
+    public function redirectToCheckout(CartRequest $request, $name, $domain, $cart_id)
     {
         $store = Store::whereNameAsUrl($name)->first();
         if(!$store)
@@ -141,11 +144,11 @@ class ShoppingCartController extends Controller
         else if($store->status == 'ON_APPROVAL')
             return view('store-comingsoon');
 
-        $cart = Cart::get($request);
+        $cart = Cart::findCart($cart_id);
 
         if(empty($cart->items))
         {
-            flash()->warning('Your shopping cart is empty!');
+            flash('Your shopping cart is empty!');
         }
 
         return view('product-chekcout')->withProducts($store->user->products)
@@ -156,5 +159,29 @@ class ShoppingCartController extends Controller
                                        ->withStoreNameTidy($store->name)
                                        ->withDomain($domain)
                                        ->withCart($cart);
+    }
+
+    public function continueShopping(CartRequest $request, $name, $domain, $cart_id)
+    {
+        $store = Store::whereNameAsUrl($name)->first();
+        if(!$store)
+            return abort(404);
+            
+        if($store->status == 'REJECTED')
+            return response()->view('store-comingsoon', [], 404);
+        else if($store->status == 'ON_APPROVAL')
+            return view('store-comingsoon');
+
+        $viewData = [
+            'products' => $store->user->products,
+            'sub_domain' => $name . '.inzaana.' . $domain,
+            'store_email' => $store->user->email,
+            'store_owner' => $store->user,
+            'store_name' => $name,
+            'store_name_tidy' => $store->name,
+            'domain' => $domain,
+            'cart' => Cart::findCart($cart_id)
+        ];
+        return response()->view('store-showcase', $viewData);
     }
 }
