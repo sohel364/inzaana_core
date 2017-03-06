@@ -123,6 +123,8 @@ class ShoppingCartController extends Controller
 
     	$cart = Cart::get($request);
 
+        $paginatedProducts = $store->user->products()->paginate(4);
+        $paginatedProducts->setPath('showcase');
         return view('store-showcase')->withProducts($store->user->products)
         							 ->withSubDomain($name . '.inzaana.' . $domain)
                                      ->withStoreEmail($store->user->email)
@@ -130,7 +132,8 @@ class ShoppingCartController extends Controller
                                      ->withStoreName($name)
                                      ->withStoreNameTidy($store->name)
                                      ->withDomain($domain)
-        							 ->withCart($cart);
+        							 ->withCart($cart)
+                                     ->withPaginatedProducts($paginatedProducts);
     }
 
     public function redirectToCheckout(CartRequest $request, $name, $domain, $cart_id)

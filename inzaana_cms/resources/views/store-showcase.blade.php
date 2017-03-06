@@ -178,7 +178,7 @@
     <div id="products" class="row list-group">
       <div class="col-lg-12">
           <div class="row">
-              @foreach($products as $singleProduct)
+              @foreach($paginated_products as $singleProduct)
                   <div class="col-sm-3 col-lg-3 col-md-3">
                       <div class="thumbnail">
                           <img src="{{ $singleProduct->thumbnail() }}" alt="">
@@ -212,7 +212,8 @@
       
     </div>
     <div class="container text-center">
-      <nav>
+      {{ $paginated_products->appends([ 'page' => $paginated_products->currentPage() ])->links() }}
+      <!-- <nav>
         <ul class="pagination">
           <li class="disabled">
             <a href="#" aria-label="Previous">
@@ -235,7 +236,7 @@
             </a>
           </li>
         </ul>
-      </nav>
+      </nav> -->
     </div>
   </div>
   <!--End of Product View-->
