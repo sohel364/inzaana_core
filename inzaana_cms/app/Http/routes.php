@@ -18,14 +18,11 @@
 */
 
 Route::group([ 'as' => 'guest::' ], function() {
-
-    Route::get('/', [ 'uses' => 'HomeController@index', 'as' => 'home' ]);  
-    Route::get('/suggest/input/{input}', [ 'uses' => 'HomeController@suggest', 'as' => 'suggest.home.stores' ]);
-
+    
     // Subdomain routing
     Route::group(array('domain' => '{name}.inzaana.{domain}'), function() {
         
-        Route::get('/', [ 'uses' => 'ShoppingCartController@index', 'as' => 'index' ]);
+        Route::get('/', [ 'uses' => 'ShoppingCartController@checkout', 'as' => 'checkout' ]);  
 
         // routes grouped by /showcase
         Route::group(['prefix' => 'showcase'], function () {
@@ -43,6 +40,9 @@ Route::group([ 'as' => 'guest::' ], function() {
             });
         });
     });
+    
+    Route::get('/', [ 'uses' => 'HomeController@index', 'as' => 'home' ]);
+    Route::get('/suggest/input/{input}', [ 'uses' => 'HomeController@suggest', 'as' => 'suggest.home.stores' ]);
 });
 
 Route::group(['middleware' => 'web'], function () {
@@ -210,6 +210,11 @@ Route::group(['middleware' => 'web'], function () {
 
                 //     Route::post('/create', [ 'uses' => 'ProductController@create', 'as' => 'products.create' ]);
                 // });
+            });
+            // Product controller
+            Route::group([ 'prefix' => 'orders' ], function () {
+
+                Route::get('/create', [ 'uses' => 'ProductOrderController@confirmCheckout', 'as' => 'orders.confirm-checkout' ]);
             });
 
             // Category controller

@@ -36,9 +36,10 @@ class ShoppingCartController extends Controller
         $this->middleware('session');
     }
 
-    public function index($name, $domain)
+    public function checkout($name, $domain)
     {
-        return ShoppingCartRedirect::to('http://inzaana.' . $domain . '/');
+        // return ShoppingCartRedirect::to('http://inzaana.' . env('APP_DOMAIN', 'com') . '/login');
+        return ShoppingCartRedirect::to('http://inzaana.' . env('APP_DOMAIN', 'com') . '/orders/confirm');
     }
 
     public function add(CartRequest $request, $name, $domain, $cart_id)
@@ -149,6 +150,9 @@ class ShoppingCartController extends Controller
 
         $cart = Cart::findCart($cart_id);
 
+        if(count($cart->items) > 0)
+            session(compact('cart'));
+
         if(empty($cart->items))
         {
             flash('Your shopping cart is empty!');
@@ -175,8 +179,11 @@ class ShoppingCartController extends Controller
         else if($store->status == 'ON_APPROVAL')
             return view('store-comingsoon');
 
+        $paginatedProducts = $store->user->products()->paginate(4);
+        $paginatedProducts->setPath('showcase');
         $viewData = [
             'products' => $store->user->products,
+            'paginated_products' => $paginatedProducts,
             'sub_domain' => $name . '.inzaana.' . $domain,
             'store_email' => $store->user->email,
             'store_owner' => $store->user,

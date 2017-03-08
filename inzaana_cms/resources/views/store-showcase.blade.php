@@ -213,30 +213,6 @@
     </div>
     <div class="container text-center">
       {{ $paginated_products->appends([ 'page' => $paginated_products->currentPage() ])->links() }}
-      <!-- <nav>
-        <ul class="pagination">
-          <li class="disabled">
-            <a href="#" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-          <li class="active"><a href="#">1</a>
-          </li>
-          <li><a href="#">2</a>
-          </li>
-          <li><a href="#">3</a>
-          </li>
-          <li><a href="#">4</a>
-          </li>
-          <li><a href="#">5</a>
-          </li>
-          <li>
-            <a href="#" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-        </ul>
-      </nav> -->
     </div>
   </div>
   <!--End of Product View-->

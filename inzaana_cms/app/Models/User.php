@@ -108,6 +108,22 @@ class User extends Model implements AuthenticatableContract,
         return [];
     }
 
+    public function isAdmin()
+    {
+        return $this->email == config('mail.admin.address');
+    }
+
+    public function isCustomer()
+    {
+        return $this->stores()->count() == 0;
+    }
+
+    public function isVendor()
+    {
+        return $this->stores()->count() > 0;
+    }
+
+
     /**
      *
      */

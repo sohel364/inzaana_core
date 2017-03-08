@@ -61,9 +61,9 @@
                                 </button>
                                 </td>
                             </form>
-                            <form method="POST">
+                            <form method="GET">
                                 <td>
-                                <button formaction="{{ '#' }}" id="checkout-btn" class="btn btn-success" type="submit">
+                                <button formaction="{{ route('guest::checkout', [ 'name' => $store_name, 'domain' => $domain ]) }}" id="checkout-btn" class="btn btn-success{{ count($cart->items) == 0 ? ' hidden' : '' }}" type="submit">
                                     <span class="glyphicon glyphicon-play"></span> Checkout
                                 </button>
                             </td>
