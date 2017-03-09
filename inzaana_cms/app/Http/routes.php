@@ -127,8 +127,8 @@ Route::group(['middleware' => 'web'], function () {
             Route::get('/edit/users/{user}', [ 'uses' => 'UserController@edit', 'as' => 'edit' ]);
             Route::post('/edit/mail/users/{user}', [ 'uses' => 'UserController@verifyProfileChanges', 'as' => 'edit.email' ]);
 
-            // Route::get('/postcodes/country/{country}', [ 'uses' => 'UserController@getPostCodes', 'as' => 'postcodes' ]);
-            // Route::get('/states/country/{country}', [ 'uses' => 'UserController@getStates', 'as' => 'states' ]);
+            Route::get('/postcodes/country/{country}', [ 'uses' => 'UserController@getPostCodes', 'as' => 'postcodes' ]);
+            Route::get('/states/country/{country}', [ 'uses' => 'UserController@getStates', 'as' => 'states' ]);
 
             // routes grouped by /vendor
             // route: /dashboard/vendor/

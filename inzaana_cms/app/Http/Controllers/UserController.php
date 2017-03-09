@@ -6,6 +6,7 @@ use Auth;
 use Carbon\Carbon;
 use Session;
 use Validator;
+use DB;
 
 // @addedby tajuddin.khandaker.cse.ju@gmail.com
 use Illuminate\Http\Request;
@@ -546,12 +547,20 @@ class UserController extends Controller
 
     public function getPostCodes($country)
     {
-        return response()->json([ 'context' => 'postcodes', 'value' => DB::table('post_codes')->select('id', 'post_code')->take(10) ]);
+        $result = DB::table('post_codes')->select('id', 'post_code as text');
+        return response()->json([
+            'context' => 'postcodes',
+            'total_count' => $result->count(),
+            'items' => $result->get() ]);
     }
 
     public function getStates($country)
     {
-        return response()->json([ 'context' => 'states', 'value' => DB::table('states')->select('id', 'state_name')->take(10) ]);
+        $result = DB::table('states')->select('id', 'state_name as text');
+        return response()->json([
+            'context' => 'states',
+            'total_count' => $result->count(),
+            'items' => $result->get() ]);
     }
 
     /**

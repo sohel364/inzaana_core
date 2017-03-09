@@ -24,6 +24,9 @@
   }
 
   </style>
+
+  <link href="/css/select2.min.css" rel="stylesheet">
+  <link href="/css/select2-bootstrap.css" rel="stylesheet">
 @endsection
 
 @section('footer-scripts')
@@ -41,6 +44,74 @@
   // });
   $().ready(onReadyEditProfileValidation);
   $('#phone_number').keypress(validateNumber);
+
+  </script>
+
+  <script src="/js/select2.full.min.js"></script>
+  <script type="text/javascript">
+
+      function formatDataSelection(data)
+      {
+          return data.text;
+      }
+
+      function formatStatesData(data)
+      {
+          var addressKey = '$address[\'STATE\']';
+          var id = '{{ ' + data.id + ' }}';
+          var text = '{{ ' + data.text + ' }}';
+          var selected = "{{ " + addressKey + " == " + id + " ? ' selected' : ''}}";
+          return "<option value='" + id + "' " + selected + ">" + text + "</option>";
+      }
+
+      function formatPostCodesData(data)
+      {
+          var addressKey = '$address[\'POSTCODE\']';
+          var id = '{{ ' + data.id + ' }}';
+          var text = '{{ ' + data.text + ' }}';
+          var selected = "{{ " + addressKey + " == " + id + " ? ' selected' : ''}}";
+          return "<option value='" + id + "' " + selected + ">" + text + "</option>";
+      }
+
+      $(".load_async").select2({
+          theme: "bootstrap",
+          ajax: {
+              delay: 250,
+              allowClear: true,
+              dataType: 'json',
+              data: function (params) {
+                var query = {
+                  search: params.term,
+                  page: params.page
+                }
+
+                // Query paramters will be ?search=[term]&page=[page]
+                return query;
+              },
+              headers: {
+                  "Accept": "application/json"
+              },
+              processResults: function (data, params) {
+                // parse the results into the format expected by Select2
+                // since we are using custom formatting functions we do not need to
+                // alter the remote JSON data, except to indicate that infinite
+                // scrolling can be used
+                params.page = params.page || 1;
+
+                return {
+                  results: data.items,
+                  pagination: {
+                    more: (params.page * 10) < data.total_count
+
+                  }
+                };
+              },
+              escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+              minimumInputLength: 1,
+              templateResult: ($(".load_async").attr('id') === 'state') ? formatStatesData : formatPostCodesData,
+              templateSelection: formatDataSelection
+          }
+      })
 
   </script>
 
@@ -151,25 +222,36 @@
                     <div class="row col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group col-sm-9 col-md-9 col-lg-9">
                           <label for="state">State</label>
-                          <select id="state" name="state" class="form-control" placeholder="Select State">
-                            @foreach ($states as $state)
+
+                          @include('includes.select-box-searchable',
+                          [ 
+                            'route' => '/dashboard/states/country/INDIA', 
+                            'default_text' => 'Select State',
+                            'name' => 'state'                            
+                          ])
+                          <!-- <select id="state" name="state" class="form-control" placeholder="Select State">
+                            {{--@foreach ($states as $state)
                               <option value='{{ $state->id }}' {{ $address['STATE'] == $state->id ? ' selected' : ''}} >{{ $state->state_name }}</option>
-                            @endforeach
-                          </select>
-                        </div>
-                      <div class="col-sm-3 col-md-3 col-lg-3">{{ $states->links() }}</div>    
+                            @endforeach--}}
+                          </select> -->
+                        </div>  
                     </div>     
 
                     <div class="row col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group col-sm-9 col-md-9 col-lg-9">
                           <label for="postcode">Postcode</label>
-                          <select id="postcode" name="postcode" class="form-control" placeholder="Select Postcode">
-                            @foreach ($post_codes as $code)
+                          @include('includes.select-box-searchable',
+                          [ 
+                            'route' => '/dashboard/postcodes/country/INDIA', 
+                            'default_text' => 'Select Postcode',
+                            'name' => 'postcode'                            
+                          ])
+                          <!-- <select id="postcode" name="postcode" class="form-control" placeholder="Select Postcode">
+                            {{--@foreach ($post_codes as $code)
                               <option value='{{ $code->id }}' {{ $address['POSTCODE'] == $code->id ? ' selected' : ''}} >{{ $code->post_code }}</option>
-                            @endforeach
-                          </select>
-                        </div>
-                      <div class="col-sm-3 col-md-3 col-lg-3">{{ $post_codes->links() }}</div>    
+                            @endforeach--}}
+                          </select> -->
+                        </div> 
                     </div>
                   </div>
 				  
