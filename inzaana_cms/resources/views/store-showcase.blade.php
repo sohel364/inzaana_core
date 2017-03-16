@@ -188,7 +188,7 @@
                               <h4><a href="javascript:void(0);" id="p-title">{{ $singleProduct->title }}</a></h4>
                               <p>{!! $product->description or '<i>No description is found to this product</i>' !!}</p>
                           </div>
-                          <a href="javascript:void(0);" class="btn btn-success add-to-cart" id="add_to_cart{{\Inzaana\ShoppingCart::existInArray($cart->items,$singleProduct->id)? "-inactive":"" }}" data-fingerprint="{{ $cart->fingerprint }}" data-pid="{{ $singleProduct->id }}">{{ \Inzaana\ShoppingCart::existInArray($cart->items,$singleProduct->id)? "Added": "Add to Cart"}}</a>
+                          <a href="javascript:void(0);" class="btn btn-success add-to-cart" id="add_to_cart{{\Inzaana\ShoppingCart::itemExists($cart,$singleProduct->id)? "-inactive":"" }}" data-fingerprint="{{ $cart->fingerprint }}" data-pid="{{ $singleProduct->id }}">{{ \Inzaana\ShoppingCart::itemExists($cart,$singleProduct->id)? "Added": "Add to Cart"}}</a>
                       </div>
                   </div>
               @endforeach
