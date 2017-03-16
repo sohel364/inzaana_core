@@ -192,22 +192,9 @@
                       </div>
                   </div>
               @endforeach
-
-              {{--<div class="col-sm-3 col-lg-3 col-md-3">
-                    <div class="thumbnail">
-                        <img src="{{ asset('images/1.png') }}" alt="">
-                        <div class="caption">
-                            <h4 class="pull-right">$64.99</h4>
-                            <h4><a href="javascript:void(0);">Product Name</a>
-                            </h4>
-                            <p>This is product short description section.</p>
-                        </div>
-						<a href="javascript:void(0);" class="btn btn-success add-to-cart">Add to Cart</a>
-                    </div>
-                </div>--}}
           </div>
       </div>
-                
+
                 
       
     </div>
@@ -216,7 +203,7 @@
     </div>
   </div>
   <!--End of Product View-->
-
+  <input type="hidden" id="refresh" value="no"> {{--do not remove this--}}
   @endsection
 
   @section('footer-scripts')
@@ -224,9 +211,14 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <script src="{{ asset('js/bootstrap.min.js') }}"></script>
   <script src="{{ asset('js/js-m/product.js') }}"></script>
-  <script src="{{ asset('data-requests/product/cart.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('data-requests/product/cart.js') }}"></script>
   <script src="{{ asset('js/js-m/bootstrap-magnify.min.js') }}"></script>
-  <script>
+  <script type="text/javascript">
+
+      $(document).ready(function(e) {
+          var input = $('#refresh').val();
+          input == 'yes' ? location.reload(true) : $('#refresh').val('yes');
+      });
 /*function flyToElement(flyer, flyingTo) {
   var $func = $(this);
   var divider = 3;

@@ -32,7 +32,6 @@ jQuery(document).on('click','#add_to_cart',function(){
 jQuery(document).on('click','#cart-item-remove-btn',function(e){
     e.preventDefault();
     var define_this = this;
-    var pid = $(this).data('pid');
     $.ajax({
         async: true,
         type: 'GET',
@@ -42,7 +41,7 @@ jQuery(document).on('click','#cart-item-remove-btn',function(e){
             if(data){
                 // $('#cart_items_count').text($('#cart_items_count').text()-1);
                 // $(define_this).closest('li').remove();
-                $('a[data-pid="'+pid+'"]').attr('id','add_to_cart').text("Add to Cart");
+                $('a[data-pid="'+$(define_this).data('pid')+'"]').attr('id','add_to_cart').text("Add to Cart");
             }
 
             $('#add-item').html(data);
