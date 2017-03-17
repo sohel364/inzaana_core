@@ -874,7 +874,7 @@
                         <h3 class="box-title">Recently Added product</h3>
                         <div class="box-tools">
                             <div class="input-group" style="width: 150px;">
-                                <input type="text" name="table_search" id="search_box" class="form-control input-sm pull-right search_box" placeholder="Search">
+                                <input type="text" name="table_search" id="search_box" class="form-control input-sm pull-right" placeholder="Search">
                                 <div class="input-group-btn">
                                     <button class="btn btn-sm btn-default" id="search_by_button_click"><i class="fa fa-search"></i></button>
                                 </div>
@@ -1024,7 +1024,7 @@
                         timeout: 5000
                     });
                 }
-                $( ".search_boxs" ).autocomplete({
+                $( ".search_box" ).autocomplete({
                     source: function( request, response ) {
                         requestProductsAutoCompleted(request.term, true, response, 'search-product');
                     },
