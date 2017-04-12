@@ -1,0 +1,8 @@
+-> download and install laragon
+-> run terminal
+-> turn on php.ini :: php_fileinfo.dll
+-> composr install
+if fails
+-> composer dumpload
+-> composer update --no-scripts
+
