@@ -37,7 +37,7 @@ class abstractCls
 {
 	void Test3()
 	{}
-	virtual void test1();
+	//virtual void test1();
 	//void virtual test() = 0;
 };
 
@@ -121,8 +121,67 @@ int subs(const int* a, int* const b)
 	return (*a + *b);
 }
 
+
+void bubbleSort(int arr[])
+{
+	int size = sizeof(arr) / sizeof(arr) / arr[0];
+	int i, j;
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = i + 1; j < 5; j++)
+		{
+			int temp;
+			if (arr[i] > arr[j])
+			{
+				temp = arr[i];
+				arr[i] = arr[j];
+				arr[j] = temp;
+			}
+		}
+	}
+}
+
+
 int main(void)
 {
+	int tc;
+	cout << "How many times you want to run ? ";
+	while (cin >> tc)
+	{
+		cout << "How many digits you want to test ? ";
+		int size = 0;
+		cin >> size;
+		int* numbers = new int[size];
+
+		cout << " Enter %d numbers", size;
+
+		for (int i = 0; i < size; i++)
+		{
+			cin >> numbers[i];
+		}
+
+		for (int i = 0; i <= size - 1; i++)
+		{
+			for (int j = i + 1; j <= size; j++)
+			{
+				int temp;
+				if (numbers[i] > numbers[j])
+				{
+					temp = numbers[i];
+					numbers[i] = numbers[j];
+					numbers[j] = temp;
+				}
+			}
+		}
+
+		for (int i = 0; i < size; i++)
+		{
+			cout << numbers[i] << endl;
+		}
+	}
+
+	return 0;
+
 	abstractCls a;
 
 	FILE* fbuffer = fopen("file.txt", "w");
