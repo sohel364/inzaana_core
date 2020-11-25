@@ -16,7 +16,7 @@ class CreateProducts extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->bigInteger('store_id');
             $table->bigInteger('market_product_id');
             $table->boolean('is_public')->default(false);
