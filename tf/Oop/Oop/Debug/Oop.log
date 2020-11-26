@@ -1,7 +1,0 @@
-﻿  Oop.cpp
-c:\users\mhas\documents\visual studio 2017\projects\oop\oop\oop.cpp(124): error C2259: 'abstractCls': cannot instantiate abstract class
-  c:\users\mhas\documents\visual studio 2017\projects\oop\oop\oop.cpp(124): note: due to following members:
-  c:\users\mhas\documents\visual studio 2017\projects\oop\oop\oop.cpp(124): note: 'void abstractCls::test(void)': is abstract
-  c:\users\mhas\documents\visual studio 2017\projects\oop\oop\oop.cpp(39): note: see declaration of 'abstractCls::test'
-c:\users\mhas\documents\visual studio 2017\projects\oop\oop\oop.cpp(126): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\stdio.h(207): note: see declaration of 'fopen'
